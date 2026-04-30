@@ -7,5 +7,5 @@
 | Name | intern_ldp_explorer |
 | Status | Working |
 | Current Task | task001_reproduce_ldp_ptp_baseline_h200 |
-| PR | Pending |
+| PR | https://github.com/StevenKKXS/ldp/pull/new/intern_ldp_explorer/task001_reproduce_ldp_ptp_baseline_h200 |
 | Session | 0 |
