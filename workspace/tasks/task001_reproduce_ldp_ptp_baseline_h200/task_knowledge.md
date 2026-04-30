@@ -18,6 +18,13 @@
 - Upstream public asset audit:
 - GitHub Releases page exists but is empty.
 - Official README provides dataset links and a Google Drive `obs_encoders.zip` for short-context encoders used in embedding caching.
+- `obs_encoders.zip` was downloaded and copied to the debug server. Archive listing confirms presence of official:
+- `square_encoder.ckpt`
+- `square_l1_encoder.ckpt`
+- `longhist_encoder.ckpt`
+- `tool_hang_encoder.ckpt`
+- `transport_encoder.ckpt`
+- `aloha_encoder.ckpt`
 - Existing remote data state on `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/datasets`:
 - Present: `robomimic/datasets/square/mh/image_abs.hdf5`
 - Missing so far: `image_abs_past.hdf5`, `image_abs_emb.hdf5`, `image_abs_past_emb.hdf5`, `longhistsquare100/*`
@@ -35,3 +42,9 @@
 - `baseline_square_3500ep_1777535019`: `square`, `global_obs=2`, `past_action_pred=false`
 - `no_ptp_square_obs16_1777535301`: `square`, `global_obs=16`, `past_action_pred=false`
 - `ptp_square_obs16_1777535313`: `square`, `global_obs=16`, `past_action_pred=true`
+- Runtime state snapshot:
+- `baseline_square_3500ep_1777535019` is writing `logs.json.txt` and has progressed into epoch 1.
+- `no_ptp_square_obs16_1777535301` and `ptp_square_obs16_1777535313` have both crossed initialization and entered `Training epoch 0`.
+- Current packing on the two H200 GPUs:
+- GPU0: short-context PTP legacy run + `ptp_square_obs16_1777535313`
+- GPU1: `baseline_square_3500ep_1777535019` + `no_ptp_square_obs16_1777535301`
