@@ -1,6 +1,6 @@
 ## Task: Reproduce LDP Baseline and PTP on H200
 
-<!-- METADATA:STATUS=Open,ASSIGNEE= -->
+<!-- METADATA:STATUS=InProgress,ASSIGNEE=intern_ldp_explorer -->
 
 ### Background
 - Reproduce the official `long-context-dp/ldp` results as closely as practical on available H200 infrastructure.
@@ -23,4 +23,3 @@
 - quantitative results obtained vs paper / website claims, with caveats
 - environment or compatibility patches required on H200
 - Repro artifacts are saved under a stable directory on shared storage.
-
