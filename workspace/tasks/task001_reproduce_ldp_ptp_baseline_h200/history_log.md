@@ -1,6 +1,6 @@
 # History Log
 
-<!-- METADATA:SESSION=5 -->
+<!-- METADATA:SESSION=6 -->
 
 ## Session 0
 - Created task for reproducing LDP baseline and PTP on H200.
@@ -103,3 +103,49 @@
 - therefore the correct diagnosis is mixed:
 - yes, the official recipe is intrinsically heavy
 - and yes, our current run is also on a slower-than-best-case path because it does not yet use embedding caching and does not use the dedicated official longhist dataset / script path end-to-end
+
+## Session 6
+- Brought up the new 96h node at `10.100.2.47:15744` and found it initially idle: both H200s were free, `/mnt/3fs2` was absent, and no training jobs were running.
+- Mounted `3fs2` successfully on the new node using the previously recorded command from the personal knowledge base:
+- `curl -fsSL http://10.100.197.13/3fs/installv2.sh | bash -s -- --token ... --mgmtd-ip 10.100.197.16 --mount-point /mnt/3fs2`
+- Verified that the persistent shared assets are available again after mounting:
+- `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/{datasets,my_configs,obs_encoders,outputs,pytorch3d_src,setup_gpu_machine.sh}`
+- Replayed environment setup on the new node by running `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/setup_gpu_machine.sh`.
+- The script completed most tasks correctly:
+- `/root/venv` created for Python 3.12
+- torch / torchvision / mujoco / robosuite / robomimic / diffusers stack installed
+- robomimic + gym + pytorch3d stub patches applied
+- import smoke reported CUDA-visible torch and the expected package versions
+- One residual issue remained after setup:
+- `pytorch3d.transforms` still imported `transform3d`, which then required missing `pytorch3d.common.workaround`
+- this prevented Hydra from instantiating the dataset module because the import chain passed through `RotationTransformer`
+- Applied the same fix described in the knowledge base directly on the new node's venv:
+- replaced `/root/venv/lib/python3.12/site-packages/pytorch3d/transforms/__init__.py` with a minimal `from .rotation_conversions import *`
+- After that patch, a new smoke train progressed into full dataset loading instead of failing during import.
+- Checked current shared dataset state on the new node:
+- present: `datasets/robomimic/datasets/square/mh/image_abs.hdf5`
+- present but problematic: `datasets/robomimic/datasets/square/mh/image_abs.hdf5.zarr.zip`
+- still missing: `datasets/longhistsquare100/*`
+- Confirmed a new caching pitfall relevant to future launches:
+- trying to open the shared `image_abs.hdf5.zarr.zip` with zarr raised `zipfile.BadZipFile`
+- because of that, `task.dataset.use_cache=true` is currently unsafe on this shared square dataset, so all newly launched jobs on this node use `task.dataset.use_cache=false`
+- Launched a CPU-side preparation job in the background:
+- `cp image_abs.hdf5 image_abs_emb.hdf5`
+- This is intended to support a later `rewrite_with_embeddings.py` pass without mutating the base dataset file in place.
+- Launched four background training jobs on the 96h node using the patched venv and shared dataset:
+- `node96_ptp_square_obs16_1777613676` on GPU0
+- `node96_no_ptp_square_obs16_1777613676` on GPU1
+- `node96_ptp_square_short_1777613676` on GPU0
+- `node96_nohist_square_short_1777613676` on GPU1
+- Launch details common across all four:
+- wrapper entrypoint: `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/run_train.py`
+- config base: `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/my_configs/square --config-name=transformer_square`
+- `logging.mode=offline`
+- `dataloader.num_workers=4`, `val_dataloader.num_workers=4`
+- `dataloader.persistent_workers=true`, `val_dataloader.persistent_workers=true`
+- `task.dataset.use_cache=false`
+- Initial verification after launch:
+- all four python parent processes were alive with elapsed times increasing
+- output directories were created under `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/outputs/node96_*`
+- log files under `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/logs/node96_*.out` showed successful config parsing and heavy progress through `Loading image data`
+- At the most recent sample, the jobs were still in HDF5 image preloading, so `nvidia-smi` showed near-zero GPU memory and utilization even though the processes were live. This is expected during the front-loaded CPU / storage phase of `use_cache=false`.

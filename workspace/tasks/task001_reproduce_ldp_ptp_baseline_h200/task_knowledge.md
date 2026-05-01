@@ -1,6 +1,6 @@
 # Task Knowledge
 
-<!-- METADATA:SESSION=5 -->
+<!-- METADATA:SESSION=6 -->
 
 ## Working Rules
 - Prefer upstream official assets first:
@@ -175,3 +175,35 @@
 - `no_ptp_obs16`: train epoch `74`, val epoch `73`, val loss `0.05386010929942131`
 - `ptp_obs16`: train epoch `74`, val epoch `73`, val loss `0.03787311911582947`
 - The `PTP` line still maintains the lower validation loss after cleanup.
+- New 96h-node bring-up knowledge:
+- node access used in this session:
+- SSH: `ssh -p 15744 root@10.100.2.47`
+- On first access, `/mnt/3fs2` was missing and had to be mounted again.
+- The shared bring-up script remains valid:
+- `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/setup_gpu_machine.sh`
+- But one extra manual fix was still needed afterward on this node:
+- overwrite `/root/venv/lib/python3.12/site-packages/pytorch3d/transforms/__init__.py` with just `from .rotation_conversions import *`
+- otherwise imports fail through `diffusion_policy.model.common.rotation_transformer` because `transform3d.py` looks for missing `pytorch3d.common.workaround`
+- Shared data availability as of Session 6:
+- present:
+- `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/datasets/robomimic/datasets/square/mh/image_abs.hdf5`
+- `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/obs_encoders/obs_encoders/{square_encoder.ckpt,longhist_encoder.ckpt,...}`
+- missing:
+- `longhistsquare100/*`
+- Important cache status:
+- `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/datasets/robomimic/datasets/square/mh/image_abs.hdf5.zarr.zip` exists but is corrupted
+- opening it via zarr raised `zipfile.BadZipFile`
+- consequence: do not rely on `task.dataset.use_cache=true` against this shared square dataset until the cache is regenerated cleanly
+- Temporary operational choice on the new node:
+- all four new training jobs were started with `task.dataset.use_cache=false`
+- this causes long front-loaded CPU / storage work during `Loading image data`, so early `nvidia-smi` samples can misleadingly show `0%` utilization and almost no GPU memory even while processes are healthy
+- New node96 training jobs launched:
+- `node96_ptp_square_obs16_1777613676`
+- `node96_no_ptp_square_obs16_1777613676`
+- `node96_ptp_square_short_1777613676`
+- `node96_nohist_square_short_1777613676`
+- Process snapshot after launch:
+- PIDs `56750`, `57061`, `58029`, `58030` were alive and advancing
+- CPU-side preparation job also running:
+- `cp image_abs.hdf5 image_abs_emb.hdf5` with PID `56748`
+- `image_abs_emb.hdf5` is being staged so `rewrite_with_embeddings.py` can be applied later without mutating the base dataset file in place
