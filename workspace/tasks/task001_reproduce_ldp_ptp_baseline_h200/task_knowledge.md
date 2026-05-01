@@ -1,6 +1,6 @@
 # Task Knowledge
 
-<!-- METADATA:SESSION=0 -->
+<!-- METADATA:SESSION=1 -->
 
 ## Working Rules
 - Prefer upstream official assets first:
@@ -48,3 +48,26 @@
 - Current packing on the two H200 GPUs:
 - GPU0: short-context PTP legacy run + `ptp_square_obs16_1777535313`
 - GPU1: `baseline_square_3500ep_1777535019` + `no_ptp_square_obs16_1777535301`
+- 2026-05-01 metric snapshot:
+- `full_train_3500ep_1777457545`:
+- latest train epoch `825`
+- latest val epoch `824`
+- latest val loss `0.09134911000728607`
+- recent checkpoint names indicate `test_mean_score` collapsed to `0.000` by epochs `499/599/699/799`
+- `baseline_square_3500ep_1777535019`:
+- latest train epoch `386`
+- latest val epoch `385`
+- latest val loss `0.0929742306470871`
+- best visible checkpoint so far from filenames is `epoch=0299-test_mean_score=0.100.ckpt`
+- `no_ptp_square_obs16_1777535301`:
+- latest train epoch `69`
+- latest val epoch `68`
+- latest val loss `0.054872460663318634`
+- no checkpoint yet because it has not reached checkpoint interval
+- `ptp_square_obs16_1777535313`:
+- latest train epoch `69`
+- latest val epoch `68`
+- latest val loss `0.03870094567537308`
+- no checkpoint yet because it has not reached checkpoint interval
+- Early comparison worth tracking:
+- at matched epoch 68/69, long-context `PTP` is ahead of long-context `no-PTP` on validation loss (`0.0387 < 0.0549`)
