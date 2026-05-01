@@ -1,6 +1,6 @@
 # Task Knowledge
 
-<!-- METADATA:SESSION=6 -->
+<!-- METADATA:SESSION=7 -->
 
 ## Working Rules
 - Prefer upstream official assets first:
@@ -207,3 +207,33 @@
 - CPU-side preparation job also running:
 - `cp image_abs.hdf5 image_abs_emb.hdf5` with PID `56748`
 - `image_abs_emb.hdf5` is being staged so `rewrite_with_embeddings.py` can be applied later without mutating the base dataset file in place
+- Session 7 live-state snapshot for the 96h node:
+- sampled at `2026-05-01 06:42 UTC`
+- `nvidia-smi` at that instant:
+- GPU0 `0%`, `27885 MiB / 143771 MiB`
+- GPU1 `17%`, `27871 MiB / 143771 MiB`
+- Meaning:
+- all four node96 runs are now alive with substantial resident memory
+- but the H200s are still under-utilized in instantaneous compute terms
+- Current parsed training progress from `logs.json.txt`:
+- `node96_no_ptp_square_obs16_1777613676`:
+- latest train epoch `3`
+- latest val epoch `2`
+- latest val loss `0.08412370830774307`
+- `node96_ptp_square_obs16_1777613676`:
+- latest train epoch `3`
+- latest val epoch `2`
+- latest val loss `0.08240393549203873`
+- `node96_nohist_square_short_1777613676`:
+- latest train epoch `21`
+- latest val epoch `20`
+- latest val loss `0.0484502874314785`
+- `node96_ptp_square_short_1777613676`:
+- latest train epoch `20`
+- latest val epoch `19`
+- latest val loss `0.038747888058423996`
+- Updated interpretation:
+- the new node is no longer stuck in preload
+- both short-history jobs have advanced quickly into stable training
+- both `obs16` jobs are training more slowly but are now producing valid train/val metrics
+- at matched progress on this node, `obs16` PTP remains slightly ahead of `obs16` no-PTP on validation loss

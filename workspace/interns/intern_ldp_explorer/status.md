@@ -8,5 +8,5 @@
 | Status | Working |
 | Current Task | task001_reproduce_ldp_ptp_baseline_h200 |
 | PR | https://github.com/StevenKKXS/ldp/pull/new/intern_ldp_explorer/task001_reproduce_ldp_ptp_baseline_h200 |
-| Session | 6 |
-| Recent Progress | Mounted `/mnt/3fs2` on the new 96h node, replayed the GPU-machine environment setup, fixed the local `pytorch3d` stub so training could import cleanly, confirmed `use_cache=true` is blocked by a corrupt shared `image_abs.hdf5.zarr.zip`, and launched four new background jobs on the node: `obs16` PTP, `obs16` no-PTP, short-history PTP, and short-history no-history, while also copying `image_abs_emb.hdf5` for the next embedding-caching step. |
+| Session | 7 |
+| Recent Progress | Re-sampled the 96h node and confirmed all four `node96_*` jobs have moved beyond preload into real training: the short-history PTP and no-history runs are already at epochs `20/21`, the `obs16` PTP and no-PTP runs are at epoch `3`, and the latest `nvidia-smi` snapshot at `2026-05-01 06:42 UTC` showed low instantaneous utilization (`GPU0 0%`, `GPU1 17%`) despite roughly `27.9 GiB` resident on each card, which means the jobs are alive but still not saturating the H200s. |

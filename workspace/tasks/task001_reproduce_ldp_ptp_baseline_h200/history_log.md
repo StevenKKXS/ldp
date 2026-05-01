@@ -1,6 +1,6 @@
 # History Log
 
-<!-- METADATA:SESSION=6 -->
+<!-- METADATA:SESSION=7 -->
 
 ## Session 0
 - Created task for reproducing LDP baseline and PTP on H200.
@@ -149,3 +149,29 @@
 - output directories were created under `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/outputs/node96_*`
 - log files under `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/logs/node96_*.out` showed successful config parsing and heavy progress through `Loading image data`
 - At the most recent sample, the jobs were still in HDF5 image preloading, so `nvidia-smi` showed near-zero GPU memory and utilization even though the processes were live. This is expected during the front-loaded CPU / storage phase of `use_cache=false`.
+
+## Session 7
+- Re-sampled the 96h node at `2026-05-01 06:42 UTC` to answer whether the new jobs had actually started training or were still stuck in preload.
+- `nvidia-smi` snapshot at that exact time:
+- GPU0: `0%` utilization, `27885 MiB / 143771 MiB`
+- GPU1: `17%` utilization, `27871 MiB / 143771 MiB`
+- Interpretation:
+- the node is no longer idle and both cards now hold large resident model state
+- instantaneous utilization is still low and bursty, so the box is not saturated
+- Parsed `logs.json.txt` for each new run:
+- `node96_no_ptp_square_obs16_1777613676`:
+- latest train epoch `3`, global step `4006`, train loss `0.0626`
+- latest val epoch `2`, val loss `0.0841`
+- `node96_ptp_square_obs16_1777613676`:
+- latest train epoch `3`, global step `3897`, train loss `0.0560`
+- latest val epoch `2`, val loss `0.0824`
+- `node96_nohist_square_short_1777613676`:
+- latest train epoch `21`, global step `24625`, train loss `0.0194`
+- latest val epoch `20`, val loss `0.04845`
+- `node96_ptp_square_short_1777613676`:
+- latest train epoch `20`, global step `23812`, train loss `0.0209`
+- latest val epoch `19`, val loss `0.03875`
+- Direct conclusion:
+- yes, the new 96h-node jobs have definitely started real training
+- the two short-history runs are far ahead because their per-epoch cost is much lower
+- the two `obs16` runs are also training, just more slowly, and PTP currently has slightly lower validation loss than no-PTP on this node as well (`0.0824 < 0.0841`)
