@@ -1,6 +1,6 @@
 # History Log
 
-<!-- METADATA:SESSION=1 -->
+<!-- METADATA:SESSION=2 -->
 
 ## Session 0
 - Created task for reproducing LDP baseline and PTP on H200.
@@ -29,3 +29,15 @@
 - `ptp_square_obs16_1777535313`: epoch 69 train, epoch 68 val, latest val loss `0.0387`, no checkpoint yet.
 - Current strongest immediate signal is that `global_obs=16` PTP already has materially lower validation loss than `global_obs=16` no-PTP at the same epoch (`0.0387` vs `0.0549`).
 - Confirmed official encoder archive is present on shared storage at `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/obs_encoders.zip`.
+
+## Session 2
+- Re-checked official parameter references in the upstream repo and local extracted paper text.
+- Clarified that the repo provides concrete runnable hyperparameters for PTP through experiment configs:
+- short-history square: `global_obs=2`, `global_action=1`, `global_horizon=32`, `batch_size=64`, `learning_rate=1e-4`, `past_action_pred=true`, `past_steps_reg=-1`, `num_epochs=3500`, `checkpoint_every=100`, `rollout_every=100`.
+- long-history square: `global_obs=16`, `global_action=1`, `global_horizon=32`, `batch_size=64`, `learning_rate=1e-4`, `past_action_pred=true`, `past_steps_reg=-1`, `num_epochs=3500`, `checkpoint_every=10`, `rollout_every=50`.
+- Confirmed the base workspace config is different (`num_epochs=3050`, `checkpoint_every=50`, `rollout_every=50`) but task-specific experiment configs override it.
+- Clarified that the paper text itself gives protocol-level references rather than a full hyperparameter table in the sections inspected:
+- default history-conditioned evaluation uses past 16 time steps
+- all policies use diffusion policies with context length 16 and chunk size 8
+- caching ablation evaluates checkpoints saved every 50 epochs for two days
+- Clarified to user-facing report that the previously mentioned `100` was not a hand-picked total training length; it was derived from the official `transformer_square.yaml` values `checkpoint_every=100` and `rollout_every=100` while total training length remained `num_epochs=3500`.

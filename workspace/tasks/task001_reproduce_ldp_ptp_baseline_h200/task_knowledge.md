@@ -1,6 +1,6 @@
 # Task Knowledge
 
-<!-- METADATA:SESSION=1 -->
+<!-- METADATA:SESSION=2 -->
 
 ## Working Rules
 - Prefer upstream official assets first:
@@ -71,3 +71,42 @@
 - no checkpoint yet because it has not reached checkpoint interval
 - Early comparison worth tracking:
 - at matched epoch 68/69, long-context `PTP` is ahead of long-context `no-PTP` on validation loss (`0.0387 < 0.0549`)
+- Official parameter references relevant to the user question:
+- README / CLI guidance:
+- short-history recommendation: `obs=2`, `act=1`, `horizon=16`
+- long-history recommendation: `obs=16`, `act=1`, `horizon=32`
+- `transformer_history.sh` toggles PTP with:
+- `policy.past_action_pred`
+- `policy.past_steps_reg`
+- Upstream runnable config values for `experiment_configs/square/transformer_square.yaml`:
+- `global_obs=2`
+- `global_action=1`
+- `global_horizon=32`
+- `batch_size=64`
+- `learning_rate=1e-4`
+- `past_action_pred=true`
+- `past_steps_reg=-1`
+- `num_epochs=3500`
+- `checkpoint_every=100`
+- `rollout_every=100`
+- `val_every=1`
+- Upstream runnable config values for `experiment_configs/longhist/transformer_longhist.yaml`:
+- `global_obs=16`
+- `global_action=1`
+- `global_horizon=32`
+- `batch_size=64`
+- `learning_rate=1e-4`
+- `past_action_pred=true`
+- `past_steps_reg=-1`
+- `num_epochs=3500`
+- `checkpoint_every=10`
+- `rollout_every=50`
+- `val_every=1`
+- Base workspace defaults in `train_diffusion_transformer_hybrid_workspace.yaml` are not the final experiment settings:
+- `num_epochs=3050`
+- `checkpoint_every=50`
+- `rollout_every=50`
+- Meaning of the previously discussed `100`:
+- not an arbitrary total-epoch choice
+- it came from the official short-history square experiment config where both `checkpoint_every` and `rollout_every` are set to `100`
+- total training duration for that config is `3500` epochs, not `100`
