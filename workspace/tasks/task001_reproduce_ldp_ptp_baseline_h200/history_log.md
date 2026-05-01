@@ -1,6 +1,6 @@
 # History Log
 
-<!-- METADATA:SESSION=3 -->
+<!-- METADATA:SESSION=4 -->
 
 ## Session 0
 - Created task for reproducing LDP baseline and PTP on H200.
@@ -51,3 +51,26 @@
 - GPU0: PID `1653544` and PID `3623114`
 - GPU1: PID `3608565` and PID `3622380`
 - Interpretation: the box is under-utilized at this sample point even though four training processes are resident; the workload is currently not saturating either H200.
+
+## Session 4
+- Re-checked the debug server at `2026-05-01 03:47-03:50 UTC` to estimate what can still finish within the 72h lease.
+- Used the server-side `sleep 72h` runtime process as a wall-clock proxy and observed `ELAPSED=224612s`, which implies about `34588s` remaining, i.e. about `9.61h` left on the box at sampling time. This is consistent with the user's separate panel reading of roughly `2d 14h 19m 45s` elapsed.
+- Refreshed run-state snapshot from `logs.json.txt`:
+- `full_train_3500ep_1777457545` (`legacy_ptp_short`): latest train epoch `840`, latest val epoch `839`, latest val loss `0.09235`, latest test record still from epoch `799` with `test/mean_score=0.0`.
+- `baseline_square_3500ep_1777535019` (`baseline_short`): latest train epoch `399`, latest val epoch `398`, latest val loss `0.07834`, latest test record still from epoch `299` with `test/mean_score=0.1` before the next checkpoint landed.
+- `no_ptp_square_obs16_1777535301`: latest train epoch `72`, latest val epoch `71`, latest val loss `0.05999`, still no test checkpoint yet.
+- `ptp_square_obs16_1777535313`: latest train epoch `72`, latest val epoch `71`, latest val loss `0.03923`, still no test checkpoint yet.
+- Computed crude epoch-rate ETAs from elapsed wall time:
+- `legacy_ptp_short`: about `20.2 epochs/hour`, next checkpoint epoch `900` in about `3.0h`, full 3500-epoch completion still about `131.7h` away.
+- `baseline_short`: about `20.0 epochs/hour`, next checkpoint epoch `400` in about `0.05h`, full completion still about `155.2h` away.
+- `no_ptp_square_obs16`: about `3.61 epochs/hour`, first checkpoint epoch `100` in about `7.76h`, full completion still about `949.7h` away.
+- `ptp_obs16`: about `3.61 epochs/hour`, first checkpoint epoch `100` in about `7.76h`, full completion still about `949.7h` away.
+- Conclusion from the 72h budget:
+- None of the 3500-epoch jobs can finish before reclamation.
+- The two paper-relevant `global_obs=16` runs should still be able to reach their first formal epoch-100 checkpoint within the remaining budget, but with limited slack if they continue sharing GPUs with lower-value short-context jobs.
+- To prioritize useful paper-facing results, I changed scheduling on the live server:
+- Stopped the low-value `legacy_ptp_short` run immediately by terminating parent PID `1653544`. This run is not the paper-default long-context protocol and had already collapsed to repeated `test_mean_score=0.0` checkpoints.
+- Started a watchdog for `baseline_short` and allowed it to persist only until its next safe checkpoint landed. The checkpoint `epoch=0399-test_mean_score=0.025.ckpt` appeared, then the watchdog terminated parent PID `3608565` at `2026-05-01 03:49:48 UTC`.
+- Post-action process map now shows only the two `obs16` runs alive:
+- GPU1 / no-PTP: parent PID `3622380`
+- GPU0 / PTP: parent PID `3623114`

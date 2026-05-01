@@ -1,6 +1,6 @@
 # Task Knowledge
 
-<!-- METADATA:SESSION=3 -->
+<!-- METADATA:SESSION=4 -->
 
 ## Working Rules
 - Prefer upstream official assets first:
@@ -114,3 +114,41 @@
 - GPU0 utilization `0%`, memory `27874 MiB / 143771 MiB`
 - GPU1 utilization `15%`, memory `27876 MiB / 143771 MiB`
 - Four resident python jobs remain mapped across the two GPUs, but instantaneous compute utilization is low, so more packing is possible if I/O and rollout interference stay acceptable.
+- Additional timing and scheduling knowledge from `2026-05-01 03:47-03:50 UTC`:
+- The server-side `sleep 72h` job had elapsed `224612s`, so the machine had about `34588s` (`9.61h`) left at sampling time.
+- Updated run metrics:
+- `legacy_ptp_short` (`full_train_3500ep_1777457545`):
+- latest train epoch `840`
+- latest val epoch `839`
+- latest val loss `0.09235268086194992`
+- latest recorded test epoch still `799` with `test/mean_score=0.0`
+- current effective value is low because checkpoint scores have already collapsed to zero and the setup is not the paper-default `obs16` protocol
+- `baseline_short` (`baseline_square_3500ep_1777535019`):
+- latest train epoch `399`
+- latest val epoch `398`
+- latest val loss `0.07834439724683762`
+- new checkpoint was later observed as `epoch=0399-test_mean_score=0.025.ckpt`
+- best visible checkpoint across this run remains `epoch=0299-test_mean_score=0.100.ckpt`
+- `no_ptp_square_obs16`:
+- latest train epoch `72`
+- latest val epoch `71`
+- latest val loss `0.05999106541275978`
+- `ptp_square_obs16`:
+- latest train epoch `72`
+- latest val epoch `71`
+- latest val loss `0.039228491485118866`
+- At matched progress, long-context `PTP` still holds the better validation loss (`0.03923 < 0.05999`).
+- Simple ETA model from observed wall time:
+- `legacy_ptp_short`: about `20.2 epochs/hour`, next checkpoint epoch `900` in about `3.0h`, full finish about `131.7h`
+- `baseline_short`: about `20.0 epochs/hour`, next checkpoint epoch `400` in about `0.05h`, full finish about `155.2h`
+- `no_ptp_square_obs16`: about `3.61 epochs/hour`, first checkpoint epoch `100` in about `7.76h`, full finish about `949.7h`
+- `ptp_square_obs16`: about `3.61 epochs/hour`, first checkpoint epoch `100` in about `7.76h`, full finish about `949.7h`
+- Operational decision taken for the remaining 72h budget:
+- stop short-context runs after preserving the next safe artifact, because starting fresh 3500-epoch jobs this late would not reach a useful milestone before reclamation
+- keep only the `obs16` pair running so the remaining wall-clock budget is concentrated on the most paper-relevant `PTP` vs `no-PTP` comparison
+- Live actions already executed:
+- terminated `legacy_ptp_short` parent PID `1653544`
+- allowed `baseline_short` to reach `epoch=0399-test_mean_score=0.025.ckpt`, then terminated parent PID `3608565`
+- surviving parent PIDs are:
+- `3622380` for `no_ptp_square_obs16_1777535301`
+- `3623114` for `ptp_square_obs16_1777535313`
