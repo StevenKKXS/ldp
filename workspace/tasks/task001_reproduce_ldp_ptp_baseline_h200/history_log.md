@@ -1,6 +1,6 @@
 # History Log
 
-<!-- METADATA:SESSION=4 -->
+<!-- METADATA:SESSION=5 -->
 
 ## Session 0
 - Created task for reproducing LDP baseline and PTP on H200.
@@ -74,3 +74,32 @@
 - Post-action process map now shows only the two `obs16` runs alive:
 - GPU1 / no-PTP: parent PID `3622380`
 - GPU0 / PTP: parent PID `3623114`
+
+## Session 5
+- Investigated whether `3500` epochs and the previously estimated `~950h` for `obs16` indicate an actual reproduction issue or simply a heavy official training recipe.
+- Confirmed from upstream configs that `num_epochs=3500` is explicitly specified by the project, not introduced by our overrides:
+- `experiment_configs/square/transformer_square.yaml`: `num_epochs=3500`, `checkpoint_every=100`, `rollout_every=100`, `val_every=1`
+- `experiment_configs/longhist/transformer_longhist.yaml`: `global_obs=16`, `num_epochs=3500`, `checkpoint_every=10`, `rollout_every=50`, `val_every=1`
+- Inspected the training loop and confirmed that one "epoch" here is not a tiny accounting unit:
+- each epoch iterates through the full train dataloader, then runs validation every epoch, optional sampling, and periodic environment rollouts / checkpointing
+- rollout is executed by `env_runner.run(policy)` and validation runs whenever `epoch % val_every == 0`
+- Estimated actual work per epoch from live logs:
+- `no_ptp_obs16`: `global_step=82366` at `epoch=72`, i.e. about `1144` optimizer steps per epoch
+- `ptp_obs16`: `global_step=82133` at `epoch=72`, i.e. about `1141` optimizer steps per epoch
+- This means a nominal `3500`-epoch run is on the order of roughly `4 million` optimizer steps before counting rollout overhead.
+- Confirmed that the official image-based configs are also expensive at evaluation time:
+- both square and longhist configs set `n_envs=28` and `n_test=40`
+- current reproduction runs also keep `val_every=1`, so validation overhead is ever-present
+- Confirmed one important speed caveat in the current reproduction setup:
+- upstream README says official observation encoders are necessary for `--emb True --cached True`, and that once caching is complete, training can proceed with "substantial speedup"
+- however the official longhist config itself currently has `task.dataset.use_cache: false`, and our active `obs16` runs are still on raw images without cached embeddings
+- Re-sampled the surviving `obs16` runs after removing the short-context jobs:
+- at `2026-05-01 04:17 UTC`, both had progressed from `epoch 72` to `epoch 74`
+- latest metrics:
+- `no_ptp_obs16`: train epoch `74`, val epoch `73`, val loss `0.05386`
+- `ptp_obs16`: train epoch `74`, val epoch `73`, val loss `0.03787`
+- Interpreted result:
+- the previous `~950h` estimate was not just an artifact of four-way packing; after cleanup the long-context pair remains slow enough that a full from-scratch `3500`-epoch image run still extrapolates to roughly `~940h` remaining at current rate
+- therefore the correct diagnosis is mixed:
+- yes, the official recipe is intrinsically heavy
+- and yes, our current run is also on a slower-than-best-case path because it does not yet use embedding caching and does not use the dedicated official longhist dataset / script path end-to-end

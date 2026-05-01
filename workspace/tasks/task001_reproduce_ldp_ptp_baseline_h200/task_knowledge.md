@@ -1,6 +1,6 @@
 # Task Knowledge
 
-<!-- METADATA:SESSION=4 -->
+<!-- METADATA:SESSION=5 -->
 
 ## Working Rules
 - Prefer upstream official assets first:
@@ -152,3 +152,26 @@
 - surviving parent PIDs are:
 - `3622380` for `no_ptp_square_obs16_1777535301`
 - `3623114` for `ptp_square_obs16_1777535313`
+- Clarification about training duration:
+- `3500` epochs is not a local arbitrary choice; it is explicitly present in both upstream configs:
+- `experiment_configs/square/transformer_square.yaml`
+- `experiment_configs/longhist/transformer_longhist.yaml`
+- Why the wall time is so large:
+- one epoch corresponds to a full pass over the train dataloader, not a small fixed number of steps
+- live runs imply about `1141-1144` optimizer steps per epoch at `obs16`
+- therefore `3500` epochs implies on the order of about `4.0M` optimization steps, before validation / rollout overhead
+- Additional overhead sources confirmed in config / code:
+- validation is run every epoch because `val_every=1`
+- rollout is done through the env runner periodically and the configs use `n_envs=28` and `n_test=40`
+- current `obs16` reproductions are training from raw images rather than cached embeddings
+- Upstream speedup path:
+- README states the provided observation encoders are needed for `--emb True --cached True`
+- README explicitly says that after caching embeddings, training can run with "substantial speedup"
+- Therefore the current `~950h` order of magnitude should be interpreted as:
+- not evidence of a single obvious code bug
+- partly the natural cost of the official image-based long-context diffusion recipe
+- partly a consequence of our current slower path that does not yet exploit embedding caching and the full official longhist data path
+- Latest post-cleanup progress sample at `2026-05-01 04:17 UTC`:
+- `no_ptp_obs16`: train epoch `74`, val epoch `73`, val loss `0.05386010929942131`
+- `ptp_obs16`: train epoch `74`, val epoch `73`, val loss `0.03787311911582947`
+- The `PTP` line still maintains the lower validation loss after cleanup.
