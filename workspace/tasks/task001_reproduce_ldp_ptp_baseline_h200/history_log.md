@@ -1,6 +1,6 @@
 # History Log
 
-<!-- METADATA:SESSION=2 -->
+<!-- METADATA:SESSION=3 -->
 
 ## Session 0
 - Created task for reproducing LDP baseline and PTP on H200.
@@ -41,3 +41,13 @@
 - all policies use diffusion policies with context length 16 and chunk size 8
 - caching ablation evaluates checkpoints saved every 50 epochs for two days
 - Clarified to user-facing report that the previously mentioned `100` was not a hand-picked total training length; it was derived from the official `transformer_square.yaml` values `checkpoint_every=100` and `rollout_every=100` while total training length remained `num_epochs=3500`.
+
+## Session 3
+- Sampled live GPU utilization on the debug server at `2026-05-01 03:26:21 UTC`.
+- `nvidia-smi` snapshot:
+- GPU0: `0%` utilization, `27874 MiB / 143771 MiB` allocated, `33 C`
+- GPU1: `15%` utilization, `27876 MiB / 143771 MiB` allocated, `38 C`
+- Active compute processes still match the expected 4-run packing:
+- GPU0: PID `1653544` and PID `3623114`
+- GPU1: PID `3608565` and PID `3622380`
+- Interpretation: the box is under-utilized at this sample point even though four training processes are resident; the workload is currently not saturating either H200.

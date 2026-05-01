@@ -1,6 +1,6 @@
 # Task Knowledge
 
-<!-- METADATA:SESSION=2 -->
+<!-- METADATA:SESSION=3 -->
 
 ## Working Rules
 - Prefer upstream official assets first:
@@ -110,3 +110,7 @@
 - not an arbitrary total-epoch choice
 - it came from the official short-history square experiment config where both `checkpoint_every` and `rollout_every` are set to `100`
 - total training duration for that config is `3500` epochs, not `100`
+- Live utilization snapshot on `2026-05-01 03:26:21 UTC`:
+- GPU0 utilization `0%`, memory `27874 MiB / 143771 MiB`
+- GPU1 utilization `15%`, memory `27876 MiB / 143771 MiB`
+- Four resident python jobs remain mapped across the two GPUs, but instantaneous compute utilization is low, so more packing is possible if I/O and rollout interference stay acceptable.
