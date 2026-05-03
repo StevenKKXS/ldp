@@ -1,6 +1,6 @@
 # Task Knowledge
 
-<!-- METADATA:SESSION=12 -->
+<!-- METADATA:SESSION=13 -->
 
 ## Working Rules
 - Prefer upstream official assets first:
@@ -338,3 +338,17 @@
 - no broader converged / multi-seed result set
 - Session 12 validation note:
 - `history_log.md` now explicitly carries the Session 12 status block and close-out check, so the task record is consistent across `status.md`, `history_log.md`, and `task_knowledge.md`
+- Long-hist square explanation to reuse:
+- in paper language, `long hist square` refers to the paper's `long-horizon square` task
+- paper definition: the robot must place and remove the square onto the peg twice before the final drop
+- why it matters: success depends on recalling what happened earlier in the episode, so it is a history-critical task
+- code mapping:
+- config family: `experiment_configs/longhist/`
+- main config: `transformer_longhist.yaml`
+- task dataset path: `data/longhistsquare100/demos.hdf5`
+- task/logging name: `square_long_image`
+- runner: `robomimic_longhist_image_runner`
+- important distinction:
+- ordinary `square` with `global_obs=16` is not the same thing as paper `long-horizon square`
+- the former is a history-conditioned version of the standard RoboMimic square task
+- the latter is a separate harder task with a different data path and task semantics

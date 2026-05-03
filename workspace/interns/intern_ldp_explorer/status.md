@@ -8,5 +8,5 @@
 | Status | Working |
 | Current Task | task001_reproduce_ldp_ptp_baseline_h200 |
 | PR | https://github.com/StevenKKXS/ldp/pull/new/intern_ldp_explorer/task001_reproduce_ldp_ptp_baseline_h200 |
-| Session | 12 |
-| Recent Progress | Re-validated the Session 12 progress summary after the stop-hook check. `history_log.md` now explicitly includes the Session 12 distance-to-paper narrative plus a close-out note, and the key conclusion is unchanged: we have a positive matched `PTP` vs `no-PTP` signal on `obs16` square, but we are still missing the full long-history data path, the full multistage cached-embedding recipe, and test-time verification needed for a paper-level reproduction claim. |
+| Session | 13 |
+| Recent Progress | Clarified what `long hist square` actually means in the paper and in code. It is not just the standard RoboMimic `square` task with a larger observation window; in the paper it is a new long-horizon square task where the robot must place and remove the square twice before the final drop, making success genuinely history-dependent. In the repo this is implemented through a separate `longhist` config family with its own dataset path `data/longhistsquare100/demos.hdf5`, task name `square_long_image`, and long-history runner wiring, rather than by a simple flag on the regular `square` task. |

@@ -1,6 +1,6 @@
 # History Log
 
-<!-- METADATA:SESSION=12 -->
+<!-- METADATA:SESSION=13 -->
 
 ## Session 0
 - Created task for reproducing LDP baseline and PTP on H200.
@@ -442,3 +442,35 @@
 - Session 12 close-out check:
 - re-validated after the stop-hook that this file explicitly contains the Session 12 progress-vs-paper explanation requested by the user
 - no change to the high-level distance-to-paper assessment from the earlier Session 12 sample
+
+## Session 13
+- User asked for a simple explanation of what `long hist square` means, how the paper defines it, and how the code implements it.
+- Clarified the paper-side meaning first:
+- `long hist square` is shorthand for the paper's `long-horizon square` task, not merely "standard square with more history frames"
+- the paper explicitly defines long-horizon square as a new simulation task "where the robot must place and remove a square onto the peg twice before finally dropping it in the peg"
+- the purpose of this task is to force the policy to remember earlier progress in the episode, so it is a genuinely history-critical task rather than a simple pick-and-place
+- the paper groups it together with long-horizon ALOHA as a setting where longer context matters substantially more than on simple square
+- Clarified the difference from standard square:
+- standard RoboMimic `square` is an existing benchmark task from RoboMimic
+- long-horizon square is a paper-added harder task built to require memory of earlier stage transitions
+- therefore, increasing `global_obs` from 2 to 16 on ordinary square does not by itself recreate long-horizon square
+- it only makes the standard square policy history-conditioned
+- Mapped this to the repo implementation:
+- the long-horizon task has its own config family under `experiment_configs/longhist/`
+- primary config is `experiment_configs/longhist/transformer_longhist.yaml`
+- it sets:
+- `global_obs: 16`
+- `dataset_path: data/longhistsquare100/demos.hdf5`
+- task / logging names tied to `square_long_image`
+- env runner target `diffusion_policy.env_runner.robomimic_longhist_image_runner.RobomimicImageRunner`
+- `checkpoint_every: 10`
+- `rollout_every: 50`
+- In contrast, regular square uses the normal square config family and the RoboMimic dataset path `data/robomimic/datasets/square/mh/image_abs.hdf5`
+- Clarified the launcher interface:
+- `transformer_history.sh` has a dedicated `longhist` config choice
+- this routes to `CONFIG=\"transformer_longhist\"` and `CONFIG_DIR=\"experiment_configs/longhist\"`
+- so the repo itself treats long-history square as a separate experiment family, not as just a runtime override on the standard square config
+- Final explanation framing recorded for future user-facing answers:
+- "long hist square" means the paper's custom long-horizon square task plus its long-context training setup
+- it is a separate data/task path in code
+- it should not be confused with "ordinary square + `global_obs=16`"
