@@ -1,6 +1,6 @@
 # Task Knowledge
 
-<!-- METADATA:SESSION=11 -->
+<!-- METADATA:SESSION=12 -->
 
 ## Working Rules
 - Prefer upstream official assets first:
@@ -323,3 +323,16 @@
 - near-equality / decodability / structural consistency are the right criteria here, not raw-byte identity
 - Session 11 validation note:
 - `history_log.md` now explicitly carries the Session 11 validation block and close-out check, so the task record is consistent across `status.md`, `history_log.md`, and `task_knowledge.md`
+- Best current high-level status framing:
+- we are no longer at the "does PTP help at all?" stage
+- we are now at the "how do we close the gap from a directional matched-ablation result to the full paper recipe and reported performance?" stage
+- Closest thing we have to a paper-relevant success today:
+- matched `obs16` square comparison on the older node:
+- `PTP`: `test/mean_score=0.2`
+- `no-PTP`: `test/mean_score=0.05`
+- This is enough to say the core method signal has been observed.
+- It is not enough to claim the paper's reported result has been reproduced, because the remaining paper-specific gaps are still:
+- missing `longhistsquare100`
+- missing full multistage cached-embedding long-history run on the intended task
+- missing test-time verification
+- no broader converged / multi-seed result set

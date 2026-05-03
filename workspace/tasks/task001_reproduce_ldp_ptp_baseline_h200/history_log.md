@@ -1,6 +1,6 @@
 # History Log
 
-<!-- METADATA:SESSION=11 -->
+<!-- METADATA:SESSION=12 -->
 
 ## Session 0
 - Created task for reproducing LDP baseline and PTP on H200.
@@ -402,3 +402,40 @@
 - Session 11 close-out check:
 - re-validated after the stop-hook that this file explicitly contains the Session 11 cache-validation explanation requested by the user
 - no change to the validation conclusions from the earlier Session 11 sample
+
+## Session 12
+- User asked for an explicit status summary of how far the work is from reproducing the paper's results, and how the current tasks relate to the paper's reported outcomes.
+- Re-sampled the live node before summarizing:
+- only one compute endpoint remains live: `10.100.2.47:15744`
+- current sampled GPU state: `GPU0 0%, 4 MiB`; `GPU1 51%, 27875 MiB`
+- still-active top-level jobs:
+- `node96_no_ptp_square_obs16_1777613676`
+- `node96_nohist_square_short_1777613676`
+- Re-parsed the current run matrix and restated the most relevant finished results:
+- short-context legacy PTP (`full_train_3500ep_1777457545`) is no longer useful for paper-level conclusions and degraded to `test/mean_score=0.0`
+- short-context no-history baseline (`baseline_square_3500ep_1777535019`) reached best visible checkpoint `0.100` at epoch `299`, later `0.025` at epoch `399`
+- matched long-context square comparison on the older node:
+- `no_ptp_square_obs16_1777535301`: epoch-99 `test/mean_score=0.05`
+- `ptp_square_obs16_1777535313`: epoch-99 `test/mean_score=0.2`
+- This remains the strongest completed result that is actually relevant to the paper's core algorithmic claim.
+- Re-stated the current live 96h-node state:
+- `node96_no_ptp_square_obs16_1777613676` is still running and has progressed to train epoch `198`, val epoch `197`, val loss `0.06457`, but its latest formal test record is still only the earlier epoch-99 `test/mean_score=0.025`
+- `node96_nohist_square_short_1777613676` is still running and has progressed to train epoch `1122`, val epoch `1121`, val loss `0.10271`, with latest formal test record `epoch 1099 -> test/mean_score=0.025`
+- Positioned the current work relative to the paper more explicitly:
+- What we have reproduced already:
+- the central algorithmic ablation that the paper cares about most: matched long-context `PTP` versus matched long-context `no-PTP`
+- a no-history-style short-context baseline
+- What we have not yet reproduced:
+- the full paper training recipe, which by default uses multistage training plus feature caching
+- the dedicated `longhistsquare100` data path used for the history-critical long-horizon square setting
+- the test-time verification stage, which the paper reports as an additional source of gain
+- multi-seed, more converged evaluation closer to the paper's reporting standard
+- Distance-to-paper assessment:
+- algorithmic direction: partially reproduced
+- current evidence already supports the paper's claim that `PTP` helps compared to matched `no-PTP`
+- paper-level performance number: not yet reproduced
+- current `0.2 / 0.05` result should be treated as an early single-comparison signal rather than a paper-equivalent success rate
+- The reason the current work still matters:
+- it has already de-risked the central hypothesis that the `past_action_pred` / PTP objective is beneficial under matched long-context settings
+- it repaired a broken cache path that blocks the paper's faster multistage recipe
+- it narrowed the remaining uncertainty down to a small number of missing paper-specific components rather than a general "PTP may not work" concern
