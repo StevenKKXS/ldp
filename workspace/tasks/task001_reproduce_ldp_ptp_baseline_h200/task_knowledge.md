@@ -321,3 +321,5 @@
 - Important nuance for explanations:
 - image tensors in cache should not be expected to be byte-identical to raw HDF5 images because they pass through the repo's JPEG2000 cache codec path
 - near-equality / decodability / structural consistency are the right criteria here, not raw-byte identity
+- Session 11 validation note:
+- `history_log.md` now explicitly carries the Session 11 validation block and close-out check, so the task record is consistent across `status.md`, `history_log.md`, and `task_knowledge.md`

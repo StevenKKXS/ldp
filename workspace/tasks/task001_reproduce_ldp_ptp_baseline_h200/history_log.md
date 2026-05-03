@@ -399,3 +399,6 @@
 - I cannot claim "identical to a remote official cache" because no such official cache file is available
 - I can claim the repaired cache is internally valid, structurally complete, codec-decodable, cardinality-consistent with the source HDF5, and usable by the exact dataset loader the training code relies on
 - This is sufficient evidence to treat it as a repaired, non-truncated working cache unless later training behavior reveals a deeper semantic mismatch
+- Session 11 close-out check:
+- re-validated after the stop-hook that this file explicitly contains the Session 11 cache-validation explanation requested by the user
+- no change to the validation conclusions from the earlier Session 11 sample
