@@ -336,3 +336,5 @@
 - missing full multistage cached-embedding long-history run on the intended task
 - missing test-time verification
 - no broader converged / multi-seed result set
+- Session 12 validation note:
+- `history_log.md` now explicitly carries the Session 12 status block and close-out check, so the task record is consistent across `status.md`, `history_log.md`, and `task_knowledge.md`

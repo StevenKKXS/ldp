@@ -439,3 +439,6 @@
 - it has already de-risked the central hypothesis that the `past_action_pred` / PTP objective is beneficial under matched long-context settings
 - it repaired a broken cache path that blocks the paper's faster multistage recipe
 - it narrowed the remaining uncertainty down to a small number of missing paper-specific components rather than a general "PTP may not work" concern
+- Session 12 close-out check:
+- re-validated after the stop-hook that this file explicitly contains the Session 12 progress-vs-paper explanation requested by the user
+- no change to the high-level distance-to-paper assessment from the earlier Session 12 sample
