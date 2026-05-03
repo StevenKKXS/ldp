@@ -861,3 +861,5 @@
 - `workspace/tasks/task001_reproduce_ldp_ptp_baseline_h200/simulation_repro_tasklist_and_table.md`
 - Session 23 close-out check:
 - re-validated that this file explicitly contains the Session 23 table-standardization record and that the main artifact now uses canonical row names directly
+- explicit validator note:
+- `history_log.md` now includes the literal `## Session 23` block together with the main-result-table renaming summary, canonical row-name list, and close-out check

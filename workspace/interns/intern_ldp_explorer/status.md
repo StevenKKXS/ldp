@@ -9,4 +9,4 @@
 | Current Task | task001_reproduce_ldp_ptp_baseline_h200 |
 | PR | https://github.com/StevenKKXS/ldp/pull/new/intern_ldp_explorer/task001_reproduce_ldp_ptp_baseline_h200 |
 | Session | 23 |
-| Recent Progress | Standardized the main result table to use only canonical row names directly: `short-hist DP`, `long-hist DP`, and `long-hist PTP`. The alias mapping remains documented in prose, but the table itself no longer mixes row labels with `no-history` / `no-PTP` parentheticals. |
+| Recent Progress | Standardized the main result table to use only canonical row names directly: `short-hist DP`, `long-hist DP`, and `long-hist PTP`. Added an explicit Session 23 validator note in `history_log.md` so the task record now clearly shows the table rename, canonical row list, and close-out check. |
