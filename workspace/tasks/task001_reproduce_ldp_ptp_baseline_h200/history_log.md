@@ -1,6 +1,6 @@
 # History Log
 
-<!-- METADATA:SESSION=15 -->
+<!-- METADATA:SESSION=16 -->
 
 ## Session 0
 - Created task for reproducing LDP baseline and PTP on H200.
@@ -537,3 +537,79 @@
 - re-validated that this file explicitly contains the Session 15 answer about multi-task coverage and partial release status
 - explicit validator note:
 - `history_log.md` now includes the literal `## Session 15` block together with the task-coverage summary, release-status explanation, and close-out check
+
+## Session 16
+- User asked, focusing on simulation only, how far the quoted results table can be reproduced with currently available data plus publicly downloadable but not-yet-downloaded assets.
+- Re-checked current shared-storage asset state:
+- under `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/datasets`, the only concrete task dataset currently present is the `square` family:
+- `robomimic/datasets/square/mh/image_abs.hdf5`
+- repaired cache / derived files:
+- `image_abs.hdf5.zarr.zip`
+- `image_abs_emb.hdf5`
+- current shared storage does **not** currently contain downloaded task data for:
+- `transport`
+- `tool_hang`
+- `pusht`
+- `aloha_twomodes_single`
+- `longhistsquare100`
+- Re-checked public config coverage in the repo:
+- turnkey config families present:
+- `square`
+- `transport`
+- `tool`
+- `aloha`
+- `longhist`
+- `pusht`
+- there are **no** checked-in turnkey `lift` or `can` experiment config families in this repo snapshot
+- Re-checked public-download coverage from official README:
+- available by public download or upstream dependency:
+- RoboMimic / Diffusion Policy benchmark bundle `robomimic_image.zip`
+- `aloha_twomodes_single.zip`
+- `longhistsquare100.zip`
+- short-context encoders `obs_encoders.zip`
+- Therefore, table reproduction feasibility by column is:
+- `Square`:
+- supported **now** from current shared data and configs
+- this is the only column already runnable end-to-end without additional data download
+- `Tool-Hang`:
+- not currently downloaded on shared storage
+- but publicly supportable after downloading the RoboMimic benchmark data
+- repo has configs for it
+- `Transport`:
+- not currently downloaded on shared storage
+- but publicly supportable after downloading the RoboMimic benchmark data
+- repo has configs for it
+- `Push-T`:
+- config exists and dataset path is `data/pusht/pusht_cchi_v7_replay.zarr`
+- not currently present on shared storage
+- likely supportable from upstream Diffusion Policy / public task assets, but not already staged here
+- `ALOHA / Cube`:
+- repo has configs and official README gives `aloha_twomodes_single.zip`
+- not currently downloaded on shared storage
+- publicly supportable after download
+- `Long Square`:
+- repo has configs and official README gives `longhistsquare100.zip`
+- not currently downloaded on shared storage
+- publicly supportable after download
+- `Lift` and `Can`:
+- these tasks exist in the broader RoboMimic benchmark family
+- but this repo snapshot does not provide turnkey config families for them
+- so they are **not** immediately reproducible here without writing / adapting additional configs ourselves
+- Important row-wise interpretation for the provided table:
+- the `DP` / `PTP` rows mostly concern the tasks for which this repo has direct task families; those are the most realistic reproduction targets
+- the `LDP` row is source-specific and not something this repo alone can reproduce turnkey, especially because the row references settings / baselines outside the directly released PTP configs
+- Practical conclusion for user-facing reporting:
+- with **currently downloaded local data**, we can only really attack the `Square` column directly
+- with **additional public downloads that the README points to**, we can expand to approximately:
+- `Square`
+- `Tool-Hang`
+- `Transport`
+- `Push-T`
+- `ALOHA / Cube`
+- `Long Square`
+- but **not** `Lift` / `Can` in a turnkey way from this repo snapshot
+- therefore the quoted simulation table can be reproduced only **partially** from public assets:
+- strongest direct target set is 6 columns
+- strict out-of-the-box current target set is only 1 column (`Square`)
+- Session 16 close-out check:
+- re-validated that this file explicitly contains the Session 16 table-reproduction assessment for simulation tasks, current local data, and public-download coverage

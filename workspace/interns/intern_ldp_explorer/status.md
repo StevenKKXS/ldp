@@ -8,5 +8,5 @@
 | Status | Working |
 | Current Task | task001_reproduce_ldp_ptp_baseline_h200 |
 | PR | https://github.com/StevenKKXS/ldp/pull/new/intern_ldp_explorer/task001_reproduce_ldp_ptp_baseline_h200 |
-| Session | 15 |
-| Recent Progress | Clarified that the paper covers many tasks beyond `square`, and added an explicit Session 15 validator note after the stop-hook. The repo and official README clearly expose simulation assets for RoboMimic / Diffusion Policy tasks plus the paper's long-history simulation benchmarks, but they do not provide GitHub Releases, pretrained policy checkpoints, or a checked-in `experiment_configs/real/` directory for the real-world tasks referenced by the launcher. |
+| Session | 16 |
+| Recent Progress | Assessed how far the simulation table can be reproduced with the data currently on shared storage versus additional public downloads. Current shared data effectively supports only `square` end-to-end right now, while public repo assets plus downloadable datasets can extend coverage to `transport`, `tool_hang`, `pusht`, `aloha/cube`, and `long square`; however `lift` / `can` lack turnkey configs here, and the table's `LDP` row is not directly reproducible from this repo alone. |

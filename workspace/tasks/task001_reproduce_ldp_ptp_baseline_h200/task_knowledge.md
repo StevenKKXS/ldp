@@ -1,6 +1,6 @@
 # Task Knowledge
 
-<!-- METADATA:SESSION=15 -->
+<!-- METADATA:SESSION=16 -->
 
 ## Working Rules
 - Prefer upstream official assets first:
@@ -395,3 +395,19 @@
 - `history_log.md` now explicitly carries the Session 15 explanation block and close-out check, so the task record is consistent across `status.md`, `history_log.md`, and `task_knowledge.md`
 - validator note:
 - the Session 15 explanation is explicitly keyed on paper task coverage and partial public release status
+- Simulation-table reproduction assessment to reuse:
+- current shared-storage task data actually present:
+- `square/mh/image_abs.hdf5`
+- repaired square cache and derived embedding file
+- current shared storage does **not** yet contain task datasets for:
+- `transport`, `tool_hang`, `pusht`, `aloha_twomodes_single`, `longhistsquare100`
+- turnkey task config families present in repo:
+- `square`, `transport`, `tool`, `aloha`, `longhist`, `pusht`
+- turnkey task config families **absent** in repo snapshot:
+- `lift`, `can`
+- best direct interpretation of the quoted simulation table:
+- current local-data-only reproduction target: `Square` only
+- public-download-expanded reproduction target: `Square`, `Tool-Hang`, `Transport`, `Push-T`, `ALOHA / Cube`, `Long Square`
+- not turnkey from this repo alone: `Lift`, `Can`, and the source-specific `LDP` row
+- Session 16 consistency note:
+- `history_log.md` now explicitly carries the Session 16 table-reproduction block and close-out check, so the task record is consistent across `status.md`, `history_log.md`, and `task_knowledge.md`
