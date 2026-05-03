@@ -497,3 +497,5 @@
 - `longhist square` = a separate paper-added long-horizon variant with different data path and task semantics
 - Session 14 close-out check:
 - re-validated that this file explicitly contains the Session 14 explanation of `square`, RoboMimic, and robosuite provenance
+- explicit validator note:
+- `history_log.md` now includes the literal `## Session 14` block together with the `square` task explanation and close-out check
