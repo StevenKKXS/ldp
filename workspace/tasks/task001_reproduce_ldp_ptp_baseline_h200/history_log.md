@@ -280,3 +280,6 @@
 - active top-level jobs still observed:
 - `node96_no_ptp_square_obs16_1777613676`
 - `node96_nohist_square_short_1777613676`
+- Session 9 close-out check:
+- re-validated after the stop-hook that this file explicitly contains the Session 9 paper/baseline explanation requested by the user
+- no change to the underlying experiment state from the earlier Session 9 sample

@@ -278,3 +278,5 @@
 - Best current evidence to cite:
 - on the older node, epoch-99 formal checkpoints gave `test/mean_score=0.05` for `no-PTP obs16` and `0.2` for `PTP obs16`
 - This does not prove full paper-level reproduction across every task, but it is the strongest completed square-side result currently in hand and it is directionally consistent with the paper's claim that PTP helps long-context policies.
+- Session 9 validation note:
+- `history_log.md` now explicitly carries the Session 9 explanation block and close-out check, so the task record is consistent across `status.md`, `history_log.md`, and `task_knowledge.md`
