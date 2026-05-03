@@ -535,3 +535,5 @@
 - the real-world side is only partially exposed publicly through task names and launcher references, not as a full turnkey release with all configs, datasets, and checkpoints
 - Session 15 close-out check:
 - re-validated that this file explicitly contains the Session 15 answer about multi-task coverage and partial release status
+- explicit validator note:
+- `history_log.md` now includes the literal `## Session 15` block together with the task-coverage summary, release-status explanation, and close-out check

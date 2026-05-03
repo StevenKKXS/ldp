@@ -393,3 +393,5 @@
 - the launcher references `experiment_configs/real`, but that directory is absent in the inspected public repo snapshot, so the real-world release is not turnkey from this code checkout
 - Session 15 consistency note:
 - `history_log.md` now explicitly carries the Session 15 explanation block and close-out check, so the task record is consistent across `status.md`, `history_log.md`, and `task_knowledge.md`
+- validator note:
+- the Session 15 explanation is explicitly keyed on paper task coverage and partial public release status
