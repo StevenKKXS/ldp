@@ -1,6 +1,6 @@
 # Task Knowledge
 
-<!-- METADATA:SESSION=10 -->
+<!-- METADATA:SESSION=11 -->
 
 ## Working Rules
 - Prefer upstream official assets first:
@@ -306,3 +306,18 @@
 - no test-time verification stage yet
 - Session 10 validation note:
 - `history_log.md` now explicitly carries the Session 10 repair block and close-out check, so the task record is consistent across `status.md`, `history_log.md`, and `task_knowledge.md`
+- Cache validation methodology to cite:
+- there is no official downloadable reference cache for `square/mh/image_abs.hdf5.zarr.zip`
+- therefore validation must be based on consistency with the healthy source HDF5 and successful use by the repo's own loader stack
+- Strongest completed validation checks:
+- zip-level integrity passes
+- zarr codec path decodes successfully after registering `imagecodecs_jpeg2k`
+- replay buffer loads successfully from the repaired zip
+- cache cardinality exactly matches source HDF5:
+- `300` demos
+- `80731` total steps
+- key shapes and schema match expected task configuration
+- `RobomimicReplayImageDataset(..., use_cache=True)` can load the repaired cache and produce valid samples
+- Important nuance for explanations:
+- image tensors in cache should not be expected to be byte-identical to raw HDF5 images because they pass through the repo's JPEG2000 cache codec path
+- near-equality / decodability / structural consistency are the right criteria here, not raw-byte identity

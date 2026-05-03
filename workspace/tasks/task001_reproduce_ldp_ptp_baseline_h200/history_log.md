@@ -1,6 +1,6 @@
 # History Log
 
-<!-- METADATA:SESSION=10 -->
+<!-- METADATA:SESSION=11 -->
 
 ## Session 0
 - Created task for reproducing LDP baseline and PTP on H200.
@@ -331,3 +331,71 @@
 - Session 10 close-out check:
 - re-validated after the stop-hook that this file explicitly contains the Session 10 cache-repair and low-score interpretation requested by the user
 - no change to the repaired cache state from the earlier Session 10 sample
+
+## Session 11
+- User asked how I determine that the repaired cache is not still corrupted or incomplete, and whether it matches any cloud-downloaded original.
+- Clarified the comparison target first:
+- there is no official cloud download for `image_abs.hdf5.zarr.zip`
+- the official `robomimic` downloader explicitly reports no URL for `square/mh/image`
+- therefore the repaired cache cannot be validated by bytewise comparison against an official remote canonical cache file
+- the correct question is whether the repaired cache is internally valid and structurally consistent with the healthy source HDF5
+- Performed a stronger validation chain on the live node:
+- zip-level integrity:
+- `zip_ok=True`
+- `entries=161477`
+- zarr/replay-buffer semantic load:
+- registered the required `imagecodecs_jpeg2k` codec
+- opened the repaired zip with `zarr.ZipStore`
+- loaded it into `ReplayBuffer.copy_from_store(...)`
+- extracted structural statistics from the cache:
+- keys: `['action', 'agentview_image', 'robot0_eef_pos', 'robot0_eef_quat', 'robot0_eye_in_hand_image', 'robot0_gripper_qpos']`
+- `n_episodes=300`
+- `episode_ends_len=300`
+- `total_steps_from_episode_ends=80731`
+- `action_shape=(80731, 10)`
+- extracted the same cardinality statistics from the source HDF5:
+- `hdf5_demo_count=300`
+- `hdf5_total_steps=80731`
+- Conclusion from these checks:
+- the repaired cache matches the source dataset in episode count and total number of time steps exactly
+- this is a strong indicator against truncation or partial write, because truncated caches typically break these end-of-buffer counters first
+- Performed schema-level consistency checks:
+- cache array shapes:
+- `agentview_image (80731, 84, 84, 3)`
+- `robot0_eye_in_hand_image (80731, 84, 84, 3)`
+- `robot0_eef_pos (80731, 3)`
+- `robot0_eef_quat (80731, 4)`
+- `robot0_gripper_qpos (80731, 2)`
+- source HDF5 first-frame shapes:
+- `agentview_image (84, 84, 3)`
+- `robot0_eye_in_hand_image (84, 84, 3)`
+- `robot0_eef_pos (3,)`
+- `robot0_eef_quat (4,)`
+- `robot0_gripper_qpos (2,)`
+- These are shape-consistent after adding the time dimension in cache form.
+- Performed a spot-value comparison:
+- lowdim observation sums for the first frame matched exactly up to float precision:
+- `robot0_eef_pos`: HDF5 `0.8894108895` vs cache `0.8894108534`
+- `robot0_eef_quat`: HDF5 `1.0620296329` vs cache `1.0620296001`
+- `robot0_gripper_qpos`: HDF5 `0.0` vs cache `0.0`
+- image sums were close but not identical:
+- `agentview_image`: HDF5 `4101217` vs cache `4101427`
+- `robot0_eye_in_hand_image`: HDF5 `4354381` vs cache `4354175`
+- Interpretation:
+- image arrays are stored through the repo's JPEG2000 codec path, so semantic fidelity and decodability matter more than byte-identical equality with the raw HDF5 source
+- exact bytewise identity is not expected to be the right criterion for the cached image tensors
+- Performed the strongest practical end-to-end check:
+- instantiated `RobomimicReplayImageDataset(..., use_cache=True)` against the repaired cache path
+- loader successfully printed `Loading cached ReplayBuffer from Disk. Loaded!`
+- dataset length was valid: `72527`
+- first sample contained valid obs/action tensor shapes:
+- `action`: `(32, 10)`
+- `agentview_image`: `(2, 3, 84, 84)`
+- `robot0_eye_in_hand_image`: `(2, 3, 84, 84)`
+- `robot0_eef_pos`: `(2, 3)`
+- `robot0_eef_quat`: `(2, 4)`
+- `robot0_gripper_qpos`: `(2, 2)`
+- Final validation judgment:
+- I cannot claim "identical to a remote official cache" because no such official cache file is available
+- I can claim the repaired cache is internally valid, structurally complete, codec-decodable, cardinality-consistent with the source HDF5, and usable by the exact dataset loader the training code relies on
+- This is sufficient evidence to treat it as a repaired, non-truncated working cache unless later training behavior reveals a deeper semantic mismatch
