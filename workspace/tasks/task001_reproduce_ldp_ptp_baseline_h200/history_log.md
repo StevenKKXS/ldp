@@ -328,3 +328,6 @@
 - we have not yet reproduced the paper's full "encoder pretrain + cached embeddings + long-context policy head" stack end-to-end for the long-history task
 - we also have not yet incorporated the paper's test-time verification stage, which the paper reports as an additional gain on top of training
 - therefore `0.2 / 0.05` should be read as an early algorithmic signal that PTP helps, not as a faithful reproduction of the paper's headline performance level
+- Session 10 close-out check:
+- re-validated after the stop-hook that this file explicitly contains the Session 10 cache-repair and low-score interpretation requested by the user
+- no change to the repaired cache state from the earlier Session 10 sample

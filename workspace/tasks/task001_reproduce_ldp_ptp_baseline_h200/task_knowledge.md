@@ -304,3 +304,5 @@
 - missing end-to-end multistage cached-embedding recipe on the intended long-history task
 - single-run / early-checkpoint comparison instead of broader converged evaluation
 - no test-time verification stage yet
+- Session 10 validation note:
+- `history_log.md` now explicitly carries the Session 10 repair block and close-out check, so the task record is consistent across `status.md`, `history_log.md`, and `task_knowledge.md`
