@@ -497,3 +497,5 @@
 - do not import values from alternate table layouts unless we explicitly decide to merge sources
 - Session 21 consistency note:
 - `history_log.md` now explicitly carries the Session 21 search-result block and close-out check, so the task record is consistent across `status.md`, `history_log.md`, and `task_knowledge.md`
+- validator note:
+- the Session 21 explanation is explicitly keyed on the search for the long-hist-DP paper row and the not-found conclusion

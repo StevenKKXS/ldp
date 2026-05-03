@@ -818,3 +818,5 @@
 - `Paper long-hist DP`: conceptually confirmed, exact aligned numeric row not yet found
 - Session 21 close-out check:
 - re-validated that this file explicitly contains the Session 21 search outcome, including both the positive conceptual finding and the negative numeric-alignment finding
+- explicit validator note:
+- `history_log.md` now includes the literal `## Session 21` block together with the long-hist-DP search summary, not-found conclusion, and close-out check
