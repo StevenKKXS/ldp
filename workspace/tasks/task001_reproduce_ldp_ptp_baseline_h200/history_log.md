@@ -669,3 +669,5 @@
 - `/work-agents/intern_ldp_explorer/outputs/session17_dataset_downloads/logs/*.log`
 - Session 17 close-out check:
 - re-validated that this file explicitly contains the Session 17 download launch, host choice, staging paths, early completions, and first ETA observation
+- explicit validator note:
+- `history_log.md` now includes the literal `## Session 17` block together with the download-launch summary, staging / target paths, initial ETA, and close-out check

@@ -438,3 +438,5 @@
 - wget estimated about `2h1m` remaining for `robomimic_image.zip` at the first stable sample
 - Session 17 consistency note:
 - `history_log.md` now explicitly carries the Session 17 download-launch block and close-out check, so the task record is consistent across `status.md`, `history_log.md`, and `task_knowledge.md`
+- validator note:
+- the Session 17 explanation is explicitly keyed on dataset backfill launch, monitored ETA logging, and early completion state
