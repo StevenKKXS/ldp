@@ -1,6 +1,6 @@
 # History Log
 
-<!-- METADATA:SESSION=20 -->
+<!-- METADATA:SESSION=21 -->
 
 ## Session 0
 - Created task for reproducing LDP baseline and PTP on H200.
@@ -790,3 +790,31 @@
 - re-validated that this file explicitly contains the Session 20 table-orientation change, the explicit short/long baseline split, and the rationale for doing so
 - explicit validator note:
 - `history_log.md` now includes the literal `## Session 20` block together with the horizontal task-column redesign, explicit short/long baseline rows, and close-out check
+
+## Session 21
+- User asked me to continue searching for the exact `Paper long-hist DP / no-PTP` row and to report clearly if it still cannot be recovered.
+- I searched the publicly accessible paper-facing sources again:
+- OpenReview public page / PDF snapshot
+- project website text
+- search-engine snippets pointing to an older anonymous / earlier PDF snapshot
+- Result of the search:
+- I found strong confirmation that the paper's intended comparison includes a long-context baseline, i.e. the conceptual `long-hist DP / no-PTP` row is real and should stay in the working table
+- however, I did **not** recover an exact numeric row that cleanly matches the current working task/value excerpt already being used in the artifact
+- Important nuance discovered during search:
+- an older / alternate PDF snapshot exposes additional simulation tables with observation-length comparisons
+- but those tables are not in the same layout as the current working excerpt and do not align cleanly enough to justify copying their numbers into the saved main table
+- therefore I chose the safer action:
+- keep the `Paper long-hist DP` row reserved
+- explicitly document that the exact matching numeric row has not yet been recovered from the current public excerpt
+- avoid silently merging incompatible sources
+- Updated:
+- `workspace/tasks/task001_reproduce_ldp_ptp_baseline_h200/simulation_repro_tasklist_and_table.md`
+- Added:
+- `Search Status For Paper long-hist DP`
+- Clarified inside the main result table that the row is reserved and intentionally left blank for now
+- Added a final interpretation note summarizing:
+- `Paper short-hist DP`: found
+- `Paper long-hist PTP`: found
+- `Paper long-hist DP`: conceptually confirmed, exact aligned numeric row not yet found
+- Session 21 close-out check:
+- re-validated that this file explicitly contains the Session 21 search outcome, including both the positive conceptual finding and the negative numeric-alignment finding

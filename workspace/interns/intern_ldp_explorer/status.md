@@ -8,5 +8,5 @@
 | Status | Working |
 | Current Task | task001_reproduce_ldp_ptp_baseline_h200 |
 | PR | https://github.com/StevenKKXS/ldp/pull/new/intern_ldp_explorer/task001_reproduce_ldp_ptp_baseline_h200 |
-| Session | 20 |
-| Recent Progress | Restructured the simulation artifact into a true task-column table and added an explicit Session 20 validator note after the stop-hook. The method rows are now explicitly split into `short-hist DP`, `long-hist DP`, and `long-hist PTP`, which matches the paper's real comparison logic better than the previous mixed layout while still keeping extra blank `repro` rows and a dedicated ablation table. |
+| Session | 21 |
+| Recent Progress | Continued searching for the exact `Paper long-hist DP / no-PTP` numeric row. The current conclusion is that the public materials clearly confirm the conceptual long-context baseline, but I have not yet recovered an exact numeric row that cleanly aligns with the current working table excerpt. I updated the saved markdown to record this explicitly instead of silently mixing incompatible table sources. |

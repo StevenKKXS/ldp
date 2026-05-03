@@ -26,6 +26,25 @@ It is also useful to separate three concepts clearly:
 The current paper-number excerpt we are using already gives a short-hist DP row and a PTP row.
 The paper / project description also clearly discusses a long-context baseline, so this artifact now reserves a row for it even when the exact paper-number cells are not all copied into the current excerpt.
 
+## Search Status For `Paper long-hist DP`
+
+Status:
+
+- exact matching numeric row for the current working table has **not yet been found** in the currently accessible public excerpt we are using
+
+What was found:
+
+- the official project site clearly uses the conceptual comparison:
+  - `Short-Context (Baseline)`
+  - `Long-Context (Baseline)`
+  - `Long-Context (Ours)`
+- an older anonymous / earlier OpenReview PDF snapshot exposes a different simulation table format with long-context values, but it does **not** cleanly align with the exact row / task-value layout of the current working excerpt
+
+Working rule:
+
+- keep the `Paper long-hist DP` row reserved
+- do not fill it with mismatched values from a different table layout unless we explicitly decide to merge sources
+
 ## In-Scope Simulation Targets
 
 - `Square`
@@ -99,7 +118,7 @@ Legend:
 | Paper short-hist DP (`no-history`) | 0.79 ± 0.06 | 0.51 ± 0.14 | 0.60 ± 0.08 | 0.67 ± 0.03 | 0.28 ± 0.04 | 0.12 ± 0.05 | 0.50 | This is the default short-context diffusion baseline row from the current excerpt. |
 | Repro short-hist DP |  |  |  |  |  |  |  | Fill with our matched no-history results. |
 | Repro short-hist DP (repeat / aggregate) |  |  |  |  |  |  |  | Use for second seed or aggregate value. |
-| Paper long-hist DP (`no-PTP`) |  |  |  |  |  |  |  | Reserve this row because the paper uses a long-context baseline, even though the current excerpt does not provide the full row values. |
+| Paper long-hist DP (`no-PTP`) |  |  |  |  |  |  |  | Reserved row. Exact matching numeric row not yet recovered from the current public excerpt; do not backfill from mismatched tables without approval. |
 | Repro long-hist DP |  |  |  |  |  |  |  | Fill with our matched long-context no-PTP results. |
 | Repro long-hist DP (repeat / aggregate) |  |  |  |  |  |  |  | Use for second seed or aggregate value. |
 | Paper long-hist PTP | 0.89 ± 0.01 | 0.75 ± 0.10 | 0.67 ± 0.08 | 0.62 ± 0.02 | 0.98 ± 0.01 | 0.93 ± 0.02 | 0.81 | Main paper method row from the current excerpt. |
@@ -134,3 +153,7 @@ Legend:
   - `short-hist DP`
   - `long-hist DP`
   - `long-hist PTP`
+- Current paper-number search outcome:
+  - `Paper short-hist DP`: found in the current working excerpt
+  - `Paper long-hist PTP`: found in the current working excerpt
+  - `Paper long-hist DP`: conceptually confirmed, but exact matching numeric row not yet found in an aligned public table

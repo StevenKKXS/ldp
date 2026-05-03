@@ -1,6 +1,6 @@
 # Task Knowledge
 
-<!-- METADATA:SESSION=20 -->
+<!-- METADATA:SESSION=21 -->
 
 ## Working Rules
 - Prefer upstream official assets first:
@@ -488,3 +488,12 @@
 - `history_log.md` now explicitly carries the Session 20 table-redesign block and close-out check, so the task record is consistent across `status.md`, `history_log.md`, and `task_knowledge.md`
 - validator note:
 - the Session 20 explanation is explicitly keyed on the horizontal task-column redesign and explicit short/long baseline split
+- Session 21 search-status note:
+- current best summary for `Paper long-hist DP / no-PTP`:
+- conceptually confirmed by paper / website framing
+- exact numeric row for the current working task-value excerpt still not recovered from the accessible public materials used so far
+- working rule:
+- keep the row reserved but blank
+- do not import values from alternate table layouts unless we explicitly decide to merge sources
+- Session 21 consistency note:
+- `history_log.md` now explicitly carries the Session 21 search-result block and close-out check, so the task record is consistent across `status.md`, `history_log.md`, and `task_knowledge.md`
