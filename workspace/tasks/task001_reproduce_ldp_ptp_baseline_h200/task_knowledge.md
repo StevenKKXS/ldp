@@ -1,6 +1,6 @@
 # Task Knowledge
 
-<!-- METADATA:SESSION=16 -->
+<!-- METADATA:SESSION=17 -->
 
 ## Working Rules
 - Prefer upstream official assets first:
@@ -413,3 +413,28 @@
 - `history_log.md` now explicitly carries the Session 16 table-reproduction block and close-out check, so the task record is consistent across `status.md`, `history_log.md`, and `task_knowledge.md`
 - validator note:
 - the Session 16 explanation is explicitly keyed on simulation-table coverage, local data availability, and public-download reach
+- Session 17 dataset-backfill procedure to reuse:
+- CPU host used:
+- `dev4infer`
+- local staging dir:
+- `/work-agents/intern_ldp_explorer/outputs/session17_dataset_downloads`
+- shared target dir:
+- `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/datasets`
+- helper script:
+- `workspace/tasks/task001_reproduce_ldp_ptp_baseline_h200/session17_download_sim_datasets.sh`
+- downloads launched in parallel:
+- `robomimic_image.zip`
+- `pusht.zip`
+- `aloha_twomodes_single.zip`
+- `longhistsquare100.zip`
+- periodic ETA log path:
+- `/work-agents/intern_ldp_explorer/outputs/session17_dataset_downloads/progress.log`
+- early outcome after launch:
+- `aloha_twomodes_single` extracted successfully
+- `pusht` extracted successfully
+- `longhistsquare100` reached final extraction stage with `demos.hdf5` visible
+- dominant remaining transfer is `robomimic_image.zip`
+- first practical ETA signal:
+- wget estimated about `2h1m` remaining for `robomimic_image.zip` at the first stable sample
+- Session 17 consistency note:
+- `history_log.md` now explicitly carries the Session 17 download-launch block and close-out check, so the task record is consistent across `status.md`, `history_log.md`, and `task_knowledge.md`

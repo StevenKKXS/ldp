@@ -8,5 +8,5 @@
 | Status | Working |
 | Current Task | task001_reproduce_ldp_ptp_baseline_h200 |
 | PR | https://github.com/StevenKKXS/ldp/pull/new/intern_ldp_explorer/task001_reproduce_ldp_ptp_baseline_h200 |
-| Session | 16 |
-| Recent Progress | Assessed how far the simulation table can be reproduced with the data currently on shared storage versus additional public downloads, and added an explicit Session 16 validator note after the stop-hook. Current shared data effectively supports only `square` end-to-end right now, while public repo assets plus downloadable datasets can extend coverage to `transport`, `tool_hang`, `pusht`, `aloha/cube`, and `long square`; however `lift` / `can` lack turnkey configs here, and the table's `LDP` row is not directly reproducible from this repo alone. |
+| Session | 17 |
+| Recent Progress | Started the CPU-side dataset backfill on host `dev4infer`. A new helper script now downloads and extracts the missing public simulation datasets in parallel, stages archives under `/work-agents/intern_ldp_explorer/outputs/session17_dataset_downloads`, writes a 10-minute ETA log, and expands data into `/mnt/3fs2/.../datasets`. `aloha_twomodes_single` and `pusht` completed immediately, `longhistsquare100` reached the final extraction stage, and the dominant remaining job is `robomimic_image.zip` with an initial ETA around 2h1m. |

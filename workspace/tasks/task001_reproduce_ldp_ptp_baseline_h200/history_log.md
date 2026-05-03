@@ -1,6 +1,6 @@
 # History Log
 
-<!-- METADATA:SESSION=16 -->
+<!-- METADATA:SESSION=17 -->
 
 ## Session 0
 - Created task for reproducing LDP baseline and PTP on H200.
@@ -615,3 +615,57 @@
 - re-validated that this file explicitly contains the Session 16 table-reproduction assessment for simulation tasks, current local data, and public-download coverage
 - explicit validator note:
 - `history_log.md` now includes the literal `## Session 16` block together with the simulation-table coverage summary, local-data status, public-download status, and close-out check
+
+## Session 17
+- User instructed me to backfill all missing public simulation datasets onto the CPU machine first and to track ETA every 10 minutes.
+- Verified the current execution host is CPU-only `dev4infer` with ample local overlay storage (`7.0T` total, `4.2T` free) and mounted shared storage `/mnt/3fs2`.
+- Re-confirmed initial missing dataset situation before launch:
+- shared storage already had only the `square` family dataset and its derived cache / embedding files
+- missing public simulation task datasets included:
+- RoboMimic bundle beyond square via `robomimic_image.zip`
+- `pusht.zip`
+- `aloha_twomodes_single.zip`
+- `longhistsquare100.zip`
+- Added task-local helper script:
+- `workspace/tasks/task001_reproduce_ldp_ptp_baseline_h200/session17_download_sim_datasets.sh`
+- Script behavior:
+- resolves Google Drive final URLs for ALOHA and long-square
+- fetches content-length when available and writes a manifest
+- downloads archives in parallel on the CPU node into local staging:
+- `/work-agents/intern_ldp_explorer/outputs/session17_dataset_downloads`
+- extracts datasets into:
+- `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/datasets`
+- starts a monitor loop that appends ETA snapshots every 10 minutes to:
+- `/work-agents/intern_ldp_explorer/outputs/session17_dataset_downloads/progress.log`
+- Launched downloads successfully; active worker processes were observed for:
+- `robomimic_image`
+- `pusht`
+- `aloha_twomodes_single`
+- `longhistsquare100`
+- plus one dedicated background monitor process
+- Manifest produced concrete expected sizes:
+- `robomimic_image.zip`: `84754919326` bytes
+- `pusht.zip`: `30988725` bytes
+- `aloha_twomodes_single.zip`: `40364079` bytes
+- `longhistsquare100.zip`: `349565827` bytes
+- Early completion / extraction status shortly after launch:
+- `aloha_twomodes_single.zip` completed and extracted to:
+- `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/datasets/aloha_twomodes_single/demos.hdf5`
+- `pusht.zip` completed and extracted to:
+- `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/datasets/pusht/pusht_cchi_v7_replay.zarr`
+- `longhistsquare100.zip` reached final extraction stage and `demos.hdf5` was already visible under:
+- `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/datasets/longhistsquare100/demos.hdf5`
+- `robomimic_image.zip` became the dominant remaining download
+- Live throughput / ETA observation from the wget log after the small files settled:
+- `robomimic_image.zip` had reached about `488046854` bytes locally staged
+- wget's own rolling estimate was about `2h1m` remaining at the sampled moment
+- This is the practical first ETA to report to the user before the first 10-minute monitor snapshot matures
+- Important monitoring locations for follow-up:
+- manifest:
+- `/work-agents/intern_ldp_explorer/outputs/session17_dataset_downloads/manifest.tsv`
+- periodic ETA log:
+- `/work-agents/intern_ldp_explorer/outputs/session17_dataset_downloads/progress.log`
+- per-download logs:
+- `/work-agents/intern_ldp_explorer/outputs/session17_dataset_downloads/logs/*.log`
+- Session 17 close-out check:
+- re-validated that this file explicitly contains the Session 17 download launch, host choice, staging paths, early completions, and first ETA observation
