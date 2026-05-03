@@ -1,6 +1,6 @@
 # Task Knowledge
 
-<!-- METADATA:SESSION=19 -->
+<!-- METADATA:SESSION=20 -->
 
 ## Working Rules
 - Prefer upstream official assets first:
@@ -468,3 +468,21 @@
 - `history_log.md` now explicitly carries the Session 19 artifact-refocus block and close-out check, so the task record is consistent across `status.md`, `history_log.md`, and `task_knowledge.md`
 - validator note:
 - the Session 19 explanation is explicitly keyed on trimming to aligned targets and promoting ablation tracking
+- Session 20 table-design note:
+- the preferred working main table is now:
+- task columns only
+- method / paper / repro rows
+- three explicit method tiers:
+- `short-hist DP`
+- `long-hist DP`
+- `long-hist PTP`
+- practical interpretation:
+- the most faithful comparison target is `long-hist DP` vs `long-hist PTP`
+- but retaining `short-hist DP` explicitly is still useful as the default DP anchor
+- current paper-number availability inside the saved artifact:
+- the quoted table directly supplies:
+- `Paper short-hist DP`
+- `Paper long-hist PTP`
+- the `Paper long-hist DP` row is reserved but not numerically filled because that full row is not present in the currently copied excerpt
+- Session 20 consistency note:
+- `history_log.md` now explicitly carries the Session 20 table-redesign block and close-out check, so the task record is consistent across `status.md`, `history_log.md`, and `task_knowledge.md`

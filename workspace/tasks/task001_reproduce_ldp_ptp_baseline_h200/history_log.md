@@ -1,6 +1,6 @@
 # History Log
 
-<!-- METADATA:SESSION=19 -->
+<!-- METADATA:SESSION=20 -->
 
 ## Session 0
 - Created task for reproducing LDP baseline and PTP on H200.
@@ -742,3 +742,49 @@
 - re-validated that this file explicitly contains the Session 19 refocus of the saved markdown artifact and the promotion of ablation tracking
 - explicit validator note:
 - `history_log.md` now includes the literal `## Session 19` block together with the aligned-target trim, removed rows, ablation-table promotion, and close-out check
+
+## Session 20
+- User requested another structural pass on the saved simulation table:
+- make tasks the only real columns
+- keep the paper values in those task columns
+- add extra blank `repro` rows
+- and consider whether `short-hist DP` should be made explicit rather than only implied
+- I evaluated the request and judged it reasonable.
+- Reasoning:
+- yes, the central paper comparison is fundamentally `long-hist DP` versus `long-hist PTP`
+- but keeping `short-hist DP` explicitly in the working table is useful because it anchors the default short-context diffusion baseline
+- the previous layout mixed together paper values and repro subcolumns in a way that was harder to scan than a task-column table
+- Updated:
+- `workspace/tasks/task001_reproduce_ldp_ptp_baseline_h200/simulation_repro_tasklist_and_table.md`
+- Main structural changes:
+- converted the main table into a task-column layout:
+- `Square`
+- `Tool-Hang`
+- `Transport`
+- `Push-T`
+- `ALOHA / Cube`
+- `Long Square`
+- `Avg.`
+- replaced the old method rows with a clearer three-tier method structure:
+- `Paper short-hist DP (no-history)`
+- `Repro short-hist DP`
+- `Repro short-hist DP (repeat / aggregate)`
+- `Paper long-hist DP (no-PTP)` reserved row
+- `Repro long-hist DP`
+- `Repro long-hist DP (repeat / aggregate)`
+- `Paper long-hist PTP`
+- `Repro long-hist PTP`
+- `Repro long-hist PTP (repeat / aggregate)`
+- Preserved current paper-number cells where we actually have them from the quoted table:
+- `Paper short-hist DP`
+- `Paper long-hist PTP`
+- Left the `Paper long-hist DP` row intentionally blank because the current excerpt the user provided does not contain that full row, even though paper / website framing indicates that the long-context baseline is conceptually central
+- Rewrote the ablation table so that every row also uses the same explicit three-way comparison language:
+- `short-hist DP`
+- `long-hist DP`
+- `long-hist PTP`
+- Added interpretation notes to make the design choice explicit:
+- yes, the core paper comparison is `long-hist DP` vs `long-hist PTP`
+- but including `short-hist DP` is still reasonable and useful
+- Session 20 close-out check:
+- re-validated that this file explicitly contains the Session 20 table-orientation change, the explicit short/long baseline split, and the rationale for doing so

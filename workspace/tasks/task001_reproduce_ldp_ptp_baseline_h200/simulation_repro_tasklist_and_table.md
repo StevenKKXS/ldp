@@ -2,18 +2,31 @@
 
 ## Purpose
 
-This file is the working artifact for the simulation-side reproduction effort.
+This is the working artifact for the simulation-side reproduction effort.
 
-It keeps two things in one place:
+This version uses a task-column layout:
 
-1. the execution task list
-2. the result tables to fill as runs complete
+- columns are tasks
+- rows are paper baselines / paper method / repro rows
 
-This version is intentionally trimmed to keep only tasks and comparisons that are meaningfully alignable with the current public PTP repo workflow.
+This makes it easier to compare one method across all tasks at a glance.
+
+## Why This Layout
+
+The user requested a horizontal table with task-only columns and extra blank repro rows.
+
+This is a good change.
+
+It is also useful to separate three concepts clearly:
+
+- `short-hist DP` = the no-history / default short-context diffusion baseline
+- `long-hist DP` = the long-context baseline without PTP (`no-PTP`)
+- `long-hist PTP` = the paper's main method
+
+The current paper-number excerpt we are using already gives a short-hist DP row and a PTP row.
+The paper / project description also clearly discusses a long-context baseline, so this artifact now reserves a row for it even when the exact paper-number cells are not all copied into the current excerpt.
 
 ## In-Scope Simulation Targets
-
-Main aligned targets:
 
 - `Square`
 - `Tool-Hang`
@@ -22,7 +35,7 @@ Main aligned targets:
 - `ALOHA / Cube`
 - `Long Square`
 
-Explicitly removed from the working table:
+Removed from this working artifact:
 
 - `Lift`
 - `Can`
@@ -30,105 +43,94 @@ Explicitly removed from the working table:
 
 Reason:
 
-- `Lift` / `Can` do not have turnkey config families in this repo snapshot
-- `LDP` is a different lab project line, not the same method family we are reproducing here
+- `Lift` / `Can` are not turnkey in this repo snapshot
+- `LDP` is a different project line and should not stay mixed into this PTP tracking sheet
 
-## Task List
+## Execution Task List
 
-### P0: Data Staging
+### P0: Data Completion
 
-- Confirm `robomimic_image.zip` fully finishes and exposes:
+- Confirm `robomimic_image.zip` completed and exposed:
   - `tool_hang`
   - `transport`
-  - any other needed RoboMimic subfolders
 - Confirm `pusht` extracted to `data/pusht/pusht_cchi_v7_replay.zarr`
 - Confirm `aloha_twomodes_single/demos.hdf5`
 - Confirm `longhistsquare100/demos.hdf5`
 
-### P1: Main Result Rows
+### P1: Main Reproduction Rows
 
-- `Square`
-  - matched `DP`-style baseline
-  - matched `PTP`
-- `Tool-Hang`
-  - matched `DP`-style baseline
-  - matched `PTP`
-- `Transport`
-  - matched `DP`-style baseline
-  - matched `PTP`
-- `Push-T`
-  - matched baseline
-  - matched `PTP` if config / adaptation is valid
-- `ALOHA / Cube`
-  - matched baseline
-  - matched `PTP`
-- `Long Square`
-  - matched baseline
-  - matched `PTP`
+- `short-hist DP`
+  - run / record aligned no-history baselines
+- `long-hist DP`
+  - run / record aligned no-PTP baselines
+- `long-hist PTP`
+  - run / record aligned PTP rows
 
-### P2: Ablation Fill-Ins
-
-Use ablations to fill the story even when some headline cells are slow to converge.
-
-Priority ablations:
+### P2: Fill Supporting Ablations
 
 - `no-history` vs `no-PTP` vs `PTP`
 - `obs=2` vs `obs=16`
 - raw-image vs cached-embedding
-- short-context encoder frozen vs not frozen if relevant
-- early checkpoint trend vs later checkpoint trend
-- single-seed pilot vs repeated-seed confirmation
+- early checkpoint vs later checkpoint trend
+- pilot seed vs repeated-seed confirmation
 
 ### P3: Metadata Capture
 
-For every filled cell, record:
+For every filled repro row, record:
 
 - config name
 - dataset path
 - checkpoint path
 - seed count
 - metric source
-- whether the result is early / pilot / converged
+- whether the result is pilot / early / converged
 
 ## Main Result Table
 
 Legend:
 
-- `Paper` = number from the target paper / user-provided table
-- `Repro` = our value to fill in
-- blank `Repro` means not yet filled
+- `Paper` rows preserve the paper-side target numbers we currently have
+- `Repro` rows are for our reproduced values
+- `—` means the current paper-number excerpt does not provide that cell
+- blank cells are intentionally left for filling
 
-| Method | Setting / Source | Square Paper | Square Repro | Tool-Hang Paper | Tool-Hang Repro | Transport Paper | Transport Repro | Push-T Paper | Push-T Repro | ALOHA / Cube Paper | ALOHA / Cube Repro | Long Square Paper | Long Square Repro | Source-specific Avg. Paper | Source-specific Avg. Repro | Notes |
-|---|---|---:|---|---:|---|---:|---|---:|---|---:|---|---:|---|---:|---|---|
-| DP | PTP internal baseline: Diffusion (no-hist) | 0.79 ± 0.06 |  | 0.51 ± 0.14 |  | 0.60 ± 0.08 |  | 0.67 ± 0.03 |  | 0.28 ± 0.04 |  | 0.12 ± 0.05 |  | 0.50 |  | Main baseline row to align first. |
-| PTP | Diffusion (PTP) | 0.89 ± 0.01 |  | 0.75 ± 0.10 |  | 0.67 ± 0.08 |  | 0.62 ± 0.02 |  | 0.98 ± 0.01 |  | 0.93 ± 0.02 |  | 0.81 |  | Main method row to align first. |
+| Row | Square | Tool-Hang | Transport | Push-T | ALOHA / Cube | Long Square | Avg. | Notes |
+|---|---:|---:|---:|---:|---:|---:|---:|---|
+| Paper short-hist DP (`no-history`) | 0.79 ± 0.06 | 0.51 ± 0.14 | 0.60 ± 0.08 | 0.67 ± 0.03 | 0.28 ± 0.04 | 0.12 ± 0.05 | 0.50 | This is the default short-context diffusion baseline row from the current excerpt. |
+| Repro short-hist DP |  |  |  |  |  |  |  | Fill with our matched no-history results. |
+| Repro short-hist DP (repeat / aggregate) |  |  |  |  |  |  |  | Use for second seed or aggregate value. |
+| Paper long-hist DP (`no-PTP`) |  |  |  |  |  |  |  | Reserve this row because the paper uses a long-context baseline, even though the current excerpt does not provide the full row values. |
+| Repro long-hist DP |  |  |  |  |  |  |  | Fill with our matched long-context no-PTP results. |
+| Repro long-hist DP (repeat / aggregate) |  |  |  |  |  |  |  | Use for second seed or aggregate value. |
+| Paper long-hist PTP | 0.89 ± 0.01 | 0.75 ± 0.10 | 0.67 ± 0.08 | 0.62 ± 0.02 | 0.98 ± 0.01 | 0.93 ± 0.02 | 0.81 | Main paper method row from the current excerpt. |
+| Repro long-hist PTP |  |  |  |  |  |  |  | Fill with our aligned PTP results. |
+| Repro long-hist PTP (repeat / aggregate) |  |  |  |  |  |  |  | Use for second seed or aggregate value. |
 
 ## Ablation Table
 
-Use this table even if the main result table is still incomplete.
-
-| Task | Comparison | Paper Expectation | Current Repro | Status | Notes |
+| Task | Comparison | Expected Direction | Current Repro | Status | Notes |
 |---|---|---|---|---|---|
-| Square | `no-history` vs `no-PTP` vs `PTP` | `PTP` should beat matched baseline | `no-PTP=0.05`, `PTP=0.2` at early checkpoint | pilot | Early only, not final |
-| Square | `obs=2` vs `obs=16` | long history should matter more with PTP |  | open | Fill after matched reruns |
-| Square | raw vs cached embeddings | cached should speed training materially |  | open | Fill once cache path is exercised in training |
-| Tool-Hang | baseline vs `PTP` | `PTP` should improve long-context performance |  | blocked on data / run |  |
-| Transport | baseline vs `PTP` | `PTP` should improve long-context performance |  | blocked on data / run |  |
-| Push-T | baseline vs `PTP` | unclear strength, useful supporting ablation |  | blocked on data / run |  |
-| ALOHA / Cube | baseline vs `PTP` | large gain expected from paper table |  | blocked on data / run |  |
-| Long Square | baseline vs `PTP` | strong gain expected from paper table |  | blocked on data / run |  |
+| Square | short-hist DP vs long-hist DP vs long-hist PTP | `PTP` should beat matched long-hist DP; long-hist DP should be compared against short-hist DP | `no-PTP=0.05`, `PTP=0.2` at early checkpoint | pilot | Early only, not final |
+| Square | `obs=2` vs `obs=16` | longer context should help if the policy actually uses it |  | open | Fill after matched reruns |
+| Square | raw vs cached embeddings | cached should preserve performance and improve speed |  | open | Fill after cached training run |
+| Tool-Hang | short-hist DP vs long-hist DP vs long-hist PTP | `PTP` should improve long-context performance |  | blocked on data / run |  |
+| Transport | short-hist DP vs long-hist DP vs long-hist PTP | `PTP` should improve long-context performance |  | blocked on data / run |  |
+| Push-T | short-hist DP vs long-hist DP vs long-hist PTP | useful supporting ablation, exact gain unclear |  | blocked on data / run |  |
+| ALOHA / Cube | short-hist DP vs long-hist DP vs long-hist PTP | large gain expected from paper row |  | blocked on data / run |  |
+| Long Square | short-hist DP vs long-hist DP vs long-hist PTP | strong gain expected from paper row |  | blocked on data / run |  |
 
 ## Immediate Fill Targets
 
-- Fill `Square` first because it already has partial pilot evidence.
-- Fill `Tool-Hang` and `Transport` next once `robomimic_image` backfill completes.
-- Fill `Long Square` and `ALOHA / Cube` next because they are directly tied to paper-specific long-history datasets.
-- Use the ablation table aggressively even before all headline cells converge.
+- Fill `Repro short-hist DP` for `Square` from the already-run short-context baseline lineage.
+- Fill `Repro long-hist DP` and `Repro long-hist PTP` for `Square` once the aligned comparison row is finalized.
+- Fill `Tool-Hang` and `Transport` next after RoboMimic backfill finishes.
+- Fill `Long Square` and `ALOHA / Cube` after their dedicated datasets are confirmed ready.
 
-## Review Notes
+## Interpretation Notes
 
-This file is intentionally biased toward:
-
-- aligned comparisons
-- public-data-supported tasks
-- ablations that let us say something useful before every headline number is finished
+- Yes, the core paper comparison is fundamentally `long-hist DP` vs `long-hist PTP`.
+- But keeping `short-hist DP` in the table is still reasonable and useful, because it anchors what "default DP ability" looks like before long context is introduced.
+- So the best working layout is not two rows but three:
+  - `short-hist DP`
+  - `long-hist DP`
+  - `long-hist PTP`
