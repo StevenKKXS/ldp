@@ -1,6 +1,6 @@
 # History Log
 
-<!-- METADATA:SESSION=8 -->
+<!-- METADATA:SESSION=9 -->
 
 ## Session 0
 - Created task for reproducing LDP baseline and PTP on H200.
@@ -251,3 +251,32 @@
 - Session 8 close-out check:
 - re-validated after the stop-hook that this session log explicitly contains the consolidated server/resource summary requested by the user
 - no change to the underlying server state from the earlier Session 8 sample
+
+## Session 9
+- User requested a plain-language explanation of what these experiments are, what the paper baselines are, how reproduction should be understood relative to the paper, and how the current work maps onto that.
+- Re-aligned the explanation around the paper's method stack:
+- long-context diffusion policy is the main setting
+- `PTP` is the auxiliary objective that predicts past action tokens alongside future ones
+- the paper also adds a multistage speed path with short-context visual pretraining plus cached long-context embeddings
+- Re-confirmed the main repo/config mapping used in our reproduction:
+- short-history square config uses `global_obs=2`, `past_action_pred=true`, `num_epochs=3500`, `checkpoint_every=100`
+- long-history config uses `global_obs=16`, `past_action_pred=true`, `num_epochs=3500`, `checkpoint_every=10`, `rollout_every=50`
+- repo CLI exposes the same axis directly through `transformer_history.sh` with `--global_obs`, `--past_action_pred`, `--past_steps_reg`, `--emb`, and `--cached`
+- Clarified baseline semantics used in the paper-facing explanation:
+- `no-history`: short-context baseline, approximated in our work by `global_obs=2` and `past_action_pred=false`
+- `no-PTP`: long-context baseline, approximated in our work by `global_obs=16` and `past_action_pred=false`
+- `PTP`: long-context method, approximated in our work by `global_obs=16` and `past_action_pred=true`
+- Clarified what has and has not yet been fully reproduced:
+- the core method comparison on square has been reproduced in the basic sense that we ran matched `obs16` `no-PTP` and `PTP` jobs and obtained formal checkpoint scores
+- the full paper recipe is not yet closed because the dedicated `longhistsquare100` data path is still missing and the cached-embedding speed path is blocked by a corrupted shared zarr cache
+- Re-stated the strongest currently completed comparison:
+- `no_ptp_square_obs16_1777535301`: epoch-99 `test/mean_score=0.05`
+- `ptp_square_obs16_1777535313`: epoch-99 `test/mean_score=0.2`
+- This is the main result currently supporting the paper's claim in our square reproduction.
+- Re-sampled the live 96h node during this explanation session:
+- endpoint: `10.100.2.47:15744`
+- GPU0: `0%`, `4 MiB / 143771 MiB`
+- GPU1: `99%`, `27875 MiB / 143771 MiB`
+- active top-level jobs still observed:
+- `node96_no_ptp_square_obs16_1777613676`
+- `node96_nohist_square_short_1777613676`

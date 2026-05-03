@@ -1,6 +1,6 @@
 # Task Knowledge
 
-<!-- METADATA:SESSION=8 -->
+<!-- METADATA:SESSION=9 -->
 
 ## Working Rules
 - Prefer upstream official assets first:
@@ -262,3 +262,19 @@
 - matched `global_obs=16` runs on the older node show `PTP` ahead of `no-PTP` both in validation loss and in the first formal checkpoint score (`0.2` vs `0.05`)
 - Session 8 validation note:
 - `history_log.md` now explicitly carries the Session 8 consolidated run/resource summary and stop-hook recheck note, so the task record is internally consistent across `status.md`, `history_log.md`, and `task_knowledge.md`
+- Paper-to-reproduction mapping to use in explanations:
+- The paper is not only "train a bigger context model". It has three separable pieces:
+- long-context conditioning
+- PTP auxiliary prediction on past action tokens
+- a multistage efficiency recipe using short-context encoder pretraining and cached long-context embeddings
+- Therefore our current work should be described carefully:
+- we have already reproduced the most central algorithmic comparison on square: long-context `PTP` vs matched long-context `no-PTP`
+- we have also run short-context no-history-style baselines
+- but we have not yet fully reproduced the paper's accelerated cached-embedding path because the required dataset/cache state is incomplete in the current environment
+- Best simple explanation of the baseline family:
+- short no-history baseline: `global_obs=2`, `past_action_pred=false`
+- long no-PTP baseline: `global_obs=16`, `past_action_pred=false`
+- long PTP method: `global_obs=16`, `past_action_pred=true`
+- Best current evidence to cite:
+- on the older node, epoch-99 formal checkpoints gave `test/mean_score=0.05` for `no-PTP obs16` and `0.2` for `PTP obs16`
+- This does not prove full paper-level reproduction across every task, but it is the strongest completed square-side result currently in hand and it is directionally consistent with the paper's claim that PTP helps long-context policies.

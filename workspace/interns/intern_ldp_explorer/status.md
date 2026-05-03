@@ -8,5 +8,5 @@
 | Status | Working |
 | Current Task | task001_reproduce_ldp_ptp_baseline_h200 |
 | PR | https://github.com/StevenKKXS/ldp/pull/new/intern_ldp_explorer/task001_reproduce_ldp_ptp_baseline_h200 |
-| Session | 8 |
-| Recent Progress | Re-validated the Session 8 run/resource summary after the stop-hook check. The old 72h node entry `10.100.2.47:37893` remains offline, the 96h node `10.100.2.47:15744` remains the only live compute endpoint, and Session 8 records in `history_log.md` / `task_knowledge.md` now explicitly include the consolidated task inventory, active-job count, and current GPU snapshot (`GPU0 0%, 4 MiB`; `GPU1 57%, 27875 MiB`). |
+| Session | 9 |
+| Recent Progress | Reframed the reproduction work against the paper's actual method stack and baselines. The current live node remains `10.100.2.47:15744`, and the latest sample shows `GPU0 0%, 4 MiB` and `GPU1 99%, 27875 MiB`, with only `node96_no_ptp_square_obs16_1777613676` and `node96_nohist_square_short_1777613676` still active. The cleanest completed result in hand remains the older matched `obs16` comparison where long-context `PTP` reached `test/mean_score=0.2` while long-context `no-PTP` reached `0.05`, which is the main evidence currently supporting the paper's claim in our square reproduction. |
