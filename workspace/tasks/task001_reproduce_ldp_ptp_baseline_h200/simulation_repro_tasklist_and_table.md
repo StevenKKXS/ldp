@@ -123,11 +123,11 @@ Legend:
 
 | Row | Square | Tool-Hang | Transport | Push-T | ALOHA / Cube | Long Square | Avg. | Notes |
 |---|---:|---:|---:|---:|---:|---:|---:|---|
-| Paper short-hist DP (`no-history`) | 0.79 ± 0.06 | 0.51 ± 0.14 | 0.60 ± 0.08 | 0.67 ± 0.03 | 0.28 ± 0.04 | 0.12 ± 0.05 | 0.50 | This is the default short-context diffusion baseline row from the current excerpt. |
-| Repro short-hist DP |  |  |  |  |  |  |  | Fill with our matched no-history results. |
+| Paper short-hist DP | 0.79 ± 0.06 | 0.51 ± 0.14 | 0.60 ± 0.08 | 0.67 ± 0.03 | 0.28 ± 0.04 | 0.12 ± 0.05 | 0.50 | This is the default short-context diffusion baseline row from the current excerpt. |
+| Repro short-hist DP |  |  |  |  |  |  |  | Fill with our matched short-hist DP results. |
 | Repro short-hist DP (repeat / aggregate) |  |  |  |  |  |  |  | Use for second seed or aggregate value. |
-| Paper long-hist DP (`no-PTP`) |  |  |  |  |  |  |  | Reserved row. Exact matching numeric row not yet recovered from the current public excerpt; do not backfill from mismatched tables without approval. |
-| Repro long-hist DP |  |  |  |  |  |  |  | Fill with our matched long-context no-PTP results. |
+| Paper long-hist DP |  |  |  |  |  |  |  | Reserved row. Exact matching numeric row not yet recovered from the current public excerpt; do not backfill from mismatched tables without approval. |
+| Repro long-hist DP |  |  |  |  |  |  |  | Fill with our matched long-hist DP results. |
 | Repro long-hist DP (repeat / aggregate) |  |  |  |  |  |  |  | Use for second seed or aggregate value. |
 | Paper long-hist PTP | 0.89 ± 0.01 | 0.75 ± 0.10 | 0.67 ± 0.08 | 0.62 ± 0.02 | 0.98 ± 0.01 | 0.93 ± 0.02 | 0.81 | Main paper method row from the current excerpt. |
 | Repro long-hist PTP |  |  |  |  |  |  |  | Fill with our aligned PTP results. |
@@ -157,6 +157,14 @@ Legend:
 
 - Yes, the core paper comparison is fundamentally `long-hist DP` vs `long-hist PTP`.
 - But keeping `short-hist DP` in the table is still reasonable and useful, because it anchors what "default DP ability" looks like before long context is introduced.
+- Use the canonical row names directly inside the main table:
+  - `short-hist DP`
+  - `long-hist DP`
+  - `long-hist PTP`
+- Keep the older aliases only in prose when needed:
+  - `short-hist DP` = `no-history`
+  - `long-hist DP` = `no-PTP`
+  - `long-hist PTP` = `PTP`
 - So the best working layout is not two rows but three:
   - `short-hist DP`
   - `long-hist DP`

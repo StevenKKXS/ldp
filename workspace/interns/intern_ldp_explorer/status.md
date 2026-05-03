@@ -8,5 +8,5 @@
 | Status | Working |
 | Current Task | task001_reproduce_ldp_ptp_baseline_h200 |
 | PR | https://github.com/StevenKKXS/ldp/pull/new/intern_ldp_explorer/task001_reproduce_ldp_ptp_baseline_h200 |
-| Session | 22 |
-| Recent Progress | Locked down the terminology: in the current PTP-paper comparison language, `long-hist DP` should be read as the long-context `no-PTP` diffusion baseline. I updated the main simulation artifact so the mapping is explicit: `short-hist DP = no-history`, `long-hist DP = no-PTP`, `long-hist PTP = PTP`. |
+| Session | 23 |
+| Recent Progress | Standardized the main result table to use only canonical row names directly: `short-hist DP`, `long-hist DP`, and `long-hist PTP`. The alias mapping remains documented in prose, but the table itself no longer mixes row labels with `no-history` / `no-PTP` parentheticals. |

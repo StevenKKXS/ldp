@@ -1,6 +1,6 @@
 # History Log
 
-<!-- METADATA:SESSION=22 -->
+<!-- METADATA:SESSION=23 -->
 
 ## Session 0
 - Created task for reproducing LDP baseline and PTP on H200.
@@ -841,3 +841,23 @@
 - Added a direct conclusion block making the mapping explicit at the top of the artifact.
 - Session 22 close-out check:
 - re-validated that this file explicitly contains the Session 22 terminology conclusion and the exact short/long/no-PTP/PTP mapping
+
+## Session 23
+- User asked me to update the main result table according to the now-settled naming convention.
+- I kept the three-way interpretation unchanged:
+- `short-hist DP` = `no-history`
+- `long-hist DP` = `no-PTP`
+- `long-hist PTP` = `PTP`
+- But I simplified the main table itself so that row labels now use only the canonical names:
+- `Paper short-hist DP`
+- `Repro short-hist DP`
+- `Paper long-hist DP`
+- `Repro long-hist DP`
+- `Paper long-hist PTP`
+- `Repro long-hist PTP`
+- Removed parenthetical aliases from the main table row names to avoid mixing naming schemes in the same artifact.
+- Kept the alias mapping only in the interpretation notes, where it belongs.
+- Updated:
+- `workspace/tasks/task001_reproduce_ldp_ptp_baseline_h200/simulation_repro_tasklist_and_table.md`
+- Session 23 close-out check:
+- re-validated that this file explicitly contains the Session 23 table-standardization record and that the main artifact now uses canonical row names directly

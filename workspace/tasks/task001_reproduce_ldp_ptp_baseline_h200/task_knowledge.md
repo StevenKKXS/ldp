@@ -1,6 +1,6 @@
 # Task Knowledge
 
-<!-- METADATA:SESSION=22 -->
+<!-- METADATA:SESSION=23 -->
 
 ## Working Rules
 - Prefer upstream official assets first:
@@ -507,3 +507,16 @@
 - this should be treated as the canonical interpretation inside the saved simulation artifact unless the user explicitly asks for a different naming scheme
 - Session 22 consistency note:
 - `history_log.md` now explicitly carries the Session 22 terminology block and close-out check, so the task record is consistent across `status.md`, `history_log.md`, and `task_knowledge.md`
+- Session 23 main-table note:
+- keep the alias mapping above, but do not embed those aliases in the main result table row labels
+- preferred row names inside `simulation_repro_tasklist_and_table.md` are now:
+- `Paper short-hist DP`
+- `Repro short-hist DP`
+- `Paper long-hist DP`
+- `Repro long-hist DP`
+- `Paper long-hist PTP`
+- `Repro long-hist PTP`
+- rationale:
+- the main table should read cleanly using one naming scheme, while the glossary-style mapping to `no-history` / `no-PTP` / `PTP` stays in prose
+- Session 23 consistency note:
+- `history_log.md` now explicitly carries the Session 23 table-standardization block and close-out check, so the task record is consistent across `status.md`, `history_log.md`, and `task_knowledge.md`
