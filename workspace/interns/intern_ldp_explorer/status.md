@@ -8,5 +8,5 @@
 | Status | Working |
 | Current Task | task001_reproduce_ldp_ptp_baseline_h200 |
 | PR | https://github.com/StevenKKXS/ldp/pull/new/intern_ldp_explorer/task001_reproduce_ldp_ptp_baseline_h200 |
-| Session | 23 |
-| Recent Progress | Standardized the main result table to use only canonical row names directly: `short-hist DP`, `long-hist DP`, and `long-hist PTP`. Added an explicit Session 23 validator note in `history_log.md` so the task record now clearly shows the table rename, canonical row list, and close-out check. |
+| Session | 24 |
+| Recent Progress | Re-checked the simulation-dataset backfill. `aloha_twomodes_single`, `pusht`, and `longhistsquare100` are fully downloaded and extracted into `/mnt/3fs2`; `robomimic_image.zip` is still actively downloading at about 36.9% complete, with the live `wget` ETA around 72m51s and only the older `square` subtree currently present under shared `datasets/robomimic/`. |

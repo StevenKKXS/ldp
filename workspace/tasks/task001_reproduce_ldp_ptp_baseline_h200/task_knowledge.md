@@ -1,6 +1,6 @@
 # Task Knowledge
 
-<!-- METADATA:SESSION=23 -->
+<!-- METADATA:SESSION=24 -->
 
 ## Working Rules
 - Prefer upstream official assets first:
@@ -522,3 +522,15 @@
 - `history_log.md` now explicitly carries the Session 23 table-standardization block and close-out check, so the task record is consistent across `status.md`, `history_log.md`, and `task_knowledge.md`
 - validator note:
 - the Session 23 explanation is explicitly keyed on the main-result-table renaming and canonical row-name standardization
+- Session 24 download-status note:
+- current dataset backfill state from the local staging area:
+- `aloha_twomodes_single`: downloaded and extracted
+- `pusht`: downloaded and extracted
+- `longhistsquare100`: downloaded and extracted
+- `robomimic_image`: still downloading; most recent checked size was `31,503,974,662 / 84,754,919,326` bytes (`36.94%`)
+- monitoring rule:
+- trust `logs/robomimic_image.log` for the current ETA because the custom `progress.log` rate calculation is obviously broken
+- extraction rule:
+- do not treat RoboMimic subtask coverage as expanded until the archive finishes downloading and the shared `datasets/robomimic/` tree actually contains more than the preexisting `square/mh` subtree
+- Session 24 consistency note:
+- `history_log.md` now explicitly carries the Session 24 download-status snapshot and close-out check, so the task record is consistent across `status.md`, `history_log.md`, and `task_knowledge.md`

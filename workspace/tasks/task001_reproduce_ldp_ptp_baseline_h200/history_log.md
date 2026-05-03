@@ -1,6 +1,6 @@
 # History Log
 
-<!-- METADATA:SESSION=23 -->
+<!-- METADATA:SESSION=24 -->
 
 ## Session 0
 - Created task for reproducing LDP baseline and PTP on H200.
@@ -863,3 +863,27 @@
 - re-validated that this file explicitly contains the Session 23 table-standardization record and that the main artifact now uses canonical row names directly
 - explicit validator note:
 - `history_log.md` now includes the literal `## Session 23` block together with the main-result-table renaming summary, canonical row-name list, and close-out check
+
+## Session 24
+- User asked for the current download status.
+- Re-checked the dataset backfill staging area at:
+- `/work-agents/intern_ldp_explorer/outputs/session17_dataset_downloads`
+- Confirmed completed downloads and extraction:
+- `aloha_twomodes_single.zip` finished at `2026-05-03T12:56:14Z` and extracted to `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/datasets/aloha_twomodes_single/demos.hdf5`
+- `pusht.zip` finished at `2026-05-03T12:56:50Z` and extracted to `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/datasets/pusht/pusht_cchi_v7_replay.zarr`
+- `longhistsquare100.zip` finished at `2026-05-03T12:56:42Z` and extracted to `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/datasets/longhistsquare100/demos.hdf5`
+- Confirmed active remaining transfer:
+- `robomimic_image.zip` is still downloading via `wget`
+- manifest target size: `84,754,919,326` bytes
+- current local size at check time: `31,503,974,662` bytes
+- current completion ratio: `36.94%`
+- live `wget` log still reports an ETA around `72m51s`
+- file size increased between two checks (`31,308,923,142 -> 31,503,974,662` bytes in about 16 seconds), so the transfer is still healthy
+- Important interpretation:
+- the `progress.log` monitor is useful for done/not-done state, but its average-rate and ETA math is clearly wrong
+- the trustworthy ETA source right now is the `wget` progress line inside `logs/robomimic_image.log`
+- Shared-disk extraction state:
+- under `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/datasets/robomimic/`, only the older `datasets/square/mh` subtree is currently visible
+- this means the big RoboMimic archive has not reached extraction yet; it is still in the download phase
+- Session 24 close-out check:
+- re-validated that this file explicitly contains the Session 24 download-status snapshot, including completed datasets, the active `robomimic_image.zip` percentage, and the note about the broken monitor ETA math
