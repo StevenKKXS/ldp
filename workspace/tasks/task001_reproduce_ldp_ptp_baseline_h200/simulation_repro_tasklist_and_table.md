@@ -23,6 +23,14 @@ It is also useful to separate three concepts clearly:
 - `long-hist DP` = the long-context baseline without PTP (`no-PTP`)
 - `long-hist PTP` = the paper's main method
 
+Direct conclusion:
+
+- yes, in the current PTP-paper comparison language, `long-hist DP` should be treated as equivalent to `no-PTP`
+- more precisely:
+  - `short-hist DP` = `no-history`
+  - `long-hist DP` = `no-PTP`
+  - `long-hist PTP` = `PTP`
+
 The current paper-number excerpt we are using already gives a short-hist DP row and a PTP row.
 The paper / project description also clearly discusses a long-context baseline, so this artifact now reserves a row for it even when the exact paper-number cells are not all copied into the current excerpt.
 

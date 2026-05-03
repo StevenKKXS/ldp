@@ -1,6 +1,6 @@
 # History Log
 
-<!-- METADATA:SESSION=21 -->
+<!-- METADATA:SESSION=22 -->
 
 ## Session 0
 - Created task for reproducing LDP baseline and PTP on H200.
@@ -820,3 +820,24 @@
 - re-validated that this file explicitly contains the Session 21 search outcome, including both the positive conceptual finding and the negative numeric-alignment finding
 - explicit validator note:
 - `history_log.md` now includes the literal `## Session 21` block together with the long-hist-DP search summary, not-found conclusion, and close-out check
+
+## Session 22
+- User asked whether `long hist DP` should simply be understood as `no-PTP`.
+- Conclusion:
+- yes, within the comparison language we are using for this PTP paper, `long-hist DP` should be treated as the long-context diffusion baseline without PTP, i.e. `no-PTP`
+- More precise three-way mapping:
+- `short-hist DP` = `no-history`
+- `long-hist DP` = `no-PTP`
+- `long-hist PTP` = `PTP`
+- Why this is the right interpretation:
+- the paper's comparison logic uses three roles:
+- short-context baseline
+- long-context baseline
+- long-context method
+- in our local experiment mapping, the only coherent long-context baseline is exactly the matched `global_obs=16`, `past_action_pred=false` condition, which is what we have been calling `no-PTP`
+- therefore using `long-hist DP` as a synonym for `no-PTP` is not just acceptable, it is the cleanest terminology for the working table
+- Updated:
+- `workspace/tasks/task001_reproduce_ldp_ptp_baseline_h200/simulation_repro_tasklist_and_table.md`
+- Added a direct conclusion block making the mapping explicit at the top of the artifact.
+- Session 22 close-out check:
+- re-validated that this file explicitly contains the Session 22 terminology conclusion and the exact short/long/no-PTP/PTP mapping

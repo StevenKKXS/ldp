@@ -1,6 +1,6 @@
 # Task Knowledge
 
-<!-- METADATA:SESSION=21 -->
+<!-- METADATA:SESSION=22 -->
 
 ## Working Rules
 - Prefer upstream official assets first:
@@ -499,3 +499,11 @@
 - `history_log.md` now explicitly carries the Session 21 search-result block and close-out check, so the task record is consistent across `status.md`, `history_log.md`, and `task_knowledge.md`
 - validator note:
 - the Session 21 explanation is explicitly keyed on the search for the long-hist-DP paper row and the not-found conclusion
+- Session 22 terminology note:
+- use the following mapping consistently:
+- `short-hist DP` = `no-history`
+- `long-hist DP` = `no-PTP`
+- `long-hist PTP` = `PTP`
+- this should be treated as the canonical interpretation inside the saved simulation artifact unless the user explicitly asks for a different naming scheme
+- Session 22 consistency note:
+- `history_log.md` now explicitly carries the Session 22 terminology block and close-out check, so the task record is consistent across `status.md`, `history_log.md`, and `task_knowledge.md`
