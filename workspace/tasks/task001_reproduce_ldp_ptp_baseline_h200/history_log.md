@@ -1,6 +1,6 @@
 # History Log
 
-<!-- METADATA:SESSION=17 -->
+<!-- METADATA:SESSION=18 -->
 
 ## Session 0
 - Created task for reproducing LDP baseline and PTP on H200.
@@ -671,3 +671,37 @@
 - re-validated that this file explicitly contains the Session 17 download launch, host choice, staging paths, early completions, and first ETA observation
 - explicit validator note:
 - `history_log.md` now includes the literal `## Session 17` block together with the download-launch summary, staging / target paths, initial ETA, and close-out check
+
+## Session 18
+- User requested a saved task list plus a final fill-in table for the simulation-side reproduction effort, including both paper-reported numbers and blank reproduction slots for later completion.
+- Added a new task artifact:
+- `workspace/tasks/task001_reproduce_ldp_ptp_baseline_h200/simulation_repro_tasklist_and_table.md`
+- The new file contains:
+- a short statement of purpose
+- the current simulation-side reproduction boundary
+- a prioritized task list grouped into:
+- `P0` data validation
+- `P1` directly supported task families
+- `P2` metadata capture
+- `P3` optional non-turnkey extensions
+- a wide fill-in markdown table preserving the user-provided / paper-reported values for:
+- `DP`
+- `LDP`
+- `PTP`
+- The table explicitly separates:
+- `Paper` values
+- `Repro` placeholders
+- and marks clearly out-of-scope cells as `OOS`
+- Captured the most important scope decisions inside the artifact:
+- currently directly targetable simulation columns are:
+- `Square`
+- `Tool-Hang`
+- `Transport`
+- `Push-T`
+- `ALOHA / Cube`
+- `Long Square`
+- `Lift` and `Can` are currently marked out-of-scope for turnkey reproduction from this repo snapshot
+- the source-specific `LDP` row is also marked out-of-scope from the current public PTP repo alone
+- Added a small "Immediate Fill Targets" section so the file can also serve as a working notebook once results start arriving.
+- Session 18 close-out check:
+- re-validated that this file explicitly contains the Session 18 saved-artifact summary and that the new markdown file exists in the task directory

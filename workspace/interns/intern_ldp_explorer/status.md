@@ -8,5 +8,5 @@
 | Status | Working |
 | Current Task | task001_reproduce_ldp_ptp_baseline_h200 |
 | PR | https://github.com/StevenKKXS/ldp/pull/new/intern_ldp_explorer/task001_reproduce_ldp_ptp_baseline_h200 |
-| Session | 17 |
-| Recent Progress | Started the CPU-side dataset backfill on host `dev4infer` and added an explicit Session 17 validator note after the stop-hook. A new helper script now downloads and extracts the missing public simulation datasets in parallel, stages archives under `/work-agents/intern_ldp_explorer/outputs/session17_dataset_downloads`, writes a 10-minute ETA log, and expands data into `/mnt/3fs2/.../datasets`. `aloha_twomodes_single` and `pusht` completed immediately, `longhistsquare100` reached the final extraction stage, and the dominant remaining job is `robomimic_image.zip` with an initial ETA around 2h1m. |
+| Session | 18 |
+| Recent Progress | Created a dedicated planning artifact for the simulation-only reproduction effort: `simulation_repro_tasklist_and_table.md`. It contains a prioritized task list, a clear in-scope / out-of-scope boundary, and a fill-in result table that preserves the paper-reported numbers while leaving explicit slots for our reproduced values. |

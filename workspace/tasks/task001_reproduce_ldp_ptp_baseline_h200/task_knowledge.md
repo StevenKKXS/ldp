@@ -1,6 +1,6 @@
 # Task Knowledge
 
-<!-- METADATA:SESSION=17 -->
+<!-- METADATA:SESSION=18 -->
 
 ## Working Rules
 - Prefer upstream official assets first:
@@ -440,3 +440,16 @@
 - `history_log.md` now explicitly carries the Session 17 download-launch block and close-out check, so the task record is consistent across `status.md`, `history_log.md`, and `task_knowledge.md`
 - validator note:
 - the Session 17 explanation is explicitly keyed on dataset backfill launch, monitored ETA logging, and early completion state
+- Session 18 saved-artifact note:
+- canonical simulation planning artifact:
+- `workspace/tasks/task001_reproduce_ldp_ptp_baseline_h200/simulation_repro_tasklist_and_table.md`
+- file purpose:
+- store the simulation reproduction task list and the final fill-in result table in one place
+- file includes:
+- scope boundary
+- prioritized execution list
+- paper numbers
+- reproduction placeholders
+- `OOS` markings for non-turnkey cells
+- Session 18 consistency note:
+- `history_log.md` now explicitly carries the Session 18 artifact-creation block and close-out check, so the task record is consistent across `status.md`, `history_log.md`, and `task_knowledge.md`
