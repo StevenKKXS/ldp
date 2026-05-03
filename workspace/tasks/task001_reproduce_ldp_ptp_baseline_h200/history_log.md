@@ -1,6 +1,6 @@
 # History Log
 
-<!-- METADATA:SESSION=13 -->
+<!-- METADATA:SESSION=14 -->
 
 ## Session 0
 - Created task for reproducing LDP baseline and PTP on H200.
@@ -477,3 +477,23 @@
 - Session 13 close-out check:
 - re-validated after the stop-hook that this file explicitly contains the Session 13 explanation requested by the user
 - no change to the technical conclusion: `longhist` is a separate long-horizon task family, not just standard square with longer observation context
+
+## Session 14
+- User asked what `square` means, whether it is a RoboMimic task, and requested a more detailed explanation.
+- Clarified the terminology stack:
+- in this repo, `square` is not a generic geometric label; it refers to the standard RoboMimic `square` benchmark task
+- the local config confirms this through the standard dataset path `data/robomimic/datasets/square/mh/image_abs.hdf5`, task name `square`, and logging tag `square_image`
+- at the simulator / environment layer, this RoboMimic task corresponds to robosuite's `NutAssemblySquare`, documented as the easier nut-assembly variant where a single square nut must be placed onto its peg
+- Clarified the task semantics for user-facing explanations:
+- intuitively, `square` means a single-arm robot sees a square nut on the table, grasps it, aligns it with the matching square peg, and inserts / places it correctly
+- in dataset naming, the path component `mh` means multi-human demonstrations; official RoboMimic docs describe MH as 300 successful trajectories collected from 6 operators
+- Mapped this back to the LDP code:
+- standard square experiments use `experiment_configs/square/transformer_square.yaml`
+- that config points to `data/robomimic/datasets/square/mh/image_abs.hdf5`
+- the env runner is `diffusion_policy.env_runner.robomimic_image_runner.RobomimicImageRunner`
+- task name is `square` and top-level task label is `square_image`
+- Clarified the distinction from paper-specific `long hist square`:
+- `square` = the normal RoboMimic square / nut-assembly benchmark
+- `longhist square` = a separate paper-added long-horizon variant with different data path and task semantics
+- Session 14 close-out check:
+- re-validated that this file explicitly contains the Session 14 explanation of `square`, RoboMimic, and robosuite provenance

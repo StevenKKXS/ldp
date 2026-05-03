@@ -1,6 +1,6 @@
 # Task Knowledge
 
-<!-- METADATA:SESSION=13 -->
+<!-- METADATA:SESSION=14 -->
 
 ## Working Rules
 - Prefer upstream official assets first:
@@ -354,3 +354,18 @@
 - the latter is a separate harder task with a different data path and task semantics
 - Session 13 consistency note:
 - `history_log.md` now explicitly carries the Session 13 explanation block and close-out check, so the task record is consistent across `status.md`, `history_log.md`, and `task_knowledge.md`
+- `square` explanation to reuse:
+- in this project, `square` refers to the standard RoboMimic `square` task, not a generic label
+- code evidence:
+- config family: `experiment_configs/square/`
+- dataset path: `data/robomimic/datasets/square/mh/image_abs.hdf5`
+- task name / logging label: `square` / `square_image`
+- underlying simulator semantics:
+- RoboMimic's `square` task is built on robosuite's `NutAssemblySquare`, i.e. place one square nut into its matching peg
+- dataset note:
+- `mh` in the path means multi-human demonstrations in RoboMimic's naming
+- important distinction:
+- `square` is the base benchmark
+- `longhist square` is the paper's separate long-horizon extension, not just the same task with more observation frames
+- Session 14 consistency note:
+- `history_log.md` now explicitly carries the Session 14 explanation block and close-out check, so the task record is consistent across `status.md`, `history_log.md`, and `task_knowledge.md`

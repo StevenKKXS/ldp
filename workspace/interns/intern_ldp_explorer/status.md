@@ -8,5 +8,5 @@
 | Status | Working |
 | Current Task | task001_reproduce_ldp_ptp_baseline_h200 |
 | PR | https://github.com/StevenKKXS/ldp/pull/new/intern_ldp_explorer/task001_reproduce_ldp_ptp_baseline_h200 |
-| Session | 13 |
-| Recent Progress | Clarified what `long hist square` actually means in the paper and in code, and added an explicit Session 13 close-out check after the stop-hook. It is not just the standard RoboMimic `square` task with a larger observation window; in the paper it is a new long-horizon square task where the robot must place and remove the square twice before the final drop, making success genuinely history-dependent. In the repo this is implemented through a separate `longhist` config family with its own dataset path `data/longhistsquare100/demos.hdf5`, task name `square_long_image`, and long-history runner wiring, rather than by a simple flag on the regular `square` task. |
+| Session | 14 |
+| Recent Progress | Clarified what `square` means in this project. In `ldp`, `square` refers to the standard RoboMimic `square` benchmark task and dataset path `data/robomimic/datasets/square/mh/image_abs.hdf5`, not a generic shape label. At the simulator level this task comes from robosuite's `NutAssemblySquare`, i.e. placing a square nut onto its peg. This also sharpens the distinction with the paper's separate `longhist square` / `long-horizon square` task family. |
