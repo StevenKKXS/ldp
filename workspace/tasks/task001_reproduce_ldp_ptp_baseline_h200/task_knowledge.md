@@ -352,3 +352,5 @@
 - ordinary `square` with `global_obs=16` is not the same thing as paper `long-horizon square`
 - the former is a history-conditioned version of the standard RoboMimic square task
 - the latter is a separate harder task with a different data path and task semantics
+- Session 13 consistency note:
+- `history_log.md` now explicitly carries the Session 13 explanation block and close-out check, so the task record is consistent across `status.md`, `history_log.md`, and `task_knowledge.md`

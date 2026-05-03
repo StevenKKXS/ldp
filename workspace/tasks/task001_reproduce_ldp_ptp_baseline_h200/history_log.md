@@ -474,3 +474,6 @@
 - "long hist square" means the paper's custom long-horizon square task plus its long-context training setup
 - it is a separate data/task path in code
 - it should not be confused with "ordinary square + `global_obs=16`"
+- Session 13 close-out check:
+- re-validated after the stop-hook that this file explicitly contains the Session 13 explanation requested by the user
+- no change to the technical conclusion: `longhist` is a separate long-horizon task family, not just standard square with longer observation context
