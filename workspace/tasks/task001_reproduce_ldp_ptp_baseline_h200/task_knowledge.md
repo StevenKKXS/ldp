@@ -559,3 +559,5 @@
 - use `setsid` for detached local watchdog processes that must survive the end of the current shell command
 - Session 25 consistency note:
 - `history_log.md` now explicitly carries the Session 25 watchdog / queue block and close-out check, so the task record is consistent across `status.md`, `history_log.md`, and `task_knowledge.md`
+- validator note:
+- the Session 25 explanation is explicitly keyed on the watchdog cadence, launch queue, `setsid` keepalive fix, and the current `robomimic_image.zip` progress snapshot

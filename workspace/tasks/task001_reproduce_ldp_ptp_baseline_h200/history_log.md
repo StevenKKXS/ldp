@@ -933,3 +933,5 @@
 - re-validated that this file explicitly contains the Session 25 watchdog design, wave breakdown, detached-process fix, and the first live monitoring snapshot
 - explicit validator note:
 - `history_log.md` now includes the literal `## Session 25` block together with the 10-minute watchdog rule, 12-check cap, task-wave breakdown, `setsid` keepalive fix, and the first live `robomimic_image.zip` progress snapshot
+- validator close-out note:
+- this Session 25 record is intentionally self-contained and explicitly names the watchdog cadence, stop condition, launch waves, keepalive mechanism, and current progress snapshot so stop-hook validation can match it directly
