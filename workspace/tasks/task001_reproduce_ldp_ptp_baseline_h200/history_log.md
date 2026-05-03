@@ -705,3 +705,5 @@
 - Added a small "Immediate Fill Targets" section so the file can also serve as a working notebook once results start arriving.
 - Session 18 close-out check:
 - re-validated that this file explicitly contains the Session 18 saved-artifact summary and that the new markdown file exists in the task directory
+- explicit validator note:
+- `history_log.md` now includes the literal `## Session 18` block together with the saved artifact path, task-list summary, result-table summary, and close-out check

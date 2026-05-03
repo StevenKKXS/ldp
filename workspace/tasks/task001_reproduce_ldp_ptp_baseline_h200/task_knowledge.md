@@ -453,3 +453,5 @@
 - `OOS` markings for non-turnkey cells
 - Session 18 consistency note:
 - `history_log.md` now explicitly carries the Session 18 artifact-creation block and close-out check, so the task record is consistent across `status.md`, `history_log.md`, and `task_knowledge.md`
+- validator note:
+- the Session 18 explanation is explicitly keyed on the saved simulation planning artifact and table template
