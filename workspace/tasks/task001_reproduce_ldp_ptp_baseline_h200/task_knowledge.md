@@ -1,6 +1,6 @@
 # Task Knowledge
 
-<!-- METADATA:SESSION=7 -->
+<!-- METADATA:SESSION=8 -->
 
 ## Working Rules
 - Prefer upstream official assets first:
@@ -237,3 +237,26 @@
 - both short-history jobs have advanced quickly into stable training
 - both `obs16` jobs are training more slowly but are now producing valid train/val metrics
 - at matched progress on this node, `obs16` PTP remains slightly ahead of `obs16` no-PTP on validation loss
+- Current resource state as of `2026-05-03`:
+- old 72h endpoint `10.100.2.47:37893` is no longer reachable and should be treated as expired
+- live endpoint is `10.100.2.47:15744`
+- host: `lg-cmc-b7r201-e06u16-h200-000110`
+- current sampled GPU state:
+- GPU0 `0%`, `4 MiB / 143771 MiB`
+- GPU1 `57%`, `27875 MiB / 143771 MiB`
+- this means the remaining live box still has substantial free capacity and is not fully utilizing both H200s
+- Current active jobs inferred from live `ps`:
+- active:
+- `node96_no_ptp_square_obs16_1777613676`
+- `node96_nohist_square_short_1777613676`
+- likely inactive:
+- `node96_ptp_square_obs16_1777613676`
+- `node96_ptp_square_short_1777613676`
+- because they no longer appear in `ps` and GPU0 is effectively idle
+- Best consolidated result summary so far:
+- short-context legacy PTP (`full_train_3500ep_1777457545`) is not useful as a paper-facing result and degraded to `test/mean_score=0.0`
+- short-context no-history baseline (`baseline_square_3500ep_1777535019`) reached a best visible checkpoint of `test/mean_score=0.100` at epoch `299`, with a later epoch-399 checkpoint at `0.025`
+- long-context no-PTP (`no_ptp_square_obs16_1777535301`) produced `test/mean_score=0.05` at epoch `99`
+- long-context PTP (`ptp_square_obs16_1777535313`) produced `test/mean_score=0.2` at epoch `99`
+- Therefore the strongest completed square-side comparison currently in hand is:
+- matched `global_obs=16` runs on the older node show `PTP` ahead of `no-PTP` both in validation loss and in the first formal checkpoint score (`0.2` vs `0.05`)

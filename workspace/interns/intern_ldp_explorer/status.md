@@ -8,5 +8,5 @@
 | Status | Working |
 | Current Task | task001_reproduce_ldp_ptp_baseline_h200 |
 | PR | https://github.com/StevenKKXS/ldp/pull/new/intern_ldp_explorer/task001_reproduce_ldp_ptp_baseline_h200 |
-| Session | 7 |
-| Recent Progress | Re-sampled the 96h node and confirmed all four `node96_*` jobs have moved beyond preload into real training: the short-history PTP and no-history runs are already at epochs `20/21`, the `obs16` PTP and no-PTP runs are at epoch `3`, and the latest `nvidia-smi` snapshot at `2026-05-01 06:42 UTC` showed low instantaneous utilization (`GPU0 0%`, `GPU1 17%`) despite roughly `27.9 GiB` resident on each card, which means the jobs are alive but still not saturating the H200s. |
+| Session | 8 |
+| Recent Progress | Re-sampled all known server endpoints on `2026-05-03` and confirmed the old 72h node entry `10.100.2.47:37893` is no longer reachable, while the 96h node `10.100.2.47:15744` remains live as host `lg-cmc-b7r201-e06u16-h200-000110`. Current GPU snapshot there is `GPU0 0%, 4 MiB` and `GPU1 57%, 27875 MiB`, so the box is not saturated. From current `ps` and `logs.json.txt`, only `node96_no_ptp_square_obs16_1777613676` and `node96_nohist_square_short_1777613676` are still active; the earlier `node96_ptp_*` jobs left output directories and metrics but do not appear active anymore. |

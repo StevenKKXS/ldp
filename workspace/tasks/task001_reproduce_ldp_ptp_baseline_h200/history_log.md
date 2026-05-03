@@ -1,6 +1,6 @@
 # History Log
 
-<!-- METADATA:SESSION=7 -->
+<!-- METADATA:SESSION=8 -->
 
 ## Session 0
 - Created task for reproducing LDP baseline and PTP on H200.
@@ -175,3 +175,76 @@
 - yes, the new 96h-node jobs have definitely started real training
 - the two short-history runs are far ahead because their per-epoch cost is much lower
 - the two `obs16` runs are also training, just more slowly, and PTP currently has slightly lower validation loss than no-PTP on this node as well (`0.0824 < 0.0841`)
+
+## Session 8
+- User requested a consolidated summary of all runs so far and current server resources.
+- Re-checked the previously used 72h debug endpoint `10.100.2.47:37893` on `2026-05-03`; SSH now returns `Connection refused`, so that lease should be treated as expired and that node is no longer available for further work.
+- Re-checked the 96h node `10.100.2.47:15744`:
+- hostname: `lg-cmc-b7r201-e06u16-h200-000110`
+- sample time: `Sun May 3 11:19:38 UTC 2026`
+- GPU snapshot:
+- GPU0: `0%`, `4 MiB / 143771 MiB`
+- GPU1: `57%`, `27875 MiB / 143771 MiB`
+- Interpretation:
+- only one card currently carries substantial resident training state
+- the node is still far from saturated and retains large free GPU capacity
+- Re-sampled current process state on the 96h node and identified only two active top-level training parents:
+- PID `57061`: `node96_no_ptp_square_obs16_1777613676`
+- PID `58030`: `node96_nohist_square_short_1777613676`
+- `node96_ptp_square_obs16_1777613676` and `node96_ptp_square_short_1777613676` still have output directories and metrics, but they do not appear in the current `ps` snapshot and GPU0 is effectively idle. The most likely interpretation is that those two jobs have already exited.
+- Re-parsed the latest `logs.json.txt` for all historically relevant runs to prepare a clean summary:
+- `full_train_3500ep_1777457545`:
+- train epoch `841`
+- val epoch `840`
+- latest val loss `0.09924`
+- latest test record at epoch `799`: `test/mean_score=0.0`
+- `baseline_square_3500ep_1777535019`:
+- train epoch `400`
+- val epoch `399`
+- latest val loss `0.07946`
+- latest test record at epoch `399`: `test/mean_score=0.025`
+- earlier best visible checkpoint remains `epoch=0299-test_mean_score=0.100`
+- `no_ptp_square_obs16_1777535301`:
+- train epoch `106`
+- val epoch `105`
+- latest val loss `0.06706`
+- first formal test checkpoint at epoch `99`: `test/mean_score=0.05`
+- `ptp_square_obs16_1777535313`:
+- train epoch `104`
+- val epoch `103`
+- latest val loss `0.04108`
+- first formal test checkpoint at epoch `99`: `test/mean_score=0.2`
+- This remains the cleanest completed evidence so far that PTP is outperforming the matched long-context no-PTP baseline on square.
+- 96h-node run snapshot from logs:
+- `node96_no_ptp_square_obs16_1777613676`:
+- train epoch `194`
+- val epoch `193`
+- latest val loss `0.06807`
+- latest test record at epoch `99`: `test/mean_score=0.025`
+- currently active
+- `node96_nohist_square_short_1777613676`:
+- train epoch `1099`
+- val epoch `1098`
+- latest val loss `0.11347`
+- latest test record at epoch `999`: `test/mean_score=0.025`
+- currently active
+- `node96_ptp_square_obs16_1777613676`:
+- train epoch `99`
+- val epoch `98`
+- latest val loss `0.04045`
+- no test record written yet
+- likely inactive now
+- `node96_ptp_square_short_1777613676`:
+- train epoch `99`
+- val epoch `98`
+- latest val loss `0.05286`
+- no test record written yet
+- likely inactive now
+- Consolidated resource summary at the end of this session:
+- live compute endpoint: one 96h node, `10.100.2.47:15744`
+- unavailable endpoint: old 72h node, `10.100.2.47:37893`
+- live active training jobs observed right now: `2`
+- important shared asset status unchanged:
+- official encoder checkpoints are available on `/mnt/3fs2`
+- `longhistsquare100` is still missing
+- shared square zarr cache remains corrupted, so `use_cache=true` is still unsafe on that dataset
