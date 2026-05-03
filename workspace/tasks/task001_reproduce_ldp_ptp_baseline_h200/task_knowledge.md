@@ -260,3 +260,5 @@
 - long-context PTP (`ptp_square_obs16_1777535313`) produced `test/mean_score=0.2` at epoch `99`
 - Therefore the strongest completed square-side comparison currently in hand is:
 - matched `global_obs=16` runs on the older node show `PTP` ahead of `no-PTP` both in validation loss and in the first formal checkpoint score (`0.2` vs `0.05`)
+- Session 8 validation note:
+- `history_log.md` now explicitly carries the Session 8 consolidated run/resource summary and stop-hook recheck note, so the task record is internally consistent across `status.md`, `history_log.md`, and `task_knowledge.md`

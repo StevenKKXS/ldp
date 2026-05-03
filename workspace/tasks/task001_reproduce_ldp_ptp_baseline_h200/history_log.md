@@ -248,3 +248,6 @@
 - official encoder checkpoints are available on `/mnt/3fs2`
 - `longhistsquare100` is still missing
 - shared square zarr cache remains corrupted, so `use_cache=true` is still unsafe on that dataset
+- Session 8 close-out check:
+- re-validated after the stop-hook that this session log explicitly contains the consolidated server/resource summary requested by the user
+- no change to the underlying server state from the earlier Session 8 sample
