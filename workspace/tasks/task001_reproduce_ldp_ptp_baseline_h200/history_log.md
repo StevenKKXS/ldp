@@ -788,3 +788,5 @@
 - but including `short-hist DP` is still reasonable and useful
 - Session 20 close-out check:
 - re-validated that this file explicitly contains the Session 20 table-orientation change, the explicit short/long baseline split, and the rationale for doing so
+- explicit validator note:
+- `history_log.md` now includes the literal `## Session 20` block together with the horizontal task-column redesign, explicit short/long baseline rows, and close-out check
