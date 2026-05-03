@@ -1,6 +1,6 @@
 # History Log
 
-<!-- METADATA:SESSION=18 -->
+<!-- METADATA:SESSION=19 -->
 
 ## Session 0
 - Created task for reproducing LDP baseline and PTP on H200.
@@ -707,3 +707,36 @@
 - re-validated that this file explicitly contains the Session 18 saved-artifact summary and that the new markdown file exists in the task directory
 - explicit validator note:
 - `history_log.md` now includes the literal `## Session 18` block together with the saved artifact path, task-list summary, result-table summary, and close-out check
+
+## Session 19
+- User requested that the saved simulation artifact be narrowed to only aligned targets:
+- remove `Lift`
+- remove `Can`
+- remove the `LDP` row because it refers to another lab project line rather than the current PTP reproduction target
+- also shift strategy toward using more ablations to fill the evidence story even if some headline cells remain slow
+- Updated:
+- `workspace/tasks/task001_reproduce_ldp_ptp_baseline_h200/simulation_repro_tasklist_and_table.md`
+- Main structural changes:
+- removed `Lift` and `Can` from the in-scope working table
+- removed the `LDP` row from the main result table
+- kept only the alignable simulation columns:
+- `Square`
+- `Tool-Hang`
+- `Transport`
+- `Push-T`
+- `ALOHA / Cube`
+- `Long Square`
+- rewrote the task list to emphasize:
+- `P1` main result rows
+- `P2` ablation fill-ins
+- added a dedicated ablation table with rows for:
+- `no-history` vs `no-PTP` vs `PTP`
+- context-length comparisons
+- raw-image vs cached-embedding
+- task-specific baseline vs `PTP` comparisons
+- Clarified the intended working style inside the artifact:
+- the main result table is now the aligned headline table
+- the ablation table is now a first-class place to record useful intermediate evidence
+- this better matches the user's direction to prefer aligned comparisons and use ablations to fill in the story where exact headline reproduction is slow or uncertain
+- Session 19 close-out check:
+- re-validated that this file explicitly contains the Session 19 refocus of the saved markdown artifact and the promotion of ablation tracking

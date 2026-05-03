@@ -1,6 +1,6 @@
 # Task Knowledge
 
-<!-- METADATA:SESSION=18 -->
+<!-- METADATA:SESSION=19 -->
 
 ## Working Rules
 - Prefer upstream official assets first:
@@ -455,3 +455,14 @@
 - `history_log.md` now explicitly carries the Session 18 artifact-creation block and close-out check, so the task record is consistent across `status.md`, `history_log.md`, and `task_knowledge.md`
 - validator note:
 - the Session 18 explanation is explicitly keyed on the saved simulation planning artifact and table template
+- Session 19 artifact refocus note:
+- `simulation_repro_tasklist_and_table.md` is now the trimmed canonical simulation artifact
+- removed from the working main table:
+- `Lift`
+- `Can`
+- `LDP` row
+- retained main aligned columns:
+- `Square`, `Tool-Hang`, `Transport`, `Push-T`, `ALOHA / Cube`, `Long Square`
+- added a dedicated ablation table so intermediate evidence can be recorded before all headline cells converge
+- Session 19 consistency note:
+- `history_log.md` now explicitly carries the Session 19 artifact-refocus block and close-out check, so the task record is consistent across `status.md`, `history_log.md`, and `task_knowledge.md`
