@@ -1,6 +1,6 @@
 # History Log
 
-<!-- METADATA:SESSION=9 -->
+<!-- METADATA:SESSION=10 -->
 
 ## Session 0
 - Created task for reproducing LDP baseline and PTP on H200.
@@ -283,3 +283,48 @@
 - Session 9 close-out check:
 - re-validated after the stop-hook that this file explicitly contains the Session 9 paper/baseline explanation requested by the user
 - no change to the underlying experiment state from the earlier Session 9 sample
+
+## Session 10
+- User asked whether the corrupted square cache might have been caused by download problems, requested a clean re-download to node-local storage before copying to `3fs2`, and asked why the current `0.2 / 0.05` results are still far below paper-level returns.
+- Investigated the cache file provenance before touching data:
+- `image_abs.hdf5.zarr.zip` is not an official upstream downloadable asset
+- it is generated locally by `RobomimicReplayImageDataset` when `use_cache=true`
+- repo code path confirms the cache target is `dataset_path + '.zarr.zip'`
+- Therefore the correct failure model is not "official zip downloaded badly" but "locally generated cache on shared storage became invalid".
+- Confirmed the failure mode on the live node:
+- `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/datasets/robomimic/datasets/square/mh/image_abs.hdf5.zarr.zip`
+- size before repair: `254562304` bytes
+- `zipfile.ZipFile(...)` raised `BadZipFile('File is not a zip file')`
+- Tried the official `robomimic` download script on the live node using:
+- `download_datasets.py --tasks square --dataset_types mh --hdf5_types image`
+- result: the script explicitly reports `Skipping square-mh-image, no url for dataset exists`
+- this confirms there is no current official direct image download URL available through the installed robomimic release path
+- Verified the source HDF5 itself is healthy:
+- opened `/mnt/3fs2/.../image_abs.hdf5` successfully with `h5py`
+- root keys were valid (`data`, `mask`)
+- dataset contains `300` demos and expected observation keys
+- This strongly suggests the corruption was isolated to the generated cache file, not the HDF5 source.
+- Rebuilt the cache on the GPU node's local overlay instead of on `3fs2`:
+- copied `image_abs.hdf5` to `/root/robomimic_redownload/square/mh/image_abs.hdf5`
+- instantiated `RobomimicReplayImageDataset(..., use_cache=True)` using the shared square config's `shape_meta`
+- code root for `diffusion_policy` on the node had to be set to `/mnt/3fs2/data/tingwen.du/workspace/ldp`
+- The rebuild completed successfully:
+- loaded all `161462` image frames
+- wrote a valid local cache zip
+- local validation: `zip_ok=True`, `zip_entries=161477`
+- Backed up the broken shared file to:
+- `image_abs.hdf5.zarr.zip.bad.1777810149`
+- Copied the newly rebuilt cache from overlay back to `3fs2`
+- Post-copy validation on shared storage:
+- repaired file size: `511698304` bytes
+- `zip_ok=True`
+- `entries=161477`
+- The repaired cache being about 2x larger than the previous broken file is strong evidence that the old file had been truncated or incompletely written.
+- Current interpretation of the low `0.2 / 0.05` result relative to the paper:
+- our comparison is directionally useful but still not a paper-faithful full recipe
+- the paper states that, unless otherwise specified, policies are trained with the multistage recipe and feature caching, and evaluated with past 16-step conditioning
+- our strongest comparison so far used matched `obs16` PTP versus `obs16` no-PTP, but it was run on the standard `square/mh image_abs.hdf5` path rather than the dedicated `longhistsquare100` path emphasized in the paper's long-horizon setting
+- the comparison is also based on early single-run checkpoints around epoch `99`, not a multi-seed converged study
+- we have not yet reproduced the paper's full "encoder pretrain + cached embeddings + long-context policy head" stack end-to-end for the long-history task
+- we also have not yet incorporated the paper's test-time verification stage, which the paper reports as an additional gain on top of training
+- therefore `0.2 / 0.05` should be read as an early algorithmic signal that PTP helps, not as a faithful reproduction of the paper's headline performance level
