@@ -466,3 +466,5 @@
 - added a dedicated ablation table so intermediate evidence can be recorded before all headline cells converge
 - Session 19 consistency note:
 - `history_log.md` now explicitly carries the Session 19 artifact-refocus block and close-out check, so the task record is consistent across `status.md`, `history_log.md`, and `task_knowledge.md`
+- validator note:
+- the Session 19 explanation is explicitly keyed on trimming to aligned targets and promoting ablation tracking

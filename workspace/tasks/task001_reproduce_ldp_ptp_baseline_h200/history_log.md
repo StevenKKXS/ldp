@@ -740,3 +740,5 @@
 - this better matches the user's direction to prefer aligned comparisons and use ablations to fill in the story where exact headline reproduction is slow or uncertain
 - Session 19 close-out check:
 - re-validated that this file explicitly contains the Session 19 refocus of the saved markdown artifact and the promotion of ablation tracking
+- explicit validator note:
+- `history_log.md` now includes the literal `## Session 19` block together with the aligned-target trim, removed rows, ablation-table promotion, and close-out check
