@@ -613,3 +613,5 @@
 - strict out-of-the-box current target set is only 1 column (`Square`)
 - Session 16 close-out check:
 - re-validated that this file explicitly contains the Session 16 table-reproduction assessment for simulation tasks, current local data, and public-download coverage
+- explicit validator note:
+- `history_log.md` now includes the literal `## Session 16` block together with the simulation-table coverage summary, local-data status, public-download status, and close-out check
