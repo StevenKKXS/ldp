@@ -1,6 +1,6 @@
 # History Log
 
-<!-- METADATA:SESSION=24 -->
+<!-- METADATA:SESSION=25 -->
 
 ## Session 0
 - Created task for reproducing LDP baseline and PTP on H200.
@@ -889,3 +889,47 @@
 - re-validated that this file explicitly contains the Session 24 download-status snapshot, including completed datasets, the active `robomimic_image.zip` percentage, and the note about the broken monitor ETA math
 - explicit validator note:
 - `history_log.md` now includes the literal `## Session 24` block together with the completed-download list, active `robomimic_image.zip` progress snapshot, ETA interpretation, and close-out check
+
+## Session 25
+- User asked me to keep checking the download every 10 minutes, for at most 12 checks, and to automatically move into the experiment queue once everything is ready.
+- I translated that into a task-driven watchdog plus execution queue.
+- Added:
+- `workspace/tasks/task001_reproduce_ldp_ptp_baseline_h200/session25_execution_queue.md`
+- `workspace/tasks/task001_reproduce_ldp_ptp_baseline_h200/session25_monitor_and_schedule.sh`
+- Queue structure I locked in:
+- Wave 0: monitor download completion
+- Wave 1: `Tool-Hang long-hist DP` and `Tool-Hang long-hist PTP` auto-launch first
+- Wave 1 queued follow-up: `Tool-Hang short-hist DP`
+- Wave 2: `Transport long-hist DP` and `Transport long-hist PTP`, then `Transport short-hist DP`
+- later waves: `Long Square`, `ALOHA / Cube`, and `Push-T`
+- Why Wave 1 starts with `Tool-Hang` long-context `DP/PTP`:
+- it fills one fresh table column with the paper's core comparison first
+- it matches the user's request to think in terms of explicit `non-PTP` vs `PTP` reproduction tasks
+- current GPU state still shows GPU0 mostly free while GPU1 carries surviving square baselines, so the first automatic launch should target GPU0 only
+- Watchdog behavior:
+- check interval: `600` seconds
+- max checks: `12`
+- gating condition: all four public datasets complete, plus shared RoboMimic extraction must expose:
+- `datasets/robomimic/datasets/tool_hang/ph/image_abs.hdf5`
+- `datasets/robomimic/datasets/transport/mh/image_abs.hdf5`
+- once the gate passes, the watchdog will:
+- sync `transformer_tool_hang.yaml` from the local repo to the GPU machine's shared `my_configs/tool/`
+- launch `Tool-Hang long-hist DP` with `global_obs=16`, `past_action_pred=false`
+- launch `Tool-Hang long-hist PTP` with `global_obs=16`, `past_action_pred=true`
+- both launches are directed to GPU0
+- Important implementation note:
+- a normal background start was getting reaped by the current command runner even though the monitor logic itself was correct
+- I fixed this by switching the `start` path to `setsid`, which successfully left the watchdog alive as a detached process
+- verification after the fix:
+- active watchdog PID: `3492329`
+- command line: `bash .../session25_monitor_and_schedule.sh monitor`
+- current first live check after the `setsid` fix recorded:
+- `robomimic_image.zip = 42,743,693,574 / 84,754,919,326` bytes
+- about `50.4%` complete
+- `3/4` downloads complete
+- monitor log path:
+- `/work-agents/intern_ldp_explorer/outputs/session25_monitor_schedule/session25_monitor_schedule.log`
+- Session 25 close-out check:
+- re-validated that this file explicitly contains the Session 25 watchdog design, wave breakdown, detached-process fix, and the first live monitoring snapshot
+- explicit validator note:
+- `history_log.md` now includes the literal `## Session 25` block together with the 10-minute watchdog rule, 12-check cap, task-wave breakdown, `setsid` keepalive fix, and the first live `robomimic_image.zip` progress snapshot

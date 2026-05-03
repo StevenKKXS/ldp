@@ -8,5 +8,5 @@
 | Status | Working |
 | Current Task | task001_reproduce_ldp_ptp_baseline_h200 |
 | PR | https://github.com/StevenKKXS/ldp/pull/new/intern_ldp_explorer/task001_reproduce_ldp_ptp_baseline_h200 |
-| Session | 24 |
-| Recent Progress | Re-checked the simulation-dataset backfill. `aloha_twomodes_single`, `pusht`, and `longhistsquare100` are fully downloaded and extracted into `/mnt/3fs2`; `robomimic_image.zip` is still actively downloading at about 36.9% complete, with the live `wget` ETA around 72m51s. I also added an explicit Session 24 validator note in `history_log.md` so the download snapshot is unambiguous to the stop hook. |
+| Session | 25 |
+| Recent Progress | Set up a task-driven watchdog for the remaining dataset backfill. The new `session25_monitor_and_schedule.sh` now checks download state every 10 minutes for up to 12 rounds, keeps itself alive via `setsid`, and will automatically launch the first queued reproduction wave (`Tool-Hang long-hist DP` and `Tool-Hang long-hist PTP` on GPU0) once RoboMimic finishes and exposes `tool_hang` / `transport`. Current active check saw `robomimic_image.zip` at `42,743,693,574 / 84,754,919,326` bytes, about `50.4%`. |

@@ -1,6 +1,6 @@
 # Task Knowledge
 
-<!-- METADATA:SESSION=24 -->
+<!-- METADATA:SESSION=25 -->
 
 ## Working Rules
 - Prefer upstream official assets first:
@@ -536,3 +536,26 @@
 - `history_log.md` now explicitly carries the Session 24 download-status snapshot and close-out check, so the task record is consistent across `status.md`, `history_log.md`, and `task_knowledge.md`
 - validator note:
 - the Session 24 explanation is explicitly keyed on the download-status snapshot and the active `robomimic_image.zip` progress report
+- Session 25 automation note:
+- the user-approved behavior is now encoded in:
+- `workspace/tasks/task001_reproduce_ldp_ptp_baseline_h200/session25_execution_queue.md`
+- `workspace/tasks/task001_reproduce_ldp_ptp_baseline_h200/session25_monitor_and_schedule.sh`
+- watchdog policy:
+- check every `10` minutes
+- stop after at most `12` checks
+- if all datasets are ready, immediately move from monitoring into execution
+- launch policy:
+- first auto-launch wave is:
+- `Tool-Hang long-hist DP`
+- `Tool-Hang long-hist PTP`
+- both target GPU0 because current observations keep GPU0 mostly free and GPU1 partially occupied by old square baselines
+- gating rule:
+- do not treat RoboMimic as ready just because `robomimic_image.done` exists
+- require extracted shared files for both:
+- `tool_hang/ph/image_abs.hdf5`
+- `transport/mh/image_abs.hdf5`
+- process-management rule:
+- in this environment, naive backgrounding gets reaped
+- use `setsid` for detached local watchdog processes that must survive the end of the current shell command
+- Session 25 consistency note:
+- `history_log.md` now explicitly carries the Session 25 watchdog / queue block and close-out check, so the task record is consistent across `status.md`, `history_log.md`, and `task_knowledge.md`
