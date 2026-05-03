@@ -1,6 +1,6 @@
 # Task Knowledge
 
-<!-- METADATA:SESSION=14 -->
+<!-- METADATA:SESSION=15 -->
 
 ## Working Rules
 - Prefer upstream official assets first:
@@ -371,3 +371,25 @@
 - `history_log.md` now explicitly carries the Session 14 explanation block and close-out check, so the task record is consistent across `status.md`, `history_log.md`, and `task_knowledge.md`
 - validator note:
 - the Session 14 explanation is explicitly keyed on the meaning and provenance of `square` in RoboMimic / robosuite / LDP
+- Paper task-coverage explanation to reuse:
+- the paper covers multiple tasks beyond `square`
+- official website text explicitly lists four real-world tasks:
+- `Franka Block Move`
+- `Franka Two Scoops`
+- `Franka Mug Replacement`
+- `Aloha Tape Replacement`
+- public repo simulation config families visibly include:
+- `square`, `transport`, `tool`, `aloha`, `longhist`, and `pusht`
+- Publicly released assets currently confirmed:
+- Diffusion Policy / RoboMimic benchmark data via `robomimic_image.zip`
+- long-history simulation datasets:
+- `aloha_twomodes_single.zip`
+- `longhistsquare100.zip`
+- short-context encoders:
+- `obs_encoders.zip`
+- Important release limitation:
+- GitHub Releases is empty
+- no official pretrained policy checkpoints have been found
+- the launcher references `experiment_configs/real`, but that directory is absent in the inspected public repo snapshot, so the real-world release is not turnkey from this code checkout
+- Session 15 consistency note:
+- `history_log.md` now explicitly carries the Session 15 explanation block and close-out check, so the task record is consistent across `status.md`, `history_log.md`, and `task_knowledge.md`

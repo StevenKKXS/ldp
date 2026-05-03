@@ -8,5 +8,5 @@
 | Status | Working |
 | Current Task | task001_reproduce_ldp_ptp_baseline_h200 |
 | PR | https://github.com/StevenKKXS/ldp/pull/new/intern_ldp_explorer/task001_reproduce_ldp_ptp_baseline_h200 |
-| Session | 14 |
-| Recent Progress | Clarified what `square` means in this project and added an explicit Session 14 validator note after the stop-hook. In `ldp`, `square` refers to the standard RoboMimic `square` benchmark task and dataset path `data/robomimic/datasets/square/mh/image_abs.hdf5`, not a generic shape label. At the simulator level this task comes from robosuite's `NutAssemblySquare`, i.e. placing a square nut onto its peg. This also sharpens the distinction with the paper's separate `longhist square` / `long-horizon square` task family. |
+| Session | 15 |
+| Recent Progress | Clarified that the paper covers many tasks beyond `square`, and that the public release is only partial. The repo and official README clearly expose simulation assets for RoboMimic / Diffusion Policy tasks plus the paper's long-history simulation benchmarks, but they do not provide GitHub Releases, pretrained policy checkpoints, or a checked-in `experiment_configs/real/` directory for the real-world tasks referenced by the launcher. |

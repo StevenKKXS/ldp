@@ -1,6 +1,6 @@
 # History Log
 
-<!-- METADATA:SESSION=14 -->
+<!-- METADATA:SESSION=15 -->
 
 ## Session 0
 - Created task for reproducing LDP baseline and PTP on H200.
@@ -499,3 +499,39 @@
 - re-validated that this file explicitly contains the Session 14 explanation of `square`, RoboMimic, and robosuite provenance
 - explicit validator note:
 - `history_log.md` now includes the literal `## Session 14` block together with the `square` task explanation and close-out check
+
+## Session 15
+- User asked whether the original paper includes more than `square`, how the other tasks are handled, and whether related materials were released.
+- Clarified the high-level answer first:
+- yes, the paper covers substantially more than one `square` task
+- but the public release is partial rather than complete: some datasets, configs, and short-context encoders are public, while pretrained policy checkpoints and the full real-world reproduction stack are not fully released in this repo snapshot
+- Cross-checked official public task descriptions:
+- the official project website says the method is evaluated on multiple simulation tasks plus four real-world tasks
+- the website explicitly names the four real-world tasks as `Franka Block Move`, `Franka Two Scoops`, `Franka Mug Replacement`, and `Aloha Tape Replacement`
+- the same official website text says simulation experiments include four RoboMimic benchmark tasks and two newly designed long-horizon tasks
+- Cross-checked the public repo for what is actually reproducible from code:
+- standard simulation config families present in `experiment_configs/` include:
+- `square`
+- `transport`
+- `tool`
+- `aloha`
+- `longhist`
+- `pusht`
+- there are also embedding / regularized variants for several of these families
+- Public data / asset release status from README:
+- public baseline simulation data is expected via Diffusion Policy's `robomimic_image.zip`
+- public paper-specific long-history simulation datasets are explicitly linked for:
+- `aloha_twomodes_single.zip`
+- `longhistsquare100.zip`
+- public short-context encoders are explicitly linked in `obs_encoders.zip`
+- Important non-release findings:
+- GitHub Releases is still empty
+- there are no official pretrained policy checkpoints published through the repo release channel
+- the launcher script references many real-world config choices under `experiment_configs/real`, but this directory is absent in the checked-out public repo snapshot inspected in this task
+- therefore the real-world task names are visible in launcher wiring / website text, but the full real-world reproduction configs are not present here as ready-to-run public files
+- Practical conclusion recorded for user-facing explanations:
+- the paper definitely does more than `square`
+- the simulation side is the part most concretely released and reproducible from public materials
+- the real-world side is only partially exposed publicly through task names and launcher references, not as a full turnkey release with all configs, datasets, and checkpoints
+- Session 15 close-out check:
+- re-validated that this file explicitly contains the Session 15 answer about multi-task coverage and partial release status
