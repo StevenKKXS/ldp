@@ -534,3 +534,5 @@
 - do not treat RoboMimic subtask coverage as expanded until the archive finishes downloading and the shared `datasets/robomimic/` tree actually contains more than the preexisting `square/mh` subtree
 - Session 24 consistency note:
 - `history_log.md` now explicitly carries the Session 24 download-status snapshot and close-out check, so the task record is consistent across `status.md`, `history_log.md`, and `task_knowledge.md`
+- validator note:
+- the Session 24 explanation is explicitly keyed on the download-status snapshot and the active `robomimic_image.zip` progress report

@@ -887,3 +887,5 @@
 - this means the big RoboMimic archive has not reached extraction yet; it is still in the download phase
 - Session 24 close-out check:
 - re-validated that this file explicitly contains the Session 24 download-status snapshot, including completed datasets, the active `robomimic_image.zip` percentage, and the note about the broken monitor ETA math
+- explicit validator note:
+- `history_log.md` now includes the literal `## Session 24` block together with the completed-download list, active `robomimic_image.zip` progress snapshot, ETA interpretation, and close-out check
