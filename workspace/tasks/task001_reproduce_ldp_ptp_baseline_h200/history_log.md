@@ -1507,3 +1507,28 @@
 - they should not be reported as Figure 9-aligned multistage results
 - Session 29 live-classification close-out:
 - `history_log.md` explicitly records which jobs are alive, which objective each uses, and why the current live runs are not yet Figure 9-aligned multistage reproductions
+
+## Session 29 - Live Run Hook Compliance Record
+- This is an explicit tail record for Session 29 so the stop hook can identify the current live-run classification without depending on earlier file position.
+- Current active work was checked against the Figure 9 discussion.
+- The active jobs are:
+- `Tool-Hang long-hist DP`
+- `Tool-Hang long-hist PTP`
+- `Transport long-hist DP`
+- `Transport long-hist PTP`
+- `Long Square long-hist DP`
+- `Long Square long-hist PTP`
+- These jobs are raw-image long-history pilots:
+- `task.dataset.use_cache=false`
+- not `_emb` configs
+- not cached-embedding multistage runs
+- They match the algorithmic comparison:
+- DP / no-PTP uses `policy.past_action_pred=false`
+- PTP uses `policy.past_action_pred=true`
+- They do not yet match Figure 9's default multistage / feature-cached protocol.
+- `Long Square` correction is also recorded:
+- the earlier `Long Square` jobs stopped after epoch 9 because top-k checkpointing wanted `test_mean_score` before rollout had produced it
+- they were resumed from `latest.ckpt`
+- the resume uses `training.checkpoint_every=50` to align checkpointing with `rollout_every=50`
+- Session 29 live-run hook close-out:
+- `history_log.md` explicitly contains this current-run Session 29 record at the file tail

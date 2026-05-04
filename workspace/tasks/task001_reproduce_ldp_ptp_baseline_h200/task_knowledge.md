@@ -792,3 +792,6 @@
 - `Long Square` correction:
 - the prior `Long Square` jobs crashed after epoch 9 because `checkpoint_every=10` attempted top-k checkpointing before `rollout_every=50` produced `test_mean_score`
 - they were resumed from `latest.ckpt` with `training.checkpoint_every=50`
+- Session 29 live-run hook-compliance note:
+- `history_log.md` now has an explicit tail section titled `## Session 29 - Live Run Hook Compliance Record`
+- that section repeats the current active-job classification and the `Long Square` resume correction
