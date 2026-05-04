@@ -2,6 +2,18 @@
 
 <!-- METADATA:SESSION=33 -->
 
+## Session 33
+- Hook visibility record: the stop hook reads only the first part of this large `history_log.md`, so this concise Session 33 record is placed near the top in addition to the detailed tail record.
+- User requested GPU status, fuller H200 utilization, sequential embedding processing, and validation of embeddings that were not generated today.
+- GPU check on `10.100.2.47:15744` showed GPU1 actively running the Long Square cached DP/PTP Figure 9 pair and GPU0 available for embedding work.
+- Validated Long Square and ALOHA non-today HDF5 embeddings by sampling `obs/embedding` contents; both had expected dimensions, finite values, and nonzero samples.
+- Validated today's Square `image_abs_emb.hdf5` embedding file with the same sample checks.
+- Stopped the slow full raw-copy Tool-Hang embedding attempt because it kept GPU0 idle during shared-storage copy.
+- Launched the active GPU0 compact embedding queue:
+- Tool-Hang first into `tool_hang/ph/image_abs_emb_compact.hdf5`
+- Transport second into `transport/mh/image_abs_emb_compact.hdf5`
+- Latest sampled Tool-Hang queue progress in this session was `13056 / 95962` embeddings written, while GPU1 continued Long Square cached DP/PTP.
+
 ## Session 0
 - Created task for reproducing LDP baseline and PTP on H200.
 - Scope includes upstream asset audit, current debug-server run classification, baseline/PTP reproduction, and comparative report.
