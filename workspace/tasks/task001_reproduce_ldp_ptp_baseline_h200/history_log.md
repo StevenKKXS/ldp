@@ -1,6 +1,39 @@
 # History Log
 
-<!-- METADATA:SESSION=37 -->
+<!-- METADATA:SESSION=38 -->
+
+## Session 38
+- User provided a new resource at `10.100.2.47` with SSH port `28447`, HTTP port `30146`, and stated it should have `4` GPUs.
+- Connected after removing the stale SSH host key for `[10.100.2.47]:28447`.
+- New node environment findings:
+- `/mnt/3fs2` was already mounted.
+- `nvidia-smi -L` exposed only `2` H200 GPUs, not `4`.
+- Ran shared setup script `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/setup_gpu_machine.sh`.
+- Applied the known PyTorch3D venv patch by replacing `/root/venv/lib/python3.12/site-packages/pytorch3d/transforms/__init__.py` with `from .rotation_conversions import *`.
+- Verified `torch.cuda.device_count()==2` on the new node.
+- Checked old/current node `10.100.2.47:15744`:
+- Long Square cached DP/PTP were still alive on GPU1 with parent PIDs `3916868` and `3916876`.
+- Tool-Hang cached DP/PTP and Transport cached DP/PTP were still alive on GPU0 with parent PIDs `2283520`, `2283522`, `2283524`, and `2283526`.
+- Launched new Square cached DP/PTP seed42 on new node GPU0:
+- DP PID `33725`, output `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/outputs/fig9_square_cached_dp_1777901875`.
+- PTP PID `33734`, output `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/outputs/fig9_square_cached_ptp_1777901875`.
+- Both jobs reached active training / env creation with no traceback in sampled tails.
+- Attempted ALOHA cached DP/PTP on new node GPU1:
+- first attempt failed because `dm_control` was missing.
+- installed repo-declared dependency `dm-control==1.0.14` into the existing `/root/venv`.
+- second attempt imported ALOHA runner successfully but failed during env runner construction with `AttributeError("'MjModel' object has no attribute 'bvh_geomid'")`.
+- Diagnosis: current `mujoco==3.8.0` is incompatible with the repo-pinned ALOHA `dm-control==1.0.14`; fixing ALOHA likely requires a MuJoCo version change or separate environment, so it was left blank rather than risking robosuite jobs.
+- Used the idle GPU1 capacity for a useful Square replicate:
+- Launched Square cached DP/PTP seed43 on new node GPU1.
+- DP PID `87949`, output `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/outputs/fig9_square_cached_dp_seed43_1777902377`.
+- PTP PID `87950`, output `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/outputs/fig9_square_cached_ptp_seed43_1777902377`.
+- Seed43 jobs entered `Training epoch 0`; sampled new-node GPU state showed GPU0 around `91-95%` and GPU1 around `93-95%` utilization.
+- Added and launched a 2h monitor on the new node:
+- script: `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/session38_oldnode_monitor.sh`.
+- monitor PID `79543`.
+- it checks old-node PIDs every `7200s` and triggers `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/session38_followup_check.py` when all tracked jobs disappear or the old node becomes unreachable.
+- The triggered follow-up is read-only: it summarizes output directories and tests checkpoint readability; it does not kill or relaunch training.
+- Initial monitor attempt used a bad `ps -p` argument format and produced one false read-only follow-up report; the script was fixed to use comma-separated PID lists and restarted successfully.
 
 ## Session 37
 - User reported the 96h GPU lease had already run `3d 7h 56m 7s` and asked whether DP/PTP could be launched now, plus how many more GPUs are needed.

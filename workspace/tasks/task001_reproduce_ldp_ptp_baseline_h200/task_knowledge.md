@@ -1,6 +1,31 @@
 # Task Knowledge
 
-<!-- METADATA:SESSION=37 -->
+<!-- METADATA:SESSION=38 -->
+
+## Session 38 Knowledge
+- New node `10.100.2.47:28447` is usable for this task, but it exposes only `2` H200 GPUs through `nvidia-smi` and CUDA, not the `4` GPUs expected from the allocation note.
+- The shared setup path remains valid on new GPU nodes:
+- run `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/setup_gpu_machine.sh`.
+- then apply the PyTorch3D import patch:
+- `/root/venv/lib/python3.12/site-packages/pytorch3d/transforms/__init__.py` should contain `from .rotation_conversions import *`.
+- ALOHA-specific environment caveat:
+- repo requirements pin `dm-control==1.0.14`, but the current setup script installs `mujoco==3.8.0`.
+- Installing `dm-control==1.0.14` fixes the missing import, but ALOHA env runner then fails with `MjModel.bvh_geomid` missing.
+- Treat ALOHA on this venv as blocked until a safe MuJoCo/dm-control compatibility plan is chosen; do not downgrade MuJoCo in-place while robosuite jobs are active.
+- New node active jobs:
+- Square cached DP seed42: PID `33725`, output `fig9_square_cached_dp_1777901875`, GPU0.
+- Square cached PTP seed42: PID `33734`, output `fig9_square_cached_ptp_1777901875`, GPU0.
+- Square cached DP seed43: PID `87949`, output `fig9_square_cached_dp_seed43_1777902377`, GPU1.
+- Square cached PTP seed43: PID `87950`, output `fig9_square_cached_ptp_seed43_1777902377`, GPU1.
+- Old node active jobs tracked by the monitor:
+- Long Square DP/PTP: `3916868`, `3916876`.
+- Tool-Hang DP/PTP: `2283520`, `2283522`.
+- Transport DP/PTP: `2283524`, `2283526`.
+- Monitor artifacts:
+- script `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/session38_oldnode_monitor.sh`.
+- monitor log `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/logs/session38_oldnode_monitor.log`.
+- follow-up script `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/session38_followup_check.py`.
+- follow-up reports are read-only checkpoint/log summaries and do not change training state.
 
 ## Working Rules
 - Prefer upstream official assets first:

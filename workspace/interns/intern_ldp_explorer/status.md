@@ -8,5 +8,5 @@
 | Status | Working |
 | Current Task | task001_reproduce_ldp_ptp_baseline_h200 |
 | PR | https://github.com/StevenKKXS/ldp/pull/new/intern_ldp_explorer/task001_reproduce_ldp_ptp_baseline_h200 |
-| Session | 37 |
-| Recent Progress | With about 16h left on the 96h H200 lease, launched Tool-Hang and Transport cached DP/PTP on GPU0 while Long Square cached DP/PTP continues on GPU1; minimum extra need is 2 more H200 cards for Square and ALOHA pairs, or 3 for cleaner one-pair-per-card packing. |
+| Session | 38 |
+| Recent Progress | Configured the new node at `10.100.2.47:28447`; it exposes 2 H200 GPUs despite the 4-card request. Launched Square cached DP/PTP seed42 on GPU0 and Square cached DP/PTP seed43 on GPU1; ALOHA is left blank because its runner requires a MuJoCo/dm-control version change. A 2h old-node monitor is active and will trigger a read-only follow-up check when tracked old jobs go offline. |
