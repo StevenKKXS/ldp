@@ -1,6 +1,6 @@
 # Task Knowledge
 
-<!-- METADATA:SESSION=29 -->
+<!-- METADATA:SESSION=30 -->
 
 ## Working Rules
 - Prefer upstream official assets first:
@@ -843,3 +843,22 @@
 - Hook compatibility note:
 - `history_log.md` now has `METADATA:SESSION=29`
 - `history_log.md` now ends with an exact `## Session 29` section so stop-hook checks that require the exact header can match it
+
+## Session 30 Live Progress Snapshot
+- As of `2026-05-04 08:23 UTC`, the 96h H200 node is still running six raw-image long-history pilot jobs:
+- `Tool-Hang DP/PTP`
+- `Transport DP/PTP`
+- `Long Square DP/PTP`
+- These are useful algorithmic DP-vs-PTP pilots, but not Figure 9-aligned because they are not cached/multistage `_emb` runs.
+- Latest live validation losses:
+- Tool-Hang: PTP `0.1088` vs DP `0.1406`
+- Transport: PTP `0.0696` vs DP `0.0745`
+- Long Square: PTP `0.0385` vs DP `0.0410`
+- Early signal remains directionally favorable to PTP, but these are not final evaluation scores.
+- GPU memory state:
+- GPU0 is effectively full with Tool-Hang pair, about `139.6 / 143.8 GiB`
+- GPU1 has Transport and Long Square pairs, about `88.9 / 143.8 GiB`
+- Sampled utilization was `0%` on both GPUs, likely bursty / input-bound at that instant because logs were actively advancing.
+- Execution decision point remains:
+- current raw-image pilots can continue as pilot evidence
+- Figure 9-aligned work starts when we stop competing raw-image jobs and launch official-encoder cached smoke runs

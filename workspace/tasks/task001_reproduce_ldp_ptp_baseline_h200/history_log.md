@@ -1,6 +1,6 @@
 # History Log
 
-<!-- METADATA:SESSION=29 -->
+<!-- METADATA:SESSION=30 -->
 
 ## Session 0
 - Created task for reproducing LDP baseline and PTP on H200.
@@ -1611,3 +1611,29 @@
 - The Figure 9 plan now explicitly says official `obs_encoders.zip` checkpoints are used first as released short-history encoder assets.
 - The compatibility snapshot records that Square, Tool-Hang, Transport, Long Square, ALOHA, and Push-T official encoders all load into their matching policies; Push-T requires an explicit `pusht_encoder.ckpt` override.
 - Current execution state is unchanged: no raw-image pilot jobs were stopped in this turn.
+
+## Session 30
+- User requested a current progress report.
+- Re-sampled the 96h H200 node at `2026-05-04 08:23 UTC`:
+- hostname: `lg-cmc-b7r201-e06u16-h200-000110`
+- GPU0: `0%` sampled utilization, `139557 / 143771 MiB` memory used
+- GPU1: `0%` sampled utilization, `88923 / 143771 MiB` memory used
+- Active GPU processes:
+- GPU0 has `Tool-Hang long-hist DP` and `Tool-Hang long-hist PTP`, about `60096 MiB` each
+- GPU1 has `Transport long-hist DP/PTP`, about `16606 MiB` each, plus `Long Square long-hist DP/PTP`, about `9568 MiB` each
+- Current live runs are still raw-image long-history pilots:
+- `task.dataset.use_cache=false`
+- not `_emb` cached-embedding configs
+- not Figure 9-aligned multistage results
+- Latest live metrics from `logs.json.txt`:
+- `Tool-Hang DP`: epoch `1`, global step `1558`, latest train loss `0.1616`, latest val loss `0.1406` at epoch `0`
+- `Tool-Hang PTP`: epoch `1`, global step `1590`, latest train loss `0.0929`, latest val loss `0.1088` at epoch `0`
+- `Transport DP`: epoch `1`, global step `5235`, latest train loss `0.0882`, latest val loss `0.0745` at epoch `0`
+- `Transport PTP`: epoch `1`, global step `5218`, latest train loss `0.0415`, latest val loss `0.0696` at epoch `0`
+- `Long Square DP`: epoch `14`, global step `10065`, latest train loss `0.0468`, latest val loss `0.0410` at epoch `13`
+- `Long Square PTP`: epoch `14`, global step `10070`, latest train loss `0.0413`, latest val loss `0.0385` at epoch `13`
+- Interpretation:
+- all six live jobs are progressing and logs were updated within seconds of sampling
+- PTP currently has lower validation loss than matched DP in all three live task pairs
+- no Figure 9-aligned cached/multistage result has been launched yet
+- current plan remains to switch to official-encoder cached smoke after approval: first `Long Square cached DP/PTP`, then `Square` embedding generation and validation
