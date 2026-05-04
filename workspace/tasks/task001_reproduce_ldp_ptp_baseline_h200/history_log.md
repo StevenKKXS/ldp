@@ -1265,3 +1265,5 @@
 - the user then issued `/model gpt-5.5 xhigh`
 - I treated this as an updated thread-level model-and-reasoning selection control message
 - no experiment-state conclusion changed as a result of recording this note
+- Session 29 model-selection reasoning note:
+- the `xhigh` portion of `/model gpt-5.5 xhigh` is explicitly recorded as a reasoning-effort selection, not as an experiment configuration change

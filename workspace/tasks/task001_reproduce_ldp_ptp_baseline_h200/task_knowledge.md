@@ -724,3 +724,5 @@
 - Session 29 model-selection update:
 - the later `/model gpt-5.5 xhigh` control message is also recorded for consistency
 - this still does not change any reproduction facts or experimental decisions
+- Session 29 reasoning-setting note:
+- the `xhigh` part of the control message is treated as a thread-level reasoning setting only
