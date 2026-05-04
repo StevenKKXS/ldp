@@ -1,6 +1,47 @@
 # History Log
 
-<!-- METADATA:SESSION=36 -->
+<!-- METADATA:SESSION=37 -->
+
+## Session 37
+- User reported the 96h GPU lease had already run `3d 7h 56m 7s` and asked whether DP/PTP could be launched now, plus how many more GPUs are needed.
+- Time calculation:
+- total lease: `96h`
+- elapsed from user: about `79h 56m`
+- remaining: about `16h 04m`
+- Live GPU state before new launches:
+- GPU0 was idle: `0%`, `1 MiB / 143771 MiB`.
+- GPU1 was occupied by Long Square cached DP/PTP: sampled around `60-99%`, `20269 MiB / 143771 MiB`.
+- Long Square cached DP/PTP had reached about epoch `499`, global step `350998`, and remained active.
+- Launched four cached DP/PTP jobs on GPU0 after embeddings were validated:
+- Tool-Hang DP: `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/outputs/fig9_toolhang_cached_dp_1777899957`
+- Tool-Hang PTP: `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/outputs/fig9_toolhang_cached_ptp_1777899957`
+- Transport DP: `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/outputs/fig9_transport_cached_dp_1777899957`
+- Transport PTP: `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/outputs/fig9_transport_cached_ptp_1777899957`
+- Initial launch attempt with timestamp `1777899901` failed immediately because `PYTHONPATH` did not include `/mnt/3fs2/data/tingwen.du/workspace/ldp`; relaunched successfully with `PYTHONPATH` fixed.
+- Successful launch process IDs:
+- Tool-Hang DP: `2283520`
+- Tool-Hang PTP: `2283522`
+- Transport DP: `2283524`
+- Transport PTP: `2283526`
+- Successful launch overrides:
+- all four use `CUDA_VISIBLE_DEVICES=0`
+- all four use `training.device=cuda:0`
+- all four use official encoder checkpoints
+- Tool-Hang uses compact embedding dataset `tool_hang/ph/image_abs_emb_compact.hdf5`
+- Transport uses compact embedding dataset `transport/mh/image_abs_emb_compact.hdf5`
+- raw HDF5 paths remain assigned to env runner dataset paths for rollout.
+- Post-launch GPU sample:
+- GPU0 reached `100%` utilization and about `23094 MiB / 143771 MiB`, later `28912 MiB / 143771 MiB`.
+- GPU1 remained active around `91-99%` and about `20270 MiB / 143771 MiB`.
+- Early liveness:
+- all four new parent processes were alive several minutes after launch.
+- Tool-Hang logs reached `Training epoch 0`.
+- Transport logs completed compact HDF5 / lowdim loading and normalizer prework without traceback.
+- Resource recommendation:
+- Current node can now run Long Square on GPU1 and overpacked Tool-Hang plus Transport on GPU0 for the remaining lease window.
+- Not yet launched due lack of free GPU capacity: Square cached DP/PTP and ALOHA cached DP/PTP.
+- Minimum extra request: `2` more H200 cards, one for Square DP/PTP and one for ALOHA DP/PTP.
+- Cleaner / faster request: `3` more H200 cards, so Tool-Hang, Transport, Square, and ALOHA can each have a dedicated pair GPU while Long Square continues on the current GPU1.
 
 ## Session 36
 - User asked for the current embedding preprocessing progress.

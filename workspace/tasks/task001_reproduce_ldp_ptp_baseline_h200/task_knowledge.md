@@ -1,6 +1,6 @@
 # Task Knowledge
 
-<!-- METADATA:SESSION=36 -->
+<!-- METADATA:SESSION=37 -->
 
 ## Working Rules
 - Prefer upstream official assets first:
@@ -963,3 +963,23 @@
 - Transport: `image_abs_emb_compact.hdf5`, dim `274`
 - Long Square: existing `longhistsquare100/demos.hdf5`, dim `137`
 - ALOHA / Cube: existing `aloha_twomodes_single/demos.hdf5`, dim `135`
+
+## Session 37 GPU Packing / Resource Note
+- With about `16h` left on the current 96h node, GPU0 was used immediately for:
+- Tool-Hang cached DP/PTP
+- Transport cached DP/PTP
+- GPU1 continues:
+- Long Square cached DP/PTP
+- Current active Figure 9 cached outputs:
+- Long Square DP/PTP: `fig9_longsquare_cached_{dp,ptp}_1777884905`
+- Tool-Hang DP/PTP: `fig9_toolhang_cached_{dp,ptp}_1777899957`
+- Transport DP/PTP: `fig9_transport_cached_{dp,ptp}_1777899957`
+- Still not launched because GPU0 is now occupied and GPU1 is busy:
+- Square cached DP/PTP
+- ALOHA / Cube cached DP/PTP
+- Minimum additional card need:
+- `2` H200 cards for Square pair and ALOHA pair.
+- Cleaner additional card need:
+- `3` H200 cards if Tool-Hang and Transport should be separated instead of sharing GPU0, while Square and ALOHA also run in parallel.
+- Launch hygiene:
+- remote runs using `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/run_train.py` must set `PYTHONPATH=/mnt/3fs2/data/tingwen.du/workspace/ldp:/mnt/3fs2/data/tingwen.du/intern_ldp_explorer:$PYTHONPATH`; otherwise `_patches.py` cannot import `diffusion_policy`.
