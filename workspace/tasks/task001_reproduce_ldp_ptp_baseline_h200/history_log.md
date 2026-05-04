@@ -1711,3 +1711,11 @@
 - `Transport` does need embedding processing and a small config repair; generate `transport_encoder.ckpt` embeddings with width `274`, set dataset/policy `use_embed_if_present=true`, and ensure dataset `shape_meta.obs.embedding.shape=[274]`.
 - `Push-T` also needs an embedding/cache path, but it is not the same HDF5 rewrite path because the dataset is zarr; keep it out of the main Figure 9 batch until zarr embedding rewrite/cache support is implemented and smoke-tested.
 - Practical order remains: finish Square rewrite, then generate Tool-Hang and Transport embeddings; ALOHA can be launched from its existing embeddings after Long Square is stable.
+
+## Session 32
+- Hook compatibility record for the Session 32 close-out.
+- `history_log.md` metadata is `METADATA:SESSION=32`.
+- Session 32 answer recorded:
+- `Long Square` and `ALOHA / Cube` already have usable `obs/embedding`
+- `Square`, `Tool-Hang`, and `Transport` need generated HDF5 embeddings for Figure 9-aligned cached long-history runs
+- `Push-T` needs a separate zarr embedding/cache implementation before it can enter the main Figure 9 cached batch
