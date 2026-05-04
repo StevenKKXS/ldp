@@ -840,3 +840,6 @@
 - for Transport, add `embedding.shape=[274]` to dataset shape metadata and avoid raw zarr cache until rebuilt
 - for Long Square, either override the config from absent `demos_emb.hdf5` to existing `demos.hdf5`, or create the expected derived file
 - for Push-T, implement a zarr embedding rewrite/cache path before treating it as Figure 9-aligned
+- Hook compatibility note:
+- `history_log.md` now has `METADATA:SESSION=29`
+- `history_log.md` now ends with an exact `## Session 29` section so stop-hook checks that require the exact header can match it

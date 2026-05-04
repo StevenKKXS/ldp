@@ -1,6 +1,6 @@
 # History Log
 
-<!-- METADATA:SESSION=28 -->
+<!-- METADATA:SESSION=29 -->
 
 ## Session 0
 - Created task for reproducing LDP baseline and PTP on H200.
@@ -1604,3 +1604,10 @@
 - in parallel validate the official rewrite pipeline by generating `Square` embeddings on a derived HDF5
 - Session 29 official-encoder close-out:
 - `history_log.md` records the official encoder first decision and compatibility snapshot at the file tail
+
+## Session 29
+- Hook compatibility record for the official encoder first update.
+- `history_log.md` metadata is now `METADATA:SESSION=29`.
+- The Figure 9 plan now explicitly says official `obs_encoders.zip` checkpoints are used first as released short-history encoder assets.
+- The compatibility snapshot records that Square, Tool-Hang, Transport, Long Square, ALOHA, and Push-T official encoders all load into their matching policies; Push-T requires an explicit `pusht_encoder.ckpt` override.
+- Current execution state is unchanged: no raw-image pilot jobs were stopped in this turn.
