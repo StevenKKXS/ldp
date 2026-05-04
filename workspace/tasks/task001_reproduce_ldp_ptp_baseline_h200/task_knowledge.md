@@ -759,3 +759,5 @@
 - official encoders are available
 - but task-specific embedding-cached datasets have not yet been rebuilt and validated as the canonical live training inputs for the current task set
 - therefore the execution-ready path was to launch raw-image long-hist pilots first, then transition toward multistage
+- Session 29 multistage-validator note:
+- the canonical Session 29 record now explicitly includes the multistage-vs-current-PTP explanation in `history_log.md`, not only the roadmap and paper-interpretation notes

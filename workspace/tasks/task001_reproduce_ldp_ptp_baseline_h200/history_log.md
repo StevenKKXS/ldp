@@ -1379,3 +1379,8 @@
 - we did not start directly from multistage because the asset pipeline for embedding-cached training was not yet the most execution-ready path
 - we started from raw-image long-hist DP/PTP to get task-aligned signal quickly
 - the next protocol-alignment step is to convert that evidence into the paper's multistage cached-embedding regime
+- Session 29 multistage-presence note:
+- this exact file's `## Session 29` block explicitly includes:
+- why we did not start directly from multistage
+- what assets are present versus still missing for cached-embedding training
+- and what the word `PTP` refers to in the current live raw-image runs
