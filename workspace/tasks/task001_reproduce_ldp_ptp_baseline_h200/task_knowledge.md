@@ -1,6 +1,6 @@
 # Task Knowledge
 
-<!-- METADATA:SESSION=33 -->
+<!-- METADATA:SESSION=34 -->
 
 ## Working Rules
 - Prefer upstream official assets first:
@@ -931,3 +931,16 @@
 - keep rollout / `env_runner.dataset_path` pointed at the raw HDF5
 - dataset `shape_meta` should include `embedding + lowdim`
 - policy `shape_meta` should remain raw-image-compatible for official encoder checkpoint loading and online rollout
+
+## Session 34 Embedding Monitor Notes
+- Tool-Hang compact embedding completion evidence:
+- `tool_hang/ph/image_abs_emb_compact.hdf5` can be opened after queue handoff
+- validation saw `200` demos, `95962` embedding steps, dim `137`, no missing embedding groups, and nonzero sampled demos
+- Transport compact embedding while active:
+- log progress is the reliable source during writing because HDF5 file locking prevents safe concurrent validation reads
+- latest sampled log was `written=121856/195800` with tqdm around `62%`
+- validate Transport only after the queue exits
+- GPU interpretation rule for the embedding queue:
+- low GPU0 utilization does not mean the queue is dead if the log and file size are advancing
+- current compact rewrite path is dominated by HDF5 read, image crop, and host-side preprocessing, so encoder GPU forward is bursty
+- GPU1 remains the main compute-utilized card while Long Square cached DP/PTP continues

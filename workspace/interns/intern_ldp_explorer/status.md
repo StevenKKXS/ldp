@@ -8,5 +8,5 @@
 | Status | Working |
 | Current Task | task001_reproduce_ldp_ptp_baseline_h200 |
 | PR | https://github.com/StevenKKXS/ldp/pull/new/intern_ldp_explorer/task001_reproduce_ldp_ptp_baseline_h200 |
-| Session | 33 |
-| Recent Progress | Checked the 96h H200 GPUs, validated existing non-today Long Square / ALOHA embeddings and today's Square embedding file, and launched a GPU0 sequential compact embedding queue for Tool-Hang followed by Transport while GPU1 continues Long Square cached DP/PTP. |
+| Session | 34 |
+| Recent Progress | Checked embedding and GPU progress: Tool-Hang compact embeddings completed and validated, Transport compact embeddings are actively writing at about 121856/195800 steps, GPU1 continues Long Square cached DP/PTP with high utilization while GPU0 embedding work is I/O/preprocess-bound. |

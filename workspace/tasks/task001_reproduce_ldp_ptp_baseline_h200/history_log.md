@@ -1,6 +1,28 @@
 # History Log
 
-<!-- METADATA:SESSION=33 -->
+<!-- METADATA:SESSION=34 -->
+
+## Session 34
+- User requested a brief report on current embedding progress and GPU utilization.
+- Re-sampled the 96h H200 node `10.100.2.47:15744` at `2026-05-04 11:27-11:28 UTC`.
+- Embedding queue status:
+- active process remains PID `484907`, script `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/session33_compact_embedding_queue.py`.
+- Tool-Hang compact embedding has completed:
+- file: `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/datasets/robomimic/datasets/tool_hang/ph/image_abs_emb_compact.hdf5`
+- size: `63M`
+- validation read: `200` demos, `95962` embedding steps, dim `137`, missing `0`, sampled demos nonzero.
+- Transport compact embedding has automatically started after Tool-Hang:
+- file: `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/datasets/robomimic/datasets/transport/mh/image_abs_emb_compact.hdf5`
+- current size sample: `177M`
+- latest log sample: `written=121856/195800`, around `62%` by tqdm batch count.
+- ETA estimate from the recent tqdm rate is roughly `25-30` minutes from the sample time if throughput remains similar.
+- GPU utilization samples:
+- single snapshot at `11:27:41 UTC`: GPU0 `0%`, `1778 MiB`, GPU1 `93%`, `20269 MiB`.
+- 8-sample series every 2 seconds: GPU0 stayed `0%` with `1778 MiB`; GPU1 varied `53-99%` with `20269 MiB`.
+- Interpretation:
+- GPU1 is still productively occupied by the Long Square cached DP/PTP pair.
+- GPU0 embedding generation is active but I/O / HDF5 / image crop dominated, so instantaneous GPU utilization is low despite log progress.
+- Transport HDF5 could not be opened for validation while the writer held a file lock; this is expected during active write and should be validated after the queue exits.
 
 ## Session 33
 - Hook visibility record: the stop hook reads only the first part of this large `history_log.md`, so this concise Session 33 record is placed near the top in addition to the detailed tail record.
