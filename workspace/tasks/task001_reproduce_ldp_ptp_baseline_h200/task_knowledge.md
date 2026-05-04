@@ -1,6 +1,6 @@
 # Task Knowledge
 
-<!-- METADATA:SESSION=34 -->
+<!-- METADATA:SESSION=35 -->
 
 ## Working Rules
 - Prefer upstream official assets first:
@@ -944,3 +944,8 @@
 - low GPU0 utilization does not mean the queue is dead if the log and file size are advancing
 - current compact rewrite path is dominated by HDF5 read, image crop, and host-side preprocessing, so encoder GPU forward is bursty
 - GPU1 remains the main compute-utilized card while Long Square cached DP/PTP continues
+
+## Session 35 Intern Helper Upgrade Note
+- Installed / confirmed Intern Agent Helper version `1.4.9` in VS Code Insiders from `/work-agents/axis_intern_agents/releases/intern-agent-helper-1.4.9.vsix`.
+- Removed `/work-agents/.github/hooks/.version`; hooks should re-extract after the user reloads the VS Code window.
+- Shared repo `git pull --rebase origin master` was blocked by pre-existing dirty files, so no stash / overwrite was performed.

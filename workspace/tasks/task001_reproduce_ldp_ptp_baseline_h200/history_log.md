@@ -1,6 +1,22 @@
 # History Log
 
-<!-- METADATA:SESSION=34 -->
+<!-- METADATA:SESSION=35 -->
+
+## Session 35
+- User requested an Intern Agent Helper plugin upgrade only, without code or config edits.
+- Ran the requested shared-repo step in `/work-agents/axis_intern_agents`:
+- `git checkout master` succeeded and the repo was already on `master`.
+- `git pull --rebase origin master` was blocked by pre-existing dirty files:
+- `vscode-extension/package-lock.json`
+- `workspace/.intern-config.json`
+- `workspace/.intern-config.local.json`
+- Did not stash, overwrite, or modify those shared repo files.
+- Fetched `origin/master` only to verify release availability without changing the working tree.
+- Highest release found was `intern-agent-helper-1.4.9.vsix`.
+- Installed / confirmed VS Code Insiders extension version `1.4.9` from:
+- `/work-agents/axis_intern_agents/releases/intern-agent-helper-1.4.9.vsix`
+- Removed `/work-agents/.github/hooks/.version` so hooks will re-extract and overwrite from the upgraded helper after window reload.
+- Confirmed `/root/.vscode-server-insiders/extensions/llm-intern-agents.intern-agent-helper-1.4.9/package.json` reports version `1.4.9`.
 
 ## Session 34
 - User requested a brief report on current embedding progress and GPU utilization.
