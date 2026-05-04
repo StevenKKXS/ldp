@@ -719,3 +719,5 @@
 - it is a general compute-efficiency method that makes long-context image-based training practical
 - Session 29 paper-validator note:
 - the canonical Session 29 record now explicitly includes the paper-grounded multistage explanation in `history_log.md`, not only the local memory-gap analysis
+- Session 29 model-selection note:
+- the `/model gpt-5.5` control message has been recorded in the Session 29 task record for consistency, but it does not change any reproduction facts
