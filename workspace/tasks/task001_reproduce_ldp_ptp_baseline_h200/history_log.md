@@ -1532,3 +1532,33 @@
 - the resume uses `training.checkpoint_every=50` to align checkpointing with `rollout_every=50`
 - Session 29 live-run hook close-out:
 - `history_log.md` explicitly contains this current-run Session 29 record at the file tail
+
+## Session 29 - Figure 9 Plan Reset
+- User asked to ignore the current raw-image version and directly plan around the Figure 9 method we had just clarified.
+- User also explicitly said not to stop current code until the plan is confirmed.
+- I created a new canonical plan artifact:
+- `workspace/tasks/task001_reproduce_ldp_ptp_baseline_h200/fig9_multistage_repro_plan.md`
+- Main planning decision:
+- current raw-image DP/PTP runs are excluded from the Figure 9 main result plan
+- they remain pilot evidence only
+- after approval, GPU budget should move to Figure 9-aligned multistage / feature-cached runs
+- Protocol target:
+- Figure 9 rows should be reproduced under multistage / feature caching
+- `PTP` means `policy.past_action_pred=true`
+- `long-hist DP` / `no-PTP` means `policy.past_action_pred=false`
+- both long-hist rows should use the same cached-embedding recipe
+- Planned stages:
+- Stage 0: keep current raw-image jobs alive until the plan is accepted
+- Stage 1: generate and validate task-specific embedding caches
+- Stage 2: smoke-test `Square long-hist DP/PTP` under `_emb` configs
+- Stage 3: launch Figure 9 main rows across the six simulation tasks
+- Stage 4: add seed/evaluation coverage toward paper-facing numbers
+- Stage 5: fill only `fig9-aligned` cells in the main result table
+- Stage 6: run ablations separately from the main protocol
+- Important risks captured in the plan:
+- some `_emb` configs still contain placeholder-like `use_embed_if_present` values
+- `Push-T` has an `_emb` config but the encoder path needs validation
+- cached datasets must be validated before launching full runs
+- Session 29 Figure 9 plan close-out:
+- no running jobs were stopped
+- the plan is ready for user review before switching the GPUs away from current raw-image jobs

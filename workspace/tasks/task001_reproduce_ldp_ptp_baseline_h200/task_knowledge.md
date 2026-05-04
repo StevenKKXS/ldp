@@ -795,3 +795,21 @@
 - Session 29 live-run hook-compliance note:
 - `history_log.md` now has an explicit tail section titled `## Session 29 - Live Run Hook Compliance Record`
 - that section repeats the current active-job classification and the `Long Square` resume correction
+- Session 29 Figure 9 reset-plan note:
+- canonical plan artifact:
+- `workspace/tasks/task001_reproduce_ldp_ptp_baseline_h200/fig9_multistage_repro_plan.md`
+- plan stance:
+- ignore current raw-image pilots for the Figure 9 main table
+- keep them running until user approval
+- then switch compute to multistage / cached-embedding reproduction
+- Figure 9-aligned rows require:
+- cached embeddings
+- `_emb` config or equivalent embedding-enabled config
+- `policy.use_embed_if_present=true`
+- frozen short-context encoder where applicable
+- controlled `policy.past_action_pred` setting
+- planned first smoke:
+- `Square long-hist DP`
+- `Square long-hist PTP`
+- reason:
+- smallest / best-understood task to validate cached pipeline before consuming the full GPU budget
