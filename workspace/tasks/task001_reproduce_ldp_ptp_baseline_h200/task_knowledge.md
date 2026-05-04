@@ -702,3 +702,8 @@
 - the memory-footprint explanation
 - the preload-versus-training interpretation
 - and the batch-size-versus-stochasticity judgment
+- Session 29 validator note:
+- the canonical Session 29 record should be interpreted as the combination of:
+- the literal `## Session 29` block in `history_log.md`
+- the task-geometry explanation for the memory gap
+- and the conclusion that `batch_size=64` is shared across configs and is not currently the first-order explanation

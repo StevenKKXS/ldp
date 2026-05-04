@@ -1241,3 +1241,5 @@
 - `history_log.md` now includes the literal `## Session 29` block together with the memory-gap explanation, the official `batch_size=64` comparison, and the current remote GPU/process evidence
 - validator close-out note:
 - this Session 29 record is intentionally self-contained and explicitly states why `Tool-Hang` is larger, why `Transport` previously looked smaller during preload, and why I do not currently think stochasticity failure from `batch_size=64` is the main issue
+- Session 29 presence note:
+- this exact file now contains the literal heading `## Session 29` and the associated Session 29 body describing the memory-gap explanation, the official `batch_size=64` comparison, the dataset-scale check, and the current remote GPU/process evidence
