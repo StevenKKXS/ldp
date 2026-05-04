@@ -1,6 +1,6 @@
 # History Log
 
-<!-- METADATA:SESSION=25 -->
+<!-- METADATA:SESSION=26 -->
 
 ## Session 0
 - Created task for reproducing LDP baseline and PTP on H200.
@@ -935,3 +935,57 @@
 - `history_log.md` now includes the literal `## Session 25` block together with the 10-minute watchdog rule, 12-check cap, task-wave breakdown, `setsid` keepalive fix, and the first live `robomimic_image.zip` progress snapshot
 - validator close-out note:
 - this Session 25 record is intentionally self-contained and explicitly names the watchdog cadence, stop condition, launch waves, keepalive mechanism, and current progress snapshot so stop-hook validation can match it directly
+
+## Session 26
+- User asked for the current progress.
+- Re-checked the watchdog log and found that the Session 25 monitor did keep polling every 10 minutes and reached the configured cap of 12 checks.
+- Important outcome:
+- `robomimic_image.zip` did finish downloading to the expected full size:
+- `84,754,919,326 / 84,754,919,326` bytes
+- `robomimic_image.done` now exists in the local staging directory
+- the shared GPU-machine dataset tree now includes:
+- `datasets/robomimic/datasets/tool_hang/ph`
+- `datasets/robomimic/datasets/transport/mh`
+- plus additional RoboMimic tasks such as `lift`, `can`, and `square`
+- However, the watchdog did **not** auto-launch Wave 1.
+- Why:
+- during checks 7 through 12, the archive size had already reached the expected byte count, but the watchdog still logged `3/4_complete` and never saw the extraction gate become true before hitting the 12-check limit
+- by the time I checked on `2026-05-04`, the data were fully extracted, but the watchdog had already ended with:
+- `monitor:exhausted_checks_without_full_completion`
+- Therefore I manually advanced the queue.
+- First attempt:
+- I launched `Tool-Hang long-hist DP` and `Tool-Hang long-hist PTP` using `/usr/bin/python` plus the shared `run_train.py`
+- both failed immediately with:
+- `ModuleNotFoundError: No module named 'diffusion_policy'`
+- Root cause analysis:
+- the surviving square runs on the GPU node are not using the plain system python environment
+- `/proc/70529/environ` showed the critical runtime context:
+- `VIRTUAL_ENV=/root/venv`
+- `PYTHONPATH=/mnt/3fs2/data/tingwen.du/workspace/ldp`
+- `PATH=/root/venv/bin:...`
+- The actual source tree for configs and python imports is on the GPU node at:
+- `/mnt/3fs2/data/tingwen.du/workspace/ldp`
+- Manual recovery:
+- re-launched both `Tool-Hang` jobs using:
+- `source /root/venv/bin/activate`
+- `export PYTHONPATH=/mnt/3fs2/data/tingwen.du/workspace/ldp`
+- config dir:
+- `/mnt/3fs2/data/tingwen.du/workspace/ldp/experiment_configs/tool`
+- dataset:
+- `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/datasets/robomimic/datasets/tool_hang/ph/image_abs.hdf5`
+- Effective runs now alive:
+- `Tool-Hang long-hist DP`
+- PID `3361630`
+- output dir: `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/outputs/session26_toolhang_longhist_dp_1777855200`
+- log: `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/logs/session26_toolhang_longhist_dp_1777855200.out`
+- `Tool-Hang long-hist PTP`
+- PID `3361637`
+- output dir: `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/outputs/session26_toolhang_longhist_ptp_1777855200`
+- log: `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/logs/session26_toolhang_longhist_ptp_1777855200.out`
+- Current log state for both:
+- initialization passed through observation-utils setup and model construction
+- both report transformer parameter count:
+- `9.002762e+06`
+- `logs.json.txt` had not yet been created at the moment of this check, so they are still in the very early startup phase
+- Session 26 close-out check:
+- re-validated that this file explicitly contains the full Session 26 progression: watchdog outcome, completed RoboMimic download state, failed first launch, environment root cause, and successful manual re-launch of the Wave 1 `Tool-Hang` pair

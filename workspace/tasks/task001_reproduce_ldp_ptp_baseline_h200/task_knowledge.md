@@ -1,6 +1,6 @@
 # Task Knowledge
 
-<!-- METADATA:SESSION=25 -->
+<!-- METADATA:SESSION=26 -->
 
 ## Working Rules
 - Prefer upstream official assets first:
@@ -561,3 +561,30 @@
 - `history_log.md` now explicitly carries the Session 25 watchdog / queue block and close-out check, so the task record is consistent across `status.md`, `history_log.md`, and `task_knowledge.md`
 - validator note:
 - the Session 25 explanation is explicitly keyed on the watchdog cadence, launch queue, `setsid` keepalive fix, and the current `robomimic_image.zip` progress snapshot
+- Session 26 runtime note:
+- `robomimic_image` is now fully downloaded and extracted; the shared RoboMimic tree contains at least:
+- `tool_hang/ph`
+- `transport/mh`
+- `square/mh`
+- `square/ph`
+- `lift/mh`
+- `lift/ph`
+- `can/mh`
+- `can/ph`
+- watchdog lesson:
+- byte-complete archive size alone was not enough to guarantee that the extraction gate became true before the 12-check cap expired
+- runtime launch rule for the GPU node:
+- do not launch with plain `/usr/bin/python`
+- match the environment used by the existing square jobs:
+- `VIRTUAL_ENV=/root/venv`
+- `PATH=/root/venv/bin:$PATH`
+- `PYTHONPATH=/mnt/3fs2/data/tingwen.du/workspace/ldp`
+- current active Wave 1 jobs:
+- `Tool-Hang long-hist DP`: PID `3361630`
+- `Tool-Hang long-hist PTP`: PID `3361637`
+- both use dataset:
+- `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/datasets/robomimic/datasets/tool_hang/ph/image_abs.hdf5`
+- both use config dir:
+- `/mnt/3fs2/data/tingwen.du/workspace/ldp/experiment_configs/tool`
+- Session 26 consistency note:
+- `history_log.md` now explicitly carries the Session 26 watchdog outcome, env root cause, and the successful manual launch of the `Tool-Hang` Wave 1 pair, so the task record is consistent across `status.md`, `history_log.md`, and `task_knowledge.md`
