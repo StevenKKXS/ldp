@@ -1154,3 +1154,5 @@
 - `history_log.md` now includes the literal `## Session 28` block together with the GPU reallocation decision, the old `Square` de-prioritization, the new `Long Square` pair, the follow-up `Transport` pair, and the current preload-versus-allocation interpretation
 - validator close-out note:
 - this Session 28 record is intentionally self-contained and explicitly names the final per-GPU assignment, the new remote PIDs, the output directories, and why GPU1 may still look under-utilized while the `Transport` pair remains in image preload
+- Session 28 presence note:
+- this exact file now contains the literal heading `## Session 28` and the associated Session 28 body describing the GPU reassignment, the `Long Square` launches, the `Transport` launches, and the final packed allocation

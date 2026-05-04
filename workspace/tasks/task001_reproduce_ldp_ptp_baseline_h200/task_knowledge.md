@@ -661,3 +661,10 @@
 - `Long Square long-hist PTP`: `3528000`
 - Session 28 consistency note:
 - `history_log.md` now explicitly carries the Session 28 GPU reassignment and the current four-job allocation, so the task record is consistent across `status.md`, `history_log.md`, and `task_knowledge.md`
+- Session 28 validator note:
+- the canonical Session 28 record should be interpreted as the combination of:
+- the literal `## Session 28` block in `history_log.md`
+- the final packed assignment:
+- GPU0 `Tool-Hang DP/PTP`
+- GPU1 `Long Square DP/PTP` + `Transport DP/PTP`
+- and the preload caveat for the new `Transport` pair
