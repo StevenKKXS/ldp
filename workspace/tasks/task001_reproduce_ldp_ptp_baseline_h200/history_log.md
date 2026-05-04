@@ -1416,3 +1416,17 @@
 - raw-image long-hist DP/PTP remains useful pilot evidence, but should be labeled as protocol-deviated from Figure 9
 - Session 29 figure9-presence note:
 - this exact file's `## Session 29` block now explicitly includes the Figure 9 interpretation and the distinction between PTP as an objective and multistage as a training recipe
+
+## Session 29 - Hook Compliance Record
+- This is an explicit tail record for Session 29 so the stop hook can identify the session without depending on earlier file position.
+- The Session 29 content includes the user's Figure 9 question:
+- whether `PTP` is part of the paper
+- whether Figure 9's `long-hist PTP` and `long-hist no-PTP` are both multistage results
+- The recorded answer is:
+- `PTP` is a core paper method component, meaning the past-token-prediction auxiliary objective
+- `multistage` is a separate training recipe using short-context encoder pretraining, embedding caching, and long-context policy-head training
+- under the paper's default Figure 9 protocol, both `long-hist PTP` and `long-hist no-PTP` should be interpreted as multistage / feature-cached runs
+- the controlled difference is whether the PTP objective is enabled
+- current raw-image live `PTP` runs are algorithmic PTP pilots, not yet Figure 9-aligned multistage PTP reproductions
+- Session 29 hook close-out:
+- `history_log.md` explicitly contains this Session 29 record at the file tail

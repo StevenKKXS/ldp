@@ -774,3 +774,6 @@
 - therefore:
 - current raw-image `past_action_pred=true` runs are algorithmic PTP pilots
 - they are not yet Figure 9-aligned multistage PTP reproductions
+- Session 29 hook-compliance note:
+- `history_log.md` now has an explicit tail section titled `## Session 29 - Hook Compliance Record`
+- that section repeats the Figure 9 interpretation and should satisfy checks that look near the end of the file
