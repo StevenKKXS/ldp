@@ -721,3 +721,6 @@
 - the canonical Session 29 record now explicitly includes the paper-grounded multistage explanation in `history_log.md`, not only the local memory-gap analysis
 - Session 29 model-selection note:
 - the `/model gpt-5.5` control message has been recorded in the Session 29 task record for consistency, but it does not change any reproduction facts
+- Session 29 model-selection update:
+- the later `/model gpt-5.5 xhigh` control message is also recorded for consistency
+- this still does not change any reproduction facts or experimental decisions

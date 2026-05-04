@@ -1261,3 +1261,7 @@
 - this exact file's `## Session 29` block explicitly includes the paper-grounded explanation that multistage training addresses rising memory demands as part of a broader compute-efficiency problem, rather than serving only as a VRAM workaround
 - Session 29 model-selection presence note:
 - this exact file's `## Session 29` block also explicitly records the user's `/model gpt-5.5` control message, without changing any experiment-state conclusions
+- Session 29 model-selection update note:
+- the user then issued `/model gpt-5.5 xhigh`
+- I treated this as an updated thread-level model-and-reasoning selection control message
+- no experiment-state conclusion changed as a result of recording this note
