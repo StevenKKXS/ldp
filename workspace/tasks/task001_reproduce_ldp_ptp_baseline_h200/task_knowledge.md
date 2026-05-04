@@ -1,6 +1,6 @@
 # Task Knowledge
 
-<!-- METADATA:SESSION=35 -->
+<!-- METADATA:SESSION=36 -->
 
 ## Working Rules
 - Prefer upstream official assets first:
@@ -949,3 +949,17 @@
 - Installed / confirmed Intern Agent Helper version `1.4.9` in VS Code Insiders from `/work-agents/axis_intern_agents/releases/intern-agent-helper-1.4.9.vsix`.
 - Removed `/work-agents/.github/hooks/.version`; hooks should re-extract after the user reloads the VS Code window.
 - Shared repo `git pull --rebase origin master` was blocked by pre-existing dirty files, so no stash / overwrite was performed.
+
+## Session 36 Embedding Completion Note
+- Compact embedding preprocessing is complete for both remaining HDF5 tasks:
+- Tool-Hang compact embedding: `200` demos, `95962` steps, dim `137`, validation clean.
+- Transport compact embedding: `300` demos, `195800` steps, dim `274`, validation clean.
+- Files to use for cached training:
+- Tool-Hang: `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/datasets/robomimic/datasets/tool_hang/ph/image_abs_emb_compact.hdf5`
+- Transport: `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/datasets/robomimic/datasets/transport/mh/image_abs_emb_compact.hdf5`
+- Current embedding-ready set for Figure 9 cached simulation work:
+- Square: `image_abs_emb.hdf5`, dim `137`
+- Tool-Hang: `image_abs_emb_compact.hdf5`, dim `137`
+- Transport: `image_abs_emb_compact.hdf5`, dim `274`
+- Long Square: existing `longhistsquare100/demos.hdf5`, dim `137`
+- ALOHA / Cube: existing `aloha_twomodes_single/demos.hdf5`, dim `135`

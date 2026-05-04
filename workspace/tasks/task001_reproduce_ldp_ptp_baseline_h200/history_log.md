@@ -1,6 +1,25 @@
 # History Log
 
-<!-- METADATA:SESSION=35 -->
+<!-- METADATA:SESSION=36 -->
+
+## Session 36
+- User asked for the current embedding preprocessing progress.
+- Re-sampled the 96h H200 node `10.100.2.47:15744` at `2026-05-04 12:14 UTC`.
+- The sequential compact embedding queue has completed and no `session33_compact_embedding_queue.py` process remains active.
+- Queue log showed:
+- Transport reached `765/765` batches.
+- final write count: `done_rewrite transport written=195800/195800`.
+- script-side validation: `demos=300 total=195800 missing=0 bad_shape=0 bad_finite=0 nonzero=True ok=True`.
+- Independent HDF5 validation results:
+- Tool-Hang file `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/datasets/robomimic/datasets/tool_hang/ph/image_abs_emb_compact.hdf5`
+- size `65722584` bytes, `200` demos, `95962` embedding steps, dim `[137]`, missing `0`, bad shape `0`, bad finite `0`, nonzero `True`.
+- Transport file `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/datasets/robomimic/datasets/transport/mh/image_abs_emb_compact.hdf5`
+- size `266565320` bytes, `300` demos, `195800` embedding steps, dim `[274]`, missing `0`, bad shape `0`, bad finite `0`, nonzero `True`.
+- GPU sample after queue completion:
+- GPU0: `0%`, `1 MiB / 143771 MiB`; embedding GPU is free again.
+- GPU1: sampled `62%` then earlier `99%`, `20269 MiB / 143771 MiB`; Long Square cached DP/PTP remains active.
+- Conclusion:
+- all HDF5 embedding preprocessing needed for Square, Tool-Hang, Transport, Long Square, and ALOHA is now available and validated for the current Figure 9 cached simulation plan.
 
 ## Session 35
 - User requested an Intern Agent Helper plugin upgrade only, without code or config edits.
