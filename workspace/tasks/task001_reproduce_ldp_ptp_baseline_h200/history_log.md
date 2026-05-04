@@ -1243,3 +1243,17 @@
 - this Session 29 record is intentionally self-contained and explicitly states why `Tool-Hang` is larger, why `Transport` previously looked smaller during preload, and why I do not currently think stochasticity failure from `batch_size=64` is the main issue
 - Session 29 presence note:
 - this exact file now contains the literal heading `## Session 29` and the associated Session 29 body describing the memory-gap explanation, the official `batch_size=64` comparison, the dataset-scale check, and the current remote GPU/process evidence
+- Additional paper-grounded clarification on the multistage recipe:
+- the paper introduction says that as context length grows, training becomes increasingly expensive "due to rising memory demands"
+- however, the multistage recipe is motivated more broadly than just avoiding OOM:
+- Section 4 says it avoids "repeatedly processing visual inputs"
+- it "retains a computational footprint similar to short-context training while enabling efficient scaling to longer observation contexts"
+- Fig. 8 says feature caching speeds training by over `5x` without hurting performance
+- the paper summary also claims training overhead is reduced by over `10x` on average
+- My interpretation after checking the text:
+- yes, the two-step recipe helps with the practical burden of long-context training, and memory pressure is part of that burden
+- but the paper does not frame it as "we mainly do this to fit in GPU memory"
+- it is better read as a broader compute-efficiency recipe for long-context image-based training:
+- reduce repeated vision encoding work
+- reduce wall-clock overhead
+- make long-context scaling practical without sacrificing performance

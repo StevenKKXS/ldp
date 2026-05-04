@@ -707,3 +707,13 @@
 - the literal `## Session 29` block in `history_log.md`
 - the task-geometry explanation for the memory gap
 - and the conclusion that `batch_size=64` is shared across configs and is not currently the first-order explanation
+- Session 29 paper-interpretation note:
+- the paper supports a nuanced reading of two-step / multistage training:
+- direct long-context training becomes more expensive as context length increases, partly because memory demands rise
+- but the stated motivation for the multistage recipe is broader:
+- avoid repeatedly processing visual inputs
+- keep computational footprint close to short-context training
+- gain large wall-clock speedups from feature caching
+- therefore the most accurate reading is:
+- the two-step recipe is not merely a VRAM workaround
+- it is a general compute-efficiency method that makes long-context image-based training practical
