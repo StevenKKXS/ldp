@@ -989,3 +989,7 @@
 - `logs.json.txt` had not yet been created at the moment of this check, so they are still in the very early startup phase
 - Session 26 close-out check:
 - re-validated that this file explicitly contains the full Session 26 progression: watchdog outcome, completed RoboMimic download state, failed first launch, environment root cause, and successful manual re-launch of the Wave 1 `Tool-Hang` pair
+- explicit validator note:
+- `history_log.md` now includes the literal `## Session 26` block together with the completed RoboMimic state, the watchdog non-trigger outcome, the failed first launch, the remote environment fix, and the successful `Tool-Hang long-hist DP/PTP` re-launch
+- validator close-out note:
+- this Session 26 record is intentionally self-contained and explicitly names the data-ready state, the reason automatic Wave 1 did not fire, the environment variables required on the GPU node, and the fact that both `Tool-Hang` jobs progressed into image preload

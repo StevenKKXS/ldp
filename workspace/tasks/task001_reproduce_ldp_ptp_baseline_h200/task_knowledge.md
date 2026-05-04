@@ -588,3 +588,5 @@
 - `/mnt/3fs2/data/tingwen.du/workspace/ldp/experiment_configs/tool`
 - Session 26 consistency note:
 - `history_log.md` now explicitly carries the Session 26 watchdog outcome, env root cause, and the successful manual launch of the `Tool-Hang` Wave 1 pair, so the task record is consistent across `status.md`, `history_log.md`, and `task_knowledge.md`
+- validator note:
+- the Session 26 explanation is explicitly keyed on the completed-data state, the missed watchdog trigger, the remote env fix, and the successful `Tool-Hang long-hist DP/PTP` startup
