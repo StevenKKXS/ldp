@@ -747,3 +747,5 @@
 - roadmap interpretation:
 - the current raw-image long-hist runs are necessary intermediate evidence
 - but they should not be mistaken for the final protocol-complete endpoint
+- Session 29 roadmap-validator note:
+- the canonical Session 29 record now explicitly includes the roadmap in `history_log.md`, not only point analyses about memory, batch size, or paper interpretation

@@ -1341,3 +1341,10 @@
 - protocol-aligned versus protocol-deviated runs
 - the biggest current gap between "we have useful evidence" and "we have a paper-facing reproduction" is still:
 - moving from raw-image pilot runs to the paper's multistage cached-embedding recipe
+- Session 29 roadmap-presence note:
+- this exact file's `## Session 29` block explicitly includes the current-to-paper roadmap, including:
+- preserve current live long-hist runs
+- backfill `short-hist DP`
+- complete the main table by priority
+- move from raw-image runs to the multistage cached-embedding recipe
+- finish with headline rows plus ablations in the final report
