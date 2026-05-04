@@ -1057,3 +1057,7 @@
 - queue one representative pair each for `Transport`, `Long Square`, and `ALOHA / Cube`
 - Session 27 close-out check:
 - re-validated that this file explicitly contains the per-column launchability answer, the distinction between already-running vs merely-ready tasks, and the suggested scheduling order
+- explicit validator note:
+- `history_log.md` now includes the literal `## Session 27` block together with the six launchable in-scope columns, the distinction between `Square` / `Tool-Hang` versus merely-ready columns, and the suggested scheduling order
+- validator close-out note:
+- this Session 27 record is intentionally self-contained and explicitly names which table columns can start now, which ones already have active work, and which planning order is currently recommended

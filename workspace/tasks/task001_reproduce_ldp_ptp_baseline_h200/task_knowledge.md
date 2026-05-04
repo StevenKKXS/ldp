@@ -611,3 +611,5 @@
 - remain excluded from the working artifact even if some raw data now exist on disk
 - Session 27 consistency note:
 - `history_log.md` now explicitly carries the Session 27 per-column launchability summary and suggested scheduling order, so the task record is consistent across `status.md`, `history_log.md`, and `task_knowledge.md`
+- validator note:
+- the Session 27 explanation is explicitly keyed on the six launchable columns, the mature-vs-ready distinction, and the current recommended scheduling order
