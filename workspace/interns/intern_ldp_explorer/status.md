@@ -8,5 +8,5 @@
 | Status | Working |
 | Current Task | task001_reproduce_ldp_ptp_baseline_h200 |
 | PR | https://github.com/StevenKKXS/ldp/pull/new/intern_ldp_explorer/task001_reproduce_ldp_ptp_baseline_h200 |
-| Session | 31 |
-| Recent Progress | Stopped the raw-image pilots, validated the Figure 9 Long Square cached-embedding path with official encoder, patched rollout normalizer compatibility, launched full Long Square cached DP/PTP runs, and started Square embedding rewrite from the official encoder. |
+| Session | 32 |
+| Recent Progress | Clarified task-by-task embedding requirements: Long Square and ALOHA already have embeddings; Square, Tool-Hang, and Transport need generated HDF5 embeddings; Push-T needs a zarr embedding/cache implementation before Figure 9-aligned use. |

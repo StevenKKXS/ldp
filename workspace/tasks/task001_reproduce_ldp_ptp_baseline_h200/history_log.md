@@ -1,6 +1,6 @@
 # History Log
 
-<!-- METADATA:SESSION=31 -->
+<!-- METADATA:SESSION=32 -->
 
 ## Session 0
 - Created task for reproducing LDP baseline and PTP on H200.
@@ -1700,3 +1700,14 @@
 - patched cached-training / raw-rollout normalizer compatibility
 - launched the full Long Square cached DP/PTP Figure 9 pair
 - continued Square official-encoder embedding rewrite on the derived HDF5 copy
+
+## Session 32
+- User asked whether other tasks also need embedding processing.
+- Answer recorded:
+- `Long Square` does not need new embedding generation for the current Figure 9 path because `longhistsquare100/demos.hdf5` already contains `obs/embedding`; it still needs explicit config overrides to use the existing file and omit dataset image preload.
+- `ALOHA / Cube` does not need new embedding generation because `aloha_twomodes_single/demos.hdf5` already contains `obs/embedding`; it still needs launch-time `use_embed_if_present=true` and DP/PTP objective overrides.
+- `Square` does need embedding processing; the current Session 31 rewrite is generating official `square_encoder.ckpt` embeddings into the derived `image_abs_emb.hdf5` copy.
+- `Tool-Hang` does need embedding processing; raw HDF5 is present but no validated embedding HDF5 is available, so create a derived HDF5 and run the official `tool_hang_encoder.ckpt` rewrite before cached DP/PTP launch.
+- `Transport` does need embedding processing and a small config repair; generate `transport_encoder.ckpt` embeddings with width `274`, set dataset/policy `use_embed_if_present=true`, and ensure dataset `shape_meta.obs.embedding.shape=[274]`.
+- `Push-T` also needs an embedding/cache path, but it is not the same HDF5 rewrite path because the dataset is zarr; keep it out of the main Figure 9 batch until zarr embedding rewrite/cache support is implemented and smoke-tested.
+- Practical order remains: finish Square rewrite, then generate Tool-Hang and Transport embeddings; ALOHA can be launched from its existing embeddings after Long Square is stable.

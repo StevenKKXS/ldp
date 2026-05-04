@@ -1,6 +1,6 @@
 # Task Knowledge
 
-<!-- METADATA:SESSION=31 -->
+<!-- METADATA:SESSION=32 -->
 
 ## Working Rules
 - Prefer upstream official assets first:
@@ -894,3 +894,11 @@
 - both use `global_obs=16`, official `longhist_encoder.ckpt`, cached embeddings, `num_epochs=3500`, `rollout_every=50`, `checkpoint_every=50`
 - GPU1 sampled after launch was around `95%` utilization and `19175 MiB` memory used.
 - Square embedding rewrite is running from official `square_encoder.ckpt` into the derived `image_abs_emb.hdf5` copy; sampled progress reached `45056 / 80731` embeddings written, about `56%`.
+
+## Session 32 Embedding Requirements By Task
+- `Long Square`: no new embedding generation required for the current main path; `longhistsquare100/demos.hdf5` already contains `obs/embedding`. Required handling is config-level: point `_emb` runs to this file, enable `use_embed_if_present`, and avoid dataset image preload.
+- `ALOHA / Cube`: no new embedding generation required; `aloha_twomodes_single/demos.hdf5` already contains `obs/embedding`. Required handling is config/launch overrides and objective selection.
+- `Square`: embedding generation required and already in progress in Session 31. Use official `square_encoder.ckpt` and write into a derived HDF5 copy rather than mutating the raw dataset.
+- `Tool-Hang`: embedding generation required. Raw HDF5 exists, but no validated `obs/embedding` copy is available; use official `tool_hang_encoder.ckpt` to produce a derived embedding HDF5 before cached DP/PTP runs.
+- `Transport`: embedding generation required plus config repair. Use official `transport_encoder.ckpt`, embedding dim `274`, set policy/dataset `use_embed_if_present=true`, and ensure dataset `shape_meta.obs.embedding.shape=[274]`.
+- `Push-T`: embedding/cache work required, but current rewrite tooling is HDF5-only while Push-T data is zarr. Treat Push-T as blocked for Figure 9-aligned cached runs until zarr embedding rewrite/cache support exists.
