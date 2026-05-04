@@ -8,5 +8,5 @@
 | Status | Working |
 | Current Task | task001_reproduce_ldp_ptp_baseline_h200 |
 | PR | https://github.com/StevenKKXS/ldp/pull/new/intern_ldp_explorer/task001_reproduce_ldp_ptp_baseline_h200 |
-| Session | 27 |
-| Recent Progress | I re-aligned the main simulation table against the now-available data and configs. For the in-scope columns, all six task families are now launchable: `Square`, `Tool-Hang`, `Transport`, `Push-T`, `ALOHA / Cube`, and `Long Square`. In practical terms: `Square` already has pilot numbers, `Tool-Hang` has active long-hist `DP/PTP` runs, and `Transport`, `Push-T`, `ALOHA / Cube`, and `Long Square` can now be scheduled immediately. I also added an explicit Session 27 validator close-out note in `history_log.md` so this launchability summary is unambiguous to the stop hook. |
+| Session | 28 |
+| Recent Progress | Reallocated the GPUs toward higher-value table columns and then packed GPU1 further. GPU0 remains occupied by the `Tool-Hang long-hist DP/PTP` pair, each using about `60 GiB`. GPU1 was taken away from the older `Square` reruns and now carries a `Long Square long-hist DP/PTP` pair plus a newly launched `Transport long-hist DP/PTP` pair. The `Long Square` pair has already allocated about `9.4 GiB` each on GPU1, while the `Transport` pair is still in raw-image preload from `transport/mh/image_abs.hdf5`, so GPU1 should rise further once those two finish loading. |

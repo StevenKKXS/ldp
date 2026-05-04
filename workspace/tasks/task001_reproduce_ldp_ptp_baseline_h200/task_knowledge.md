@@ -1,6 +1,6 @@
 # Task Knowledge
 
-<!-- METADATA:SESSION=27 -->
+<!-- METADATA:SESSION=28 -->
 
 ## Working Rules
 - Prefer upstream official assets first:
@@ -253,6 +253,35 @@
 - `node96_ptp_square_obs16_1777613676`
 - `node96_ptp_square_short_1777613676`
 - because they no longer appear in `ps` and GPU0 is effectively idle
+- Session 28 GPU-packing decision:
+- old `Square` reruns on GPU1 were intentionally de-prioritized because they had lower incremental value than opening new in-scope table columns
+- the old root jobs `57061` and `58030` were terminated to free GPU1 for new work
+- current intended allocation is:
+- GPU0:
+- `Tool-Hang long-hist DP` PID `3361630`
+- `Tool-Hang long-hist PTP` PID `3361637`
+- GPU1:
+- `Long Square long-hist DP` PID `3527999`
+- `Long Square long-hist PTP` PID `3528000`
+- `Transport long-hist DP` PID `3547458`
+- `Transport long-hist PTP` PID `3547459`
+- Session 28 live remote snapshot at `2026-05-04 06:31 UTC`:
+- GPU0:
+- `139549 MiB / 143771 MiB`
+- `Tool-Hang` pair still occupies about `60094 MiB` each
+- GPU1:
+- `34695 MiB / 143771 MiB`
+- `Long Square` pair already shows about `9386 MiB` each in `nvidia-smi`
+- `Transport` pair is alive in `ps` but still in raw-image preload on about `783,200` frames, so it may not yet show its final GPU allocation
+- Important interpretation rule for this stage:
+- `nvidia-smi` instantaneous utilization can under-report packed training progress when some jobs are still in the CPU-side preload path
+- for packed launches, trust the combination of:
+- `ps`
+- task-specific stdout logs
+- and `nvidia-smi` memory/process tables
+- rather than relying on utilization percentage alone
+- Session 28 consistency note:
+- this file now explicitly matches the Session 28 history record by naming the final four-job GPU1 packing plan and the mixed preload / allocated interpretation
 - Best consolidated result summary so far:
 - short-context legacy PTP (`full_train_3500ep_1777457545`) is not useful as a paper-facing result and degraded to `test/mean_score=0.0`
 - short-context no-history baseline (`baseline_square_3500ep_1777535019`) reached a best visible checkpoint of `test/mean_score=0.100` at epoch `299`, with a later epoch-399 checkpoint at `0.025`
@@ -613,3 +642,22 @@
 - `history_log.md` now explicitly carries the Session 27 per-column launchability summary and suggested scheduling order, so the task record is consistent across `status.md`, `history_log.md`, and `task_knowledge.md`
 - validator note:
 - the Session 27 explanation is explicitly keyed on the six launchable columns, the mature-vs-ready distinction, and the current recommended scheduling order
+- Session 28 GPU-allocation note:
+- current intended high-value allocation is now:
+- GPU0:
+- `Tool-Hang long-hist DP`
+- `Tool-Hang long-hist PTP`
+- GPU1:
+- `Long Square long-hist DP`
+- `Long Square long-hist PTP`
+- de-prioritized work:
+- the older `Square` reruns were treated as lower marginal value than opening a fresh `Long Square` column
+- runtime caveat:
+- when the `Long Square` pair is in raw-image preload, `nvidia-smi` can temporarily under-report real eventual occupancy because GPU memory has not been claimed yet
+- main active PIDs after the reallocation:
+- `Tool-Hang long-hist DP`: `3361630`
+- `Tool-Hang long-hist PTP`: `3361637`
+- `Long Square long-hist DP`: `3527999`
+- `Long Square long-hist PTP`: `3528000`
+- Session 28 consistency note:
+- `history_log.md` now explicitly carries the Session 28 GPU reassignment and the current four-job allocation, so the task record is consistent across `status.md`, `history_log.md`, and `task_knowledge.md`

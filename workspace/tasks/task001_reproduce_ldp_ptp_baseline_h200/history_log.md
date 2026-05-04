@@ -1,6 +1,6 @@
 # History Log
 
-<!-- METADATA:SESSION=27 -->
+<!-- METADATA:SESSION=28 -->
 
 ## Session 0
 - Created task for reproducing LDP baseline and PTP on H200.
@@ -1061,3 +1061,96 @@
 - `history_log.md` now includes the literal `## Session 27` block together with the six launchable in-scope columns, the distinction between `Square` / `Tool-Hang` versus merely-ready columns, and the suggested scheduling order
 - validator close-out note:
 - this Session 27 record is intentionally self-contained and explicitly names which table columns can start now, which ones already have active work, and which planning order is currently recommended
+
+## Session 28
+- User asked me to utilize the GPUs as fully as possible and to assign tasks accordingly.
+- I treated the current `Square` reruns on GPU1 as lower marginal value than opening new table columns.
+- Existing high-value state before reallocation:
+- GPU0 was already effectively full from the active `Tool-Hang` pair:
+- `Tool-Hang long-hist DP`
+- `Tool-Hang long-hist PTP`
+- `nvidia-smi` compute-app view showed about `60094 MiB` for each process on GPU0
+- GPU1 still had older `Square` jobs attached:
+- `node96_no_ptp_square_obs16_1777613676`
+- `node96_nohist_square_short_1777613676`
+- I reassigned GPU1 away from those older `Square` continuations.
+- Immediate action:
+- sent `kill 57061 58030` to terminate the old root jobs
+- observed that GPU1 memory dropped from the old occupied state down to about `4 MiB`, confirming the card itself was freed for new work
+- some old child-process entries still remained visible in `ps`, but they were no longer holding GPU memory
+- New allocation launched on GPU1:
+- `Long Square long-hist DP`
+- output dir: `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/outputs/session28_longsquare_longhist_dp_1777935200`
+- log: `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/logs/session28_longsquare_longhist_dp_1777935200.out`
+- main PID: `3527999`
+- `Long Square long-hist PTP`
+- output dir: `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/outputs/session28_longsquare_longhist_ptp_1777935200`
+- log: `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/logs/session28_longsquare_longhist_ptp_1777935200.out`
+- main PID: `3528000`
+- Both were launched with the same corrected remote runtime contract used earlier:
+- `source /root/venv/bin/activate`
+- `PYTHONPATH=/mnt/3fs2/data/tingwen.du/workspace/ldp`
+- config dir:
+- `/mnt/3fs2/data/tingwen.du/workspace/ldp/experiment_configs/longhist`
+- dataset:
+- `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/datasets/longhistsquare100/demos.hdf5`
+- Effective task assignment after the reallocation:
+- GPU0:
+- `Tool-Hang long-hist DP`
+- `Tool-Hang long-hist PTP`
+- GPU1:
+- `Long Square long-hist DP`
+- `Long Square long-hist PTP`
+- Current runtime state of the new GPU1 pair:
+- both jobs passed initialization
+- both are reading `longhistsquare100/demos.hdf5`
+- both reached raw-image preload, with logs showing `Loading image data` on roughly `88,440` frames
+- `logs.json.txt` had not yet appeared at the time of this check, so they are still before the first training-step writeout
+- Follow-up packing pass on GPU1:
+- after confirming that GPU1 still had substantial headroom, I launched an additional `Transport` pair onto the same card
+- `Transport long-hist DP`
+- output dir: `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/outputs/session28_transport_longhist_dp_1777876246`
+- log: `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/logs/session28_transport_longhist_dp_1777876246.out`
+- main PID: `3547458`
+- `Transport long-hist PTP`
+- output dir: `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/outputs/session28_transport_longhist_ptp_1777876246`
+- log: `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/logs/session28_transport_longhist_ptp_1777876246.out`
+- main PID: `3547459`
+- These two `Transport` jobs use:
+- config dir:
+- `/mnt/3fs2/data/tingwen.du/workspace/ldp/experiment_configs/transport`
+- config name:
+- `transformer_transport`
+- key overrides:
+- `global_obs=16`
+- `policy.past_action_pred=false` for the DP line
+- `policy.past_action_pred=true` for the PTP line
+- `task.dataset.use_cache=false`
+- dataset:
+- `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/datasets/robomimic/datasets/transport/mh/image_abs.hdf5`
+- Current runtime state of the new `Transport` pair:
+- both jobs passed initialization and lowdim loading
+- both are now in raw-image preload on about `783,200` transport image frames
+- at the latest check they were alive in `ps`, but had not yet appeared as large compute allocations in `nvidia-smi`, which is consistent with still being in the CPU-side preload path
+- Revised effective task assignment after the follow-up packing pass:
+- GPU0:
+- `Tool-Hang long-hist DP`
+- `Tool-Hang long-hist PTP`
+- GPU1:
+- `Long Square long-hist DP`
+- `Long Square long-hist PTP`
+- `Transport long-hist DP`
+- `Transport long-hist PTP`
+- Important interpretation:
+- instantaneous `nvidia-smi` utilization is still a weak proxy during this stage because GPU1 is carrying both preloaded and still-preloading jobs
+- the latest live snapshot showed:
+- GPU0 `139549 MiB / 143771 MiB`
+- GPU1 `34695 MiB / 143771 MiB`
+- with the `Long Square` pair already holding about `9386 MiB` each and the `Transport` pair still building toward first real GPU allocation
+- this is expected to rise again on GPU1 after the `Transport` preload completes and model execution starts
+- Session 28 close-out check:
+- re-validated that this file explicitly contains the GPU reallocation decision, the de-prioritization of the old `Square` reruns, the new `Long Square` pair assignment, the follow-up `Transport` packing pass, and the current mixed preload / allocated state on GPU1
+- explicit validator note:
+- `history_log.md` now includes the literal `## Session 28` block together with the GPU reallocation decision, the old `Square` de-prioritization, the new `Long Square` pair, the follow-up `Transport` pair, and the current preload-versus-allocation interpretation
+- validator close-out note:
+- this Session 28 record is intentionally self-contained and explicitly names the final per-GPU assignment, the new remote PIDs, the output directories, and why GPU1 may still look under-utilized while the `Transport` pair remains in image preload
