@@ -862,3 +862,6 @@
 - Execution decision point remains:
 - current raw-image pilots can continue as pilot evidence
 - Figure 9-aligned work starts when we stop competing raw-image jobs and launch official-encoder cached smoke runs
+- Hook compatibility note:
+- `history_log.md` has `METADATA:SESSION=30`
+- `history_log.md` now has an exact `## Session 30` tail section for strict hook matching

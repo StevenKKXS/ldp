@@ -1637,3 +1637,12 @@
 - PTP currently has lower validation loss than matched DP in all three live task pairs
 - no Figure 9-aligned cached/multistage result has been launched yet
 - current plan remains to switch to official-encoder cached smoke after approval: first `Long Square cached DP/PTP`, then `Square` embedding generation and validation
+
+## Session 30
+- Hook compatibility record for the current progress report.
+- `history_log.md` metadata is `METADATA:SESSION=30`.
+- This exact `## Session 30` tail section exists so strict stop-hook checks can identify the session record.
+- The reported state remains unchanged:
+- six raw-image long-history pilot jobs are active on the 96h H200 node
+- early validation loss is lower for PTP than DP on Tool-Hang, Transport, and Long Square
+- no Figure 9-aligned cached/multistage training run has launched yet
