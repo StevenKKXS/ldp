@@ -1430,3 +1430,80 @@
 - current raw-image live `PTP` runs are algorithmic PTP pilots, not yet Figure 9-aligned multistage PTP reproductions
 - Session 29 hook close-out:
 - `history_log.md` explicitly contains this Session 29 record at the file tail
+
+## Session 29 - Live Run Classification
+- User asked what is currently running and whether it matches the Figure 9 / multistage interpretation we just clarified.
+- I rechecked the live GPU node and the Hydra overrides.
+- Current active long-history raw-image jobs:
+- `Tool-Hang long-hist DP`
+- PID: `3361630`
+- config: `transformer_tool_hang`
+- `global_obs=16`
+- `policy.past_action_pred=false`
+- `task.dataset.use_cache=false`
+- dataset: `robomimic/datasets/tool_hang/ph/image_abs.hdf5`
+- latest observed progress: epoch `0`, global step about `1329`
+- GPU memory: about `60094 MiB`
+- `Tool-Hang long-hist PTP`
+- PID: `3361637`
+- config: `transformer_tool_hang`
+- `global_obs=16`
+- `policy.past_action_pred=true`
+- `task.dataset.use_cache=false`
+- dataset: `robomimic/datasets/tool_hang/ph/image_abs.hdf5`
+- latest observed progress: epoch `0`, global step about `1364`
+- GPU memory: about `60094 MiB`
+- `Transport long-hist DP`
+- PID: `3547458`
+- config: `transformer_transport`
+- `global_obs=16`
+- `policy.past_action_pred=false`
+- `task.dataset.use_cache=false`
+- dataset: `robomimic/datasets/transport/mh/image_abs.hdf5`
+- latest observed progress: epoch `1`, global step about `3346`
+- GPU memory: about `16606 MiB`
+- `Transport long-hist PTP`
+- PID: `3547459`
+- config: `transformer_transport`
+- `global_obs=16`
+- `policy.past_action_pred=true`
+- `task.dataset.use_cache=false`
+- dataset: `robomimic/datasets/transport/mh/image_abs.hdf5`
+- latest observed progress: epoch `1`, global step about `3328`
+- GPU memory: about `16606 MiB`
+- `Long Square long-hist DP`
+- new PID after resume: `3745287`
+- config: `transformer_longhist`
+- `policy.past_action_pred=false`
+- `task.dataset.use_cache=false`
+- dataset: `longhistsquare100/demos.hdf5`
+- resumed from `checkpoints/latest.ckpt`
+- override added: `training.checkpoint_every=50`
+- reason: avoid the epoch-10 crash caused by top-k checkpoint monitoring `test_mean_score` before any rollout has produced that metric
+- `Long Square long-hist PTP`
+- new PID after resume: `3745288`
+- config: `transformer_longhist`
+- `policy.past_action_pred=true`
+- `task.dataset.use_cache=false`
+- dataset: `longhistsquare100/demos.hdf5`
+- resumed from `checkpoints/latest.ckpt`
+- override added: `training.checkpoint_every=50`
+- Important state correction:
+- before the resume, the two `Long Square` jobs had stopped after epoch 9 with:
+- `KeyError: 'test_mean_score'`
+- this happened because the config checkpoint interval was `10` while rollout interval was `50`, so `test_mean_score` was absent at the first top-k checkpoint attempt
+- I restarted them from `latest.ckpt` with checkpoint interval aligned to `50`
+- Protocol classification:
+- these runs do match the algorithmic long-history DP/PTP comparison:
+- DP / no-PTP means `past_action_pred=false`
+- PTP means `past_action_pred=true`
+- these runs do not match the full Figure 9 default protocol yet:
+- they are raw-image runs
+- `task.dataset.use_cache=false`
+- they are not `_emb` configs
+- they are not training from validated cached embeddings
+- Therefore:
+- current live jobs are useful pilot / bridge runs for the DP vs PTP comparison
+- they should not be reported as Figure 9-aligned multistage results
+- Session 29 live-classification close-out:
+- `history_log.md` explicitly records which jobs are alive, which objective each uses, and why the current live runs are not yet Figure 9-aligned multistage reproductions

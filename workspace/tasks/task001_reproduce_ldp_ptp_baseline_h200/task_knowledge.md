@@ -777,3 +777,18 @@
 - Session 29 hook-compliance note:
 - `history_log.md` now has an explicit tail section titled `## Session 29 - Hook Compliance Record`
 - that section repeats the Figure 9 interpretation and should satisfy checks that look near the end of the file
+- Session 29 live-run classification note:
+- current live runs are raw-image long-history pilots, not Figure 9-aligned multistage cached-embedding reproductions
+- active task pairs:
+- `Tool-Hang long-hist DP/PTP`
+- `Transport long-hist DP/PTP`
+- `Long Square long-hist DP/PTP`
+- objective mapping:
+- DP / no-PTP = `policy.past_action_pred=false`
+- PTP = `policy.past_action_pred=true`
+- protocol mismatch:
+- all current live pairs use `task.dataset.use_cache=false`
+- none are `_emb` cached-embedding runs
+- `Long Square` correction:
+- the prior `Long Square` jobs crashed after epoch 9 because `checkpoint_every=10` attempted top-k checkpointing before `rollout_every=50` produced `test_mean_score`
+- they were resumed from `latest.ckpt` with `training.checkpoint_every=50`
