@@ -134,6 +134,9 @@ Required settings:
 - `global_obs=16`
 - `policy.past_action_pred=false` for DP
 - `policy.past_action_pred=true` for PTP
+- policy shape metadata remains raw-image-compatible so the official image encoder checkpoint loads
+- dataset shape metadata should keep `embedding + lowdim` and omit image keys, so training avoids image preload while rollout keeps lowdim normalizer statistics
+- image range normalizers must be present for online raw-observation rollout even when image arrays are omitted from the cached replay buffer
 - output directories clearly named `fig9_*`
 
 Success criteria:

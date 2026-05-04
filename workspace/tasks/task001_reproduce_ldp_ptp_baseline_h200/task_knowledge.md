@@ -1,6 +1,6 @@
 # Task Knowledge
 
-<!-- METADATA:SESSION=30 -->
+<!-- METADATA:SESSION=31 -->
 
 ## Working Rules
 - Prefer upstream official assets first:
@@ -865,3 +865,32 @@
 - Hook compatibility note:
 - `history_log.md` has `METADATA:SESSION=30`
 - `history_log.md` now has an exact `## Session 30` tail section for strict hook matching
+
+## Session 31 Figure 9 Cached Execution
+- Raw-image long-history pilots were stopped on the 96h H200 node so Figure 9-aligned cached runs could use the GPUs.
+- Long Square official cached path is now validated:
+- official encoder: `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/obs_encoders/obs_encoders/longhist_encoder.ckpt`
+- dataset: `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/datasets/longhistsquare100/demos.hdf5`
+- dataset already contains `obs/embedding`
+- Policy shape metadata must stay raw-image-compatible so the official image encoder checkpoint can load.
+- Dataset shape metadata should omit image keys for cached training:
+- keep `embedding`
+- keep lowdim robot state keys so normalizer has rollout state statistics
+- delete only dataset image keys such as `agentview_image` and `robot0_eye_in_hand_image`
+- Important code finding:
+- upstream `RobomimicReplayImageDataset` applies `use_embed_if_present` after converting/loading replay data
+- therefore leaving raw image keys in `task.dataset.shape_meta` still causes raw image preload even if the sampler later uses only `embedding/action`
+- Session 31 code patch:
+- `RobomimicReplayImageDataset` now stores `dataset_path`
+- `get_normalizer()` adds image range normalizers for HDF5 image keys without loading image arrays into replay memory
+- this is needed for `embedding + lowdim` cached training followed by raw-observation online rollout
+- Smoke evidence:
+- Long Square cached PTP short-rollout smoke completed train/val/rollout/checkpoint
+- Long Square cached DP no-rollout smoke completed train/val
+- patched Long Square cached DP `embedding + lowdim` rollout smoke completed and wrote `test/mean_score=0.0`
+- Full Long Square Figure 9 pair launched:
+- `fig9_longsquare_cached_dp_1777884905`: `policy.past_action_pred=false`
+- `fig9_longsquare_cached_ptp_1777884905`: `policy.past_action_pred=true`
+- both use `global_obs=16`, official `longhist_encoder.ckpt`, cached embeddings, `num_epochs=3500`, `rollout_every=50`, `checkpoint_every=50`
+- GPU1 sampled after launch was around `95%` utilization and `19175 MiB` memory used.
+- Square embedding rewrite is running from official `square_encoder.ckpt` into the derived `image_abs_emb.hdf5` copy; sampled progress reached `45056 / 80731` embeddings written, about `56%`.

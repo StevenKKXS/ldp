@@ -8,5 +8,5 @@
 | Status | Working |
 | Current Task | task001_reproduce_ldp_ptp_baseline_h200 |
 | PR | https://github.com/StevenKKXS/ldp/pull/new/intern_ldp_explorer/task001_reproduce_ldp_ptp_baseline_h200 |
-| Session | 30 |
-| Recent Progress | Re-sampled the 96h H200 node and added a strict `## Session 30` tail record to `history_log.md`; six raw-image long-history pilots are active, while Figure 9-aligned cached/multistage runs have not launched yet. |
+| Session | 31 |
+| Recent Progress | Stopped the raw-image pilots, validated the Figure 9 Long Square cached-embedding path with official encoder, patched rollout normalizer compatibility, launched full Long Square cached DP/PTP runs, and started Square embedding rewrite from the official encoder. |

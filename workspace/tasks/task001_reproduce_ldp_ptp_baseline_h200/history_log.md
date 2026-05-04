@@ -1,6 +1,6 @@
 # History Log
 
-<!-- METADATA:SESSION=30 -->
+<!-- METADATA:SESSION=31 -->
 
 ## Session 0
 - Created task for reproducing LDP baseline and PTP on H200.
@@ -1646,3 +1646,47 @@
 - six raw-image long-history pilot jobs are active on the 96h H200 node
 - early validation loss is lower for PTP than DP on Tool-Hang, Transport, and Long Square
 - no Figure 9-aligned cached/multistage training run has launched yet
+
+## Session 31
+- User asked to continue after confirming the official-encoder-first Figure 9 plan.
+- Stopped the six raw-image long-history pilot parents on the 96h H200 node to free the GPUs for Figure 9-aligned work:
+- `session26_toolhang_longhist_dp_1777855200`
+- `session26_toolhang_longhist_ptp_1777855200`
+- `session28_transport_longhist_dp_1777876246`
+- `session28_transport_longhist_ptp_1777876246`
+- `session28_longsquare_longhist_dp_1777935200`
+- `session28_longsquare_longhist_ptp_1777935200`
+- Validated Long Square official-encoder cached path with `longhist_encoder.ckpt` and `longhistsquare100/demos.hdf5`.
+- Initial PTP cached smoke succeeded end-to-end:
+- output: `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/outputs/fig9_smoke_longsquare_cached_shortroll_ptp_1777884156`
+- wrote train, validation, rollout `test/mean_score`, and checkpoints
+- the matched DP smoke reached rollout but failed with `AsyncVectorEnv` EOF, which isolated the issue to rollout/runtime rather than embedding training.
+- Found the important efficiency mismatch in upstream `_emb` configs:
+- `task.dataset.use_embed_if_present=true` trims sampler keys to `embedding/action`
+- but dataset conversion still follows `task.dataset.shape_meta`
+- if raw image keys remain in dataset shape metadata, the replay buffer still preloads raw images before sampling only embeddings
+- Verified the correct Figure 9 training-side override:
+- keep policy shape metadata raw so the official image encoder checkpoint loads
+- set dataset shape metadata to `embedding + lowdim`
+- delete only dataset image keys through Hydra overrides
+- keep lowdim keys so rollout normalizer has robot state statistics
+- Added a code compatibility patch in `diffusion_policy/dataset/robomimic_replay_image_dataset.py`:
+- store `dataset_path` on the dataset
+- during `get_normalizer`, add stat-free image range normalizers for HDF5 image keys even when image arrays are omitted from the replay buffer
+- this supports cached-embedding training while online rollout still receives raw image observations from the environment
+- Verified patched Long Square DP smoke:
+- no-rollout embedding-only DP train/val completed with `val_loss=1.0737582445144653`
+- patched `embedding + lowdim` DP rollout smoke completed with `test/mean_score=0.0`, `val_loss=1.1049251556396484`, and no normalizer or `AsyncVectorEnv` crash
+- Started the Figure 9-aligned Long Square full pair on GPU1:
+- DP: `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/outputs/fig9_longsquare_cached_dp_1777884905`, `policy.past_action_pred=false`
+- PTP: `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/outputs/fig9_longsquare_cached_ptp_1777884905`, `policy.past_action_pred=true`
+- both use official `longhist_encoder.ckpt`, `global_obs=16`, cached `obs/embedding`, `training.num_epochs=3500`, `rollout_every=50`, `checkpoint_every=50`
+- sampled GPU1 state after launch: about `95%` utilization and `19175 / 143771 MiB` used while both runs were in epoch 0
+- Started Square embedding rewrite from official `square_encoder.ckpt`:
+- script: `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/session31_square_embed_rewrite.py`
+- target: `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/datasets/robomimic/datasets/square/mh/image_abs_emb.hdf5`
+- source raw dataset is left untouched
+- sampled progress reached `45056 / 80731` written, about `56%`
+- Current active 96h-node work at close of Session 31:
+- GPU0: Square embedding rewrite, low memory but image-encoder-bound
+- GPU1: Long Square cached DP/PTP full Figure 9 pair, active training around epoch `5` in the latest sample
