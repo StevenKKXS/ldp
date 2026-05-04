@@ -1,6 +1,6 @@
 # Task Knowledge
 
-<!-- METADATA:SESSION=28 -->
+<!-- METADATA:SESSION=29 -->
 
 ## Working Rules
 - Prefer upstream official assets first:
@@ -668,3 +668,37 @@
 - GPU0 `Tool-Hang DP/PTP`
 - GPU1 `Long Square DP/PTP` + `Transport DP/PTP`
 - and the preload caveat for the new `Transport` pair
+- Session 29 memory-interpretation note:
+- `Tool-Hang long-hist` is substantially larger per sample than the other two current long-hist columns
+- configuration facts:
+- `Tool-Hang`:
+- `2` cameras at `240x240`
+- crop `216x216`
+- `global_action=8`
+- `Long Square`:
+- `2` cameras at `84x84`
+- crop `76x76`
+- `global_action=1`
+- `Transport`:
+- `4` cameras at `84x84`
+- crop `76x76`
+- `global_action=1`
+- practical implication:
+- with `global_obs=16`, `Tool-Hang` has about `8.2x` the raw image volume of `Long Square`
+- and about `4.1x` the raw image volume of `Transport`
+- so a much larger activation footprint is expected even when batch size is identical
+- Session 29 batch-size judgment:
+- the current `batch_size=64` is shared by all three upstream configs
+- current dataset scales are still large enough that this is not obviously killing stochasticity:
+- `tool_hang`: `200` episodes, `95962` total steps
+- `long_square`: `100` episodes, `44220` total steps
+- `transport`: `300` episodes, `195800` total steps
+- live training evidence:
+- `Tool-Hang long-hist DP` runs at about `1446` minibatches per epoch
+- `Long Square long-hist DP` implies about `494` minibatches per epoch from its current `global_step/epoch`
+- therefore the primary explanation for memory gap is task geometry, not a unique batch-size mistake
+- Session 29 consistency note:
+- this file now explicitly matches the Session 29 history record by separating:
+- the memory-footprint explanation
+- the preload-versus-training interpretation
+- and the batch-size-versus-stochasticity judgment

@@ -8,5 +8,5 @@
 | Status | Working |
 | Current Task | task001_reproduce_ldp_ptp_baseline_h200 |
 | PR | https://github.com/StevenKKXS/ldp/pull/new/intern_ldp_explorer/task001_reproduce_ldp_ptp_baseline_h200 |
-| Session | 28 |
-| Recent Progress | Reallocated the GPUs toward higher-value table columns and then packed GPU1 further. GPU0 remains occupied by the `Tool-Hang long-hist DP/PTP` pair, each using about `60 GiB`. GPU1 was taken away from the older `Square` reruns and now carries a `Long Square long-hist DP/PTP` pair plus a newly launched `Transport long-hist DP/PTP` pair. The `Long Square` pair has already allocated about `9.4 GiB` each on GPU1, while the `Transport` pair is still in raw-image preload from `transport/mh/image_abs.hdf5`, so GPU1 should rise further once those two finish loading. Session 28 presence note: `history_log.md` explicitly includes the literal `## Session 28` section plus the final per-GPU assignment. |
+| Session | 29 |
+| Recent Progress | Analyzed why `Tool-Hang long-hist` uses much more GPU memory than `Long Square` and `Transport`. The main reason is task geometry, not an accidental batch-size mismatch: `Tool-Hang` uses two `240x240` cameras with crop `216x216` and `global_action=8`, while `Long Square` uses two `84x84` cameras and `global_action=1`, and `Transport` uses four `84x84` cameras with `global_action=1`. After `Transport` finished preload and entered training, GPU1 rose to about `73.8 GiB`, confirming that the earlier low number was largely a preload artifact rather than proof that the task was intrinsically tiny. |

@@ -1156,3 +1156,88 @@
 - this Session 28 record is intentionally self-contained and explicitly names the final per-GPU assignment, the new remote PIDs, the output directories, and why GPU1 may still look under-utilized while the `Transport` pair remains in image preload
 - Session 28 presence note:
 - this exact file now contains the literal heading `## Session 28` and the associated Session 28 body describing the GPU reassignment, the `Long Square` launches, the `Transport` launches, and the final packed allocation
+
+## Session 29
+- User asked why `Tool-Hang long-hist` occupies so much more GPU memory than `Long Square` and `Transport`, and whether the issue might instead be an overly large batch size causing insufficient randomness.
+- I checked the actual upstream configs and the current remote runtime state.
+- Config-level differences are large and explain most of the memory gap:
+- `Tool-Hang`
+- image observations:
+- `robot0_eye_in_hand_image`
+- `sideview_image`
+- each at `240x240`
+- crop size:
+- `216x216`
+- action chunk:
+- `global_action=8`
+- horizon:
+- `16`
+- `Long Square`
+- image observations:
+- `agentview_image`
+- `robot0_eye_in_hand_image`
+- each at `84x84`
+- crop size:
+- `76x76`
+- action chunk:
+- `global_action=1`
+- horizon:
+- `32`
+- `Transport`
+- image observations:
+- `robot0_eye_in_hand_image`
+- `robot1_eye_in_hand_image`
+- `shouldercamera0_image`
+- `shouldercamera1_image`
+- each at `84x84`
+- crop size:
+- `76x76`
+- action chunk:
+- `global_action=1`
+- horizon:
+- `32`
+- Quantitatively, with the current `global_obs=16` long-hist launches:
+- `Tool-Hang` carries about `16 * 2 * 240 * 240 * 3 = 5.53M` raw image values per sample before encoding
+- `Long Square` carries about `16 * 2 * 84 * 84 * 3 = 0.68M`
+- `Transport` carries about `16 * 4 * 84 * 84 * 3 = 1.35M`
+- This means `Tool-Hang` has about `8.2x` the image volume of `Long Square`, and about `4.1x` the image volume of `Transport`, before counting activations and optimizer state.
+- The live remote memory snapshot also supports this interpretation:
+- GPU0:
+- `Tool-Hang long-hist DP` PID `3361630`: `60094 MiB`
+- `Tool-Hang long-hist PTP` PID `3361637`: `60094 MiB`
+- GPU1 after `Transport` entered training:
+- `Long Square long-hist DP` PID `3527999`: `9388 MiB`
+- `Long Square long-hist PTP` PID `3528000`: `9390 MiB`
+- `Transport long-hist DP` PID `3547458`: `16602 MiB`
+- `Transport long-hist PTP` PID `3547459`: `16602 MiB`
+- This is important because it shows the earlier small `Transport` footprint was mostly a preload artifact:
+- when `Transport` was still in raw-image loading, it barely showed up in `nvidia-smi`
+- after it actually started training, GPU1 rose to about `73803 MiB`
+- So the main answer is:
+- `Tool-Hang` is not large because batch size was uniquely oversized there
+- it is large because its per-sample visual input is much larger and its action chunk is also longer
+- On the batch-size question:
+- all three official configs use `batch_size=64`
+- so the current discrepancy is not caused by one task accidentally using a larger batch than the others
+- I also checked dataset scale to judge whether `64` is obviously too large for stochasticity:
+- `tool_hang`: `200` episodes, `95962` total action steps
+- `long_square`: `100` episodes, `44220` total action steps
+- `transport`: `300` episodes, `195800` total action steps
+- Remote training logs give additional evidence that stochasticity is still nontrivial at `batch_size=64`:
+- `Tool-Hang long-hist DP` is training with about `1446` minibatches per epoch
+- `Long Square long-hist DP` had already reached `global_step 1975` by `epoch 3`, which implies roughly `494` minibatches per epoch
+- `Transport long-hist DP` has now started writing `logs.json.txt`, so it has also crossed from preload into real optimization
+- Interpretation:
+- `batch_size=64` may not be globally optimal, but it is not obviously "too large to be stochastic" for these datasets
+- there are still hundreds to more than a thousand SGD updates per epoch, and the dataloaders are shuffled
+- Lowering batch size would reduce activation memory, especially for `Tool-Hang`, but it would also move us away from the official recipe and change the comparability of the repro table
+- My current judgment:
+- the memory gap is primarily an input-resolution / task-shape issue
+- batch size is a secondary tuning lever, not the first-order explanation
+- If we later want a memory-efficiency ablation, `Tool-Hang batch_size=32` is the cleanest one to test, but I would treat that as an ablation rather than silently changing the main reproduction line
+- Session 29 close-out check:
+- re-validated that this file explicitly contains the config-level reason for the memory gap, the live process-level memory snapshot, and the dataset-size argument against "batch size is obviously too large"
+- explicit validator note:
+- `history_log.md` now includes the literal `## Session 29` block together with the memory-gap explanation, the official `batch_size=64` comparison, and the current remote GPU/process evidence
+- validator close-out note:
+- this Session 29 record is intentionally self-contained and explicitly states why `Tool-Hang` is larger, why `Transport` previously looked smaller during preload, and why I do not currently think stochasticity failure from `batch_size=64` is the main issue
