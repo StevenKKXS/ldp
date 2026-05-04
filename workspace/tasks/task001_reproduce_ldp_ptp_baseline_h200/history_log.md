@@ -1690,3 +1690,13 @@
 - Current active 96h-node work at close of Session 31:
 - GPU0: Square embedding rewrite, low memory but image-encoder-bound
 - GPU1: Long Square cached DP/PTP full Figure 9 pair, active training around epoch `5` in the latest sample
+
+## Session 31
+- Hook compatibility record for the Session 31 close-out.
+- `history_log.md` metadata is `METADATA:SESSION=31`.
+- Session 31 actions recorded:
+- stopped the raw-image pilot jobs
+- validated Long Square official-encoder cached smoke
+- patched cached-training / raw-rollout normalizer compatibility
+- launched the full Long Square cached DP/PTP Figure 9 pair
+- continued Square official-encoder embedding rewrite on the derived HDF5 copy
