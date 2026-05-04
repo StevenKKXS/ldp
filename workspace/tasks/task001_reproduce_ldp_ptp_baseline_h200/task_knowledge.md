@@ -761,3 +761,16 @@
 - therefore the execution-ready path was to launch raw-image long-hist pilots first, then transition toward multistage
 - Session 29 multistage-validator note:
 - the canonical Session 29 record now explicitly includes the multistage-vs-current-PTP explanation in `history_log.md`, not only the roadmap and paper-interpretation notes
+- Session 29 Figure 9 terminology note:
+- `PTP` is an original method component in the paper:
+- it means the auxiliary past-token-prediction objective
+- `multistage` is a separate efficiency/training recipe:
+- short-context encoder
+- cached embeddings
+- long-context policy-head training
+- Figure 9 should be read under the paper's default protocol:
+- long-history `PTP` and long-history `no-PTP` are both trained with the multistage / feature-caching recipe unless otherwise specified
+- the controlled difference is whether the PTP objective is enabled
+- therefore:
+- current raw-image `past_action_pred=true` runs are algorithmic PTP pilots
+- they are not yet Figure 9-aligned multistage PTP reproductions

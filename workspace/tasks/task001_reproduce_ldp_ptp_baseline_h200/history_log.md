@@ -1384,3 +1384,35 @@
 - why we did not start directly from multistage
 - what assets are present versus still missing for cached-embedding training
 - and what the word `PTP` refers to in the current live raw-image runs
+- Session 29 Figure 9 terminology clarification:
+- User asked whether `PTP` is part of the original paper, and whether Figure 9's `long-hist PTP` and `long-hist non-PTP` are both products of multistage training or merely "predicting the past".
+- Paper-grounded answer:
+- `PTP` is a core component of the paper, not an external label:
+- it is the auxiliary objective where the policy predicts past action tokens together with future action tokens
+- `multistage training` is a separate training recipe:
+- short-context visual encoder pretraining
+- feature caching
+- long-context policy-head training from cached embeddings
+- Figure 9 should be interpreted under the paper's default protocol:
+- Section 5 says the paper compares PTP against:
+- `no-history`
+- `no-PTP`
+- and PTP
+- It also says that unless otherwise specified, policies are trained with the multistage recipe and feature caching.
+- Therefore:
+- `long-hist PTP` in Figure 9 means:
+- long-history conditioning
+- multistage / feature-cached training recipe
+- PTP objective enabled
+- `long-hist no-PTP` in Figure 9 means:
+- long-history conditioning
+- same multistage / feature-cached training recipe
+- PTP objective disabled
+- This distinction matters for our reproduction:
+- our current live `PTP` runs only match the algorithmic objective part (`past_action_pred=true`)
+- they do not yet match the full Figure 9 protocol because they are still raw-image runs, not cached-embedding multistage runs
+- Updated reproduction implication:
+- for Figure 9-aligned reproduction, both `long-hist DP` and `long-hist PTP` should eventually be rerun or validated under the cached-embedding multistage path
+- raw-image long-hist DP/PTP remains useful pilot evidence, but should be labeled as protocol-deviated from Figure 9
+- Session 29 figure9-presence note:
+- this exact file's `## Session 29` block now explicitly includes the Figure 9 interpretation and the distinction between PTP as an objective and multistage as a training recipe
