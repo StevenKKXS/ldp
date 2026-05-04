@@ -1348,3 +1348,34 @@
 - complete the main table by priority
 - move from raw-image runs to the multistage cached-embedding recipe
 - finish with headline rows plus ablations in the final report
+- Session 29 clarification on "why not directly multistage" and "what current PTP means":
+- Why not directly multistage right now:
+- the repo does expose the multistage / cached path:
+- `transformer_history.sh` supports `--emb True --cached True`
+- README instructs using official short-history encoders plus `rewrite_with_embeddings.py`
+- `_emb` configs exist for multiple tasks
+- but our current remote state is still incomplete for directly switching the main runs over:
+- official short-context encoders are present
+- however, task-specific embedding-cached datasets have not yet been produced and validated as the canonical training inputs for the current live task set
+- in other words:
+- we have the encoder checkpoints
+- but we do not yet have the fully prepared per-task cached-embedding datasets lined up as the production path for `Tool-Hang`, `Long Square`, and `Transport`
+- because of that, the fastest way to get evidence on the board was to launch raw-image long-hist runs first, instead of waiting for the full multistage asset pipeline to be rebuilt and validated
+- What "PTP" means in the current runs:
+- at the method level, `PTP` means:
+- `past_action_pred=true`
+- namely the model is trained with the past-token-prediction objective enabled
+- in our current live runs, `PTP` specifically means:
+- raw-image
+- long-history
+- PTP-enabled
+- not yet:
+- cached-embedding
+- final multistage paper-recipe PTP
+- so there is an important distinction:
+- "current PTP run" = the algorithmic PTP objective is active
+- "paper-complete PTP reproduction" = algorithmic PTP objective active inside the multistage cached-embedding training recipe
+- My practical answer to the user question is therefore:
+- we did not start directly from multistage because the asset pipeline for embedding-cached training was not yet the most execution-ready path
+- we started from raw-image long-hist DP/PTP to get task-aligned signal quickly
+- the next protocol-alignment step is to convert that evidence into the paper's multistage cached-embedding regime

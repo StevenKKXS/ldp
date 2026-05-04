@@ -749,3 +749,13 @@
 - but they should not be mistaken for the final protocol-complete endpoint
 - Session 29 roadmap-validator note:
 - the canonical Session 29 record now explicitly includes the roadmap in `history_log.md`, not only point analyses about memory, batch size, or paper interpretation
+- Session 29 multistage-clarification note:
+- current live `PTP` runs should be interpreted as:
+- long-history
+- raw-image
+- `past_action_pred=true`
+- not yet the final paper-complete multistage cached-embedding recipe
+- why multistage was not the immediate starting point:
+- official encoders are available
+- but task-specific embedding-cached datasets have not yet been rebuilt and validated as the canonical live training inputs for the current task set
+- therefore the execution-ready path was to launch raw-image long-hist pilots first, then transition toward multistage
