@@ -1580,3 +1580,27 @@
 - `Square long-hist PTP`
 - Session 29 Figure 9 hook close-out:
 - `history_log.md` explicitly contains this Session 29 Figure 9 plan record at the file tail
+
+## Session 29 - Official Encoder First Plan Update
+- User confirmed the `official encoder first` reproduction path after clarifying that short-hist encoders are still required by Figure 9 multistage.
+- Updated `workspace/tasks/task001_reproduce_ldp_ptp_baseline_h200/fig9_multistage_repro_plan.md` to make that path explicit:
+- official `obs_encoders.zip` checkpoints are treated as released Stage 1 encoder assets
+- short-hist DP remains a separate baseline row to evaluate or backfill
+- long-hist DP and long-hist PTP must both use the same frozen-encoder / embedding-cache recipe
+- dry-run loaded the official encoders on the 96h H200 node:
+- `square_encoder.ckpt`: OK, feature dim `137`
+- `tool_hang_encoder.ckpt`: OK, feature dim `137`
+- `transport_encoder.ckpt`: OK, feature dim `274`
+- `longhist_encoder.ckpt`: OK, feature dim `137`
+- `aloha_encoder.ckpt`: OK, feature dim `135`
+- `pusht_encoder.ckpt`: OK with explicit `obs_encoder_dir` override, feature dim `66`
+- cache/data compatibility findings:
+- `Long Square` and `ALOHA / Cube` already have `obs/embedding` in their HDF5 datasets
+- `Square`, `Tool-Hang`, and `Transport` need embeddings generated on derived HDF5 copies before Figure 9-aligned launch
+- `Transport` also needs `_emb` config repair: add `embedding.shape=[274]`, dataset `use_embed_if_present=true`, and avoid stale/raw zarr cache until rebuilt
+- `Push-T` has a loadable official encoder, but current `rewrite_with_embeddings.py` is HDF5-only and does not directly support the Push-T zarr replay
+- revised immediate smoke strategy:
+- first smoke `Long Square long-hist DP/PTP` using existing embeddings
+- in parallel validate the official rewrite pipeline by generating `Square` embeddings on a derived HDF5
+- Session 29 official-encoder close-out:
+- `history_log.md` records the official encoder first decision and compatibility snapshot at the file tail

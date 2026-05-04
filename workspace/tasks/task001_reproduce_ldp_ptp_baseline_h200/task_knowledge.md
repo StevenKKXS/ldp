@@ -816,3 +816,27 @@
 - Session 29 Figure 9 hook-compliance note:
 - `history_log.md` now has an explicit tail section titled `## Session 29 - Figure 9 Plan Hook Compliance Record`
 - that section repeats the new Figure 9 multistage plan artifact and the approval-before-stopping constraint
+
+## Session 29 Official Encoder / Cache Compatibility
+- User confirmed the `official encoder first` path for Figure 9 reproduction.
+- Meaning:
+- do not skip the short-hist encoder stage
+- treat official `obs_encoders.zip` checkpoints as the released short-hist encoder products for the first paper-facing pass
+- use those encoders to generate or validate frozen `obs/embedding` data for long-hist DP and long-hist PTP
+- Official encoder dry-run on the 96h H200 node:
+- `square_encoder.ckpt` loads and freezes in the Square policy; `obs_feature_dim=137`
+- `tool_hang_encoder.ckpt` loads and freezes in the Tool-Hang policy; `obs_feature_dim=137`
+- `transport_encoder.ckpt` loads and freezes in the Transport policy; `obs_feature_dim=274`
+- `longhist_encoder.ckpt` loads and freezes in the Long Square policy; `obs_feature_dim=137`
+- `aloha_encoder.ckpt` loads and freezes in the ALOHA policy; `obs_feature_dim=135`
+- `pusht_encoder.ckpt` loads and freezes if `obs_encoder_dir` is explicitly overridden; `obs_feature_dim=66`
+- Existing embedding readiness:
+- `longhistsquare100/demos.hdf5` already contains `obs/embedding` with 100 demos / 44,220 steps
+- `aloha_twomodes_single/demos.hdf5` already contains `obs/embedding` with 50 demos / 25,000 steps
+- `square/mh/image_abs_emb.hdf5` exists but currently does not contain an `embedding` key, so it is only a staged copy and still needs rewrite
+- Required config fixes before Figure 9-aligned launch:
+- replace placeholder `use_embed_if_present` values with explicit `true`
+- set both policy and dataset `use_embed_if_present=true` for HDF5 embedding datasets
+- for Transport, add `embedding.shape=[274]` to dataset shape metadata and avoid raw zarr cache until rebuilt
+- for Long Square, either override the config from absent `demos_emb.hdf5` to existing `demos.hdf5`, or create the expected derived file
+- for Push-T, implement a zarr embedding rewrite/cache path before treating it as Figure 9-aligned
