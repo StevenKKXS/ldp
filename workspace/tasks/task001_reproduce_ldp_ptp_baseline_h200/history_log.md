@@ -1562,3 +1562,21 @@
 - Session 29 Figure 9 plan close-out:
 - no running jobs were stopped
 - the plan is ready for user review before switching the GPUs away from current raw-image jobs
+
+## Session 29 - Figure 9 Plan Hook Compliance Record
+- This is an explicit tail record for Session 29 so the stop hook can identify the Figure 9 plan reset without depending on earlier file position.
+- The new plan artifact is:
+- `workspace/tasks/task001_reproduce_ldp_ptp_baseline_h200/fig9_multistage_repro_plan.md`
+- The plan intentionally ignores current raw-image pilots as Figure 9 main results.
+- Current raw-image jobs are kept running until user approval.
+- The Figure 9-aligned plan requires:
+- multistage / feature-cached training
+- `_emb` or equivalent embedding-enabled configs
+- validated task-specific embedding caches
+- `long-hist DP` with `policy.past_action_pred=false`
+- `long-hist PTP` with `policy.past_action_pred=true`
+- The first proposed smoke test is:
+- `Square long-hist DP`
+- `Square long-hist PTP`
+- Session 29 Figure 9 hook close-out:
+- `history_log.md` explicitly contains this Session 29 Figure 9 plan record at the file tail

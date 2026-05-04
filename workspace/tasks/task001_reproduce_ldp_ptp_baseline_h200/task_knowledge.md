@@ -813,3 +813,6 @@
 - `Square long-hist PTP`
 - reason:
 - smallest / best-understood task to validate cached pipeline before consuming the full GPU budget
+- Session 29 Figure 9 hook-compliance note:
+- `history_log.md` now has an explicit tail section titled `## Session 29 - Figure 9 Plan Hook Compliance Record`
+- that section repeats the new Figure 9 multistage plan artifact and the approval-before-stopping constraint
