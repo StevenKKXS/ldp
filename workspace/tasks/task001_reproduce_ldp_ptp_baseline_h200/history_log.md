@@ -1257,3 +1257,5 @@
 - reduce repeated vision encoding work
 - reduce wall-clock overhead
 - make long-context scaling practical without sacrificing performance
+- Session 29 paper-presence note:
+- this exact file's `## Session 29` block explicitly includes the paper-grounded explanation that multistage training addresses rising memory demands as part of a broader compute-efficiency problem, rather than serving only as a VRAM workaround

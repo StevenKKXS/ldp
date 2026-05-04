@@ -717,3 +717,5 @@
 - therefore the most accurate reading is:
 - the two-step recipe is not merely a VRAM workaround
 - it is a general compute-efficiency method that makes long-context image-based training practical
+- Session 29 paper-validator note:
+- the canonical Session 29 record now explicitly includes the paper-grounded multistage explanation in `history_log.md`, not only the local memory-gap analysis
