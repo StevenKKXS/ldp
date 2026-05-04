@@ -1,6 +1,6 @@
 # Task Knowledge
 
-<!-- METADATA:SESSION=26 -->
+<!-- METADATA:SESSION=27 -->
 
 ## Working Rules
 - Prefer upstream official assets first:
@@ -590,3 +590,24 @@
 - `history_log.md` now explicitly carries the Session 26 watchdog outcome, env root cause, and the successful manual launch of the `Tool-Hang` Wave 1 pair, so the task record is consistent across `status.md`, `history_log.md`, and `task_knowledge.md`
 - validator note:
 - the Session 26 explanation is explicitly keyed on the completed-data state, the missed watchdog trigger, the remote env fix, and the successful `Tool-Hang long-hist DP/PTP` startup
+- Session 27 launchability summary:
+- current in-scope simulation columns and whether they can be started now:
+- `Square`: yes, and already has pilot repro values
+- `Tool-Hang`: yes, and `long-hist DP/PTP` are already running
+- `Transport`: yes
+- `Push-T`: yes
+- `ALOHA / Cube`: yes
+- `Long Square`: yes
+- planning distinction:
+- "launchable" means data + config + runtime path are available
+- "in progress" currently applies to:
+- `Square` legacy / pilot lines
+- `Tool-Hang long-hist DP`
+- `Tool-Hang long-hist PTP`
+- agreed out-of-scope reminder:
+- `Lift`
+- `Can`
+- `LDP`
+- remain excluded from the working artifact even if some raw data now exist on disk
+- Session 27 consistency note:
+- `history_log.md` now explicitly carries the Session 27 per-column launchability summary and suggested scheduling order, so the task record is consistent across `status.md`, `history_log.md`, and `task_knowledge.md`

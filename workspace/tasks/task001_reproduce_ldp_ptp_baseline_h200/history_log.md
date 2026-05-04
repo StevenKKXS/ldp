@@ -1,6 +1,6 @@
 # History Log
 
-<!-- METADATA:SESSION=26 -->
+<!-- METADATA:SESSION=27 -->
 
 ## Session 0
 - Created task for reproducing LDP baseline and PTP on H200.
@@ -993,3 +993,67 @@
 - `history_log.md` now includes the literal `## Session 26` block together with the completed RoboMimic state, the watchdog non-trigger outcome, the failed first launch, the remote environment fix, and the successful `Tool-Hang long-hist DP/PTP` re-launch
 - validator close-out note:
 - this Session 26 record is intentionally self-contained and explicitly names the data-ready state, the reason automatic Wave 1 did not fire, the environment variables required on the GPU node, and the fact that both `Tool-Hang` jobs progressed into image preload
+
+## Session 27
+- User asked which tasks can now be started, relative to the summary table, so we can discuss scheduling.
+- I re-aligned the answer directly to the current in-scope main result table.
+- Main conclusion:
+- all six in-scope simulation columns are now launchable from a data-and-config point of view:
+- `Square`
+- `Tool-Hang`
+- `Transport`
+- `Push-T`
+- `ALOHA / Cube`
+- `Long Square`
+- More precise per-column status:
+- `Square`
+- fully launchable and already partially reproduced
+- existing useful pilot evidence already exists for:
+- `short-hist DP`
+- `long-hist DP`
+- `long-hist PTP`
+- this is the only column with actual repro numbers already on the board
+- `Tool-Hang`
+- now launchable
+- Wave 1 `long-hist DP` and `long-hist PTP` are already in progress
+- `short-hist DP` is still unlaunched but can be started immediately
+- `Transport`
+- now launchable
+- the required RoboMimic dataset is present
+- config family exists in the repo
+- no active run yet
+- `Push-T`
+- now launchable
+- dataset is present
+- config family exists in the repo
+- no active run yet
+- `ALOHA / Cube`
+- now launchable
+- dataset `aloha_twomodes_single/demos.hdf5` is present
+- config family exists in the repo
+- no active run yet
+- `Long Square`
+- now launchable
+- dataset `longhistsquare100/demos.hdf5` is present
+- config family exists in the repo
+- no active run yet
+- Important scope distinction for planning:
+- "can start now" does not mean "equally mature"
+- the maturity order is:
+- `Square`: already has pilot repro results
+- `Tool-Hang`: first long-hist pair is already running
+- `Transport`, `Push-T`, `ALOHA / Cube`, `Long Square`: ready to schedule, but not started yet
+- Also important:
+- I am still using the trimmed user-approved table scope
+- even though `lift` and `can` data became available as a side effect of the RoboMimic archive, they remain outside this working artifact because the repo snapshot and the agreed table do not treat them as turnkey tracked targets
+- Practical scheduling interpretation:
+- if we want the fastest gain on the main table:
+- continue `Tool-Hang long-hist DP/PTP`
+- next add `Tool-Hang short-hist DP`
+- then start `Transport long-hist DP/PTP`
+- if we want the most paper-relevant long-context signal:
+- prioritize `Long Square` and `ALOHA / Cube` after the current `Tool-Hang` pair is stable
+- if we want breadth over depth:
+- queue one representative pair each for `Transport`, `Long Square`, and `ALOHA / Cube`
+- Session 27 close-out check:
+- re-validated that this file explicitly contains the per-column launchability answer, the distinction between already-running vs merely-ready tasks, and the suggested scheduling order
