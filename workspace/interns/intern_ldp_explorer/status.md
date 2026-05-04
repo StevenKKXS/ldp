@@ -8,5 +8,5 @@
 | Status | Working |
 | Current Task | task001_reproduce_ldp_ptp_baseline_h200 |
 | PR | https://github.com/StevenKKXS/ldp/pull/new/intern_ldp_explorer/task001_reproduce_ldp_ptp_baseline_h200 |
-| Session | 32 |
-| Recent Progress | Clarified task-by-task embedding requirements: Long Square and ALOHA already have embeddings; Square, Tool-Hang, and Transport need generated HDF5 embeddings; Push-T needs a zarr embedding/cache implementation before Figure 9-aligned use. |
+| Session | 33 |
+| Recent Progress | Checked the 96h H200 GPUs, validated existing non-today Long Square / ALOHA embeddings and today's Square embedding file, and launched a GPU0 sequential compact embedding queue for Tool-Hang followed by Transport while GPU1 continues Long Square cached DP/PTP. |

@@ -1,6 +1,6 @@
 # History Log
 
-<!-- METADATA:SESSION=32 -->
+<!-- METADATA:SESSION=33 -->
 
 ## Session 0
 - Created task for reproducing LDP baseline and PTP on H200.
@@ -1719,3 +1719,74 @@
 - `Long Square` and `ALOHA / Cube` already have usable `obs/embedding`
 - `Square`, `Tool-Hang`, and `Transport` need generated HDF5 embeddings for Figure 9-aligned cached long-history runs
 - `Push-T` needs a separate zarr embedding/cache implementation before it can enter the main Figure 9 cached batch
+
+## Session 33
+- User asked to check GPU status, use the H200 node as fully as practical, schedule the remaining embedding processing sequentially, and validate embeddings that were not produced today.
+- Re-sampled the 96h H200 node `10.100.2.47:15744` on `2026-05-04`.
+- Initial GPU state:
+- GPU0: idle at sample time, `0%` utilization and about `1 MiB / 143771 MiB`.
+- GPU1: active with Long Square cached DP/PTP, sampled around `88-98%` utilization and about `20269 MiB / 143771 MiB`.
+- Active GPU1 Figure 9-aligned Long Square runs remain:
+- DP: `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/outputs/fig9_longsquare_cached_dp_1777884905`
+- PTP: `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/outputs/fig9_longsquare_cached_ptp_1777884905`
+- Latest observed Long Square progress before launching the embedding queue:
+- DP around epoch `141`, global step about `99359`, latest train loss about `0.0087`.
+- PTP around epoch `144`, global step about `101789`, latest validation loss about `0.00673`.
+- Validated existing embedding files by opening HDF5, sampling demos, checking `obs/embedding` presence, shape consistency, finiteness, and nonzero content.
+- Long Square validation:
+- file: `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/datasets/longhistsquare100/demos.hdf5`
+- mtime: `2025-03-31T22:28:43`, not today.
+- demos: `100`, total embeddings: `44220`, dim: `137`.
+- validation result: missing `0`, bad shape `0`, non-finite `0`, sample was nonzero.
+- ALOHA / Cube validation:
+- file: `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/datasets/aloha_twomodes_single/demos.hdf5`
+- mtime: `2025-05-15T18:16:12`, not today.
+- demos: `50`, total embeddings: `25000`, dim: `135`.
+- validation result: missing `0`, bad shape `0`, non-finite `0`, sample was nonzero.
+- Square validation:
+- file: `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/datasets/robomimic/datasets/square/mh/image_abs_emb.hdf5`
+- mtime: `2026-05-04T09:08:22`, today.
+- demos: `300`, total embeddings: `80731`, dim: `137`.
+- validation result: missing `0`, bad shape `0`, non-finite `0`, sample was nonzero.
+- Tried a full raw-copy embedding queue first:
+- script: `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/session33_embedding_queue.py`
+- PID: `446528`
+- log: `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/logs/session33_embedding_queue.out`
+- reason stopped: copying full raw image HDF5 to `image_abs_emb.hdf5` did not use a fast reflink path on shared storage, took too long, and kept GPU0 idle.
+- Removed the partial full-copy Tool-Hang output:
+- `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/datasets/robomimic/datasets/tool_hang/ph/image_abs_emb.hdf5`
+- Switched to a compact embedding-HDF5 strategy:
+- script: `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/session33_compact_embedding_queue.py`
+- active PID after restart: `484907`
+- active log: `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/logs/session33_compact_embedding_queue_b256.out`
+- GPU: GPU0
+- batch size: `256` for Tool-Hang and Transport.
+- rationale: Figure 9 cached training needs actions, lowdim observations, and `obs/embedding`; online rollout can still point to the raw HDF5 dataset, so copying full image arrays into the embedding training file is unnecessary.
+- Compact Tool-Hang queue state:
+- source: `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/datasets/robomimic/datasets/tool_hang/ph/image_abs.hdf5`
+- destination: `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/datasets/robomimic/datasets/tool_hang/ph/image_abs_emb_compact.hdf5`
+- demos: `200`, total steps: `95962`, embedding dim: `137`.
+- latest sampled progress: `6656 / 95962` embeddings written, around `8%`.
+- latest compact file size sample: `17M`.
+- Transport is queued after Tool-Hang:
+- source: `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/datasets/robomimic/datasets/transport/mh/image_abs.hdf5`
+- destination: `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/datasets/robomimic/datasets/transport/mh/image_abs_emb_compact.hdf5`
+- expected embedding dim: `274`.
+- Current GPU interpretation:
+- GPU1 is well utilized by the full Long Square cached pair.
+- GPU0 now has the compact embedding process resident at about `3584 MiB`; instantaneous utilization samples can show `0%` because the rewrite is HDF5 read / image crop / encoder-forward mixed and bursty, but the log is actively advancing.
+- Training implication for compact HDF5:
+- launch cached training with the dataset path set to the compact embedding HDF5.
+- keep `env_runner.dataset_path` or equivalent rollout data source pointed at the raw HDF5.
+- dataset shape metadata should include `embedding + lowdim` and omit raw image arrays.
+- policy shape metadata should stay raw-image compatible so official encoders can load and rollout normalizers remain compatible.
+
+## Session 33
+- Hook compatibility record for the Session 33 GPU / embedding close-out.
+- `history_log.md` metadata is `METADATA:SESSION=33`.
+- Session 33 actions recorded:
+- checked GPU0/GPU1 live state on `10.100.2.47:15744`
+- validated Long Square, ALOHA, and Square embedding HDF5 files by sampling contents
+- stopped the slow full-copy embedding attempt
+- launched the active GPU0 sequential compact embedding queue for Tool-Hang followed by Transport
+- kept the GPU1 Long Square cached DP/PTP pair running

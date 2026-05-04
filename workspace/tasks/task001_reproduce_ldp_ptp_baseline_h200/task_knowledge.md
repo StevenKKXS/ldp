@@ -1,6 +1,6 @@
 # Task Knowledge
 
-<!-- METADATA:SESSION=32 -->
+<!-- METADATA:SESSION=33 -->
 
 ## Working Rules
 - Prefer upstream official assets first:
@@ -902,3 +902,32 @@
 - `Tool-Hang`: embedding generation required. Raw HDF5 exists, but no validated `obs/embedding` copy is available; use official `tool_hang_encoder.ckpt` to produce a derived embedding HDF5 before cached DP/PTP runs.
 - `Transport`: embedding generation required plus config repair. Use official `transport_encoder.ckpt`, embedding dim `274`, set policy/dataset `use_embed_if_present=true`, and ensure dataset `shape_meta.obs.embedding.shape=[274]`.
 - `Push-T`: embedding/cache work required, but current rewrite tooling is HDF5-only while Push-T data is zarr. Treat Push-T as blocked for Figure 9-aligned cached runs until zarr embedding rewrite/cache support exists.
+
+## Session 33 Embedding Validation And Queue
+- Existing embedding validation rule:
+- for any embedding HDF5 not generated today, open the file, sample demos, verify `obs/embedding` exists, verify consistent last-dimension width, check finite values, and check that sampled embeddings are not all zero.
+- Validated non-today embeddings:
+- Long Square `longhistsquare100/demos.hdf5`: mtime `2025-03-31T22:28:43`, `100` demos, `44220` embeddings, dim `137`, no missing / bad-shape / non-finite sample failures.
+- ALOHA / Cube `aloha_twomodes_single/demos.hdf5`: mtime `2025-05-15T18:16:12`, `50` demos, `25000` embeddings, dim `135`, no missing / bad-shape / non-finite sample failures.
+- Validated today's generated Square embedding:
+- Square `robomimic/datasets/square/mh/image_abs_emb.hdf5`: mtime `2026-05-04T09:08:22`, `300` demos, `80731` embeddings, dim `137`, no missing / bad-shape / non-finite sample failures.
+- Compact embedding HDF5 is the preferred path for Tool-Hang and Transport:
+- do not copy full raw image arrays into the derived embedding HDF5 unless required by a later code path
+- include actions, lowdim observations, generated `obs/embedding`, and placeholder image keys only where needed for normalizer compatibility
+- use the raw HDF5 path separately for env runner / rollout
+- Active sequential queue:
+- script: `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/session33_compact_embedding_queue.py`
+- active PID at last check: `484907`
+- active log: `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/logs/session33_compact_embedding_queue_b256.out`
+- batch size: `256`
+- current first job: Tool-Hang official `tool_hang_encoder.ckpt` into `tool_hang/ph/image_abs_emb_compact.hdf5`
+- queued second job: Transport official `transport_encoder.ckpt` into `transport/mh/image_abs_emb_compact.hdf5`
+- Last sampled Tool-Hang progress:
+- `6656 / 95962` embeddings written, about `8%`
+- destination size `17M`
+- GPU0 had about `3584 MiB` resident for the queue process
+- Practical training configuration implication:
+- for cached training, point `task.dataset.dataset_path` at the compact embedding HDF5
+- keep rollout / `env_runner.dataset_path` pointed at the raw HDF5
+- dataset `shape_meta` should include `embedding + lowdim`
+- policy `shape_meta` should remain raw-image-compatible for official encoder checkpoint loading and online rollout
