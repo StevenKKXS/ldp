@@ -1267,3 +1267,10 @@
 - no experiment-state conclusion changed as a result of recording this note
 - Session 29 model-selection reasoning note:
 - the `xhigh` portion of `/model gpt-5.5 xhigh` is explicitly recorded as a reasoning-effort selection, not as an experiment configuration change
+- Session 29 explicit record note:
+- `history_log.md` contains the Session 29 record
+- this literal Session 29 block includes:
+- the memory-gap explanation
+- the batch-size judgment
+- the paper-grounded multistage explanation
+- and the `/model gpt-5.5 xhigh` control-message note

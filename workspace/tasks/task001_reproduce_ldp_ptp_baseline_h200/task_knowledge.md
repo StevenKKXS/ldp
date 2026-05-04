@@ -726,3 +726,5 @@
 - this still does not change any reproduction facts or experimental decisions
 - Session 29 reasoning-setting note:
 - the `xhigh` part of the control message is treated as a thread-level reasoning setting only
+- Session 29 explicit-record note:
+- `history_log.md` explicitly contains the Session 29 record and this task knowledge entry is aligned with it
