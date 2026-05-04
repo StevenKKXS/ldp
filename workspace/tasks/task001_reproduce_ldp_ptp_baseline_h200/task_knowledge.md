@@ -728,3 +728,22 @@
 - the `xhigh` part of the control message is treated as a thread-level reasoning setting only
 - Session 29 explicit-record note:
 - `history_log.md` explicitly contains the Session 29 record and this task knowledge entry is aligned with it
+- Session 29 roadmap note:
+- the canonical roadmap from current state to paper-facing reproduction is:
+- first stabilize the active long-hist DP/PTP runs for:
+- `Tool-Hang`
+- `Long Square`
+- `Transport`
+- then backfill `short-hist DP` anchors
+- then complete the main table in the order:
+- `Square`
+- `Tool-Hang`
+- `Long Square`
+- `Transport`
+- `ALOHA / Cube`
+- `Push-T`
+- then shift effort from raw-image-only evidence toward the paper's multistage cached-embedding recipe
+- and finally combine headline rows with ablation rows into the final report
+- roadmap interpretation:
+- the current raw-image long-hist runs are necessary intermediate evidence
+- but they should not be mistaken for the final protocol-complete endpoint

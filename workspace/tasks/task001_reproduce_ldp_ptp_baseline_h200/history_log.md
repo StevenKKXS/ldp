@@ -1274,3 +1274,70 @@
 - the batch-size judgment
 - the paper-grounded multistage explanation
 - and the `/model gpt-5.5 xhigh` control-message note
+- Session 29 roadmap note:
+- the current reproduction plan from "now" to "paper-facing result" is staged as follows
+- Stage 0: preserve the current live work
+- keep running:
+- `Tool-Hang long-hist DP`
+- `Tool-Hang long-hist PTP`
+- `Long Square long-hist DP`
+- `Long Square long-hist PTP`
+- `Transport long-hist DP`
+- `Transport long-hist PTP`
+- because these are already consuming real budget and directly populate the main table's long-hist rows
+- Stage 1: get usable long-hist artifacts
+- for each active task column, wait for:
+- stable `logs.json.txt` progression
+- first meaningful validation signal
+- first saved checkpoint milestone
+- expected first completed columns from the active queue:
+- `Tool-Hang`
+- `Long Square`
+- `Transport`
+- Stage 2: restore the missing `short-hist DP` anchors
+- the main table is intentionally three-row:
+- `short-hist DP`
+- `long-hist DP`
+- `long-hist PTP`
+- so after the current long-hist pairs are stable, the next fill targets should be:
+- `Tool-Hang short-hist DP`
+- `Transport short-hist DP`
+- and any comparable short-history version needed to keep the chosen table columns interpretable
+- Stage 3: complete the main table in priority order
+- practical priority order:
+- `Square`
+- because it already has pilot values
+- `Tool-Hang`
+- because it is already deep into training
+- `Long Square`
+- because it is central to the paper's long-history claim
+- `Transport`
+- because it is already running and provides a second strong RoboMimic check
+- `ALOHA / Cube`
+- because the paper reports a strong gain there and the dataset is available
+- `Push-T`
+- as a breadth/supporting column rather than the first headline target
+- Stage 4: move from raw-image pilots to the actual paper recipe
+- raw-image long-hist runs are the current bridge, not the final endpoint
+- to become paper-facing, the work must explicitly include the multistage cached-embedding route:
+- validate or regenerate embedding caches
+- use the official short-context encoders already downloaded
+- train long-context policies on cached embeddings
+- compare raw-image versus cached-embedding on:
+- speed
+- stability
+- final performance
+- Stage 5: fill the ablation table in parallel with headline results
+- minimum ablation families:
+- `short-hist DP` vs `long-hist DP` vs `long-hist PTP`
+- raw-image vs cached embeddings
+- early checkpoint vs later checkpoint trend
+- optional resource ablation such as `Tool-Hang batch_size=32` if we decide to study memory efficiency separately from the official recipe
+- Stage 6: final report structure
+- the final reproduction report should separate:
+- exact paper target numbers
+- our reproduced main-table values
+- pilot versus converged status
+- protocol-aligned versus protocol-deviated runs
+- the biggest current gap between "we have useful evidence" and "we have a paper-facing reproduction" is still:
+- moving from raw-image pilot runs to the paper's multistage cached-embedding recipe
