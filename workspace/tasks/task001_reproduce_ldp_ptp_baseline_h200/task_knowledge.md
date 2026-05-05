@@ -1,6 +1,64 @@
 # Task Knowledge
 
-<!-- METADATA:SESSION=58 -->
+<!-- METADATA:SESSION=59 -->
+
+## Session 59 Knowledge
+- Current active Wave B host:
+- SSH `root@10.100.0.29 -p 36645`.
+- hostname `lg-cmc-b7r201-b04u06-h200-000040`.
+- hardware check showed 4 x NVIDIA H200, each `143771 MiB`.
+- `/mnt/3fs2` is mounted and writable under `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer`.
+- setup log for this host: `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/logs/session59_setup_gpu_machine_1777981498.log`.
+- setup status: `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/logs/session59_setup_gpu_machine_1777981498.status`.
+- Session 59 environment fix:
+- after setup, `pytorch3d.transforms` needed `pytorch3d.common.workaround`.
+- `_safe_det_3x3` was added to shared source `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/pytorch3d_src/common/workaround.py`.
+- same file was copied into `/root/venv/lib/python3.12/site-packages/pytorch3d/common/workaround.py`.
+- verified `pytorch3d.transforms` and `RotationTransformer` imports pass before Wave B launch.
+- Current active Wave B runs started in Session 59:
+- Transport DP/no-PTP seed42: `fig9_diffusion_subset_transport_dp_s42_1777981819`, GPU0, parent PID `27557`.
+- Transport PTP seed42: `fig9_diffusion_subset_transport_ptp_s42_1777981819`, GPU1, parent PID `27559`.
+- LongSquare DP/no-PTP seed42: `fig9_diffusion_subset_longsquare_dp_s42_1777981819`, GPU2, parent PID `27562`.
+- LongSquare PTP seed42: `fig9_diffusion_subset_longsquare_ptp_s42_1777981819`, GPU3, parent PID `27565`.
+- Current Wave B logs:
+- `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/logs/<run>.log`.
+- Current Wave B outputs:
+- `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/outputs/<run>`.
+- Current copied Wave B configs:
+- `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/my_configs/session59/transport/transformer_transport_emb.yaml`.
+- `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/my_configs/session59/longhist/transformer_longhist_emb.yaml`.
+- Session 59 Wave B launch settings:
+- `global_obs=16`.
+- `global_horizon=32`.
+- `global_action=8`.
+- `training.seed=42`.
+- `training.num_epochs=500`.
+- `dataloader.batch_size=64`.
+- `val_dataloader.batch_size=64`.
+- `training.gradient_accumulate_every=1`.
+- `policy.past_steps_reg=-1`.
+- DP/no-PTP sets `policy.past_action_pred=false`.
+- PTP sets `policy.past_action_pred=true`.
+- `policy.use_embed_if_present=true`.
+- dataset-side cached embedding enabled.
+- `task.dataset.use_cache=false`.
+- `logging.mode=offline`.
+- `training.resume=false`.
+- Training rollout remains `task.env_runner.n_test=40`.
+- Training rollout uses `task.env_runner.n_envs=4`.
+- Transport data/shape rule:
+- train dataset is `image_abs_emb_compact.hdf5` with embedding shape `274`.
+- rollout/env dataset is raw `image_abs.hdf5`.
+- add `+task.dataset.use_embed_if_present=true`.
+- add `+task.dataset.shape_meta.obs.embedding.shape=[274]`.
+- delete dataset image keys `robot0_eye_in_hand_image`, `robot1_eye_in_hand_image`, `shouldercamera0_image`, and `shouldercamera1_image`.
+- Transport uses `rollout_every=100`, `checkpoint_every=100`.
+- LongSquare data/shape rule:
+- `demos_emb.hdf5` is absent on shared storage.
+- `demos.hdf5` contains `obs/embedding` and is used for both training and rollout/env metadata.
+- delete dataset image keys `agentview_image` and `robot0_eye_in_hand_image`.
+- LongSquare uses `rollout_every=50`, `checkpoint_every=50`.
+- Initial Wave B health check at `2026-05-05 11:52 UTC` confirmed all four parent PIDs alive and all four logs in `Training epoch 0`.
 
 ## Session 58 Knowledge
 - Current active Wave A host:

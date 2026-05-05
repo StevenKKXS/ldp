@@ -1,6 +1,107 @@
 # History Log
 
-<!-- METADATA:SESSION=58 -->
+<!-- METADATA:SESSION=59 -->
+
+## Session 59
+- User provided an additional GPU allocation and asked to check whether it has 4 GPUs and basic access, configure the environment, and start Wave B if there are no issues.
+- New remote checked:
+- host: `10.100.0.29:36645`.
+- hostname: `lg-cmc-b7r201-b04u06-h200-000040`.
+- GPUs: 4 x NVIDIA H200, each `143771 MiB`.
+- initial GPU state before Wave B launch: all four GPUs had about `1 MiB` used and `0%` utilization.
+- root filesystem: `223T` size, `212T` available.
+- `/mnt/3fs2`: mounted as `hf3fs.stage`, `448T` size, `24T` available, `95%` used.
+- shared task root `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer` existed.
+- no active `run_train.py`, `train.py`, or `eval.py` jobs were found before launch.
+- Environment setup:
+- `/root/venv` was missing on the new container.
+- ran `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/setup_gpu_machine.sh`.
+- setup stamp `1777981498`.
+- setup PID `16960`.
+- setup log `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/logs/session59_setup_gpu_machine_1777981498.log`.
+- setup status `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/logs/session59_setup_gpu_machine_1777981498.status`, set to `DONE` after completion.
+- setup installed torch `2.5.1+cu124`, robosuite `1.4.1`, robomimic `0.3.0`, mujoco `3.8.0`, diffusers `0.30.0`, gym `0.25.2`, zarr `2.18.7`, and related dependencies.
+- setup import smoke reported CUDA available with `torch.cuda.device_count() == 4`.
+- Setup caveat fixed before launch:
+- setup initially reported `pytorch3d.transforms FAIL: No module named 'pytorch3d.common.workaround'`.
+- created `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/pytorch3d_src/common/workaround.py`.
+- copied the file into `/root/venv/lib/python3.12/site-packages/pytorch3d/common/workaround.py`.
+- implemented `_safe_det_3x3(tensor)` as `torch.linalg.det(tensor)`.
+- verified `import pytorch3d.transforms` succeeds.
+- verified `from diffusion_policy.model.common.rotation_transformer import RotationTransformer` succeeds under the launch `PYTHONPATH`.
+- Code state checked:
+- remote shared code path `/mnt/3fs2/data/tingwen.du/workspace/ldp`.
+- git commit `5113f46` on `main`.
+- existing remote dirty file remains `diffusion_policy/dataset/robomimic_replay_image_dataset.py`, matching the previously used runtime patch state.
+- Synced current reviewed configs to:
+- `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/my_configs/session59/transport/transformer_transport_emb.yaml`.
+- `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/my_configs/session59/longhist/transformer_longhist_emb.yaml`.
+- Verified copied configs have `global_obs=16`, `global_horizon=32`, `global_action=8`, `past_steps_reg=-1`, and `num_epochs=500`.
+- Verified Wave B cached data:
+- Transport train HDF5 `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/datasets/robomimic/datasets/transport/mh/image_abs_emb_compact.hdf5`, first demo `obs/embedding` shape `(714, 274)`.
+- Transport raw rollout HDF5 `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/datasets/robomimic/datasets/transport/mh/image_abs.hdf5`.
+- LongSquare `demos.hdf5` exists and contains first demo `obs/embedding` shape `(442, 137)`.
+- LongSquare `demos_emb.hdf5` was not present on shared storage, so Wave B uses `demos.hdf5` for both cached training and rollout/env metadata.
+- Launched Wave B at stamp `1777981819`:
+- Transport DP/no-PTP:
+- run `fig9_diffusion_subset_transport_dp_s42_1777981819`.
+- GPU0.
+- parent PID `27557`.
+- log `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/logs/fig9_diffusion_subset_transport_dp_s42_1777981819.log`.
+- output `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/outputs/fig9_diffusion_subset_transport_dp_s42_1777981819`.
+- Transport PTP:
+- run `fig9_diffusion_subset_transport_ptp_s42_1777981819`.
+- GPU1.
+- parent PID `27559`.
+- log `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/logs/fig9_diffusion_subset_transport_ptp_s42_1777981819.log`.
+- output `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/outputs/fig9_diffusion_subset_transport_ptp_s42_1777981819`.
+- LongSquare DP/no-PTP:
+- run `fig9_diffusion_subset_longsquare_dp_s42_1777981819`.
+- GPU2.
+- parent PID `27562`.
+- log `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/logs/fig9_diffusion_subset_longsquare_dp_s42_1777981819.log`.
+- output `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/outputs/fig9_diffusion_subset_longsquare_dp_s42_1777981819`.
+- LongSquare PTP:
+- run `fig9_diffusion_subset_longsquare_ptp_s42_1777981819`.
+- GPU3.
+- parent PID `27565`.
+- log `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/logs/fig9_diffusion_subset_longsquare_ptp_s42_1777981819.log`.
+- output `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/outputs/fig9_diffusion_subset_longsquare_ptp_s42_1777981819`.
+- Common Wave B launch overrides:
+- `global_obs=16`.
+- `global_horizon=32`.
+- `global_action=8`.
+- `training.seed=42`.
+- `training.num_epochs=500`.
+- `dataloader.batch_size=64`.
+- `val_dataloader.batch_size=64`.
+- `training.gradient_accumulate_every=1`.
+- `policy.use_embed_if_present=true`.
+- dataset-side cached embedding enabled.
+- `task.dataset.use_cache=false`.
+- `policy.past_steps_reg=-1`.
+- DP/no-PTP runs set `policy.past_action_pred=false`.
+- PTP runs set `policy.past_action_pred=true`.
+- `training.resume=false`.
+- `logging.mode=offline`.
+- `MUJOCO_GL=egl`.
+- `PYTHONPATH=/mnt/3fs2/data/tingwen.du/workspace/ldp:/mnt/3fs2/data/tingwen.du/intern_ldp_explorer:$PYTHONPATH`.
+- `task.env_runner.n_test=40`.
+- `task.env_runner.n_envs=4`, matching the Session 58 concurrency reduction used to reduce async rollout `EOFError` risk.
+- Transport-specific launch details:
+- uses `+task.dataset.use_embed_if_present=true`.
+- uses `+task.dataset.shape_meta.obs.embedding.shape=[274]`.
+- deletes dataset image keys `robot0_eye_in_hand_image`, `robot1_eye_in_hand_image`, `shouldercamera0_image`, and `shouldercamera1_image`.
+- uses `rollout_every=100`, `checkpoint_every=100`.
+- LongSquare-specific launch details:
+- train/env dataset path both use `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/datasets/longhistsquare100/demos.hdf5`.
+- deletes dataset image keys `agentview_image` and `robot0_eye_in_hand_image`.
+- uses `rollout_every=50`, `checkpoint_every=50`.
+- Initial Wave B health check at `2026-05-05 11:52 UTC`:
+- all four parent PIDs were alive.
+- GPU memory/utilization: GPU0 `5379 MiB` `71%`, GPU1 `5379 MiB` `67%`, GPU2 `2777 MiB` `43%`, GPU3 `2777 MiB` `41%`.
+- all four logs had entered `Training epoch 0`.
+- No final 100-episode evaluation was launched in this session.
 
 ## Session 58
 - User asked to continue and start the experiment, with information recorded so they can later ask for expected completion time.
