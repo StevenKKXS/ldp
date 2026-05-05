@@ -1,6 +1,32 @@
 # Task Knowledge
 
-<!-- METADATA:SESSION=53 -->
+<!-- METADATA:SESSION=54 -->
+
+## Session 54 Knowledge
+- Public source gap:
+- PTP paper / project page do not explicitly specify batch size or number of GPUs per training run.
+- Therefore epoch count alone is not enough to fully define the optimizer trajectory.
+- Source-supported config facts from GitHub/local configs:
+- train dataloader `batch_size=64`.
+- validation dataloader `batch_size=64`.
+- `gradient_accumulate_every=1`.
+- `training.device=cuda:0`.
+- Training implementation facts:
+- local training path is single-process Hydra `train.py`.
+- workspace moves model and optimizer to `torch.device(cfg.training.device)`.
+- no DDP / torchrun / DataParallel / DistributedSampler path was found.
+- Current reproduction convention:
+- one run = one process on one GPU.
+- effective training batch size = `64`.
+- gradient accumulation = `1`.
+- multiple GPUs may run multiple independent jobs, but should not be used as data parallel for a single run unless explicitly labeled as a protocol change.
+- When reporting formal results, include:
+- GPU model and count per run.
+- `batch_size`.
+- `gradient_accumulate_every`.
+- epoch count.
+- checkpoint/evaluation cadence.
+- exact Hydra overrides.
 
 ## Session 53 Knowledge
 - Paper B.3.1 training-length rule is now the active config rule for PTP transformer reproduction:

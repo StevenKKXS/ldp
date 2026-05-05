@@ -1,6 +1,34 @@
 # History Log
 
-<!-- METADATA:SESSION=53 -->
+<!-- METADATA:SESSION=54 -->
+
+## Session 54
+- User asked whether the sources checked for the PTP paper specify batch size and number of GPUs, noting that fixed epoch count alone is insufficient because different effective batch or multi-GPU setups change optimizer steps and reproducibility.
+- Checked public sources and local code/config.
+- Paper / project page finding:
+- B.3.1 and the project page describe the training recipe and epoch counts, but no explicit batch size or number of GPUs per run was found in the public paper/project text.
+- The paper does specify protocol-level items such as default 500 epochs, LH ALOHA 1500 epochs, frozen short-context encoder, cached embeddings, and evaluation over 100 episodes x 3 seeds, but not the hardware parallelism / effective batch.
+- Official GitHub / local config finding:
+- official and local transformer configs specify `dataloader.batch_size=64`.
+- validation dataloaders also specify `batch_size=64`.
+- training configs specify `gradient_accumulate_every=1`.
+- training configs specify `training.device=cuda:0`.
+- `transformer_history.sh` also launches `training.device=cuda:0`.
+- Training code finding:
+- `train.py` instantiates one Hydra workspace and calls `workspace.run()`.
+- `TrainDiffusionTransformerHybridWorkspace` sets `device = torch.device(cfg.training.device)` and moves model / EMA / optimizer to that one device.
+- No `torchrun`, `DistributedDataParallel`, `DataParallel`, `DistributedSampler`, `world_size`, or `local_rank` path was found in the training entry / workspace.
+- Practical interpretation:
+- The best source-supported reproduction assumption is single process, single GPU per run.
+- Effective per-step training batch is `64`.
+- Gradient accumulation is `1`, so optimizer updates happen every batch.
+- Running multiple jobs on multiple GPUs should be treated as parallel independent runs, not one multi-GPU training run.
+- If a future launch uses DDP or larger effective batch, the sample exposure per epoch may remain one dataset pass, but optimizer step count and gradient statistics change; it should be reported as a protocol deviation.
+- Reproduction rule recorded:
+- keep `batch_size=64`.
+- keep `gradient_accumulate_every=1`.
+- keep one GPU per run unless a new source or explicit experiment plan justifies a different effective batch.
+- report hardware as "single H200 process per run" for our launches, and report the exact config / overrides used.
 
 ## Session 53
 - User provided the paper B.3.1 implementation detail text and asked to set configs accordingly, with the interpretation that default should be `500` epochs and individual long-horizon ALOHA tasks should be `1500`.
