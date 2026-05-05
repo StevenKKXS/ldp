@@ -1,6 +1,32 @@
 # Task Knowledge
 
-<!-- METADATA:SESSION=45 -->
+<!-- METADATA:SESSION=46 -->
+
+## Session 46 Knowledge
+- Current valid GPU resource replaces all prior obsolete resources:
+- SSH endpoint: `root@10.100.0.29 -p 30103`.
+- hostname: `lg-cmc-b7r201-b04u06-h200-000040`.
+- OS: Ubuntu `24.04.1 LTS`.
+- GPU inventory:
+- `4x NVIDIA H200`.
+- driver `570.124.06`; CUDA version from `nvidia-smi` header `12.8`.
+- per-GPU memory: `143771 MiB`.
+- current state at probe: all GPUs idle, about `1 MiB` used each, `0%` utilization, no GPU compute processes.
+- CPU / RAM:
+- `192` logical CPUs.
+- `Intel Xeon Platinum 8558`, 2 sockets x 48 cores x 2 threads.
+- about `2.0 TiB` RAM and no swap.
+- Storage:
+- root overlay / local RAID reports about `223T` total with about `212T` free.
+- `/mnt/3fs` mounted, about `950T` total and `97T` free.
+- `/mnt/3fs2` mounted, about `448T` total and `29T` free.
+- Shared LDP paths are present:
+- `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer`.
+- `/mnt/3fs2/data/tingwen.du/workspace/ldp`.
+- shared artifact sizes sampled: datasets `266G`, outputs `72G`, obs_encoders `5.7G`, repo mirror `32M`.
+- Runtime caveat:
+- `/root/venv` is missing and `nvcc` is not on PATH.
+- Before launching experiments on this node, run the existing setup workflow, then re-check Python deps, PyTorch CUDA visibility, and the PyTorch3D transform import patch.
 
 ## Session 45 Knowledge
 - GPU resource invalidation rule:

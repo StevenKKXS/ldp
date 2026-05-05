@@ -8,5 +8,5 @@
 | Status | Working |
 | Current Task | task001_reproduce_ldp_ptp_baseline_h200 |
 | PR | https://github.com/StevenKKXS/ldp/pull/new/intern_ldp_explorer/task001_reproduce_ldp_ptp_baseline_h200 |
-| Session | 45 |
-| Recent Progress | User stated GPU resources will be reassigned and all current/previous GPU resources are invalid as of `2026-05-05T08:36:30Z`. Marked old endpoints `10.100.2.47:15744`, `10.100.2.47:28447`, and `10.100.2.47:37893` as obsolete; do not use prior live-process assumptions until a new SSH endpoint is provided and verified. |
+| Session | 46 |
+| Recent Progress | Inspected newly assigned GPU node `10.100.0.29:30103`: reachable as root, host `lg-cmc-b7r201-b04u06-h200-000040`, Ubuntu 24.04.1, 4x NVIDIA H200 with driver `570.124.06` / CUDA `12.8`, each `143771 MiB`, all idle with no GPU processes. Node has 192 CPUs, about 2.0 TiB RAM, local root/overlay about `223T` with `212T` free, `/mnt/3fs2` mounted with `448T` total / `29T` free, shared LDP paths present; `/root/venv` and `nvcc` are missing, so setup is needed before running experiments. |

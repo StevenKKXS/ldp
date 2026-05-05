@@ -1,6 +1,38 @@
 # History Log
 
-<!-- METADATA:SESSION=45 -->
+<!-- METADATA:SESSION=46 -->
+
+## Session 46
+- User provided a newly assigned GPU resource: `10.100.0.29`, SSH port `30103`.
+- Connected successfully with `ssh -p 30103 root@10.100.0.29`.
+- Probe timestamp: `2026-05-05T08:48:20Z` to `2026-05-05T08:48:47Z`.
+- Host / OS:
+- hostname `lg-cmc-b7r201-b04u06-h200-000040`.
+- Ubuntu `24.04.1 LTS`, kernel `5.15.0-126-generic`.
+- GPU inventory:
+- `4` GPUs visible via `nvidia-smi -L`.
+- all are `NVIDIA H200`.
+- driver `570.124.06`; `nvidia-smi` reports CUDA version `12.8`.
+- each GPU reports `143771 MiB` total memory.
+- current GPU state: all four GPUs have about `1 MiB` used, `0%` utilization, and no running GPU compute processes.
+- CPU / memory:
+- `192` logical CPUs.
+- CPU model `Intel Xeon Platinum 8558`, 2 sockets, 48 cores per socket, 2 threads per core.
+- system RAM about `2.0 TiB`, with about `1.9 TiB` available during probe; no swap.
+- Storage / mounts:
+- root overlay reports `223T` total, `402G` used, `212T` available.
+- local block layout includes `nvme0n1p2` about `3.5T` and `md0` RAID0 about `223.5T`.
+- `/mnt/3fs` mounted as `hf3fs.stage`, `950T` total, `97T` available.
+- `/mnt/3fs2` mounted as `hf3fs.stage`, `448T` total, `29T` available.
+- Shared task paths:
+- `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer` exists.
+- `/mnt/3fs2/data/tingwen.du/workspace/ldp` exists.
+- shared sizes sampled: datasets `266G`, outputs `72G`, obs_encoders `5.7G`, shared repo mirror `32M`.
+- Runtime readiness:
+- `/root/venv` is missing.
+- `nvcc` is not installed / not on PATH.
+- system Python is `/usr/bin/python`, version `3.12.3`.
+- Conclusion: the new node has 4 idle H200 GPUs and the required shared storage mounted, but needs the existing GPU setup workflow before launching LDP jobs.
 
 ## Session 45
 - User stated they are reallocating GPU resources and that the current GPU resources are all invalid.
