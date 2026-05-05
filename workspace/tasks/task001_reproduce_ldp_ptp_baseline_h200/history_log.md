@@ -1,6 +1,80 @@
 # History Log
 
-<!-- METADATA:SESSION=54 -->
+<!-- METADATA:SESSION=55 -->
+
+## Session 55
+- User asked for a checklist of all parameters planned for execution so they can review whether the plan is reasonable.
+- No training was launched.
+- Rechecked current config values for the 4 runnable main `_emb` configs:
+- `experiment_configs/square/transformer_square_emb.yaml`.
+- `experiment_configs/tool/transformer_tool_hang_emb.yaml`.
+- `experiment_configs/transport/transformer_transport_emb.yaml`.
+- `experiment_configs/longhist/transformer_longhist_emb.yaml`.
+- Planned first executable set:
+- Square DP and PTP.
+- Tool-Hang DP and PTP.
+- Transport DP and PTP.
+- LongSquare DP and PTP.
+- ALOHA remains excluded from this first batch because the current environment is still blocked on `dm_control` / MuJoCo compatibility.
+- Push-T remains excluded from this first batch because Push-T runtime/cache support has not passed smoke rollout.
+- Common planned training parameters:
+- one process per run on one H200 GPU.
+- no DDP / torchrun / DataParallel.
+- `dataloader.batch_size=64`.
+- `val_dataloader.batch_size=64`.
+- `training.gradient_accumulate_every=1`.
+- effective train batch per optimizer step is `64`.
+- `global_obs=16`.
+- `global_horizon=32`.
+- `global_action=1`.
+- `training.num_epochs=500`.
+- `optimizer.learning_rate=0.0001`.
+- `optimizer.betas=[0.9,0.95]`.
+- `training.lr_scheduler=cosine`.
+- `training.lr_warmup_steps=1000`.
+- `training.use_ema=true`.
+- `training.val_every=1`.
+- `training.sample_every=5`.
+- `policy.num_inference_steps=100`.
+- `obs_encoder_freeze=true`.
+- `policy.use_embed_if_present=true`.
+- dataset-side `use_embed_if_present=true`; Transport requires `+task.dataset.use_embed_if_present=true`.
+- `task.dataset.use_cache=false`.
+- seed `42` for the first pass.
+- Proposed DP/PTP switch:
+- DP / no-PTP: `policy.past_action_pred=false`.
+- PTP: `policy.past_action_pred=true`.
+- Planned first-pass seed policy:
+- run seed `42` first for all 8 runnable cells.
+- after first-pass sanity, add seeds `43` and `44` with identical parameters if the user wants the paper-style 3-seed aggregate.
+- Planned rollout / checkpoint cadence:
+- Square: `checkpoint_every=100`, `rollout_every=100`, `task.env_runner.n_test=40`, `max_steps=500`.
+- Tool-Hang: `checkpoint_every=50`, `rollout_every=50`, `task.env_runner.n_test=40`, `max_steps=700`.
+- Transport: `checkpoint_every=100`, `rollout_every=100`, `task.env_runner.n_test=40`, `max_steps=700`.
+- LongSquare: `checkpoint_every=50`, `rollout_every=50`, `task.env_runner.n_test=40`, `max_steps=500`.
+- Review item:
+- paper reports final evaluation over 100 episodes x 3 seeds.
+- current planned training rollout keeps config default `n_test=40` for checkpoint selection to limit training-time eval overhead.
+- final reporting should run or record a separate 100-episode evaluation per selected checkpoint/seed.
+- Planned dataset / encoder paths:
+- Square train HDF5: `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/datasets/robomimic/datasets/square/mh/image_abs_emb.hdf5`.
+- Square raw rollout HDF5: `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/datasets/robomimic/datasets/square/mh/image_abs.hdf5`.
+- Square encoder: `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/obs_encoders/obs_encoders/square_encoder.ckpt`.
+- Tool-Hang train HDF5: `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/datasets/robomimic/datasets/tool_hang/ph/image_abs_emb_compact.hdf5`.
+- Tool-Hang raw rollout HDF5: `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/datasets/robomimic/datasets/tool_hang/ph/image_abs.hdf5`.
+- Tool-Hang encoder: `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/obs_encoders/obs_encoders/tool_hang_encoder.ckpt`.
+- Transport train HDF5: `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/datasets/robomimic/datasets/transport/mh/image_abs_emb_compact.hdf5`.
+- Transport raw rollout HDF5: `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/datasets/robomimic/datasets/transport/mh/image_abs.hdf5`.
+- Transport encoder: `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/obs_encoders/obs_encoders/transport_encoder.ckpt`.
+- LongSquare dataset: `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/datasets/longhistsquare100/demos.hdf5`.
+- LongSquare encoder: `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/obs_encoders/obs_encoders/longhist_encoder.ckpt`.
+- Planned cached-training optimization:
+- policy shape metadata remains raw-image-compatible so the official encoder checkpoint loads.
+- dataset shape metadata should use embedding plus lowdim and omit dataset image keys to avoid replay image preload where possible.
+- rollout still uses raw HDF5 observations and the patched image normalizer path.
+- Output convention proposed:
+- `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/outputs/fig9_<task>_cached_<dp|ptp>_s<seed>_<stamp>`.
+- User review requested before launching.
 
 ## Session 54
 - User asked whether the sources checked for the PTP paper specify batch size and number of GPUs, noting that fixed epoch count alone is insufficient because different effective batch or multi-GPU setups change optimizer steps and reproducibility.

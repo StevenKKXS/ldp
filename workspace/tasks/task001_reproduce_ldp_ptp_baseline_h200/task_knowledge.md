@@ -1,6 +1,40 @@
 # Task Knowledge
 
-<!-- METADATA:SESSION=54 -->
+<!-- METADATA:SESSION=55 -->
+
+## Session 55 Knowledge
+- Pre-launch parameter checklist for first executable main batch:
+- tasks: Square, Tool-Hang, Transport, LongSquare.
+- methods per task: DP / no-PTP with `policy.past_action_pred=false`; PTP with `policy.past_action_pred=true`.
+- first pass seed: `42`.
+- paper aggregate seeds to add after first-pass sanity: `43`, `44`.
+- common training:
+- one process, one H200 GPU per run.
+- no DDP / no data-parallel batch enlargement.
+- `batch_size=64`.
+- `gradient_accumulate_every=1`.
+- effective optimizer-step batch size `64`.
+- `global_obs=16`.
+- `global_horizon=32`.
+- `global_action=1`.
+- `num_epochs=500`.
+- `learning_rate=1e-4`.
+- `betas=[0.9,0.95]`.
+- `lr_scheduler=cosine`.
+- `lr_warmup_steps=1000`.
+- `use_ema=true`.
+- `val_every=1`.
+- `sample_every=5`.
+- `policy.num_inference_steps=100`.
+- `obs_encoder_freeze=true`.
+- `policy.use_embed_if_present=true`.
+- `task.dataset.use_embed_if_present=true` or Hydra add-key equivalent for Transport.
+- Training rollout defaults:
+- Square and Transport: checkpoint/rollout every `100` epochs.
+- Tool-Hang and LongSquare: checkpoint/rollout every `50` epochs.
+- current training-time rollout uses `n_test=40`.
+- final paper-style reporting should use `100` episodes x `3` seeds.
+- Launch only after user confirms the parameter checklist.
 
 ## Session 54 Knowledge
 - Public source gap:
