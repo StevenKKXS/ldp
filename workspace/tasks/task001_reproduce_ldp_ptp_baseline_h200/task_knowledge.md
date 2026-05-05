@@ -1,6 +1,23 @@
 # Task Knowledge
 
-<!-- METADATA:SESSION=42 -->
+<!-- METADATA:SESSION=43 -->
+
+## Session 43 Knowledge
+- Effective code locations:
+- Git repo / branch: `/work-agents/intern_ldp_explorer/ldp/` on `intern_ldp_explorer/task001_reproduce_ldp_ptp_baseline_h200`.
+- Shared H200 runtime helper directory: `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/`.
+- Local output records: `/work-agents/intern_ldp_explorer/outputs/`.
+- Current effective Git-tracked code:
+- `diffusion_policy/dataset/robomimic_replay_image_dataset.py`: cached-embedding compatibility patch that stores `dataset_path` and adds image normalizers from HDF5 metadata so rollout-time raw image keys remain normalized even when replay-buffer training omits image tensors.
+- `workspace/tasks/task001_reproduce_ldp_ptp_baseline_h200/session17_download_sim_datasets.sh`: public simulation dataset downloader / extractor / progress monitor.
+- `workspace/tasks/task001_reproduce_ldp_ptp_baseline_h200/session25_monitor_and_schedule.sh`: dataset-readiness watchdog and early Tool-Hang launch scheduler.
+- `workspace/tasks/task001_reproduce_ldp_ptp_baseline_h200/session25_execution_queue.md`: staged execution queue specification used by the scheduler.
+- Current effective shared-runtime helper code:
+- `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/run_train.py` and `run_eval.py`: wrappers that import `_patches.py` and then execute repo `train.py` / `eval.py`.
+- `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/_patches.py`: Gym / AsyncVectorEnv compatibility monkey patches used by remote runs.
+- `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/setup_gpu_machine.sh`: GPU node bring-up script.
+- `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/session31_square_embed_rewrite.py`, `session33_embedding_queue.py`, `session33_compact_embedding_queue.py`, and `session33_validate_embeddings.py`: embedding rewrite / generation / validation helpers.
+- `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/session38_oldnode_monitor.sh` and `session38_followup_check.py`: read-only monitor and output/checkpoint summary helpers.
 
 ## Session 42 Knowledge
 - No new experiment result or technical finding was added. This session only confirmed what current-task context is accessible from the workspace and carried the task metadata forward to Session 42.

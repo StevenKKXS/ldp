@@ -8,5 +8,5 @@
 | Status | Working |
 | Current Task | task001_reproduce_ldp_ptp_baseline_h200 |
 | PR | https://github.com/StevenKKXS/ldp/pull/new/intern_ldp_explorer/task001_reproduce_ldp_ptp_baseline_h200 |
-| Session | 42 |
-| Recent Progress | Answered current-task context query and confirmed accessible workspace/task information. Latest recorded experiment state remains the Session 41 Fig. 9 categorized stage summary: Push-T is data/planning gated; Square has weak checkpoint/rollout artifacts; Tool-Hang and Transport failed first rollout after epoch 49 before checkpoint save; Long Square has checkpoints with score 0.0; ALOHA is blocked by MuJoCo/dm-control compatibility. |
+| Session | 43 |
+| Recent Progress | Answered code-location and effective-code inventory query. Confirmed Git-tracked effective code is on branch `intern_ldp_explorer/task001_reproduce_ldp_ptp_baseline_h200`: one core cached-embedding compatibility patch, task-local dataset/scheduling helper scripts, and task documentation; shared H200 runtime helpers live under `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/`. |

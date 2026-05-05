@@ -1,6 +1,20 @@
 # History Log
 
-<!-- METADATA:SESSION=42 -->
+<!-- METADATA:SESSION=43 -->
+
+## Session 43
+- User asked where my code is saved and which code is currently effective.
+- Checked current branch, recent commits, branch diff against `origin/main`, task-local files, local output/debug directories, and shared 3fs runtime helper directory.
+- Current branch is `intern_ldp_explorer/task001_reproduce_ldp_ptp_baseline_h200`; pushed head before this session was `ef4b4a3`.
+- Git-tracked effective code / artifacts on the task branch:
+- core repo patch: `diffusion_policy/dataset/robomimic_replay_image_dataset.py`, adding cached-embedding normalizer compatibility for image observation keys without loading image tensors into the replay buffer.
+- task helper script: `workspace/tasks/task001_reproduce_ldp_ptp_baseline_h200/session17_download_sim_datasets.sh`.
+- task helper script: `workspace/tasks/task001_reproduce_ldp_ptp_baseline_h200/session25_monitor_and_schedule.sh`.
+- task execution plan: `workspace/tasks/task001_reproduce_ldp_ptp_baseline_h200/session25_execution_queue.md`.
+- task reports / planning docs: `fig9_multistage_repro_plan.md`, `simulation_repro_tasklist_and_table.md`, `README.md`, `history_log.md`, `task_knowledge.md`, plus status file.
+- Shared H200 runtime helper code is stored under `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/`, including `run_train.py`, `run_eval.py`, `_patches.py`, `setup_gpu_machine.sh`, embedding rewrite / validation scripts, and Session 38 monitor/follow-up scripts.
+- Local `/work-agents/intern_ldp_explorer/debug` currently has no files; local `/work-agents/intern_ldp_explorer/outputs` contains Session 17 dataset-download artifacts and Session 25 monitor logs.
+- Noted existing uncommitted file `workspace/interns/intern_ldp_explorer/knowledge.md`; it was not touched.
 
 ## Session 42
 - User asked what current-task work information is accessible in this environment.
