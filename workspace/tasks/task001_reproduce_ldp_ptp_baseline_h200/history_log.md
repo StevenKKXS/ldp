@@ -1,6 +1,25 @@
 # History Log
 
-<!-- METADATA:SESSION=40 -->
+<!-- METADATA:SESSION=41 -->
+
+## Session 41
+- User requested reorganizing each task's stage status by the paper's Fig. 9 source categories.
+- Adopted the user's category taxonomy:
+- Push-T benchmark: `pusht`; source is the Push-T task from Chi et al. / Diffusion Policy.
+- RoboMimic benchmark: `square`, `tool-hang`, `transport`; paper states these three use RoboMimic multi-human demonstration datasets.
+- Author-introduced long-horizon simulation tasks: `lh-aloha`, `lh-square`; paper states these are newly introduced long-horizon simulation tasks.
+- Kept the three-stage status model:
+- Stage 1: data / official encoder / embedding cache ready.
+- Stage 2: training reaches checkpoint-producing state.
+- Stage 3: rollout evaluation produces table-fillable score.
+- Reorganized current task status:
+- `pusht`: remains before Stage 1 for the current Fig. 9 execution; no active aligned data/checkpoint/run is available in the latest outputs.
+- `square`: Stage 2 complete for cached DP/PTP seed42 and seed43; Stage 3 has only weak pilot rollout scores (`0.05` best DP seed42, `0.025` for the other Square lines).
+- `tool-hang`: Stage 1 complete; training reached epoch `49`, but first rollout failed with `AsyncVectorEnv EOFError` before checkpoint save, so Stage 2 has no usable checkpoint and Stage 3 has no score.
+- `transport`: same state as `tool-hang`: Stage 1 complete, epoch `49` reached, first rollout failed before checkpoint save, no table-fillable score.
+- `lh-aloha`: Stage 1 data / embedding present, but Stage 2 blocked by `dm-control==1.0.14` versus current `mujoco==3.8.0` compatibility issue (`MjModel.bvh_geomid` missing).
+- `lh-square`: Stage 2 complete with late checkpoints / latest checkpoint state around epoch `2249-2261`, but Stage 3 remains unsuccessful with parsed rollout score `0.0`.
+- Recorded this classification in `task_knowledge.md` for future reports and planning.
 
 ## Session 40
 - User asked for a concise stage-by-stage reproduction overview across all tasks.

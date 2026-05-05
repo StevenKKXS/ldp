@@ -1,6 +1,35 @@
 # Task Knowledge
 
-<!-- METADATA:SESSION=40 -->
+<!-- METADATA:SESSION=41 -->
+
+## Session 41 Knowledge
+- Fig. 9 task source categories should be reported as:
+- Push-T benchmark:
+- `pusht`
+- source / note: Push-T task from Chi et al. / Diffusion Policy.
+- RoboMimic benchmark:
+- `square`
+- `tool-hang`
+- `transport`
+- source / note: the paper states these three are from RoboMimic and use multi-human demonstration datasets.
+- Author-introduced long-horizon simulation tasks:
+- `lh-aloha`
+- `lh-square`
+- source / note: the paper states it introduces these two new long-horizon simulation tasks.
+- Use the following three-stage progress model inside each category:
+- Stage 1: data, official encoder, and cached embeddings are ready.
+- Stage 2: training has reached checkpoint-producing state.
+- Stage 3: rollout evaluation has produced a table-fillable success score.
+- Current categorized stage map:
+- Push-T benchmark:
+- `pusht`: before Stage 1 for the current execution; data / aligned run not active in latest Fig. 9 outputs.
+- RoboMimic benchmark:
+- `square`: Stage 2 complete; Stage 3 only weak pilot scores (`0.05` best DP seed42, `0.025` for other Square lines).
+- `tool-hang`: Stage 1 complete; Stage 2 has no usable checkpoint because first Stage 3 rollout failed at epoch `49` before checkpoint save.
+- `transport`: Stage 1 complete; Stage 2 has no usable checkpoint because first Stage 3 rollout failed at epoch `49` before checkpoint save.
+- Author-introduced long-horizon simulation tasks:
+- `lh-aloha`: Stage 1 present; Stage 2 blocked by MuJoCo/dm-control compatibility.
+- `lh-square`: Stage 2 complete; Stage 3 failed so far with rollout score `0.0`.
 
 ## Session 40 Knowledge
 - For user-facing progress reports, use this three-stage model:
