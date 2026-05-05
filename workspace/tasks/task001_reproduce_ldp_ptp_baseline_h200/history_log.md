@@ -1,6 +1,56 @@
 # History Log
 
-<!-- METADATA:SESSION=52 -->
+<!-- METADATA:SESSION=53 -->
+
+## Session 53
+- User provided the paper B.3.1 implementation detail text and asked to set configs accordingly, with the interpretation that default should be `500` epochs and individual long-horizon ALOHA tasks should be `1500`.
+- Agreed with that interpretation for paper-aligned reproduction:
+- default transformer policies: `training.num_epochs=500`.
+- long-horizon ALOHA transformer policies: `training.num_epochs=1500`.
+- Applied the setting to PTP / transformer experiment configs:
+- Square transformer configs changed from `3500` to `500`:
+- `experiment_configs/square/transformer_square.yaml`.
+- `experiment_configs/square/transformer_square_emb.yaml`.
+- `experiment_configs/square/transformer_square_past.yaml`.
+- `experiment_configs/square/transformer_square_past_emb.yaml`.
+- `experiment_configs/square/transformer_square_reg.yaml`.
+- `experiment_configs/square/transformer_square_reg_emb.yaml`.
+- Tool-Hang transformer configs changed from `3500` to `500`:
+- `experiment_configs/tool/transformer_tool_hang.yaml`.
+- `experiment_configs/tool/transformer_tool_hang_emb.yaml`.
+- `experiment_configs/tool/transformer_tool_hang_reg.yaml`.
+- `experiment_configs/tool/transformer_tool_hang_reg_emb.yaml`.
+- Transport transformer configs changed from `3500` to `500`:
+- `experiment_configs/transport/transformer_transport.yaml`.
+- `experiment_configs/transport/transformer_transport_emb.yaml`.
+- `experiment_configs/transport/transformer_transport_reg.yaml`.
+- `experiment_configs/transport/transformer_transport_reg_emb.yaml`.
+- LongSquare transformer configs changed from `3500` to `500`:
+- `experiment_configs/longhist/transformer_longhist.yaml`.
+- `experiment_configs/longhist/transformer_longhist_emb.yaml`.
+- `experiment_configs/longhist/transformer_longhist_past.yaml`.
+- `experiment_configs/longhist/transformer_longhist_past_emb.yaml`.
+- `experiment_configs/longhist/transformer_longhist_reg.yaml`.
+- `experiment_configs/longhist/transformer_longhist_reg_emb.yaml`.
+- Push-T transformer configs changed from `701` to `500`:
+- `experiment_configs/transformer_pusht.yaml`.
+- `experiment_configs/transformer_pusht_emb.yaml`.
+- ALOHA transformer configs changed from `3500` to `1500`:
+- `experiment_configs/aloha/transformer_aloha.yaml`.
+- `experiment_configs/aloha/transformer_aloha_emb.yaml`.
+- `experiment_configs/aloha/transformer_aloha_reg_emb.yaml`.
+- Explicitly left non-PTP-transformer legacy configs unchanged:
+- `experiment_configs/square/unet_hybrid_square.yaml`.
+- `experiment_configs/square/unet_hybrid_square_emb.yaml`.
+- `experiment_configs/square/transformer_square_bc_rnn.yaml`.
+- Validation:
+- `rg -n "num_epochs:" experiment_configs -g '*.yaml'` shows non-ALOHA PTP transformer configs at `500`, ALOHA transformer configs at `1500`, and only the non-PTP-transformer legacy configs still at `3050`.
+- `git diff --check` passed.
+- Current main runnable `_emb` set now has:
+- Square: `global_obs=16`, `num_epochs=500`.
+- Tool-Hang: `global_obs=16`, `num_epochs=500`.
+- Transport: `global_obs=16`, `num_epochs=500`.
+- LongSquare: `global_obs=16`, `num_epochs=500`.
 
 ## Session 52
 - User asked whether the PTP paper, GitHub, or other open public sources explicitly mark the training recipe, including how long training takes to reach paper-level returns, and requested a report.

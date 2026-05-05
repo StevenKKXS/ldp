@@ -1,6 +1,24 @@
 # Task Knowledge
 
-<!-- METADATA:SESSION=52 -->
+<!-- METADATA:SESSION=53 -->
+
+## Session 53 Knowledge
+- Paper B.3.1 training-length rule is now the active config rule for PTP transformer reproduction:
+- default transformer policies train for `500` epochs.
+- long-horizon ALOHA transformer policies train for `1500` epochs.
+- This supersedes the previous conservative `3500`-epoch cap inherited from public GitHub configs for the main paper-aligned reproduction path.
+- Current main runnable `_emb` settings:
+- Square: `global_obs=16`, `num_epochs=500`.
+- Tool-Hang: `global_obs=16`, `num_epochs=500`.
+- Transport: `global_obs=16`, `num_epochs=500`.
+- LongSquare: `global_obs=16`, `num_epochs=500`.
+- ALOHA settings for when the dependency block is solved:
+- `experiment_configs/aloha/transformer_aloha*.yaml` now use `num_epochs=1500`.
+- Push-T settings for when the dependency/cache block is solved:
+- `experiment_configs/transformer_pusht*.yaml` now use `num_epochs=500`.
+- Scope note:
+- PTP / transformer experiment configs were updated.
+- UNet hybrid and BC-RNN legacy configs were not changed because they are not the active PTP transformer mainline.
 
 ## Session 52 Knowledge
 - Public PTP recipe evidence:
