@@ -1,6 +1,20 @@
 # Task Knowledge
 
-<!-- METADATA:SESSION=46 -->
+<!-- METADATA:SESSION=47 -->
+
+## Session 47 Knowledge
+- `setup_gpu_machine.sh` is mainly a RoboMimic/robosuite environment bootstrap for Python 3.12 H200 nodes.
+- It configures internal pip mirror, apt GL/EGL/OSMesa/GLFW/Python-dev libraries, local `/root/venv`, fixed Python package set, robomimic/gym compatibility patches, pytorch3d transforms stub, and robosuite/robomimic macros.
+- Explicit package stack includes Torch `2.5.1`, torchvision `0.20.1`, MuJoCo `3.8.0`, robosuite `1.4.1`, robomimic `0.3.0`, diffusers `0.30.0`, zarr `2.18.7`, gym `0.25.2`, Hydra/OmegaConf, OpenCV, h5py, image/media codecs, wandb, tensorboard, accelerate/transformers.
+- Coverage by Fig. 9 category:
+- RoboMimic benchmark (`square`, `tool-hang`, `transport`): covered in principle by current setup plus existing wrappers / cached-embedding config overrides.
+- Author-added `lh-square`: covered in principle because it uses the same `RobomimicReplayImageDataset` and `robomimic_longhist_image_runner` family.
+- Author-added `lh-aloha`: not covered. It imports `dm_control`; setup does not install `dm-control`, and earlier `dm-control==1.0.14` with setup's `mujoco==3.8.0` failed with missing `MjModel.bvh_geomid`.
+- Push-T: not covered as a proven runnable target. Its env imports `pygame`, `pymunk`, `shapely`, `skimage`, and matplotlib-related modules; these are in repo requirements but not explicit in setup.
+- Practical environment recommendation:
+- Run / validate the current setup for RoboMimic benchmark and Long Square first.
+- Keep ALOHA in a separate compatibility environment or explicitly choose a safe `dm-control` / MuJoCo pair before launch.
+- Before Push-T training/rollout, add or verify `pygame`, `pymunk`, `shapely`, `scikit-image`, and `matplotlib`, and use headless pygame settings if needed.
 
 ## Session 46 Knowledge
 - Current valid GPU resource replaces all prior obsolete resources:

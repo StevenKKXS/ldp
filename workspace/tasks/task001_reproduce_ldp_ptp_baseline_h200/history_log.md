@@ -1,6 +1,29 @@
 # History Log
 
-<!-- METADATA:SESSION=46 -->
+<!-- METADATA:SESSION=47 -->
+
+## Session 47
+- User asked what `setup_gpu_machine.sh` configures and whether it satisfies the Fig. 9 categories: RoboMimic, author-added tasks, and Push-T.
+- User explicitly requested inspection results only and no modifications.
+- Performed read-only inspection only; did not run setup, install packages, edit scripts, or launch jobs.
+- `setup_gpu_machine.sh` configures:
+- `/usr/pip.conf` to use the internal pip mirror `http://10.100.197.13/simple/`.
+- apt packages: `python3.12-venv`, `python3.12-dev`, `build-essential`, GL/EGL/GLES/GLFW/OSMesa libraries.
+- `/root/venv` Python 3.12 virtualenv on local disk.
+- pip packages including Torch `2.5.1`, torchvision `0.20.1`, MuJoCo `3.8.0`, robosuite `1.4.1`, robomimic `0.3.0`, diffusers `0.30.0`, zarr `2.18.7`, gym `0.25.2`, Hydra/OmegaConf, numpy/scipy/pandas, OpenCV, h5py, wandb, media codecs, tensorboard, transformers/accelerate, and related utilities.
+- site-package patches for `robomimic.env_robosuite` optional `mujoco_py`, lazy `CropRandomizer` compatibility in `robomimic.models.base_nets`, and Python 3.12 gym vector-space deepcopy compatibility.
+- a lightweight `pytorch3d.transforms` stub copied from shared `pytorch3d_src`.
+- robosuite / robomimic `setup_macros.py` to suppress startup warnings that can break env runner subprocess probing.
+- Fig. 9 environment assessment:
+- RoboMimic benchmark tasks (`square`, `tool-hang`, `transport`) are the primary target of the setup and should be trainable with the existing run wrappers, cached-embedding overrides, and known patches.
+- Author-added `lh-square` uses `RobomimicReplayImageDataset` and `robomimic_longhist_image_runner`, so it is on the same RoboMimic/robosuite stack and should be covered by this setup.
+- Author-added `lh-aloha` uses `AlohaImageRunner` and imports `dm_control`; current setup does not install `dm-control`. Prior manual install of repo-declared `dm-control==1.0.14` with current `mujoco==3.8.0` failed with `MjModel.bvh_geomid` missing, so ALOHA is not covered by this setup without a separate MuJoCo/dm-control compatibility plan.
+- Push-T uses `PushTImageDataset` / `PushTImageRunner` and imports `pygame`, `pymunk`, `shapely`, `skimage`, and matplotlib-related modules. These packages are in the repo requirements, but are not explicit in `setup_gpu_machine.sh`, so Push-T should be treated as not covered until import / rollout smoke tests pass or these dependencies are added.
+- Recommendation from inspection only:
+- Use current setup first for RoboMimic benchmark and Long Square.
+- Do not mix an experimental ALOHA MuJoCo downgrade into the same venv while RoboMimic jobs depend on MuJoCo 3.8 / robosuite 1.4.1.
+- Prefer a separate ALOHA venv or a validated compatibility matrix for `dm-control` and MuJoCo before scheduling ALOHA rollout.
+- Add or verify Push-T dependencies before treating Push-T as runnable.
 
 ## Session 46
 - User provided a newly assigned GPU resource: `10.100.0.29`, SSH port `30103`.
