@@ -1,6 +1,15 @@
 # Task Knowledge
 
-<!-- METADATA:SESSION=56 -->
+<!-- METADATA:SESSION=57 -->
+
+## Session 57 Knowledge
+- Current executable `_emb` configs do not inherently require multiple HDF5 paths per task:
+- Square dataset/env runner path: `data/robomimic/datasets/square/mh/image_abs.hdf5`.
+- Tool-Hang dataset/env runner path: `data/robomimic/datasets/tool_hang/ph/image_abs.hdf5`.
+- Transport dataset/env runner path: `data/robomimic/datasets/transport/mh/image_abs.hdf5`.
+- LongSquare dataset/env runner path: `data/longhistsquare100/demos_emb.hdf5`.
+- LongSquare appears to use one HDF5 because its longhist dataset is packaged as a self-contained long-history / embedding-bearing file.
+- Robomimic tasks may need separate raw and embedding-bearing HDF5 files only if preprocessing keeps cached embeddings in a different copy; if embeddings are written into the same `image_abs.hdf5`, one file is also sufficient.
 
 ## Session 56 Knowledge
 - User-approved corrections to pre-launch plan:

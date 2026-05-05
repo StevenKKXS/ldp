@@ -8,5 +8,5 @@
 | Status | Working |
 | Current Task | task001_reproduce_ldp_ptp_baseline_h200 |
 | PR | https://github.com/StevenKKXS/ldp/pull/new/intern_ldp_explorer/task001_reproduce_ldp_ptp_baseline_h200 |
-| Session | 56 |
-| Recent Progress | Applied user review corrections to the pre-launch plan. Updated the four executable main `_emb` configs so `global_action=8` for Square, Tool-Hang, Transport, and LongSquare. Confirmed each already has `past_steps_reg=-1`; launch commands will still explicitly set `policy.past_steps_reg=-1` for both DP and PTP. The experiment will be labeled `Fig9 diffusion-only subset` rather than full Fig. 9. Training rollout stays `n_test=40` for checkpoint selection; final paper-style eval must use `n_test=100`, `n_samples=1`, seeds `[42,43,44]`, and avoid the `eval.py` perturb path that forces `n_test=150`. |
+| Session | 57 |
+| Recent Progress | Answered why LongSquare appears to use one HDF5 while other tasks may be discussed as needing multiple files. Rechecked the executable `_emb` configs: each task currently points dataset and env runner at a single configured HDF5 path. LongSquare is special mostly because the longhist release path is already an embedding-capable dataset (`demos_emb.hdf5` / previously validated embedded `demos.hdf5`), while Robomimic tasks may require raw and embedding-bearing variants depending on preprocessing. No training or code changes were made in this session. |

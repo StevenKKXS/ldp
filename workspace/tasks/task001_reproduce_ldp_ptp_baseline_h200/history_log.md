@@ -1,6 +1,20 @@
 # History Log
 
-<!-- METADATA:SESSION=56 -->
+<!-- METADATA:SESSION=57 -->
+
+## Session 57
+- User asked briefly why LongSquare appears to need only one HDF5 while other tasks need multiple HDF5 files.
+- Rechecked the current executable `_emb` configs for Square, Tool-Hang, Transport, and LongSquare.
+- Current config fact:
+- each config uses one configured HDF5 path for both training dataset and env runner metadata.
+- LongSquare points at `data/longhistsquare100/demos_emb.hdf5` in the released config path.
+- Square points at `data/robomimic/datasets/square/mh/image_abs.hdf5`.
+- Tool-Hang points at `data/robomimic/datasets/tool_hang/ph/image_abs.hdf5`.
+- Transport points at `data/robomimic/datasets/transport/mh/image_abs.hdf5`.
+- Interpretation:
+- LongSquare looks like a single-file case because the longhist dataset can be self-contained with demos plus cached embeddings in one HDF5.
+- Robomimic tasks are sometimes described with multiple HDF5 variants because raw demonstrations and embedding-augmented/cache files may be separate depending on preprocessing.
+- No code or training launch was performed.
 
 ## Session 56
 - User reviewed the pre-launch checklist and judged the overall plan reasonable for a `Fig. 9 diffusion-only subset` over 4 simulation tasks, with required corrections.
