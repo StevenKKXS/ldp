@@ -1,6 +1,52 @@
 # Task Knowledge
 
-<!-- METADATA:SESSION=57 -->
+<!-- METADATA:SESSION=58 -->
+
+## Session 58 Knowledge
+- Current active Wave A host:
+- SSH `root@10.100.0.29 -p 30103`.
+- hostname `lg-cmc-b7r201-b04u06-h200-000040`.
+- hardware check showed 4 x NVIDIA H200, each `143771 MiB`.
+- root filesystem has ample space; `/mnt/3fs2` has about `27T` available and is `95%` used.
+- Current active Wave A runs started in Session 58:
+- Square DP/no-PTP seed42: `fig9_diffusion_subset_square_dp_s42_1777979501`, GPU0, parent PID `299641`.
+- Square PTP seed42: `fig9_diffusion_subset_square_ptp_s42_1777979501`, GPU1, parent PID `299643`.
+- Tool-Hang DP/no-PTP seed42: `fig9_diffusion_subset_toolhang_dp_s42_1777979501`, GPU2, parent PID `299645`.
+- Tool-Hang PTP seed42: `fig9_diffusion_subset_toolhang_ptp_s42_1777979501`, GPU3, parent PID `299647`.
+- Current run logs:
+- `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/logs/<run>.log`.
+- Current run outputs:
+- `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/outputs/<run>`.
+- Current copied configs:
+- `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/my_configs/session58/square/transformer_square_emb.yaml`.
+- `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/my_configs/session58/tool/transformer_tool_hang_emb.yaml`.
+- Session 58 launch settings:
+- `global_obs=16`.
+- `global_horizon=32`.
+- `global_action=8`.
+- `training.seed=42`.
+- `training.num_epochs=500`.
+- `dataloader.batch_size=64`.
+- `val_dataloader.batch_size=64`.
+- `training.gradient_accumulate_every=1`.
+- `policy.past_steps_reg=-1`.
+- DP/no-PTP sets `policy.past_action_pred=false`.
+- PTP sets `policy.past_action_pred=true`.
+- `policy.use_embed_if_present=true`.
+- `task.dataset.use_embed_if_present=true`.
+- `task.dataset.use_cache=false`.
+- `logging.mode=offline`.
+- `training.resume=false`.
+- Training rollout remains `task.env_runner.n_test=40`.
+- Session 58 intentionally sets training rollout `task.env_runner.n_envs=4` to reduce the prior async-vector rollout `EOFError` risk from older high-concurrency Tool-Hang / Transport attempts.
+- Cached dataset path rule for active Wave A:
+- Square training dataset is `image_abs_emb.hdf5`; Square rollout/env dataset is raw `image_abs.hdf5`.
+- Tool-Hang training dataset is `image_abs_emb_compact.hdf5`; Tool-Hang rollout/env dataset is raw `image_abs.hdf5`.
+- Cached-training shape metadata rule for active Wave A:
+- Square removes dataset image keys `agentview_image` and `robot0_eye_in_hand_image`.
+- Tool-Hang removes dataset image keys `robot0_eye_in_hand_image` and `sideview_image`.
+- Initial health check at `2026-05-05 11:13 UTC` confirmed all four parent PIDs alive, all four logs in training epoch progress, and GPU utilization around `40%`.
+- Wave B was not launched in Session 58. Remaining first-pass seed42 cells are Transport DP/PTP and LongSquare DP/PTP.
 
 ## Session 57 Knowledge
 - Current executable `_emb` configs do not inherently require multiple HDF5 paths per task:

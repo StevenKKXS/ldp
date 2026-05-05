@@ -1,6 +1,90 @@
 # History Log
 
-<!-- METADATA:SESSION=57 -->
+<!-- METADATA:SESSION=58 -->
+
+## Session 58
+- User asked to continue and start the experiment, with information recorded so they can later ask for expected completion time.
+- Remote host checked:
+- host: `10.100.0.29:30103`.
+- hostname: `lg-cmc-b7r201-b04u06-h200-000040`.
+- GPUs: 4 x NVIDIA H200, each reporting `143771 MiB`.
+- initial GPU state before launch: all four GPUs were idle with about `1 MiB` memory used.
+- root filesystem: `223T` size, `212T` available.
+- `/mnt/3fs2`: `448T` size, `27T` available, `95%` used.
+- runtime verified:
+- `/root/venv/bin/python`.
+- torch `2.5.1+cu124`.
+- `torch.cuda.device_count() == 4`.
+- no active `run_train.py`, `train.py`, or `eval.py` process was found before launch.
+- Synced current reviewed configs to the remote write area:
+- `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/my_configs/session58/square/transformer_square_emb.yaml`.
+- `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/my_configs/session58/tool/transformer_tool_hang_emb.yaml`.
+- Verified copied configs have `global_obs=16`, `global_horizon=32`, `global_action=8`, `past_steps_reg=-1`, and `num_epochs=500`.
+- Verified cached embedding files:
+- Square train HDF5 `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/datasets/robomimic/datasets/square/mh/image_abs_emb.hdf5`, first demo `obs/embedding` shape `(127, 137)`.
+- Tool-Hang train HDF5 `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/datasets/robomimic/datasets/tool_hang/ph/image_abs_emb_compact.hdf5`, first demo `obs/embedding` shape `(681, 137)`.
+- Launched Wave A at stamp `1777979501`:
+- Square DP/no-PTP:
+- run `fig9_diffusion_subset_square_dp_s42_1777979501`.
+- GPU0.
+- parent PID `299641`.
+- log `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/logs/fig9_diffusion_subset_square_dp_s42_1777979501.log`.
+- output `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/outputs/fig9_diffusion_subset_square_dp_s42_1777979501`.
+- Square PTP:
+- run `fig9_diffusion_subset_square_ptp_s42_1777979501`.
+- GPU1.
+- parent PID `299643`.
+- log `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/logs/fig9_diffusion_subset_square_ptp_s42_1777979501.log`.
+- output `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/outputs/fig9_diffusion_subset_square_ptp_s42_1777979501`.
+- Tool-Hang DP/no-PTP:
+- run `fig9_diffusion_subset_toolhang_dp_s42_1777979501`.
+- GPU2.
+- parent PID `299645`.
+- log `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/logs/fig9_diffusion_subset_toolhang_dp_s42_1777979501.log`.
+- output `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/outputs/fig9_diffusion_subset_toolhang_dp_s42_1777979501`.
+- Tool-Hang PTP:
+- run `fig9_diffusion_subset_toolhang_ptp_s42_1777979501`.
+- GPU3.
+- parent PID `299647`.
+- log `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/logs/fig9_diffusion_subset_toolhang_ptp_s42_1777979501.log`.
+- output `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/outputs/fig9_diffusion_subset_toolhang_ptp_s42_1777979501`.
+- Common launch overrides:
+- `global_obs=16`.
+- `global_horizon=32`.
+- `global_action=8`.
+- `training.seed=42`.
+- `training.num_epochs=500`.
+- `dataloader.batch_size=64`.
+- `val_dataloader.batch_size=64`.
+- `training.gradient_accumulate_every=1`.
+- `policy.use_embed_if_present=true`.
+- `task.dataset.use_embed_if_present=true`.
+- `task.dataset.use_cache=false`.
+- `policy.past_steps_reg=-1`.
+- DP/no-PTP runs set `policy.past_action_pred=false`.
+- PTP runs set `policy.past_action_pred=true`.
+- `training.resume=false`.
+- `logging.mode=offline`.
+- `MUJOCO_GL=egl`.
+- `PYTHONPATH=/mnt/3fs2/data/tingwen.du/workspace/ldp:/mnt/3fs2/data/tingwen.du/intern_ldp_explorer:$PYTHONPATH`.
+- `hydra.run.dir` is the output directory listed for each run.
+- Dataset / rollout path split:
+- Square train HDF5: `image_abs_emb.hdf5`; rollout/env HDF5: `image_abs.hdf5`.
+- Tool-Hang train HDF5: `image_abs_emb_compact.hdf5`; rollout/env HDF5: `image_abs.hdf5`.
+- Dataset shape metadata image keys were deleted for cached training:
+- Square deletes `task.dataset.shape_meta.obs.agentview_image` and `task.dataset.shape_meta.obs.robot0_eye_in_hand_image`.
+- Tool-Hang deletes `task.dataset.shape_meta.obs.robot0_eye_in_hand_image` and `task.dataset.shape_meta.obs.sideview_image`.
+- Training rollout setting:
+- kept `task.env_runner.n_test=40`.
+- set `task.env_runner.n_envs=4` instead of the released higher default to reduce the prior multi-process async rollout `EOFError` risk seen in older Tool-Hang / Transport full-run attempts.
+- Square uses `rollout_every=100`, `checkpoint_every=100`.
+- Tool-Hang uses `rollout_every=50`, `checkpoint_every=50`.
+- Initial health check at `2026-05-05 11:13 UTC`:
+- all four parent PIDs were alive.
+- GPUs used about `2781 MiB`, `2781 MiB`, `3017 MiB`, `3017 MiB`.
+- GPU utilization was about `41%`, `42%`, `40%`, `42%`.
+- all four logs had entered training; Square runs were in epoch 2 and Tool-Hang runs were in epoch 1/2 during the check.
+- No Wave B launch was started in this session. Wave B remains Transport DP/PTP and LongSquare DP/PTP after Wave A is stable enough to schedule.
 
 ## Session 57
 - User asked briefly why LongSquare appears to need only one HDF5 while other tasks need multiple HDF5 files.
