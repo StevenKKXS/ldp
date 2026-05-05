@@ -1,6 +1,164 @@
 # History Log
 
-<!-- METADATA:SESSION=59 -->
+<!-- METADATA:SESSION=61 -->
+
+## Session 61
+- User again asked for a current run-status statistic; a fresh snapshot was taken instead of reusing the previous parse.
+- Snapshot time: `2026-05-05 13:09 UTC`.
+- Local repo state before recording:
+- branch `intern_ldp_explorer/task001_reproduce_ldp_ptp_baseline_h200`.
+- pre-existing uncommitted local file remains `workspace/interns/intern_ldp_explorer/knowledge.md`; it was not staged.
+- Shared storage on both checked containers:
+- `/mnt/3fs2` reports `448T` size, `425T` used, `23T` available, `95%` used.
+- Wave A host `10.100.0.29:30103`:
+- GPU0 `2841 MiB`, `40%`.
+- GPU1 `2841 MiB`, `41%`.
+- GPU2 `3647 MiB`, `34%`.
+- GPU3 `3647 MiB`, `42%`.
+- Wave B host `10.100.0.29:36645`:
+- GPU0 `5401 MiB`, `72%`.
+- GPU1 `5401 MiB`, `79%`.
+- GPU2 `2837 MiB`, `35%`.
+- GPU3 `2839 MiB`, `34%`.
+- Log scan result:
+- all 8 parent PIDs are alive.
+- no active run log matched `Error executing job`, `Traceback`, `EOFError`, `RuntimeError`, or `CUDA out of memory`.
+- Wave A run table:
+- Square DP/no-PTP:
+- run `fig9_diffusion_subset_square_dp_s42_1777979501`.
+- PID `299641`, GPU0, alive.
+- latest parsed progress `Training epoch 213`, `2%`, step `30/1272`, latest parsed loss `0.00393`.
+- latest validation parsed at epoch `212`.
+- scored checkpoints: `epoch=0099-test_mean_score=0.000.ckpt`, `epoch=0199-test_mean_score=0.000.ckpt`.
+- best parsed checkpoint score `0.000`.
+- Square PTP:
+- run `fig9_diffusion_subset_square_ptp_s42_1777979501`.
+- PID `299643`, GPU1, alive.
+- latest parsed progress `Training epoch 219`, `79%`, step `999/1272`, latest parsed loss `0.00939`.
+- latest validation parsed at epoch `218`.
+- scored checkpoints: `epoch=0099-test_mean_score=0.475.ckpt`, `epoch=0199-test_mean_score=0.400.ckpt`.
+- best parsed checkpoint score `0.475`.
+- Tool-Hang DP/no-PTP:
+- run `fig9_diffusion_subset_toolhang_dp_s42_1777979501`.
+- PID `299645`, GPU2, alive.
+- latest parsed progress `Training epoch 149`, `99%`, step `1499/1516`, latest parsed loss `0.0159`.
+- latest validation parsed at epoch `148`.
+- scored checkpoints: `epoch=0049-test_mean_score=0.000.ckpt`, `epoch=0099-test_mean_score=0.000.ckpt`.
+- best parsed checkpoint score `0.000`.
+- Tool-Hang PTP:
+- run `fig9_diffusion_subset_toolhang_ptp_s42_1777979501`.
+- PID `299647`, GPU3, alive.
+- latest parsed progress `Training epoch 155`, `28%`, step `429/1516`, latest parsed loss `0.0158`.
+- latest validation parsed at epoch `154`.
+- scored checkpoints: `epoch=0049-test_mean_score=0.000.ckpt`, `epoch=0099-test_mean_score=0.000.ckpt`, `epoch=0149-test_mean_score=0.000.ckpt`.
+- best parsed checkpoint score `0.000`.
+- Wave B run table:
+- Transport DP/no-PTP:
+- run `fig9_diffusion_subset_transport_dp_s42_1777981819`.
+- PID `27557`, GPU0, alive.
+- latest parsed progress `Training epoch 64`, `86%`, step `2480/2887`, latest parsed loss `0.0161`.
+- latest validation parsed at epoch `63`.
+- no checkpoint yet; first checkpoint expected at epoch `99` because `checkpoint_every=100`.
+- Transport PTP:
+- run `fig9_diffusion_subset_transport_ptp_s42_1777981819`.
+- PID `27559`, GPU1, alive.
+- latest parsed progress `Training epoch 67`, `62%`, step `1795/2887`, latest parsed loss `0.0256`.
+- latest validation parsed at epoch `66`.
+- no checkpoint yet; first checkpoint expected at epoch `99` because `checkpoint_every=100`.
+- LongSquare DP/no-PTP:
+- run `fig9_diffusion_subset_longsquare_dp_s42_1777981819`.
+- PID `27562`, GPU2, alive.
+- latest parsed progress `Training epoch 199`, `99%`, step `692/702`, latest parsed loss `0.00358`.
+- latest validation parsed at epoch `198`.
+- scored checkpoints: `epoch=0049-test_mean_score=0.000.ckpt`, `epoch=0099-test_mean_score=0.000.ckpt`, `epoch=0149-test_mean_score=0.000.ckpt`.
+- best parsed checkpoint score `0.000`.
+- LongSquare PTP:
+- run `fig9_diffusion_subset_longsquare_ptp_s42_1777981819`.
+- PID `27565`, GPU3, alive.
+- latest parsed progress `Training epoch 199`, `98%`, step `686/702`, latest parsed loss `0.00446`.
+- latest validation parsed at epoch `198`.
+- scored checkpoints: `epoch=0049-test_mean_score=0.000.ckpt`, `epoch=0099-test_mean_score=0.000.ckpt`, `epoch=0149-test_mean_score=0.000.ckpt`.
+- best parsed checkpoint score `0.000`.
+- Interpretation:
+- all 8 first-pass seed42 jobs are running normally.
+- Square PTP remains the only run with a nonzero training-time checkpoint score so far.
+- checkpoint scores are training-time `n_test=40` scores and are not final paper-style results.
+
+## Session 60
+- User asked for a current run-status statistic.
+- Snapshot time: `2026-05-05 12:16 UTC`.
+- Local repo state before recording:
+- branch `intern_ldp_explorer/task001_reproduce_ldp_ptp_baseline_h200`.
+- only pre-existing uncommitted local file remains `workspace/interns/intern_ldp_explorer/knowledge.md`; it was not staged.
+- Shared storage on both checked containers:
+- `/mnt/3fs2` reports `448T` size, `424T` used, `24T` available, `95%` used.
+- Wave A host `10.100.0.29:30103`:
+- GPU0 `2841 MiB`, `38%`.
+- GPU1 `2841 MiB`, `40%`.
+- GPU2 `3647 MiB`, `39%`.
+- GPU3 `3647 MiB`, `38%`.
+- Wave B host `10.100.0.29:36645`:
+- GPU0 `5401 MiB`, `47%`.
+- GPU1 `5401 MiB`, `77%`.
+- GPU2 `2837 MiB`, `41%`.
+- GPU3 `2839 MiB`, `0%` at the instant sampled; parent PID remained alive and log showed training progress.
+- Log scan result:
+- all 8 parent PIDs are alive.
+- no current run log matched `Error executing job`, `Traceback`, `EOFError`, `RuntimeError`, or `CUDA out of memory`.
+- Wave A run table:
+- Square DP/no-PTP:
+- run `fig9_diffusion_subset_square_dp_s42_1777979501`.
+- PID `299641`, GPU0, alive.
+- latest parsed progress `Training epoch 120`, `57%`, step `725/1272`.
+- latest validation parsed at epoch `119`.
+- checkpoints: `epoch=0099-test_mean_score=0.000.ckpt`, `latest.ckpt`.
+- Square PTP:
+- run `fig9_diffusion_subset_square_ptp_s42_1777979501`.
+- PID `299643`, GPU1, alive.
+- latest parsed progress `Training epoch 124`, `28%`, step `350/1272`.
+- latest validation parsed at epoch `123`.
+- checkpoints: `epoch=0099-test_mean_score=0.475.ckpt`, `latest.ckpt`.
+- Tool-Hang DP/no-PTP:
+- run `fig9_diffusion_subset_toolhang_dp_s42_1777979501`.
+- PID `299645`, GPU2, alive.
+- latest parsed progress `Training epoch 89`, `65%`, step `982/1516`.
+- latest validation parsed at epoch `88`.
+- checkpoints: `epoch=0049-test_mean_score=0.000.ckpt`, `latest.ckpt`.
+- Tool-Hang PTP:
+- run `fig9_diffusion_subset_toolhang_ptp_s42_1777979501`.
+- PID `299647`, GPU3, alive.
+- latest parsed progress `Training epoch 95`, `32%`, step `480/1516`.
+- latest validation parsed at epoch `94`.
+- checkpoints: `epoch=0049-test_mean_score=0.000.ckpt`, `latest.ckpt`.
+- Wave B run table:
+- Transport DP/no-PTP:
+- run `fig9_diffusion_subset_transport_dp_s42_1777981819`.
+- PID `27557`, GPU0, alive.
+- latest parsed progress `Training epoch 20`, `61%`, step `1748/2887`.
+- latest validation parsed at epoch `19`.
+- no checkpoint yet; first checkpoint expected at epoch `99` because `checkpoint_every=100`.
+- Transport PTP:
+- run `fig9_diffusion_subset_transport_ptp_s42_1777981819`.
+- PID `27559`, GPU1, alive.
+- latest parsed progress `Training epoch 21`, `49%`, step `1415/2887`.
+- latest validation parsed at epoch `20`.
+- no checkpoint yet; first checkpoint expected at epoch `99` because `checkpoint_every=100`.
+- LongSquare DP/no-PTP:
+- run `fig9_diffusion_subset_longsquare_dp_s42_1777981819`.
+- PID `27562`, GPU2, alive.
+- latest parsed progress `Training epoch 68`, `30%`, step `210/702`.
+- latest validation parsed at epoch `67`.
+- checkpoints: `epoch=0049-test_mean_score=0.000.ckpt`, `latest.ckpt`.
+- LongSquare PTP:
+- run `fig9_diffusion_subset_longsquare_ptp_s42_1777981819`.
+- PID `27565`, GPU3, alive.
+- latest parsed progress `Training epoch 70`, `51%`, step `359/702`.
+- latest validation parsed at epoch `69`.
+- checkpoints: `epoch=0049-test_mean_score=0.000.ckpt`, `latest.ckpt`.
+- Interpretation:
+- all 8 first-pass seed42 jobs are running.
+- first training-time checkpoint score is promising only for Square PTP so far (`0.475` at epoch `99`); other completed first checkpoints are `0.000`.
+- these are training-time `n_test=40` rollout/checkpoint scores, not final paper-style `n_test=100`, `n_samples=1`, seeds `[42,43,44]` results.
 
 ## Session 59
 - User provided an additional GPU allocation and asked to check whether it has 4 GPUs and basic access, configure the environment, and start Wave B if there are no issues.

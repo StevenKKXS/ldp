@@ -1,6 +1,44 @@
 # Task Knowledge
 
-<!-- METADATA:SESSION=59 -->
+<!-- METADATA:SESSION=61 -->
+
+## Session 61 Knowledge
+- Latest monitoring snapshot time: `2026-05-05 13:09 UTC`.
+- All 8 active seed42 runs were alive at the snapshot.
+- Log scan found no `Error executing job`, `Traceback`, `EOFError`, `RuntimeError`, or `CUDA out of memory` in the active run logs.
+- Wave A latest parsed progress:
+- Square DP/no-PTP `fig9_diffusion_subset_square_dp_s42_1777979501`: epoch `213`, `2%`, step `30/1272`, loss `0.00393`; best checkpoint score `0.000`.
+- Square PTP `fig9_diffusion_subset_square_ptp_s42_1777979501`: epoch `219`, `79%`, step `999/1272`, loss `0.00939`; best checkpoint score `0.475`.
+- Tool-Hang DP/no-PTP `fig9_diffusion_subset_toolhang_dp_s42_1777979501`: epoch `149`, `99%`, step `1499/1516`, loss `0.0159`; best checkpoint score `0.000`.
+- Tool-Hang PTP `fig9_diffusion_subset_toolhang_ptp_s42_1777979501`: epoch `155`, `28%`, step `429/1516`, loss `0.0158`; best checkpoint score `0.000`.
+- Wave B latest parsed progress:
+- Transport DP/no-PTP `fig9_diffusion_subset_transport_dp_s42_1777981819`: epoch `64`, `86%`, step `2480/2887`, loss `0.0161`; no checkpoint yet.
+- Transport PTP `fig9_diffusion_subset_transport_ptp_s42_1777981819`: epoch `67`, `62%`, step `1795/2887`, loss `0.0256`; no checkpoint yet.
+- LongSquare DP/no-PTP `fig9_diffusion_subset_longsquare_dp_s42_1777981819`: epoch `199`, `99%`, step `692/702`, loss `0.00358`; best checkpoint score `0.000`.
+- LongSquare PTP `fig9_diffusion_subset_longsquare_ptp_s42_1777981819`: epoch `199`, `98%`, step `686/702`, loss `0.00446`; best checkpoint score `0.000`.
+- Current checkpoint-score caution:
+- checkpoint filenames reflect training-time rollout with `n_test=40`.
+- do not report these as final paper-style results.
+- final reporting still requires selected checkpoints evaluated with `n_test=100`, `n_samples=1`, and seeds `[42,43,44]`.
+
+## Session 60 Knowledge
+- Latest monitoring snapshot time: `2026-05-05 12:16 UTC`.
+- All 8 active seed42 runs were alive at the snapshot.
+- Log scan found no `Error executing job`, `Traceback`, `EOFError`, `RuntimeError`, or `CUDA out of memory` in the active run logs.
+- Wave A latest parsed progress:
+- Square DP/no-PTP `fig9_diffusion_subset_square_dp_s42_1777979501`: epoch `120`, `57%`, step `725/1272`; checkpoint `epoch=0099-test_mean_score=0.000.ckpt`.
+- Square PTP `fig9_diffusion_subset_square_ptp_s42_1777979501`: epoch `124`, `28%`, step `350/1272`; checkpoint `epoch=0099-test_mean_score=0.475.ckpt`.
+- Tool-Hang DP/no-PTP `fig9_diffusion_subset_toolhang_dp_s42_1777979501`: epoch `89`, `65%`, step `982/1516`; checkpoint `epoch=0049-test_mean_score=0.000.ckpt`.
+- Tool-Hang PTP `fig9_diffusion_subset_toolhang_ptp_s42_1777979501`: epoch `95`, `32%`, step `480/1516`; checkpoint `epoch=0049-test_mean_score=0.000.ckpt`.
+- Wave B latest parsed progress:
+- Transport DP/no-PTP `fig9_diffusion_subset_transport_dp_s42_1777981819`: epoch `20`, `61%`, step `1748/2887`; no checkpoint yet.
+- Transport PTP `fig9_diffusion_subset_transport_ptp_s42_1777981819`: epoch `21`, `49%`, step `1415/2887`; no checkpoint yet.
+- LongSquare DP/no-PTP `fig9_diffusion_subset_longsquare_dp_s42_1777981819`: epoch `68`, `30%`, step `210/702`; checkpoint `epoch=0049-test_mean_score=0.000.ckpt`.
+- LongSquare PTP `fig9_diffusion_subset_longsquare_ptp_s42_1777981819`: epoch `70`, `51%`, step `359/702`; checkpoint `epoch=0049-test_mean_score=0.000.ckpt`.
+- Current checkpoint-score caution:
+- checkpoint filenames reflect training-time rollout with `n_test=40`.
+- do not report these as final paper-style results.
+- final reporting still requires selected checkpoints evaluated with `n_test=100`, `n_samples=1`, and seeds `[42,43,44]`.
 
 ## Session 59 Knowledge
 - Current active Wave B host:
