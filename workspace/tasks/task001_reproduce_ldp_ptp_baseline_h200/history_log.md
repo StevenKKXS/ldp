@@ -1,6 +1,44 @@
 # History Log
 
-<!-- METADATA:SESSION=50 -->
+<!-- METADATA:SESSION=51 -->
+
+## Session 51
+- User requested:
+- make the main experiment `global_obs` unified to `16`.
+- explain checkpoint save behavior, save interval, and save paths.
+- Changed main `_emb` experiment configs:
+- `experiment_configs/square/transformer_square_emb.yaml`: `global_obs` changed from `2` to `16`.
+- `experiment_configs/transport/transformer_transport_emb.yaml`: `global_obs` changed from `2` to `16`.
+- No change was needed for:
+- `experiment_configs/tool/transformer_tool_hang_emb.yaml`, already `global_obs: 16`.
+- `experiment_configs/longhist/transformer_longhist_emb.yaml`, already `global_obs: 16`.
+- Verification command confirmed all four main configs now have `global_obs: 16`.
+- Checkpoint behavior inspected from `diffusion_policy/workspace/base_workspace.py`, `diffusion_policy/workspace/train_diffusion_transformer_hybrid_workspace.py`, and `diffusion_policy/common/checkpoint_util.py`.
+- Save trigger:
+- checkpointing runs when `(self.epoch + 1) % cfg.training.checkpoint_every == 0`.
+- rollout runs earlier in the same epoch when `(self.epoch + 1) % cfg.training.rollout_every == 0`.
+- validation runs when `self.epoch % cfg.training.val_every == 0`.
+- sample/train-batch action diagnostics run when `self.epoch % cfg.training.sample_every == 0`.
+- Current save intervals:
+- Square: `checkpoint_every=100`, `rollout_every=100`.
+- Transport: `checkpoint_every=100`, `rollout_every=100`.
+- Tool-Hang: `checkpoint_every=50`, `rollout_every=50`.
+- LongSquare: `checkpoint_every=50`, `rollout_every=50`.
+- These checkpoint intervals are aligned with rollout intervals, so checkpoint epochs should include `test/mean_score`, sanitized to `test_mean_score`, for top-k checkpoint naming.
+- Save paths:
+- `BaseWorkspace.output_dir` is Hydra runtime output dir unless the workspace is instantiated with an explicit `output_dir`.
+- Our remote launches set `hydra.run.dir=/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/outputs/<run_name>`.
+- Therefore checkpoints save under `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/outputs/<run_name>/checkpoints/`.
+- `save_last_ckpt=true` writes `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/outputs/<run_name>/checkpoints/latest.ckpt` at each checkpoint interval.
+- `save_last_snapshot=false` in these configs, so no snapshot pickle is expected.
+- Top-k checkpoint behavior:
+- `checkpoint.topk.monitor_key=test_mean_score`.
+- `checkpoint.topk.mode=max`.
+- format is `epoch={epoch:04d}-test_mean_score={test_mean_score:.3f}.ckpt`.
+- Square and Transport keep `k=50`.
+- Tool-Hang and LongSquare keep `k=10`.
+- Resume behavior:
+- because `training.resume=true`, a run in the same Hydra output directory resumes from `<output_dir>/checkpoints/latest.ckpt` if that file exists.
 
 ## Session 50
 - User asked for a detailed explanation of the current training settings / recipe and explicitly requested no code modification.

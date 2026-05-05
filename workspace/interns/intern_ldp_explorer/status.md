@@ -8,5 +8,5 @@
 | Status | Working |
 | Current Task | task001_reproduce_ldp_ptp_baseline_h200 |
 | PR | https://github.com/StevenKKXS/ldp/pull/new/intern_ldp_explorer/task001_reproduce_ldp_ptp_baseline_h200 |
-| Session | 50 |
-| Recent Progress | Inspected current training recipe without modifying code. Confirmed node `10.100.0.29:30103` has no active `run_train.py` / `train.py` / `eval.py` processes and all 4 H200s are idle. Current valid recipe is the Figure 9-style cached-embedding path for the 4 smoke-validated tasks: Square, Tool-Hang, Transport, and LongSquare. Core setup: `/root/venv`, `MUJOCO_GL=egl`, wrapper `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/run_train.py`, frozen official observation encoders, `_emb` configs, `num_epochs=3500`, `batch_size=64`, cosine LR with `lr=1e-4`, EMA enabled, online rollout/checkpoint cadence from task config, and DP/PTP controlled by `policy.past_action_pred=false/true`. |
+| Session | 51 |
+| Recent Progress | Unified main experiment `_emb` configs to `global_obs=16` by changing Square and Transport from `2` to `16`; Tool-Hang and LongSquare were already `16`. Verified all four main configs now report `global_obs: 16`. Checkpoint behavior remains config-driven: Square/Transport save and rollout every `100` epochs; Tool-Hang/LongSquare save and rollout every `50` epochs. Checkpoints are written under each Hydra output directory's `checkpoints/` folder as `latest.ckpt` plus top-k `epoch=....ckpt` files keyed by `test_mean_score`. |

@@ -1,6 +1,27 @@
 # Task Knowledge
 
-<!-- METADATA:SESSION=50 -->
+<!-- METADATA:SESSION=51 -->
+
+## Session 51 Knowledge
+- Main experiment `_emb` configs now use `global_obs=16` for all four currently runnable tasks:
+- Square: `experiment_configs/square/transformer_square_emb.yaml`.
+- Tool-Hang: `experiment_configs/tool/transformer_tool_hang_emb.yaml`.
+- Transport: `experiment_configs/transport/transformer_transport_emb.yaml`.
+- LongSquare: `experiment_configs/longhist/transformer_longhist_emb.yaml`.
+- This makes the main DP/PTP comparison a long-history comparison across the current runnable set.
+- Checkpoint save rule:
+- checkpoints are created only at epoch numbers satisfying `(epoch + 1) % training.checkpoint_every == 0`.
+- `latest.ckpt` is overwritten at each checkpoint interval when `checkpoint.save_last_ckpt=true`.
+- top-k checkpoints are named with `epoch={epoch:04d}-test_mean_score={test_mean_score:.3f}.ckpt`.
+- top-k uses `mode=max` and `monitor_key=test_mean_score`.
+- checkpoint directory is `<Hydra output_dir>/checkpoints/`.
+- In our remote launches, set `hydra.run.dir=/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/outputs/<run_name>`, so checkpoints are under `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/outputs/<run_name>/checkpoints/`.
+- Save intervals for current main configs:
+- Square: every `100` epochs, aligned with rollout every `100` epochs; top-k `k=50`.
+- Transport: every `100` epochs, aligned with rollout every `100` epochs; top-k `k=50`.
+- Tool-Hang: every `50` epochs, aligned with rollout every `50` epochs; top-k `k=10`.
+- LongSquare: every `50` epochs, aligned with rollout every `50` epochs; top-k `k=10`.
+- Because top-k naming depends on `test_mean_score`, keep `checkpoint_every` aligned with `rollout_every` unless checkpoint code is changed or top-k monitor is changed.
 
 ## Session 50 Knowledge
 - Current live-state rule for the valid node:
