@@ -4,7 +4,7 @@ obs_encoder_dir: obs_encoders/square_encoder.ckpt
 obs_encoder_freeze: true
 global_horizon: 32
 global_obs: 16
-global_action: 1
+global_action: 8
 subsample_frames: 1
 subsampling_method: uniform
 

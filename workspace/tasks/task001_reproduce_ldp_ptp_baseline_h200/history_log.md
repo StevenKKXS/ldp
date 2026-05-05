@@ -1,6 +1,38 @@
 # History Log
 
-<!-- METADATA:SESSION=55 -->
+<!-- METADATA:SESSION=56 -->
+
+## Session 56
+- User reviewed the pre-launch checklist and judged the overall plan reasonable for a `Fig. 9 diffusion-only subset` over 4 simulation tasks, with required corrections.
+- Accepted corrections:
+- change `global_action` from `1` to `8`.
+- explicitly set `policy.past_steps_reg=-1` for both DP/no-PTP and PTP launch commands.
+- final paper-style eval must use `n_test=100` and `n_samples=1`.
+- do not use test-time verification samples for the main Fig. 9 / Table 3 result.
+- do not claim full Fig. 9; label this batch as `Fig9 diffusion-only subset: Square / Tool-Hang / Transport / LongSquare`.
+- keep `num_epochs=500` and explicitly document that this follows paper Appendix B.3.1 rather than released YAML defaults.
+- confirm LongSquare training HDF5 contains `obs/embedding` when using `demos.hdf5`.
+- Changed configs:
+- `experiment_configs/square/transformer_square_emb.yaml`: `global_action=8`.
+- `experiment_configs/tool/transformer_tool_hang_emb.yaml`: `global_action=8`.
+- `experiment_configs/transport/transformer_transport_emb.yaml`: `global_action=8`.
+- `experiment_configs/longhist/transformer_longhist_emb.yaml`: `global_action=8`.
+- Rechecked current values:
+- all four executable `_emb` configs now have `global_obs=16`, `global_horizon=32`, `global_action=8`, `num_epochs=500`, and `policy.past_steps_reg=-1`.
+- `policy.past_action_pred` remains config-default `true`; DP/no-PTP launch will override it to `false`.
+- Launch command requirement:
+- DP/no-PTP must set `policy.past_action_pred=false policy.past_steps_reg=-1`.
+- PTP must set `policy.past_action_pred=true policy.past_steps_reg=-1`.
+- Final eval requirement:
+- use `n_samples=1` for main diffusion result.
+- use `n_test=100`.
+- use seeds `[42,43,44]` for paper-style aggregate.
+- avoid the existing perturb-based `eval.py` path unless it is changed or overridden, because with `force_perturbs` it sets `cfg.task.env_runner.n_test=150`.
+- Training rollout policy remains:
+- keep released config `n_test=40` during training for checkpoint selection.
+- run separate 100-episode evaluation on selected checkpoints for reporting.
+- Output naming requirement:
+- include `fig9_diffusion_subset` or an equivalent label in output / manifest so the batch is not reported as full Fig. 9.
 
 ## Session 55
 - User asked for a checklist of all parameters planned for execution so they can review whether the plan is reasonable.

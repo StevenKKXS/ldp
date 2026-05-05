@@ -1,6 +1,31 @@
 # Task Knowledge
 
-<!-- METADATA:SESSION=55 -->
+<!-- METADATA:SESSION=56 -->
+
+## Session 56 Knowledge
+- User-approved corrections to pre-launch plan:
+- first batch label is `Fig9 diffusion-only subset`, not full Fig. 9.
+- tasks: Square, Tool-Hang, Transport, LongSquare.
+- methods: diffusion DP/no-PTP and diffusion PTP only.
+- current executable `_emb` configs now use:
+- `global_obs=16`.
+- `global_horizon=32`.
+- `global_action=8`.
+- `num_epochs=500`.
+- `policy.past_steps_reg=-1`.
+- Launch overrides must explicitly include:
+- DP/no-PTP: `policy.past_action_pred=false policy.past_steps_reg=-1`.
+- PTP: `policy.past_action_pred=true policy.past_steps_reg=-1`.
+- Evaluation rule for main result:
+- training-time rollout may keep `n_test=40`.
+- final paper-style evaluation uses `n_test=100`, `n_samples=1`, and seeds `[42,43,44]`.
+- do not use `{3,5,10}` samples for main Fig. 9 subset; those belong to test-time verification ablations.
+- do not use the existing `eval.py -p/--force_perturbs` path unchanged for the final 100-episode main eval, because that code sets `cfg.task.env_runner.n_test=150`.
+- Reporting caveats:
+- this batch excludes Push-T and ALOHA.
+- this batch excludes no-history and regression rows.
+- `num_epochs=500` follows paper Appendix B.3.1, not the older GitHub YAML `3500` setting.
+- Before launch, confirm LongSquare `demos.hdf5` has `obs/embedding`; previous validation did show embeddings in this file, but this should remain in the run manifest.
 
 ## Session 55 Knowledge
 - Pre-launch parameter checklist for first executable main batch:
