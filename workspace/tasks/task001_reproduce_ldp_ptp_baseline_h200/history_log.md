@@ -1,6 +1,81 @@
 # History Log
 
-<!-- METADATA:SESSION=48 -->
+<!-- METADATA:SESSION=49 -->
+
+## Session 49
+- User asked to test smoke tests and rollout for the 4 currently feasible tasks.
+- Target node:
+- `root@10.100.0.29 -p 30103`.
+- Reused Session 48 `/root/venv` with the PyTorch3D transforms venv patch already applied.
+- Common smoke/rollout settings:
+- `training.num_epochs=1`.
+- `training.max_train_steps=1`.
+- `training.max_val_steps=1`.
+- `training.rollout_every=1`.
+- `training.checkpoint_every=1`.
+- `training.sample_every=10000`.
+- `dataloader.batch_size=8`, `val_dataloader.batch_size=8`.
+- `dataloader.num_workers=0`, `val_dataloader.num_workers=0`.
+- `logging.mode=offline`.
+- `policy.num_inference_steps=2`.
+- `policy.use_embed_if_present=true`.
+- `task.dataset.use_embed_if_present=true` where the key exists; Transport required `+task.dataset.use_embed_if_present=true`.
+- rollout runner overrides: `n_envs=1`, `n_test=1`, `n_train=0`, `n_test_vis=0`, `n_train_vis=0`, `max_steps=5`.
+- Initial launch stamp `1777972300` did not reach training:
+- Square, Tool-Hang, and LongSquare used encoder paths missing the nested `obs_encoders/` directory.
+- Transport needed the Hydra add-key override `+task.dataset.use_embed_if_present=true`.
+- Relaunched all 4 with corrected encoder paths and Transport add-key override under stamp `1777972600`.
+- Final smoke/rollout results:
+- Square:
+- config `experiment_configs/square/transformer_square_emb.yaml`.
+- embedding train file `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/datasets/robomimic/datasets/square/mh/image_abs_emb.hdf5`.
+- raw rollout file `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/datasets/robomimic/datasets/square/mh/image_abs.hdf5`.
+- encoder `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/obs_encoders/obs_encoders/square_encoder.ckpt`.
+- output `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/outputs/session49_smoke_square_1777972600`.
+- log `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/logs/session49_smoke_square_1777972600.log`.
+- env `NutAssemblySquare`, action size `7`, rollout action tensor shape `(1, 5, 10)`.
+- metrics: `train_loss=1.0779560804367065`, `val_loss=1.0656265020370483`, `test/mean_score=0.0`, `train_action_mse_error=0.759455144405365`.
+- wrote `checkpoints/latest.ckpt` and `checkpoints/epoch=0000-test_mean_score=0.000.ckpt`.
+- Tool-Hang:
+- config `experiment_configs/tool/transformer_tool_hang_emb.yaml`.
+- compact embedding train file `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/datasets/robomimic/datasets/tool_hang/ph/image_abs_emb_compact.hdf5`.
+- raw rollout file `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/datasets/robomimic/datasets/tool_hang/ph/image_abs.hdf5`.
+- encoder `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/obs_encoders/obs_encoders/tool_hang_encoder.ckpt`.
+- output `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/outputs/session49_smoke_toolhang_1777972600`.
+- log `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/logs/session49_smoke_toolhang_1777972600.log`.
+- env `ToolHang`, action size `7`, rollout action tensor shape `(1, 5, 10)`.
+- metrics: `train_loss=1.067086100578308`, `val_loss=1.0479481220245361`, `test/mean_score=0.0`, `train_action_mse_error=0.7990238070487976`.
+- wrote `checkpoints/latest.ckpt` and `checkpoints/epoch=0000-test_mean_score=0.000.ckpt`.
+- Transport:
+- config `experiment_configs/transport/transformer_transport_emb.yaml`.
+- compact embedding train file `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/datasets/robomimic/datasets/transport/mh/image_abs_emb_compact.hdf5`.
+- raw rollout file `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/datasets/robomimic/datasets/transport/mh/image_abs.hdf5`.
+- encoder `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/obs_encoders/obs_encoders/transport_encoder.ckpt`.
+- output `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/outputs/session49_smoke_transport_1777972600`.
+- log `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/logs/session49_smoke_transport_1777972600.log`.
+- env `TwoArmTransport`, action size `14`, rollout action tensor shape `(1, 5, 20)`.
+- metrics: `train_loss=1.2998424768447876`, `val_loss=1.304030418395996`, `test/mean_score=0.0`, `train_action_mse_error=0.8344888687133789`.
+- wrote `checkpoints/latest.ckpt` and `checkpoints/epoch=0000-test_mean_score=0.000.ckpt`.
+- LongSquare:
+- config `experiment_configs/longhist/transformer_longhist_emb.yaml`.
+- train and rollout dataset `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/datasets/longhistsquare100/demos.hdf5`.
+- encoder `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/obs_encoders/obs_encoders/longhist_encoder.ckpt`.
+- output `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/outputs/session49_smoke_longsquare_1777972600`.
+- log `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/logs/session49_smoke_longsquare_1777972600.log`.
+- env `NutAssemblySquare`, action size `7`, rollout action tensor shape `(1, 5, 10)`.
+- metrics: `train_loss=1.086228370666504`, `val_loss=1.0437071323394775`, `test/mean_score=0.0`, `train_action_mse_error=0.7798007130622864`.
+- wrote `checkpoints/latest.ckpt` and `checkpoints/epoch=0000-test_mean_score=0.000.ckpt`.
+- Error scan:
+- `grep -E 'Traceback|Error executing job|ModuleNotFoundError|ImportError|RuntimeError|ValueError|Exception|AssertionError'` returned `0` matches for all four successful logs.
+- Rollout evidence:
+- each log created the target RoboMimic environment and printed the corresponding `Eval ... 1/1` rollout progress.
+- each final `logs.json.txt` row contains `test/sim_max_reward_100000` and `test/mean_score`.
+- checkpointing completed for each run.
+- No videos were expected because the smoke overrides set `n_test_vis=0` and `n_train_vis=0`.
+- Operational note:
+- Square and LongSquare still spend significant time in HDF5 image conversion/loading because their dataset shape metadata retains image keys even when `use_embed_if_present=true`; Tool-Hang and Transport compact HDF5s skip most of that cost due empty image placeholders.
+- GPU state after completion:
+- all four H200s showed about `1 MiB` used and `0%` utilization, with no smoke processes still running.
 
 ## Session 48
 - User asked to execute setup on the new GPU resource, then discuss the plan and specify follow-up work.

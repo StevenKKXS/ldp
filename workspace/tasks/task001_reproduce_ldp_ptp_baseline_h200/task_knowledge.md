@@ -1,6 +1,44 @@
 # Task Knowledge
 
-<!-- METADATA:SESSION=48 -->
+<!-- METADATA:SESSION=49 -->
+
+## Session 49 Knowledge
+- Current smoke-validated task set on `10.100.0.29:30103`:
+- `square`.
+- `tool-hang`.
+- `transport`.
+- `longsquare` / `lh-square`.
+- ALOHA is still outside this validated set because the Session 48 import check fails on missing `dm_control`.
+- Push-T is still outside this validated set because the Session 48 import check fails on missing `pygame`.
+- Working smoke/rollout recipe:
+- activate `/root/venv`.
+- set `PYTHONPATH=/mnt/3fs2/data/tingwen.du/workspace/ldp:/mnt/3fs2/data/tingwen.du/intern_ldp_explorer:$PYTHONPATH`.
+- set `MUJOCO_GL=egl`.
+- use `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/run_train.py`.
+- use one epoch, one train step, one validation step, `rollout_every=1`, `checkpoint_every=1`, offline wandb, `policy.num_inference_steps=2`, `n_envs=1`, `n_test=1`, `n_train=0`, and `max_steps=5`.
+- For official encoder checkpoints on the current node, use the nested encoder paths:
+- Square: `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/obs_encoders/obs_encoders/square_encoder.ckpt`.
+- Tool-Hang: `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/obs_encoders/obs_encoders/tool_hang_encoder.ckpt`.
+- Transport: `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/obs_encoders/obs_encoders/transport_encoder.ckpt`.
+- LongSquare: `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/obs_encoders/obs_encoders/longhist_encoder.ckpt`.
+- Dataset path pattern that passed smoke:
+- Square: `task.dataset.dataset_path` points to `square/mh/image_abs_emb.hdf5`; `task.dataset_path` and `task.env_runner.dataset_path` point to raw `square/mh/image_abs.hdf5`.
+- Tool-Hang: `task.dataset.dataset_path` points to `tool_hang/ph/image_abs_emb_compact.hdf5`; rollout paths point to raw `tool_hang/ph/image_abs.hdf5`.
+- Transport: `task.dataset.dataset_path` points to `transport/mh/image_abs_emb_compact.hdf5`; rollout paths point to raw `transport/mh/image_abs.hdf5`.
+- LongSquare: train and rollout dataset point to `longhistsquare100/demos.hdf5`.
+- Transport config does not define `task.dataset.use_embed_if_present` by default; launch with `+task.dataset.use_embed_if_present=true` instead of `task.dataset.use_embed_if_present=true`.
+- Smoke result evidence from stamp `1777972600`:
+- Square: output `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/outputs/session49_smoke_square_1777972600`, `test/mean_score=0.0`, `val_loss=1.0656265020370483`, no traceback/error matches.
+- Tool-Hang: output `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/outputs/session49_smoke_toolhang_1777972600`, `test/mean_score=0.0`, `val_loss=1.0479481220245361`, no traceback/error matches.
+- Transport: output `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/outputs/session49_smoke_transport_1777972600`, `test/mean_score=0.0`, `val_loss=1.304030418395996`, no traceback/error matches.
+- LongSquare: output `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/outputs/session49_smoke_longsquare_1777972600`, `test/mean_score=0.0`, `val_loss=1.0437071323394775`, no traceback/error matches.
+- Rollout verification signal:
+- the training loop executes online rollout before validation/checkpoint when `(epoch + 1) % rollout_every == 0`.
+- with `rollout_every=1` and `num_epochs=1`, all four successful runs created the target environment, printed `Eval ... 1/1`, wrote `test/mean_score`, then wrote `latest.ckpt`.
+- `n_test_vis=0` means the smoke runs intentionally did not produce video files.
+- Performance caveat:
+- Square and LongSquare full HDF5 runs still preload/convert image keys before training because current dataset shape metadata includes image observations; `use_embed_if_present=true` alone does not remove that upfront loading cost.
+- Tool-Hang and Transport compact embedding HDF5s are the faster pattern for smoke and cached training because raw images are represented by empty placeholders while rollout still uses the raw HDF5.
 
 ## Session 48 Knowledge
 - New H200 node setup state:
