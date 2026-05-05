@@ -1,6 +1,32 @@
 # History Log
 
-<!-- METADATA:SESSION=39 -->
+<!-- METADATA:SESSION=40 -->
+
+## Session 40
+- User asked for a concise stage-by-stage reproduction overview across all tasks.
+- Tried to refresh both known GPU endpoints:
+- `ssh -p 15744 root@10.100.2.47` returned `No route to host`.
+- `ssh -p 28447 root@10.100.2.47` returned `No route to host`.
+- Therefore the current status is based on the latest shared 3fs output files rather than live process inspection.
+- Defined the three practical stages for reporting:
+- Stage 1: data / official encoder / embedding cache ready.
+- Stage 2: training reaches checkpoint-producing state.
+- Stage 3: rollout evaluation produces table-fillable score.
+- Latest stage summary by task:
+- `Square`: Stage 2 complete for cached DP/PTP seed42 and seed43, Stage 3 has low pilot scores only. Latest epochs are about `1387-1393`; best checkpoint score is `0.05` for DP seed42 and `0.025` for the other Square lines.
+- `Long Square`: Stage 2 complete and reached late training checkpoints / latest checkpoint state; Stage 3 is not successful. Latest epochs are about `2249-2261`; latest parsed rollout score remains `0.0`.
+- `Tool-Hang`: Stage 1 complete with compact embedding cache; Stage 2 training reached epoch `49`, but Stage 3 first rollout failed with `AsyncVectorEnv EOFError`, so no usable checkpoint or score exists.
+- `Transport`: Stage 1 complete with compact embedding cache; Stage 2 training reached epoch `49`, but Stage 3 first rollout failed with `AsyncVectorEnv EOFError`, so no usable checkpoint or score exists.
+- `ALOHA / Cube`: Stage 1 data / embedding is present, but environment compatibility blocks Stage 2. Installing `dm-control==1.0.14` fixes import but fails with current `mujoco==3.8.0` because `MjModel.bvh_geomid` is missing.
+- `Push-T`: lower-priority support task; no active aligned run is available in the latest Fig. 9 execution state, so it remains at planning / data-gating rather than training.
+- Last visible output timestamps:
+- Square outputs stopped writing around `2026-05-05 04:20 UTC`.
+- Long Square outputs stopped writing around `2026-05-05 05:06 UTC`.
+- Since both nodes are unreachable, treat those as the latest available states unless a new endpoint comes online.
+- Overall interpretation:
+- data/cache preparation is mostly complete for the main simulation targets except Push-T execution and ALOHA runtime compatibility.
+- current reproduced scores are far below the paper targets and should be treated as failed / incomplete pilot results rather than successful reproduction.
+- next concrete action should focus on safer Tool-Hang/Transport reruns that checkpoint before rollout and reduce concurrent render stress, plus diagnosing why Square/Long Square scores stay near zero despite long training.
 
 ## Session 39
 - User asked for the current running-result status.

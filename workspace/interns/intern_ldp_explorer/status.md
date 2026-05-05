@@ -8,5 +8,5 @@
 | Status | Working |
 | Current Task | task001_reproduce_ldp_ptp_baseline_h200 |
 | PR | https://github.com/StevenKKXS/ldp/pull/new/intern_ldp_explorer/task001_reproduce_ldp_ptp_baseline_h200 |
-| Session | 39 |
-| Recent Progress | Rechecked running results on 2026-05-05 UTC. New node `10.100.2.47:28447` is still running four Square cached jobs around epoch 1329-1335 with low rollout scores so far; old node `:15744` is still running Long Square DP/PTP around epoch 2140-2149 with test score still 0.0. Tool-Hang/Transport jobs stopped at epoch 49 during first rollout due AsyncVectorEnv EOFError plus NVIDIA Xid 31/109, leaving no checkpoint. |
+| Session | 40 |
+| Recent Progress | Both SSH endpoints `10.100.2.47:15744` and `:28447` now return `No route to host`; latest state is from shared 3fs outputs. Square reached around epoch 1387-1393 with best score 0.05/0.025; Long Square reached epoch 2249-2261 with score 0.0; Tool-Hang and Transport remain failed at first rollout after epoch 49 with no checkpoint; ALOHA is blocked by MuJoCo/dm-control compatibility. |

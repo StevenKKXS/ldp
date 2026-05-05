@@ -1,6 +1,20 @@
 # Task Knowledge
 
-<!-- METADATA:SESSION=39 -->
+<!-- METADATA:SESSION=40 -->
+
+## Session 40 Knowledge
+- For user-facing progress reports, use this three-stage model:
+- Stage 1: data, official encoder, and cached embeddings are ready.
+- Stage 2: training has produced checkpoint-capable artifacts.
+- Stage 3: rollout evaluation has produced a table-fillable success score.
+- Current task stage map:
+- `Square`: Stage 2 plus weak Stage 3 pilot scores.
+- `Long Square`: Stage 2 plus failed Stage 3 scores.
+- `Tool-Hang`: Stage 1 complete, Stage 2 interrupted before checkpoint because Stage 3 rollout failed first.
+- `Transport`: Stage 1 complete, Stage 2 interrupted before checkpoint because Stage 3 rollout failed first.
+- `ALOHA / Cube`: Stage 1 present, Stage 2 blocked by MuJoCo/dm-control incompatibility.
+- `Push-T`: planning / data-gated support task, not in active Fig. 9 execution outputs.
+- Both GPU endpoints can become unreachable while shared 3fs outputs remain readable; in that state, report latest file timestamps and parsed logs as last visible state, not as live training.
 
 ## Session 39 Knowledge
 - Tool-Hang and Transport failure mode:
