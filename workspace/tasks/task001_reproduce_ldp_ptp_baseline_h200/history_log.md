@@ -1,6 +1,51 @@
 # History Log
 
-<!-- METADATA:SESSION=38 -->
+<!-- METADATA:SESSION=39 -->
+
+## Session 39
+- User asked for the current running-result status.
+- Rechecked old node `10.100.2.47:15744` at `2026-05-05T03:45 UTC`.
+- Old-node GPU status:
+- GPU0: `0%`, `5 MiB / 143771 MiB`.
+- GPU1: about `72%`, `20269 MiB / 143771 MiB`.
+- Still-running old-node jobs:
+- Long Square cached DP PID `3916868`, elapsed about `18h50m`.
+- Long Square cached PTP PID `3916876`, elapsed about `18h50m`.
+- Old-node jobs that are no longer running:
+- Tool-Hang DP/PTP PIDs `2283520`, `2283522`.
+- Transport DP/PTP PIDs `2283524`, `2283526`.
+- Long Square parsed metrics:
+- DP output `fig9_longsquare_cached_dp_1777884905`: latest epoch `2149`, global step `1509298`, train loss `0.000929`, val loss `0.000620`, latest test at epoch `2099` with `test/mean_score=0.0`, best parsed test score `0.0`.
+- PTP output `fig9_longsquare_cached_ptp_1777884905`: latest epoch `2140`, global step `1502583`, train loss `0.000755`, val loss `0.000702`, latest test at epoch `2099` with `test/mean_score=0.0`, best parsed test score `0.0`.
+- Tool-Hang parsed state before failure:
+- DP reached epoch `49`, global step `75798`, train loss `0.029264`, val loss `0.025294`, no test score and no checkpoint.
+- PTP reached epoch `49`, global step `75798`, train loss `0.023632`, val loss `0.022409`, no test score and no checkpoint.
+- Transport parsed state before failure:
+- DP reached epoch `49`, global step `144348`, train loss `0.016618`, val loss `0.030902`, no test score and no checkpoint.
+- PTP reached epoch `49`, global step `144348`, train loss `0.014805`, val loss `0.023940`, no test score and no checkpoint.
+- Failure diagnosis for Tool-Hang and Transport:
+- all four processes failed during the first rollout/eval after epoch 49.
+- stdout shows `diffusion_policy.gym_util.async_vector_env.AsyncVectorEnv` failing with `EOFError` while receiving worker results.
+- old-node `dmesg` around `2026-05-04 15:34-15:35 UTC` contains many NVIDIA `Xid 31` MMU faults and `Xid 109` context-switch timeouts from python render/eval workers.
+- Because the training loop runs rollout before checkpointing, failure at epoch 49 prevented the epoch-49/50 checkpoint from being written.
+- Rechecked new node `10.100.2.47:28447` at `2026-05-05T03:45 UTC`.
+- New-node GPU status:
+- GPU0: about `96%`, `36782 MiB / 143771 MiB`.
+- GPU1: about `91%`, `3263 MiB / 143771 MiB`.
+- New-node running jobs:
+- Square DP seed42 PID `33725`, elapsed about `14h07m`.
+- Square PTP seed42 PID `33734`, elapsed about `14h07m`.
+- Square DP seed43 PID `87949`, elapsed about `13h59m`.
+- Square PTP seed43 PID `87950`, elapsed about `13h59m`.
+- Square parsed metrics:
+- seed42 DP output `fig9_square_cached_dp_1777901875`: latest epoch `1329`, global step `1691228`, train loss `0.005814`, val loss `0.086698`, latest test epoch `1299` score `0.05`, best parsed test score `0.05`.
+- seed42 PTP output `fig9_square_cached_ptp_1777901875`: latest epoch `1335`, global step `1699390`, train loss `0.005253`, val loss `0.085266`, latest test epoch `1299` score `0.0`, best parsed test score `0.025`.
+- seed43 DP output `fig9_square_cached_dp_seed43_1777902377`: latest epoch `1332`, global step `1700906`, train loss `0.005592`, val loss `0.018468`, latest test epoch `1299` score `0.0`, best parsed test score `0.025`.
+- seed43 PTP output `fig9_square_cached_ptp_seed43_1777902377`: latest epoch `1329`, global step `1697078`, train loss `0.006699`, val loss `0.016765`, latest test epoch `1299` score `0.0`, best parsed test score `0.025`.
+- Interpretation:
+- Square and Long Square are still training and have usable intermediate checkpoints, but current rollout success scores remain far below the paper values.
+- Tool-Hang and Transport currently have no usable result because they stopped before any checkpoint was saved.
+- Old-node GPU0 is idle after Tool-Hang/Transport failure; a safer relaunch should avoid simultaneous heavy rollout and should either delay rollout until after the first checkpoint or reduce rollout parallelism.
 
 ## Session 38
 - User provided a new resource at `10.100.2.47` with SSH port `28447`, HTTP port `30146`, and stated it should have `4` GPUs.

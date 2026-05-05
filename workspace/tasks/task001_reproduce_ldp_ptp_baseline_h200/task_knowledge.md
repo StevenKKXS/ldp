@@ -1,6 +1,21 @@
 # Task Knowledge
 
-<!-- METADATA:SESSION=38 -->
+<!-- METADATA:SESSION=39 -->
+
+## Session 39 Knowledge
+- Tool-Hang and Transport failure mode:
+- the four old-node jobs reached epoch `49` and then failed during first rollout/eval.
+- error signature is `AsyncVectorEnv` parent pipe `EOFError`, not a training loss failure.
+- old-node `dmesg` has simultaneous NVIDIA `Xid 31` and `Xid 109` messages from python render workers, indicating a GPU render/driver-side fault during parallel env rollout.
+- The workspace loop runs rollout before checkpointing, so a failure at epoch `49` with `rollout_every=50` and `checkpoint_every=50` prevents the first checkpoint from being saved.
+- Safer Tool-Hang/Transport relaunch options:
+- set `training.rollout_every` larger than `training.checkpoint_every` so the first checkpoint is saved before rollout.
+- avoid running Tool-Hang and Transport rollouts concurrently on the same GPU.
+- consider reducing env runner parallelism for first validation/eval if a full-paper rollout keeps hitting Xid/EOFError.
+- Current intermediate result gap:
+- Long Square DP/PTP have both reached over epoch `2100`, but parsed `test/mean_score` is still `0.0`.
+- Square cached seed42/seed43 have reached around epoch `1330`; best parsed Square score is only `0.05` for DP seed42 and `0.025` for the other three lines.
+- These are far below paper-level Square and Long Square results, so current artifacts are not yet successful reproductions.
 
 ## Session 38 Knowledge
 - New node `10.100.2.47:28447` is usable for this task, but it exposes only `2` H200 GPUs through `nvidia-smi` and CUDA, not the `4` GPUs expected from the allocation note.
