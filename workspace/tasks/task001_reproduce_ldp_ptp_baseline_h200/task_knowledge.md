@@ -1,6 +1,29 @@
 # Task Knowledge
 
-<!-- METADATA:SESSION=47 -->
+<!-- METADATA:SESSION=48 -->
+
+## Session 48 Knowledge
+- New H200 node setup state:
+- endpoint: `root@10.100.0.29 -p 30103`.
+- setup log: `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/logs/session48_setup_gpu_machine_1777972015.log`.
+- setup status: `0`.
+- `/root/venv` now exists and contains the RoboMimic/robosuite stack from `setup_gpu_machine.sh`.
+- setup validation saw `torch 2.5.1+cu124`, CUDA available, and `torch.cuda.device_count()==4`.
+- Required post-setup venv patch:
+- setup's PyTorch3D transforms check failed with missing `pytorch3d.common.workaround`.
+- Fixed by writing `from .rotation_conversions import *` into `/root/venv/lib/python3.12/site-packages/pytorch3d/transforms/__init__.py`.
+- Post-fix import OK: `quaternion_to_matrix`, `matrix_to_quaternion`.
+- Post-setup import matrix:
+- OK: `_patches`.
+- OK: `diffusion_policy.env_runner.robomimic_image_runner`.
+- OK: `diffusion_policy.env_runner.robomimic_longhist_image_runner`.
+- OK: `diffusion_policy.dataset.robomimic_replay_image_dataset`.
+- FAIL: ALOHA runner and sim env still need `dm_control`.
+- FAIL: Push-T runner still needs `pygame`; likely also needs `pymunk`, `shapely`, `scikit-image`, and headless pygame handling before rollout.
+- Scheduling implication:
+- use the current environment first for RoboMimic benchmark tasks (`square`, `tool-hang`, `transport`) and `lh-square`.
+- do not schedule ALOHA on this venv until a separate compatibility environment or dependency plan is chosen.
+- do not schedule Push-T rollout until missing Push-T dependencies are installed and import/rollout smoke tests pass.
 
 ## Session 47 Knowledge
 - `setup_gpu_machine.sh` is mainly a RoboMimic/robosuite environment bootstrap for Python 3.12 H200 nodes.

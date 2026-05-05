@@ -1,6 +1,41 @@
 # History Log
 
-<!-- METADATA:SESSION=47 -->
+<!-- METADATA:SESSION=48 -->
+
+## Session 48
+- User asked to execute setup on the new GPU resource, then discuss the plan and specify follow-up work.
+- Ran setup on new node `root@10.100.0.29 -p 30103`.
+- Setup command was launched in the background on the remote node:
+- PID `55751`.
+- log `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/logs/session48_setup_gpu_machine_1777972015.log`.
+- status file `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/logs/session48_setup_gpu_machine_1777972015.status`.
+- Setup exited with status `0`; remote log ended at `2026-05-05T09:08:32Z`.
+- Setup installed `/root/venv` and the intended RoboMimic/robosuite stack.
+- Built-in setup validation reported:
+- `torch 2.5.1+cu124`, CUDA available, `device_count: 4`.
+- `mujoco 3.8.0`, `robosuite 1.4.1`, `robomimic 0.3.0`, `diffusers 0.30.0`.
+- `zarr 2.18.7`, `gym 0.25.2`.
+- Setup built-in PyTorch3D transforms check failed with `No module named 'pytorch3d.common.workaround'`.
+- Applied the known venv-only PyTorch3D fix by replacing `/root/venv/lib/python3.12/site-packages/pytorch3d/transforms/__init__.py` with `from .rotation_conversions import *`.
+- Revalidated `from pytorch3d.transforms import quaternion_to_matrix, matrix_to_quaternion`; both imports succeeded.
+- Ran post-setup import validation with `PYTHONPATH=/mnt/3fs2/data/tingwen.du/workspace/ldp:/mnt/3fs2/data/tingwen.du/intern_ldp_explorer` and `MUJOCO_GL=egl`.
+- Validation OK:
+- `_patches`.
+- `pytorch3d.transforms`.
+- `diffusion_policy.env_runner.robomimic_image_runner`.
+- `diffusion_policy.env_runner.robomimic_longhist_image_runner`.
+- `diffusion_policy.dataset.robomimic_replay_image_dataset`.
+- Validation still failing:
+- `diffusion_policy.env_runner.aloha_image_runner`: `ModuleNotFoundError: No module named 'dm_control'`.
+- `diffusion_policy.env.aloha.sim_env`: `ModuleNotFoundError: No module named 'dm_control'`.
+- `diffusion_policy.env_runner.pusht_image_runner`: `ModuleNotFoundError: No module named 'pygame'`.
+- `diffusion_policy.dataset.pusht_image_dataset` imports successfully.
+- GPU state after validation:
+- all four H200 GPUs report `143771 MiB` total, about `1 MiB` used, `0%` utilization, and no active GPU work from this task.
+- Planning implication:
+- current node is ready for RoboMimic benchmark tasks and Long Square after a short smoke train.
+- ALOHA remains environment-blocked until `dm-control` / MuJoCo compatibility is solved.
+- Push-T remains dependency-blocked until pygame/pymunk/shapely/scikit-image/matplotlib stack is installed or validated.
 
 ## Session 47
 - User asked what `setup_gpu_machine.sh` configures and whether it satisfies the Fig. 9 categories: RoboMimic, author-added tasks, and Push-T.
