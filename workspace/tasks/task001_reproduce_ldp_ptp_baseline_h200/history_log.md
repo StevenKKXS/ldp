@@ -1,6 +1,18 @@
 # History Log
 
-<!-- METADATA:SESSION=41 -->
+<!-- METADATA:SESSION=42 -->
+
+## Session 42
+- User asked what current-task work information is accessible in this environment.
+- Read the active status, task README, history log, and task knowledge files.
+- Confirmed accessible context includes:
+- code path `/work-agents/intern_ldp_explorer/ldp/`
+- status path `/work-agents/intern_ldp_explorer/ldp/workspace/interns/intern_ldp_explorer/status.md`
+- task path `/work-agents/intern_ldp_explorer/ldp/workspace/tasks/task001_reproduce_ldp_ptp_baseline_h200/`
+- debug path `/work-agents/intern_ldp_explorer/ldp/../debug/`
+- output path `/work-agents/intern_ldp_explorer/ldp/../outputs/`
+- Current task remains `task001_reproduce_ldp_ptp_baseline_h200`, status `Working`, on branch `intern_ldp_explorer/task001_reproduce_ldp_ptp_baseline_h200`.
+- No new experiment execution or result parsing was performed in this session.
 
 ## Session 41
 - User requested reorganizing each task's stage status by the paper's Fig. 9 source categories.
