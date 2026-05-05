@@ -1,6 +1,20 @@
 # History Log
 
-<!-- METADATA:SESSION=43 -->
+<!-- METADATA:SESSION=44 -->
+
+## Session 44
+- User asked what GPU resources are currently available.
+- Rechecked live GPU access at `2026-05-05T08:33:50Z`.
+- Local workspace command `command -v nvidia-smi` returned no path and local `nvidia-smi` produced no GPU output, so no local GPU is visible from this environment.
+- Known H200 endpoints tested:
+- `ssh -p 15744 root@10.100.2.47` returned `Connection refused`.
+- `ssh -p 28447 root@10.100.2.47` returned `Connection refused`.
+- old 72h endpoint `ssh -p 37893 root@10.100.2.47` returned `Connection refused`.
+- Current live accessible GPU count from this environment is therefore `0`.
+- Historical context remains:
+- `10.100.2.47:15744` was a 2-H200 node while reachable.
+- `10.100.2.47:28447` was expected to have 4 GPUs but exposed only 2 H200 GPUs while reachable.
+- Shared 3fs output directory `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/outputs` is still readable; latest top-level output directory mtime sampled was `2026-05-04T13:45:52Z` for Square seed43 outputs.
 
 ## Session 43
 - User asked where my code is saved and which code is currently effective.

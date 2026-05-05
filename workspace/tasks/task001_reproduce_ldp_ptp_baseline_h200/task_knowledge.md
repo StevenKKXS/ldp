@@ -1,6 +1,18 @@
 # Task Knowledge
 
-<!-- METADATA:SESSION=43 -->
+<!-- METADATA:SESSION=44 -->
+
+## Session 44 Knowledge
+- Current GPU availability from this workspace as of `2026-05-05T08:33:50Z`:
+- local environment has no visible `nvidia-smi`, so no local GPU can be used directly.
+- `10.100.2.47:15744` returns `Connection refused`.
+- `10.100.2.47:28447` returns `Connection refused`.
+- old `10.100.2.47:37893` returns `Connection refused`.
+- Therefore current live accessible GPU count is `0`, even though shared 3fs artifacts remain readable.
+- Historical GPU resource inventory for future allocation requests:
+- `10.100.2.47:15744` previously exposed 2 H200 GPUs.
+- `10.100.2.47:28447` was provided as a supposed 4-GPU resource but actually exposed only 2 H200 GPUs through `nvidia-smi` / CUDA.
+- Last readable shared-output freshness check: latest top-level output directory mtime around `2026-05-04T13:45:52Z`; treat live process state as unknown/unavailable until a new reachable SSH endpoint is provided.
 
 ## Session 43 Knowledge
 - Effective code locations:
