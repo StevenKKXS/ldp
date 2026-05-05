@@ -1,6 +1,34 @@
 # Task Knowledge
 
-<!-- METADATA:SESSION=51 -->
+<!-- METADATA:SESSION=52 -->
+
+## Session 52 Knowledge
+- Public PTP recipe evidence:
+- Project page and paper describe a multistage recipe: short-context encoder pretraining, frozen encoder, cached visual embeddings, long-context policy-head training, and PTP objective in the policy head.
+- Paper default protocol:
+- context length is 16 observations for long-context policies.
+- main simulation evaluation uses 100 episodes across 3 random seeds.
+- action chunking is 8 in the main simulation protocol.
+- policies are trained with feature caching unless otherwise specified.
+- single-sample inference is used for main simulation comparison; test-time PTP verification is evaluated separately.
+- Paper implementation details:
+- default training length is stated as 500 epochs.
+- long-horizon ALOHA is stated as 1500 epochs.
+- observation length 16 corresponds to horizon 32 and 16 future tokens.
+- Feature-caching timing evidence:
+- paper reports a two-day ablation comparing cached and non-cached long-context training.
+- checkpoints in that ablation are evaluated every 50 epochs.
+- cached training matches non-cached performance in 20% of training time and surpasses it within 40% of the compute budget.
+- Public GitHub recipe evidence:
+- README says `experiment_configs/` contains configurations used for experiments.
+- CLI supports `global_obs`, `global_action`, `global_horizon`, `past_action_pred`, `emb`, and `cached`.
+- README states short-history generally uses `obs=2, act=1, horizon=16`, and long-history generally uses `obs=16, act=1, horizon=32`.
+- GitHub `_emb` configs for Square, Tool-Hang, Transport, and LongSquare list `training.num_epochs=3500`.
+- Mismatch / caution:
+- paper's 500/1500 epoch statement and GitHub's 3500-epoch configs are not reconciled in public text.
+- public sources do not state a task-specific wall-clock duration or exact checkpoint epoch that guarantees Figure 9 reward.
+- For reproduction, do not claim "paper reward should happen after X hours" from public evidence alone.
+- Use 3500 as a conservative training cap from config, evaluate checkpoints on the paper protocol, and report the best checkpoint epoch / score actually observed.
 
 ## Session 51 Knowledge
 - Main experiment `_emb` configs now use `global_obs=16` for all four currently runnable tasks:

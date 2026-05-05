@@ -1,6 +1,55 @@
 # History Log
 
-<!-- METADATA:SESSION=51 -->
+<!-- METADATA:SESSION=52 -->
+
+## Session 52
+- User asked whether the PTP paper, GitHub, or other open public sources explicitly mark the training recipe, including how long training takes to reach paper-level returns, and requested a report.
+- Performed web and local source inspection without modifying training code.
+- Public sources checked:
+- project page: `https://long-context-dp.github.io/`.
+- arXiv page / HTML: `https://arxiv.org/abs/2505.09561` and `https://ar5iv.labs.arxiv.org/html/2505.09561v2`.
+- official GitHub repo: `https://github.com/long-context-dp/ldp`.
+- official GitHub `_emb` configs for Square, Tool-Hang, Transport, and LongSquare.
+- local README and experiment configs in this repo.
+- Findings from the paper / project page:
+- PTP is explicitly described as an auxiliary objective that predicts past actions alongside future actions.
+- The method explicitly includes a multistage training recipe:
+- pretrain a short-context visual encoder.
+- freeze the encoder.
+- cache visual embeddings for training data.
+- train the long-context policy head on cached embeddings.
+- Default experiment protocol:
+- visual and proprioceptive context from the past 16 time steps.
+- comparison against no-history and no-PTP baselines.
+- multistage recipe with feature caching unless otherwise specified.
+- single-sample inference for the main simulation comparison.
+- evaluation: 100 episodes across 3 random seeds for each simulation policy-task pair.
+- Appendix implementation detail states:
+- all policies are trained for 500 epochs by default.
+- long-horizon ALOHA is trained for 1500 epochs.
+- context-length table: observation length 16 maps to horizon 32 and 16 future tokens.
+- Feature-caching ablation:
+- trains cached and non-cached history-conditioned diffusion policies for two days.
+- evaluates checkpoints every 50 epochs.
+- reports cached training matches performance in 20% of training time and surpasses within 40% of the compute budget.
+- Public GitHub findings:
+- README says `experiment_configs/` contains all configurations used for experiments.
+- README exposes the CLI arguments for `global_obs`, `global_action`, `global_horizon`, `past_action_pred`, `emb`, and `cached`.
+- README says short-history generally uses `obs=2, act=1, horizon=16`; long-history generally uses `obs=16, act=1, horizon=32`.
+- README provides official short-history encoders and `rewrite_with_embeddings.py` for caching embeddings.
+- Official GitHub `_emb` YAMLs still list `training.num_epochs=3500` for Square, Tool-Hang, Transport, and LongSquare, with rollout/checkpoint cadence of 100 for Square/Transport and 50 for Tool-Hang/LongSquare.
+- Important mismatch:
+- paper appendix says default `500` epochs and LH ALOHA `1500`.
+- official GitHub configs list `3500` epochs.
+- There is no public text found that reconciles these two epoch counts or states which checkpoint produced each Figure 9 value.
+- Answer to the user's convergence-time question:
+- public sources do not provide a task-specific wall-clock time or exact checkpoint number that guarantees paper-level return.
+- The closest public guidance is the two-day caching ablation and the 20% / 40% compute-budget statement, but it is relative and task-group-level, not a launch recipe that says "train N hours to hit Figure 9 score."
+- Practical implication for our reproduction:
+- use the paper's recipe structure and target evaluation protocol for reporting.
+- keep checkpointing/evaluation frequent enough to observe the curve.
+- treat `num_epochs=3500` in GitHub configs as a conservative runnable cap, not proof that all 3500 epochs are required.
+- select the best validated checkpoint by `test_mean_score` across the saved checkpoints and report the exact epoch/checkpoint.
 
 ## Session 51
 - User requested:
