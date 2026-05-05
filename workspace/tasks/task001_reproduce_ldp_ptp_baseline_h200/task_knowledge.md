@@ -1,6 +1,62 @@
 # Task Knowledge
 
-<!-- METADATA:SESSION=49 -->
+<!-- METADATA:SESSION=50 -->
+
+## Session 50 Knowledge
+- Current live-state rule for the valid node:
+- `10.100.0.29:30103` has no active formal training process at the time of Session 50 inspection.
+- Treat the current training recipe as an executable launch recipe, not as an already-running job.
+- Current executable task set remains:
+- `square`.
+- `tool-hang`.
+- `transport`.
+- `longsquare` / `lh-square`.
+- Current non-executable task set remains:
+- ALOHA: blocked by `dm_control` / MuJoCo compatibility.
+- Push-T: blocked by missing Push-T runtime dependencies such as `pygame` until import and rollout are validated.
+- Formal cached-embedding training recipe:
+- run via `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/run_train.py` inside `/root/venv`.
+- set `PYTHONPATH=/mnt/3fs2/data/tingwen.du/workspace/ldp:/mnt/3fs2/data/tingwen.du/intern_ldp_explorer:$PYTHONPATH`.
+- set `MUJOCO_GL=egl`.
+- use `TrainDiffusionTransformerHybridWorkspace` and `DiffusionTransformerHybridImagePolicy`.
+- use frozen official observation encoders.
+- set `policy.use_embed_if_present=true`.
+- set dataset-side `use_embed_if_present=true`; for Transport this must be added with `+task.dataset.use_embed_if_present=true`.
+- DP / no-PTP row: `policy.past_action_pred=false`.
+- PTP row: `policy.past_action_pred=true`.
+- Full-run defaults from the four validated configs:
+- `num_epochs=3500`.
+- `batch_size=64`.
+- `num_workers=8`.
+- `learning_rate=1e-4`.
+- `betas=[0.9, 0.95]`.
+- `lr_scheduler=cosine`.
+- `lr_warmup_steps=1000`.
+- `gradient_accumulate_every=1`.
+- `use_ema=true`.
+- `val_every=1`.
+- `sample_every=5`.
+- `num_inference_steps=100`.
+- `global_horizon=32`.
+- `global_action=1`.
+- Task-specific full-run defaults:
+- Square: `global_obs=2`, `rollout_every=100`, `checkpoint_every=100`, max rollout steps `500`.
+- Tool-Hang: `global_obs=16`, `rollout_every=50`, `checkpoint_every=50`, max rollout steps `700`.
+- Transport: current config default `global_obs=2`, `rollout_every=100`, `checkpoint_every=100`, max rollout steps `700`.
+- LongSquare: `global_obs=16`, `rollout_every=50`, `checkpoint_every=50`, max rollout steps `500`.
+- Smoke recipe is intentionally much smaller:
+- `num_epochs=1`.
+- `max_train_steps=1`.
+- `max_val_steps=1`.
+- `rollout_every=1`.
+- `checkpoint_every=1`.
+- `n_envs=1`.
+- `n_test=1`.
+- `max_steps=5`.
+- `batch_size=8`.
+- `num_workers=0`.
+- `num_inference_steps=2`.
+- Use this only for liveness / rollout verification, not for result claims.
 
 ## Session 49 Knowledge
 - Current smoke-validated task set on `10.100.0.29:30103`:

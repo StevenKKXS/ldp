@@ -1,6 +1,61 @@
 # History Log
 
-<!-- METADATA:SESSION=49 -->
+<!-- METADATA:SESSION=50 -->
+
+## Session 50
+- User asked for a detailed explanation of the current training settings / recipe and explicitly requested no code modification.
+- Performed read-only inspection of:
+- task README.
+- current `history_log.md` and `task_knowledge.md`.
+- `workspace/tasks/task001_reproduce_ldp_ptp_baseline_h200/fig9_multistage_repro_plan.md`.
+- four smoke-validated configs:
+- `experiment_configs/square/transformer_square_emb.yaml`.
+- `experiment_configs/tool/transformer_tool_hang_emb.yaml`.
+- `experiment_configs/transport/transformer_transport_emb.yaml`.
+- `experiment_configs/longhist/transformer_longhist_emb.yaml`.
+- training workspace `diffusion_policy/workspace/train_diffusion_transformer_hybrid_workspace.py`.
+- Checked current node `root@10.100.0.29 -p 30103`:
+- all four H200 GPUs report about `1 MiB` used and `0%` utilization.
+- no active `run_train.py`, `train.py`, or `eval.py` process was found.
+- Current interpretation:
+- there is no live formal training currently running on the valid node.
+- the current executable recipe is the smoke-validated cached-embedding recipe for Square, Tool-Hang, Transport, and LongSquare.
+- ALOHA and Push-T remain outside the current executable set due missing / incompatible environment dependencies.
+- Formal recipe summary:
+- use `/root/venv`.
+- set `PYTHONPATH=/mnt/3fs2/data/tingwen.du/workspace/ldp:/mnt/3fs2/data/tingwen.du/intern_ldp_explorer:$PYTHONPATH`.
+- set `MUJOCO_GL=egl`.
+- invoke `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/run_train.py`.
+- training workspace is `TrainDiffusionTransformerHybridWorkspace`.
+- policy is `DiffusionTransformerHybridImagePolicy`.
+- official observation encoders are frozen with `obs_encoder_freeze=true`.
+- use cached embeddings for train data with `policy.use_embed_if_present=true` and dataset-side use-embed enabled.
+- keep rollout paths pointed to the raw HDF5 where needed so online RoboMimic env construction works.
+- DP / no-PTP is controlled by `policy.past_action_pred=false`.
+- PTP is controlled by `policy.past_action_pred=true`.
+- Default full-run settings from configs:
+- `training.num_epochs=3500`.
+- `dataloader.batch_size=64` and `val_dataloader.batch_size=64`.
+- `dataloader.num_workers=8` and `val_dataloader.num_workers=8`.
+- `optimizer.learning_rate=0.0001`.
+- `optimizer.betas=[0.9, 0.95]`.
+- `training.lr_scheduler=cosine`.
+- `training.lr_warmup_steps=1000`.
+- `training.gradient_accumulate_every=1`.
+- `training.use_ema=true`.
+- `training.val_every=1`.
+- `training.sample_every=5`.
+- `policy.num_inference_steps=100` for formal runs; smoke reduced it to `2`.
+- `global_horizon=32` and `global_action=1` across the four configs.
+- Task-specific full-run defaults:
+- Square: `global_obs=2`, `rollout_every=100`, `checkpoint_every=100`, `n_envs=28`, `n_test=40`, `n_train=6`, `max_steps=500`, action dim `10`, encoder dim `137`.
+- Tool-Hang: `global_obs=16`, `rollout_every=50`, `checkpoint_every=50`, `n_envs=28`, `n_test=40`, `n_train=6`, `max_steps=700`, action dim `10`, encoder dim `137`.
+- Transport: `global_obs=2` in the current `_emb` config, `rollout_every=100`, `checkpoint_every=100`, `n_envs=28`, `n_test=40`, `n_train=6`, `max_steps=700`, action dim `20`, encoder dim `274`, and requires `+task.dataset.use_embed_if_present=true` as an added Hydra key.
+- LongSquare: `global_obs=16`, `rollout_every=50`, `checkpoint_every=50`, `n_envs=28`, `n_test=40`, `n_train=6`, `max_steps=500`, action dim `10`, encoder dim `137`.
+- Smoke recipe distinction:
+- Session 49 smoke used one epoch, one train step, one validation step, `rollout_every=1`, `checkpoint_every=1`, `n_envs=1`, `n_test=1`, `max_steps=5`, `batch_size=8`, `num_workers=0`, offline wandb, and `policy.num_inference_steps=2`.
+- This smoke recipe validated execution only; it is not the formal training recipe for result reproduction.
+- No code files were modified in this session; only required workspace status/history/knowledge records were updated.
 
 ## Session 49
 - User asked to test smoke tests and rollout for the 4 currently feasible tasks.
