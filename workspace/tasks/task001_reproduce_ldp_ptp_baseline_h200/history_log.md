@@ -1,6 +1,17 @@
 # History Log
 
-<!-- METADATA:SESSION=44 -->
+<!-- METADATA:SESSION=45 -->
+
+## Session 45
+- User stated they are reallocating GPU resources and that the current GPU resources are all invalid.
+- Recorded this at `2026-05-05T08:36:30Z`.
+- Treat all previously known GPU endpoints as obsolete for live execution:
+- `10.100.2.47:15744`
+- `10.100.2.47:28447`
+- `10.100.2.47:37893`
+- Do not rely on any previous live-process state, GPU occupancy, PID list, or remaining-lease assumption from those endpoints.
+- Shared 3fs artifacts and historical logs remain useful as completed/partial artifacts, but not as evidence of currently running jobs.
+- Next operational step is to wait for the newly allocated SSH endpoint / port, then verify with `nvidia-smi -L`, GPU memory/utilization, `/mnt/3fs2` mount state, and current process list before launching any work.
 
 ## Session 44
 - User asked what GPU resources are currently available.

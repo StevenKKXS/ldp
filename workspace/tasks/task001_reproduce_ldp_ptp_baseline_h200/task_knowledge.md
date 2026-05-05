@@ -1,6 +1,22 @@
 # Task Knowledge
 
-<!-- METADATA:SESSION=44 -->
+<!-- METADATA:SESSION=45 -->
+
+## Session 45 Knowledge
+- GPU resource invalidation rule:
+- As of user message in Session 45, all previously known GPU resources are considered obsolete.
+- Do not use or schedule against:
+- `10.100.2.47:15744`
+- `10.100.2.47:28447`
+- `10.100.2.47:37893`
+- Historical outputs from those nodes remain useful for analysis, but their live PIDs, GPU occupancy, lease duration, and availability must be ignored.
+- For a newly assigned GPU resource, first-run validation checklist:
+- SSH connectivity and hostname/date.
+- `nvidia-smi -L`.
+- `nvidia-smi --query-gpu=index,name,memory.total,memory.used,utilization.gpu --format=csv,noheader,nounits`.
+- `/mnt/3fs2` mount availability and shared helper path `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/`.
+- active process list for `run_train.py`, `train.py`, `eval.py`, and old task scripts.
+- Only after that validation should the task scheduler choose launches.
 
 ## Session 44 Knowledge
 - Current GPU availability from this workspace as of `2026-05-05T08:33:50Z`:
