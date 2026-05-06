@@ -1,6 +1,46 @@
 # History Log
 
-<!-- METADATA:SESSION=69 -->
+<!-- METADATA:SESSION=70 -->
+
+## Session 70
+- User asked to keep encoder/data inconsistencies recorded for later handling and focus on why Tool-Hang and Transport have 0 success, especially why Square succeeds while these two do not.
+- Confirmed the encoder/data inconsistencies are already recorded in Session 69 and are not the current main line.
+- Compared selected runs and eval evidence for Square, Tool-Hang, and Transport.
+- Checkpoint score evidence:
+- Square DP checkpoints: mostly 0, with epoch 499 at `0.025`.
+- Square PTP checkpoints: epoch 99 `0.475`, epoch 199 `0.400`, epoch 299 `0.250`, epoch 399 `0.400`, epoch 499 `0.425`.
+- Tool-Hang DP and PTP checkpoints: every saved checkpoint is `test_mean_score=0.000`.
+- Transport DP and PTP checkpoints: every saved checkpoint is `test_mean_score=0.000`.
+- Session 65 selected-checkpoint eval evidence:
+- Square PTP selected `epoch=0099-test_mean_score=0.475.ckpt`, 100-episode eval score `0.36`.
+- Square DP selected `epoch=0499-test_mean_score=0.025.ckpt`, 100-episode eval score `0.0`.
+- Tool-Hang DP/PTP selected epoch 499 checkpoints, 100-episode eval score `0.0`.
+- Transport DP/PTP selected epoch 499 checkpoints, 100-episode eval score `0.0`.
+- Training rollout evidence:
+- Square PTP had nonzero `train/mean_score` and `test/mean_score` during training rollouts.
+- Tool-Hang PTP had `train/mean_score=0.0` and `test/mean_score=0.0` at every rollout from epoch 49 through 499.
+- Transport PTP had `train/mean_score=0.0` and `test/mean_score=0.0` at every rollout from epoch 99 through 499.
+- Config comparison:
+- all three PTP runs use `global_obs=16`, `global_horizon=32`, `global_action=8`, `batch_size=64`, `lr=1e-4`, `past_action_pred=true`, `past_steps_reg=-1`, cached embeddings, official frozen encoder, and `abs_action=true`.
+- env runner paths are raw HDF5 files, while training paths are cached embedding HDF5 files.
+- Tool-Hang uses `max_steps=700`, `n_test=40`, `n_train=6`, `rollout_every=50`, `checkpoint_every=50`.
+- Transport uses `max_steps=700`, `n_test=40`, `n_train=6`, `rollout_every=100`, `checkpoint_every=100`.
+- Square uses `max_steps=500`, `n_test=40`, `n_train=6`, `rollout_every=100`, `checkpoint_every=100`.
+- Data scale / task complexity:
+- Square cached data: `300` demos, `80731` steps, action dim `10`, obs feature dim `137`.
+- Tool-Hang cached data: `200` demos, `95962` steps, action dim `10`, obs feature dim `137`.
+- Transport cached data: `300` demos, `195800` steps, action dim `20`, obs feature dim `274`, model conditioning projection is larger.
+- Current diagnosis:
+- Tool-Hang and Transport zero success is unlikely to be caused by cached-embedding mismatch because Session 69 showed both are consistent with their frozen encoders.
+- It is unlikely to be caused by compact HDF5 empty image arrays under the intended eval path because env rollout uses raw rendered observations and official encoders.
+- Since `train/mean_score` is also always zero, the issue is not only held-out seed generalization.
+- Most likely causes are harder multi-stage sparse-reward tasks not reaching success under the 500-epoch recipe, checkpoint selection being uninformative when all sparse rewards are zero, and a still-unverified task-specific runner/action convention path.
+- Recommended diagnostic order:
+- first run expert-action replay on Tool-Hang and Transport train initial states through the same env runner/action conversion path. If expert replay does not succeed, fix runner/action/env metadata before retraining.
+- then run a small train-seed policy rollout with video and action dumps for multiple checkpoints to see whether the policy reaches subgoals or is stationary/unstable.
+- then run PTP diagnostic eval with `n_samples=3` or `5`; if this becomes nonzero, the policy has useful samples but `n_samples=1` is too brittle.
+- if runner/expert replay is valid and policies still fail train seeds, rerun or continue with a longer recipe such as `1500` or `3500` epochs and reset the LR schedule rather than resuming a completed cosine schedule at zero learning rate.
+- for Fig. 9 comparability, keep `global_obs=16`, `global_horizon=32`, `global_action=8`, `past_steps_reg=-1`, and `n_samples=1` for the main reported line; use altered chunk size or multi-sample only as diagnostics.
 
 ## Session 69
 - User asked to check the six tasks one by one and report inconsistent datasets.

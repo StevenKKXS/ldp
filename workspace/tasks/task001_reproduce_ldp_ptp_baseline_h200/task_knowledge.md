@@ -1,6 +1,26 @@
 # Task Knowledge
 
-<!-- METADATA:SESSION=69 -->
+<!-- METADATA:SESSION=70 -->
+
+## Session 70 Knowledge
+- Tool-Hang / Transport zero-success diagnosis status:
+- Square PTP is the control proving the general cached embedding + frozen encoder + eval path can work: it reaches `0.36` in the 100-episode selected-checkpoint eval.
+- Tool-Hang and Transport have zero success in both training rollout checkpoints and final selected-checkpoint evals.
+- Tool-Hang and Transport `train/mean_score` are also always `0.0`, so the failure is not only test seed generalization.
+- Main configs match Square on the important Fig. 9 line: `global_obs=16`, `global_horizon=32`, `global_action=8`, `batch_size=64`, `past_action_pred=true`, `past_steps_reg=-1`, `use_embed_if_present=true`, and frozen official encoders.
+- Tool-Hang and Transport cached embeddings are consistent with their frozen encoders, so embedding mismatch is not the main explanation for their zero success.
+- Current strongest hypotheses:
+- 500 epochs is likely enough for Square but insufficient for harder sparse-reward Tool-Hang and Transport, especially because released embedding YAMLs use much longer schedules.
+- sparse binary rewards make checkpoint selection brittle; all-zero scores provide no ranking signal.
+- Transport is substantially harder: dual-arm action dim `20`, embedding dim `274`, and a much larger transformer conditioning projection/model.
+- Tool-Hang is multi-stage and has fewer demos than Square, so low val loss can still correspond to no complete success.
+- First diagnostic to run before retraining:
+- expert-action replay through the exact Tool-Hang and Transport env runner/action conversion path. This validates env metadata, initial states, max steps, `abs_action`, and rotation conversion.
+- Second diagnostic:
+- small train-seed policy rollouts with video/action dumps for several checkpoints, to classify behavior as stationary, wrong-object, partial-subgoal, or unstable.
+- Third diagnostic:
+- PTP eval with `n_samples=3` or `5` as a diagnostic only. Nonzero score there would indicate sample-selection brittleness rather than complete absence of task skill.
+- If diagnostics validate runner/action path, rerun or extend Tool-Hang and Transport with longer training and a fresh LR schedule; avoid resuming a finished cosine schedule at `lr=0`.
 
 ## Session 69 Knowledge
 - Six-task embedding consistency status:
