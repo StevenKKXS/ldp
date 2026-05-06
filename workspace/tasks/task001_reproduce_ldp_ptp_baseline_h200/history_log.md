@@ -1,6 +1,31 @@
 # History Log
 
-<!-- METADATA:SESSION=84 -->
+<!-- METADATA:SESSION=85 -->
+
+## Session 85
+- User asked for concrete suggestions, based on the experiments so far, for getting Tool-Hang and Transport off zero success.
+- Recommended path for Tool-Hang:
+- do not prioritize longer retraining first, because current evidence says the stronger blocker is replay / environment fidelity
+- first target should be stable expert replay from stored initial states under the same rollout path intended for evaluation
+- prefer the absolute-action dataset path over the original delta-action path, because the video-enabled `image_abs` replay succeeded while the original delta path stayed at zero on recorded demos
+- keep `control_delta=false` whenever replaying `image_abs.hdf5`
+- systematically compare the environment-construction differences that changed replay behavior: headless versus image-enabled path, `use_image_obs`, render path, and hard reset behavior
+- if possible, align robosuite / robomimic environment version with the dataset so `model_file` reset can be tested; the current version mismatch around `robot0_g0_vis` is a strong fidelity risk
+- only after expert replay is stable should Tool-Hang be rerun as a training experiment
+- once replay is stable, keep the main paper-comparable policy settings first and only then consider longer training
+- Recommended path for Transport:
+- do not spend the next cycle on environment surgery, because expert replay already passes
+- first rerun should be a fresh longer schedule, not resume from the current cosine tail
+- suggested order: `1500` epochs first, then `3500` if needed
+- keep the main comparable settings fixed on the first rerun: `global_obs=16`, `global_horizon=32`, `global_action=8`, `past_steps_reg=-1`, cached embedding path, frozen encoder
+- increase checkpoint / rollout visibility because all-zero scalar scores are a weak ranking signal:
+- save checkpoints and rollouts more frequently
+- keep a few saved rollout videos for train and test seeds
+- compare EMA and non-EMA checkpoints at evaluation time
+- use `n_samples=3` or `5` only as a diagnostic to test whether the model contains occasional good samples; keep `n_samples=1` for the main reported line
+- If the user wants the shortest path to nonzero numbers:
+- Tool-Hang: fix replay fidelity first
+- Transport: run longer fresh training first
 
 ## Session 84
 - User asked for a concise summary of why Tool-Hang is currently all zero.

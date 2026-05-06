@@ -8,5 +8,5 @@
 | Status | Working |
 | Current Task | task001_reproduce_ldp_ptp_baseline_h200 |
 | PR | https://github.com/StevenKKXS/ldp/pull/new/intern_ldp_explorer/task001_reproduce_ldp_ptp_baseline_h200 |
-| Session | 84 |
-| Recent Progress | Condensed the current Tool-Hang diagnosis into one summary: the present `0` success should not be read as a clean policy-failure signal. The strongest evidence now points to Tool-Hang replay / environment fidelity instability under the current robosuite path, because expert demos do not replay consistently from stored initial states, while their terminal states are still recognized as successful. Training quality may still be a contributing factor, but it is not the first explanation to trust until replay conditions are made stable. |
+| Session | 85 |
+| Recent Progress | Produced task-specific recommendations for getting Tool-Hang and Transport off zero success. The recommendation split is now explicit: Tool-Hang should not be retrained first; it should first get a stable expert-replay path using the absolute-action dataset and environment settings that actually reproduce demos. Transport has the opposite profile: expert replay passes, so the next moves should focus on longer fresh-schedule training, denser checkpointing, saved rollout videos, and EMA/non-EMA or multi-sample diagnostics rather than environment surgery. |

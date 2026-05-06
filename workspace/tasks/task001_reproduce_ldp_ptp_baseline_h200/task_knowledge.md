@@ -1,6 +1,19 @@
 # Task Knowledge
 
-<!-- METADATA:SESSION=84 -->
+<!-- METADATA:SESSION=85 -->
+
+## Session 85 Knowledge
+- Best recommendation summary for escaping zero success:
+- Tool-Hang:
+- first fix replay / environment fidelity before trusting any new training run
+- use the absolute-action dataset path as the primary candidate
+- keep `control_delta=false` for `image_abs.hdf5`
+- compare image-enabled versus headless environment construction and, if possible, restore a dataset-compatible robosuite path so `model_file` reset can be tested
+- Transport:
+- environment path is not the first suspect because expert replay passes
+- first action should be longer fresh-schedule training with denser checkpointing and saved rollout videos
+- keep the paper-comparable policy settings fixed on the first rerun
+- use multi-sample eval or EMA/non-EMA comparison only as diagnostics, not as the main reported metric
 
 ## Session 84 Knowledge
 - Best one-paragraph summary for Tool-Hang `0` success:
