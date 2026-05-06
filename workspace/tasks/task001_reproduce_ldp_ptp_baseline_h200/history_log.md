@@ -1,6 +1,16 @@
 # History Log
 
-<!-- METADATA:SESSION=74 -->
+<!-- METADATA:SESSION=75 -->
+
+## Session 75
+- User asked to continue once more after the command-line guidance.
+- Added explicit reusable command patterns for the user:
+- one-run inspection command for a single `logs.json.txt`.
+- eight-run batch summary command over the current 4x2 diffusion subset.
+- The intended usage is to inspect only JSONL rows containing `test/mean_score`, because those rows align checkpoint/eval events with `epoch`, `global_step`, `train_loss`, `val_loss`, `train/mean_score`, `test/mean_score`, and `lr`.
+- Session 73-74 interpretation remains unchanged:
+- optimization is occurring in all runs.
+- current evidence does not support simple undertraining as the primary explanation for Tool-Hang / Transport zero success.
 
 ## Session 74
 - User asked to continue after the loss-curve summary.

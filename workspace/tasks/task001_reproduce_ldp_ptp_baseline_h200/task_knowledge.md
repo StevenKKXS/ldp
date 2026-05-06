@@ -1,6 +1,11 @@
 # Task Knowledge
 
-<!-- METADATA:SESSION=74 -->
+<!-- METADATA:SESSION=75 -->
+
+## Session 75 Knowledge
+- Recommended direct inspection commands should parse `logs.json.txt` instead of `train.log`.
+- For checkpoint-level comparison, filter JSONL rows with `test/mean_score`.
+- For bulk comparison, print per-eval-row `epoch`, `train_loss`, `val_loss`, `train/mean_score`, `test/mean_score`, and `lr`, then compute first/last/min summaries per run.
 
 ## Session 74 Knowledge
 - Command-line inspection recipe:
