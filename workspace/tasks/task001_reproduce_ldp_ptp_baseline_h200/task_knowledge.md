@@ -1,6 +1,26 @@
 # Task Knowledge
 
-<!-- METADATA:SESSION=78 -->
+<!-- METADATA:SESSION=79 -->
+
+## Session 79 Knowledge
+- Expert replay results:
+- Square states-only replay on `image_abs.hdf5`: `3/3` success.
+- Tool-Hang states-only replay on `image_abs.hdf5`: `1/8` success.
+- Transport states-only replay on `image_abs.hdf5`: `5/5` success.
+- Tool-Hang original delta `image.hdf5` replay: `0/8` success under both states-only runner-like reset and metadata-default object-observation setting.
+- Tool-Hang `hard_reset=False` replay: `1/5` success, so hard reset is not the main fix.
+- Final-state reset checks:
+- Square `8/8`, Tool-Hang `8/8`, Transport `7/8` terminal states recognized as successful under current environment.
+- Tool-Hang implication:
+- the reward predicate recognizes success states, but action rollout from stored initial states is not faithful.
+- stored Tool-Hang actions and states are therefore not enough to validate current runner behavior under the installed robosuite path.
+- HDF5 demo groups include `model_file`, but `reset_to({"model": model_file, "states": ...})` fails under current robosuite with missing `robot0_g0_vis`.
+- Current `RobomimicImageRunner` uses only `states[0]` for train init states and does not pass `model_file`.
+- Action conversion implication:
+- axis-angle -> rotation6d -> inverse roundtrip error is around `1e-6`, so conversion math is not the observed Tool-Hang replay failure.
+- Interpretation for zero-success tasks:
+- Tool-Hang zero success has a strong env / replay fidelity explanation.
+- Transport zero success is not explained by expert replay and should be investigated via rollout videos, action dumps, EMA/non-EMA comparison, and longer fresh-schedule training.
 
 ## Session 78 Knowledge
 - Current likely causes for success below paper and zero-success tasks:

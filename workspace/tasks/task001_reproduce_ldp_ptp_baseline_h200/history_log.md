@@ -1,6 +1,35 @@
 # History Log
 
-<!-- METADATA:SESSION=78 -->
+<!-- METADATA:SESSION=79 -->
+
+## Session 79
+- User asked to quickly run expert replay to check for runner / action-path issues, then asked to continue the unfinished replay check.
+- Replay ran on `10.100.0.29:30103` using `/root/venv` because local Python and the shared venv lacked robomimic / robosuite.
+- Main replay output directory:
+- `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/debug/session79_expert_replay`
+- Main states-only runner-like expert replay:
+- file: `replay_summary.json`
+- Square `image_abs.hdf5`: first `3` demos replayed successfully, success_any_rate `1.0`.
+- Tool-Hang `image_abs.hdf5`: first `8` demos replayed with abs-action axis-angle -> rotation6d -> inverse roundtrip, success_any_rate `0.125` (`1/8`).
+- Transport `image_abs.hdf5`: first `5` demos replayed successfully, success_any_rate `1.0`.
+- Abs-action conversion roundtrip errors were around `1e-6` or lower, so the conversion math itself is not the Tool-Hang failure.
+- Tool-Hang controls:
+- original delta `image.hdf5` replay under states-only reset passed `0/8`.
+- original delta `image.hdf5` replay with metadata-default object observations also passed `0/8`.
+- `image_abs.hdf5` replay with `hard_reset=False` passed only `1/5`, so the runner hard-reset setting is not enough to explain the failure.
+- Final-state reset check:
+- file: `final_state_success_summary.json`
+- Square final states checked `8/8` successful.
+- Tool-Hang final states checked `8/8` successful.
+- Transport final states checked `7/8` successful.
+- Interpretation:
+- Tool-Hang reward predicate can recognize successful states, but replaying the stored actions from stored initial states mostly fails.
+- This points to Tool-Hang reset / dynamics / dataset-model fidelity rather than cached embeddings or action conversion alone.
+- Dataset groups contain `model_file`, but resetting with `{"model": model_file, "states": states[0]}` fails under current robosuite with missing geom `robot0_g0_vis`.
+- The current Robomimic image runner uses only `states[0]` for train init states and does not pass `model_file`; this means the actual Tool-Hang rollout path can suffer from the same fidelity issue found by replay.
+- Practical conclusion:
+- Tool-Hang zero success is now strongly explained by env / replay fidelity risk.
+- Transport zero success is not explained by expert replay, because the Transport expert replay passes; Transport remains a training quality / duration / checkpoint-selection problem unless another diagnostic contradicts this.
 
 ## Session 78
 - User asked for likely causes of lower-than-reported success rates and some tasks having zero success, plus recommendations.
