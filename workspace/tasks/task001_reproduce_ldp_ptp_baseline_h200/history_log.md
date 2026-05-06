@@ -1,6 +1,26 @@
 # History Log
 
-<!-- METADATA:SESSION=83 -->
+<!-- METADATA:SESSION=84 -->
+
+## Session 84
+- User asked for a concise summary of why Tool-Hang is currently all zero.
+- Current best summary:
+- Tool-Hang zero success is most likely not a pure policy-learning failure.
+- The strongest evidence is that Tool-Hang expert replay is unstable under the current environment path:
+- headless states-only replay of `image_abs.hdf5` succeeded only `1/8`
+- original delta-action replay succeeded `0/8`
+- terminal-state recognition is still `8/8`
+- video-enabled replay changed the boundary again, with `image_abs` demos replaying better than in the earlier headless run
+- Therefore the current Tool-Hang zero is best explained as:
+- first, replay / env fidelity instability
+- second, possible policy weakness on top of that
+- Explicitly not the main explanation:
+- cached embedding mismatch is unlikely, because Tool-Hang embeddings were checked against the frozen encoder and matched
+- a simple absolute-vs-relative controller mixup in the replay script was avoided intentionally
+- the reward predicate itself is not the main issue, because Tool-Hang final states are recognized as successful
+- What this means for interpretation:
+- the present Tool-Hang `0` cannot be trusted as a clean model-comparison number
+- before blaming training recipe, checkpoint choice, or PTP itself, Tool-Hang replay conditions need to be pinned down so expert data can be reproduced consistently from stored starts
 
 ## Session 83
 - User asked whether experiment 2 changed from absolute to relative control, what was actually fed into the replay environment, and whether that could itself explain the failure.

@@ -8,5 +8,5 @@
 | Status | Working |
 | Current Task | task001_reproduce_ldp_ptp_baseline_h200 |
 | PR | https://github.com/StevenKKXS/ldp/pull/new/intern_ldp_explorer/task001_reproduce_ldp_ptp_baseline_h200 |
-| Session | 83 |
-| Recent Progress | Clarified the control-semantics question for Tool-Hang experiment 1 vs experiment 2. Experiment 1 replays `image_abs.hdf5` by explicitly setting `control_delta=false` and sending absolute 7D actions back into the env after the same rotation6d roundtrip used by the policy path. Experiment 2 replays original `image.hdf5` by keeping delta-control semantics and sending the raw relative 7D actions directly. This means the replay script did not mix absolute actions with a relative controller or vice versa; that specific semantic mismatch was avoided on purpose. |
+| Session | 84 |
+| Recent Progress | Condensed the current Tool-Hang diagnosis into one summary: the present `0` success should not be read as a clean policy-failure signal. The strongest evidence now points to Tool-Hang replay / environment fidelity instability under the current robosuite path, because expert demos do not replay consistently from stored initial states, while their terminal states are still recognized as successful. Training quality may still be a contributing factor, but it is not the first explanation to trust until replay conditions are made stable. |

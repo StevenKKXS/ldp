@@ -1,6 +1,15 @@
 # Task Knowledge
 
-<!-- METADATA:SESSION=83 -->
+<!-- METADATA:SESSION=84 -->
+
+## Session 84 Knowledge
+- Best one-paragraph summary for Tool-Hang `0` success:
+- do not interpret it as a clean policy failure yet
+- strongest current cause is replay / environment fidelity instability under the installed robosuite path
+- evidence: expert replay from stored initial states is inconsistent, but terminal states are recognized as successful
+- embeddings are not the leading suspect
+- replay control semantics were aligned intentionally
+- therefore Tool-Hang needs stable expert replay before its zero-success policy numbers can be trusted
 
 ## Session 83 Knowledge
 - Tool-Hang experiment 1 vs experiment 2 control semantics:
