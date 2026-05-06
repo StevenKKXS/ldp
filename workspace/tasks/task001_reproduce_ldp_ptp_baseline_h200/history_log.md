@@ -1,6 +1,36 @@
 # History Log
 
-<!-- METADATA:SESSION=85 -->
+<!-- METADATA:SESSION=86 -->
+
+## Session 86
+- User asked how `control_delta=false` is set for these robomimic tasks and whether each task differs.
+- Checked code paths and dataset metadata.
+- Main code finding:
+- for robomimic runners, `control_delta=false` is generally not set per-task by separate custom logic
+- instead, the common rule is: if `abs_action=true`, the runner overrides
+- `env_meta['env_kwargs']['controller_configs']['control_delta'] = False`
+- This pattern appears in:
+- `diffusion_policy/env_runner/robomimic_image_runner.py`
+- `diffusion_policy/env_runner/robomimic_lowdim_runner.py`
+- `diffusion_policy/env_runner/robomimic_longhist_image_runner.py`
+- `diffusion_policy/env_runner/robomimic_square_long_image_runner.py`
+- Dataset-conversion finding:
+- `diffusion_policy/common/robomimic_util.py` also creates an absolute-action environment metadata copy with `control_delta=false` when converting delta actions to absolute actions
+- This is used to generate absolute actions, not as a task-specific rollout special case
+- Config finding:
+- the relevant robomimic task configs for Square, Tool-Hang, Transport, and LongSquare all set `abs_action: true`
+- Therefore these tasks all enter the same runtime branch that forces `control_delta=false`
+- Dataset metadata finding:
+- the checked HDF5 files still store `control_delta=true` in `data.attrs['env_args']`, including the `image_abs.hdf5` files
+- So the switch to absolute control is mostly a runtime override by the runner, not something visibly rewritten into the dataset metadata
+- Answer to whether tasks differ:
+- the `control_delta=false` rule itself is mostly uniform across these robomimic tasks
+- what differs by task is not the existence of the override, but the environment and action structure it applies to:
+- Square and Tool-Hang are single-arm `7D`
+- Transport is dual-arm `14D` raw / `20D` transformed in the policy path
+- LongSquare uses the longhist runner but the same `abs_action -> control_delta=false` principle
+- Practical implication:
+- if one task behaves differently under absolute control, it is more likely due to environment-specific dynamics / reset / controller behavior than because that task uses a fundamentally different `control_delta=false` setting in the code
 
 ## Session 85
 - User asked for concrete suggestions, based on the experiments so far, for getting Tool-Hang and Transport off zero success.

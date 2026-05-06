@@ -8,5 +8,5 @@
 | Status | Working |
 | Current Task | task001_reproduce_ldp_ptp_baseline_h200 |
 | PR | https://github.com/StevenKKXS/ldp/pull/new/intern_ldp_explorer/task001_reproduce_ldp_ptp_baseline_h200 |
-| Session | 85 |
-| Recent Progress | Produced task-specific recommendations for getting Tool-Hang and Transport off zero success. The recommendation split is now explicit: Tool-Hang should not be retrained first; it should first get a stable expert-replay path using the absolute-action dataset and environment settings that actually reproduce demos. Transport has the opposite profile: expert replay passes, so the next moves should focus on longer fresh-schedule training, denser checkpointing, saved rollout videos, and EMA/non-EMA or multi-sample diagnostics rather than environment surgery. |
+| Session | 86 |
+| Recent Progress | Traced how `control_delta=false` is set for the robomimic tasks. The main finding is that Square, Tool-Hang, Transport, and LongSquare do not each carry a separate task-specific control-delta rule in the runner; instead, the runners uniformly override `env_meta['env_kwargs']['controller_configs']['control_delta'] = False` whenever `abs_action=true`. The HDF5 files themselves still report `control_delta=true` even for `image_abs.hdf5`, so the absolute-control switch is primarily a runtime override rather than a property stored back into dataset metadata. |

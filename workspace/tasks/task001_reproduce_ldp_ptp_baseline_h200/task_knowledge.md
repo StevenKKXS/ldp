@@ -1,6 +1,15 @@
 # Task Knowledge
 
-<!-- METADATA:SESSION=85 -->
+<!-- METADATA:SESSION=86 -->
+
+## Session 86 Knowledge
+- For the robomimic tasks in this project, `control_delta=false` is mostly a shared runtime rule, not a different per-task hand-written setting.
+- Shared rule:
+- if `abs_action=true`, the robomimic runner overrides `env_meta['env_kwargs']['controller_configs']['control_delta'] = False`
+- This applies in the standard image runner, lowdim runner, longhist image runner, and square-long image runner.
+- Square, Tool-Hang, Transport, and LongSquare configs all set `abs_action: true`, so they all hit that override branch.
+- HDF5 metadata can still show `control_delta=true` even in `image_abs.hdf5`; the absolute-control choice is mainly a runtime override.
+- Task differences are mainly in action dimension and environment dynamics, not in whether the code uses a different `control_delta=false` rule.
 
 ## Session 85 Knowledge
 - Best recommendation summary for escaping zero success:
