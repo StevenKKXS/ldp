@@ -1,6 +1,18 @@
 # Task Knowledge
 
-<!-- METADATA:SESSION=70 -->
+<!-- METADATA:SESSION=71 -->
+
+## Session 71 Knowledge
+- Current table-ready reproduction results use Session 65 selected-checkpoint evals:
+- `n_test=100`, `n_samples=1`, video-enabled local eval path `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/evals/session65_video_1778035802`.
+- Repro no-PTP / DP values:
+- Square `0.00`, Tool-Hang `0.00`, Transport `0.00`, Push-T `N/A`, LH-ALOHA `N/A`, Long Square `0.00`.
+- Repro PTP values:
+- Square `0.36`, Tool-Hang `0.00`, Transport `0.00`, Push-T `N/A`, LH-ALOHA `N/A`, Long Square `0.00`.
+- Current reproduction averages should be labeled as four-task averages:
+- Repro no-PTP 4-task avg `0.000`.
+- Repro PTP 4-task avg `0.090`.
+- Do not compare these averages directly to the paper's six-task `Source-specific Avg.` without noting missing Push-T and LH-ALOHA.
 
 ## Session 70 Knowledge
 - Tool-Hang / Transport zero-success diagnosis status:

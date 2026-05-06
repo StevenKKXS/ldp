@@ -1,6 +1,31 @@
 # History Log
 
-<!-- METADATA:SESSION=70 -->
+<!-- METADATA:SESSION=71 -->
+
+## Session 71
+- User asked to insert the current reproduction results into the paper-result table by adding reproduction rows under the paper rows.
+- Used current completed selected-checkpoint evals from Session 65:
+- eval root: `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/evals/session65_video_1778035802`.
+- setting: `100` test episodes, `n_samples=1`, selected checkpoint per run.
+- Available comparable tasks: Square, Tool-Hang, Transport, and Long Square.
+- Repro no-PTP / DP selected-checkpoint results:
+- Square `0.00`, selected `epoch=0499-test_mean_score=0.025.ckpt`.
+- Tool-Hang `0.00`, selected `epoch=0499-test_mean_score=0.000.ckpt`.
+- Transport `0.00`, selected `epoch=0499-test_mean_score=0.000.ckpt`.
+- Long Square `0.00`, selected `epoch=0499-test_mean_score=0.000.ckpt`.
+- Push-T is `N/A` because no current cached-embedding repro eval is available.
+- LH-ALOHA is `N/A` because current ALOHA/Cube data/encoder pairing is inconsistent and has no valid comparable repro eval.
+- Repro no-PTP 4-task average is `0.000`.
+- Repro PTP selected-checkpoint results:
+- Square `0.36`, selected `epoch=0099-test_mean_score=0.475.ckpt`.
+- Tool-Hang `0.00`, selected `epoch=0499-test_mean_score=0.000.ckpt`.
+- Transport `0.00`, selected `epoch=0499-test_mean_score=0.000.ckpt`.
+- Long Square `0.00`, selected `epoch=0499-test_mean_score=0.000.ckpt`.
+- Push-T is `N/A` because no current cached-embedding repro eval is available.
+- LH-ALOHA is `N/A` because current ALOHA/Cube data/encoder pairing is inconsistent and has no valid comparable repro eval.
+- Repro PTP 4-task average is `0.090`.
+- Important caveat:
+- the paper `Source-specific Avg.` rows average six tasks, while the current reproduction average is over four evaluated tasks only and should not be read as a six-task average.
 
 ## Session 70
 - User asked to keep encoder/data inconsistencies recorded for later handling and focus on why Tool-Hang and Transport have 0 success, especially why Square succeeds while these two do not.
