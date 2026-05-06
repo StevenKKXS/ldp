@@ -1,6 +1,17 @@
 # Task Knowledge
 
-<!-- METADATA:SESSION=67 -->
+<!-- METADATA:SESSION=68 -->
+
+## Session 68 Knowledge
+- Compact embedding HDF5 files for Tool-Hang and Transport can intentionally omit or empty raw image arrays if cached training uses `obs/embedding`.
+- For the diffusion transformer policy, when `use_embed_if_present=true` and `embedding` is present in the batch, `compute_loss` uses `batch["obs"]["embedding"]` directly as `cond`; raw image tensors are not encoded during that cached-training loss path.
+- Final eval should not depend on compact HDF5 image arrays; it should depend on environment-rendered raw observations plus the frozen encoder loaded in the policy.
+- Tool-Hang and Transport Session 67 consistency metrics matched cached embeddings to online raw-frame encoder outputs, so empty compact image arrays are not the main current explanation for their zero success rates.
+- Empty compact image arrays remain a risk only for any path that accidentally uses the compact HDF5 as a raw-image source for rollout or visualization.
+- Next execution target is six-task dataset consistency coverage:
+- `Push-T`, `Square`, `Tool-Hang`, `Transport`, `ALOHA/Cube`, and `LongSquare`.
+- required regenerated files must use new names in the same directory and must not overwrite original datasets.
+- configs should be updated only after the generated or existing dataset has passed consistency checks.
 
 ## Session 67 Knowledge
 - Cached embedding consistency check method:

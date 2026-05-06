@@ -1,6 +1,21 @@
 # History Log
 
-<!-- METADATA:SESSION=67 -->
+<!-- METADATA:SESSION=68 -->
+
+## Session 68
+- User asked whether the previously mentioned empty image arrays in compact HDF5 files mean Tool-Hang and Transport need retraining, and whether the zero success rates are related to that issue.
+- Answer recorded:
+- Tool-Hang and Transport do not need retraining merely because the compact embedding HDF5 files omit or empty raw image arrays.
+- In cached-embedding training with `use_embed_if_present=true`, the training policy consumes `batch["obs"]["embedding"]` as the observation condition, so raw image arrays in the compact training HDF5 are not part of the loss path.
+- Online rollout and final eval should use environment-rendered raw images and the frozen encoder, not raw image arrays from the compact training HDF5.
+- Session 67 evidence showed Tool-Hang and Transport cached embeddings match the frozen online encoder on the same raw frames, so their zero success rates are not explained by an embedding/image-array mismatch under the current check.
+- Empty compact image arrays could affect train-time rollout only if a rollout/env-runner path accidentally tries to use the compact HDF5 image arrays as raw image observations; the intended setup keeps rollout data/environment source separate from compact training data.
+- Current best explanation for Tool-Hang and Transport zero success remains policy/checkpoint underperformance or task/eval configuration sensitivity, not empty compact images.
+- User set the next session goal:
+- check dataset/embedding consistency for all six tasks: `Push-T`, `Square`, `Tool-Hang`, `Transport`, `ALOHA/Cube`, and `LongSquare`.
+- identify which datasets require regeneration.
+- regenerate needed HDF5 datasets with new filenames in the same directories, without overwriting original files.
+- update the related configs to point to the validated or regenerated dataset paths.
 
 ## Session 67
 - User asked to quickly check whether cached embeddings are consistent with the frozen encoder.
