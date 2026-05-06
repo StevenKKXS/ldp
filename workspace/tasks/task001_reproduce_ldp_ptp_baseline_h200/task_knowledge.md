@@ -1,6 +1,24 @@
 # Task Knowledge
 
-<!-- METADATA:SESSION=79 -->
+<!-- METADATA:SESSION=80 -->
+
+## Session 80 Knowledge
+- Best concise explanation of the Tool-Hang replay diagnosis:
+- controls pass: Square `3/3`, Transport `5/5`
+- Tool-Hang abs-action replay from stored initial states: `1/8`
+- Tool-Hang original delta-action replay from stored initial states: `0/8`
+- Tool-Hang original delta replay with metadata-default object observations: `0/8`
+- Tool-Hang abs replay with `hard_reset=False`: `1/5`
+- Tool-Hang terminal-state recognition: `8/8`
+- This means:
+- the replay method itself is not globally broken
+- Tool-Hang success predicate is not the main issue
+- Tool-Hang failure occurs during trajectory rollout from stored initial state, not at the final-state recognition stage
+- abs-action conversion is not the main culprit
+- current Tool-Hang runner / environment fidelity is the leading explanation for Tool-Hang zero success
+- Important compatibility note:
+- Tool-Hang demos store `model_file`, but model-plus-state reset fails under current robosuite because of geom-name mismatch
+- current `RobomimicImageRunner` does not use `model_file`, only `states[0]`
 
 ## Session 79 Knowledge
 - Expert replay results:

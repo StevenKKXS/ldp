@@ -1,6 +1,45 @@
 # History Log
 
-<!-- METADATA:SESSION=79 -->
+<!-- METADATA:SESSION=80 -->
+
+## Session 80
+- User said the previous Tool-Hang replay explanation was hard to follow and asked for a clearer description of the experiments, phenomena, and conclusion.
+- Clarified the Tool-Hang replay diagnosis as four separate experiments plus two sanity controls.
+- Sanity controls:
+- Square states-only replay on `image_abs.hdf5` passed `3/3`.
+- Transport states-only replay on `image_abs.hdf5` passed `5/5`.
+- These controls show the replay script and general method are not globally broken.
+- Tool-Hang experiment 1:
+- input: `tool_hang/ph/image_abs.hdf5`
+- setup: current runner-like states-only reset, `control_delta=False`, `use_object_obs=False`, abs-action conversion roundtrip identical to training / eval path
+- result: `1/8` success, only `demo_5` succeeds
+- meaning: under the same broad rollout assumptions as the current eval path, most Tool-Hang expert demos cannot be faithfully replayed
+- Tool-Hang experiment 2:
+- input: `tool_hang/ph/image.hdf5` original delta-action dataset
+- setup: states-only reset, keep delta-action controller setting
+- result: `0/8` success
+- meaning: the failure is not caused only by the abs-action conversion path
+- Tool-Hang experiment 3:
+- input: same original `image.hdf5`
+- setup: keep metadata-default object-observation setting
+- result: `0/8` success
+- meaning: turning object observations back on does not fix the replay failure
+- Tool-Hang experiment 4:
+- input: `tool_hang/ph/image_abs.hdf5`
+- setup: states-only reset with `hard_reset=False`
+- result: `1/5` success
+- meaning: runner hard-reset behavior is not the main issue either
+- Tool-Hang final-state check:
+- setup: do not replay the action trajectory; directly reset to each demo terminal state
+- result: `8/8` terminal states are recognized as successful by the current environment
+- meaning: the success predicate itself is not the main problem; the problem appears while rolling out from stored initial state to stored final state
+- Additional environment compatibility finding:
+- each Tool-Hang demo stores a `model_file`
+- resetting with `{\"model\": model_file, \"states\": states[0]}` fails under current robosuite with missing geom `robot0_g0_vis`
+- current `RobomimicImageRunner` only uses `states[0]` and does not pass `model_file`
+- Final interpretation stated clearly:
+- Tool-Hang zero success is now strongly linked to env / replay fidelity risk in the current installed robosuite path
+- Transport zero success is different, because its expert replay passes; Transport remains a policy-training / checkpoint / rollout-behavior problem instead of a basic expert-replay fidelity failure
 
 ## Session 79
 - User asked to quickly run expert replay to check for runner / action-path issues, then asked to continue the unfinished replay check.
