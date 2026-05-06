@@ -1,6 +1,18 @@
 # Task Knowledge
 
-<!-- METADATA:SESSION=63 -->
+<!-- METADATA:SESSION=64 -->
+
+## Session 64 Knowledge
+- Session 63 selected-checkpoint eval did not save videos.
+- Checked path: `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/evals/session63_1778032161`.
+- Video extension scan result: no `mp4`, `gif`, `webm`, or `avi` files found.
+- Retained eval artifacts:
+- `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/evals/session63_1778032161/<run>/eval_log.json`.
+- `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/logs/session63_eval_<run>_1778032161.log`.
+- Cause:
+- Session 63 eval used `n_test_vis=0` and `n_train_vis=0`.
+- Session 63 independent eval used `wandb_log: noop`, so it did not upload media artifacts.
+- To save videos for a future diagnostic eval, run a small eval with nonzero test visualization count and an output path or W&B logging path that preserves the rendered videos.
 
 ## Session 63 Knowledge
 - Selected-checkpoint one-pass eval completed for all 8 seed42 diffusion subset runs.

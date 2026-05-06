@@ -1,6 +1,21 @@
 # History Log
 
-<!-- METADATA:SESSION=63 -->
+<!-- METADATA:SESSION=64 -->
+
+## Session 64
+- User asked whether videos were saved for the selected-checkpoint evaluation.
+- Checked `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/evals/session63_1778032161` for video files with extensions `mp4`, `gif`, `webm`, and `avi`.
+- Result: no video files were found.
+- Checked the eval output files under `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/evals/session63_1778032161/<run>/eval_log.json`.
+- Result: each run has an `eval_log.json`, but no media artifact path or video key was present in the saved eval outputs.
+- Checked Session 63 eval logs under `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/logs/session63_eval_*_1778032161.log`.
+- Result: logs show `wandb_log: noop`, and no saved video artifact path was emitted.
+- Cause:
+- Session 63 final eval was configured with `n_test_vis=0` and `n_train_vis=0`.
+- The runtime independent eval also used no-op `wandb.log`, so even if a runner produced visual logging objects they would not be uploaded to W&B.
+- Conclusion:
+- The Session 63 `n_test=100`, `n_samples=1` selected-checkpoint evaluation did not save videos.
+- Existing retained artifacts are JSON eval summaries and plain-text logs.
 
 ## Session 63
 - User asked to select the best checkpoint for each run, choose the last checkpoint if there is no score, run one evaluation, and summarize the results.
