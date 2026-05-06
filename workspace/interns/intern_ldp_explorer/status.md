@@ -8,5 +8,5 @@
 | Status | Working |
 | Current Task | task001_reproduce_ldp_ptp_baseline_h200 |
 | PR | https://github.com/StevenKKXS/ldp/pull/new/intern_ldp_explorer/task001_reproduce_ldp_ptp_baseline_h200 |
-| Session | 76 |
-| Recent Progress | Consolidated the parameter-design history into two layers so later analysis does not mix exploratory runs with the main paper-aligned reproduction line. Recorded that the final 4x2 diffusion subset switched to `global_obs=16`, `global_horizon=32`, `global_action=8`, `num_epochs=500`, `batch_size=64`, explicit `past_steps_reg=-1`, DP/PTP split via `past_action_pred`, and cached-embedding training with a frozen official short-context encoder, while older exploratory runs included short-context `global_obs=2`, `global_action=1`, `num_epochs=3500`, raw-image pilots, and different checkpoint / rollout cadences. |
+| Session | 77 |
+| Recent Progress | Answered whether the encoder is frozen during training. Confirmed that the current paper-aligned cached-embedding 4x2 diffusion runs use `_emb` configs with `obs_encoder_freeze=true`; the policy code then sets every observation-encoder parameter to `requires_grad=False`. In cached-embedding loss computation, `use_embed_if_present=true` consumes `batch["obs"]["embedding"]` directly, so training does not normally forward raw images through the encoder. Raw-image / non-embedding configs can have `obs_encoder_freeze=false` and are not the current main reproduction line. |

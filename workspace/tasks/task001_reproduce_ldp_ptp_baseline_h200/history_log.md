@@ -1,6 +1,19 @@
 # History Log
 
-<!-- METADATA:SESSION=76 -->
+<!-- METADATA:SESSION=77 -->
+
+## Session 77
+- User asked whether the encoder is frozen during training.
+- Checked current config and code behavior.
+- Current main reproduction answer:
+- yes, for the paper-aligned cached-embedding 4x2 diffusion subset, the observation encoder is frozen.
+- `_emb` configs for Square, Tool-Hang, Transport, and LongSquare set `obs_encoder_freeze: true`.
+- In `diffusion_transformer_hybrid_image_policy.py`, when `obs_encoder_freeze` is true, the constructor iterates over `self.obs_encoder.parameters()` and sets `param.requires_grad = False`.
+- The optimizer still appends `self.obs_encoder.parameters()` to an optimizer group, but frozen parameters do not receive gradients and are not updated by AdamW.
+- With `policy.use_embed_if_present=true` and cached HDF5 batches containing `obs/embedding`, the training loss path uses `batch["obs"]["embedding"]` directly instead of forwarding raw images through `self.obs_encoder`.
+- During online rollout / eval, if raw observations are provided and no `embedding` key exists, the frozen encoder can still be used for inference features.
+- Caveat recorded:
+- raw-image / non-embedding configs such as base non-`_emb` YAMLs can have `obs_encoder_freeze=false`; those are not the current main cached reproduction line.
 
 ## Session 76
 - User asked which parameter designs had been changed previously.

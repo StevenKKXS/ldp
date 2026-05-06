@@ -1,6 +1,14 @@
 # Task Knowledge
 
-<!-- METADATA:SESSION=76 -->
+<!-- METADATA:SESSION=77 -->
+
+## Session 77 Knowledge
+- For the current paper-aligned cached-embedding 4x2 diffusion subset, the observation encoder is frozen during training.
+- `_emb` configs use `obs_encoder_freeze: true`; the policy constructor sets `requires_grad=False` on `self.obs_encoder.parameters()`.
+- The optimizer includes an obs-encoder parameter group, but frozen parameters do not receive gradients and therefore do not update.
+- With `use_embed_if_present=true` and HDF5 batches containing `obs/embedding`, the training loss path consumes cached embeddings directly and normally does not call `self.obs_encoder` during supervised training.
+- The frozen encoder still matters for rollout / eval when raw environment images are provided and no `embedding` key is present.
+- Non-`_emb` raw-image configs can have `obs_encoder_freeze=false`; do not confuse those defaults with the current cached reproduction runs.
 
 ## Session 76 Knowledge
 - Parameter-history recap should separate exploratory settings from the final reproduction line.
