@@ -1,11 +1,11 @@
 # intern_method_developer - 状态
 
-<!-- METADATA:STATUS=Working,TASK=task002_test_smolvla_square_ldp -->
+<!-- METADATA:STATUS=Idle,TASK= -->
 
 | 字段 | 值 |
 |------|-----|
 | Name | intern_method_developer |
-| Status | Working |
-| Current Task | task002_test_smolvla_square_ldp |
-| PR | https://github.com/StevenKKXS/ldp/pull/new/intern_method_developer/task002_test_smolvla_square_ldp |
+| Status | Idle |
+| Current Task | |
+| PR | N/A |
 | Session | 0 |

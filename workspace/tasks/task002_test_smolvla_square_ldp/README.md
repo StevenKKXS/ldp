@@ -1,6 +1,6 @@
 ## Task: Test SmolVLA Structure for LDP Square Training
 
-<!-- METADATA:STATUS=InProgress,ASSIGNEE=intern_method_developer -->
+<!-- METADATA:STATUS=Completed,ASSIGNEE=intern_method_developer -->
 
 ### Background
 - The supervisor asked to test whether the SmolVLA model structure can be used for the `square` task under the current LDP codebase.
@@ -20,3 +20,6 @@
 - The report includes exact dataset/config/checkpoint/log paths under `/mnt/3fs2/data/tingwen.du`.
 - The report includes observed training behavior and quantitative metrics available from the run.
 - Any compatibility patches or wrappers are documented without changing the original LDP checkout.
+
+### Report
+- `/mnt/3fs2/data/tingwen.du/intern_method_developer/task002_test_smolvla_square_ldp/REPORT.md`
