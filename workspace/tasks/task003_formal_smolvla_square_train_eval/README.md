@@ -1,6 +1,6 @@
 ## Task: Formal SmolVLA Square Training and Evaluation
 
-<!-- METADATA:STATUS=InProgress,ASSIGNEE=intern_method_developer -->
+<!-- METADATA:STATUS=Completed,ASSIGNEE=intern_method_developer -->
 
 ### Background
 - The supervisor requested formal SmolVLA-style training on the LDP square task.
@@ -18,3 +18,10 @@
 - A report under `/mnt/3fs2/data/tingwen.du/intern_method_developer/task003_formal_smolvla_square_train_eval/` summarizes commands, artifacts, metrics, and limitations.
 - Training/eval artifacts are reproducible and isolated from the original LDP checkout.
 - Task status and knowledge are updated in this branch.
+
+### Result
+- Report: `/mnt/3fs2/data/tingwen.du/intern_method_developer/task003_formal_smolvla_square_train_eval/reports/REPORT.md`
+- Run: `/mnt/3fs2/data/tingwen.du/intern_method_developer/task003_formal_smolvla_square_train_eval/runs/formal_ldp_abs10_1000epoch_eval100_20260506_135043`
+- Completed 1000 epochs with eval at epochs 100, 200, ..., 1000.
+- Best offline sampled action MSE: epoch 300, `0.13077014684677124`.
+- Final epoch 1000 sampled action MSE: `0.13218089938163757`.
