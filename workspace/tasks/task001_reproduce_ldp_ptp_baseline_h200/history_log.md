@@ -1,6 +1,46 @@
 # History Log
 
-<!-- METADATA:SESSION=89 -->
+<!-- METADATA:SESSION=90 -->
+
+## Session 90
+- User asked for the current run status.
+- Checked remote H200 node `10.100.0.29:30103`.
+- Old active queue stamp `1778070500` state before intervention:
+- GPU0 and GPU3 were idle.
+- GPU1 was running Tool-Hang DP `a8` and `a1`.
+- GPU2 was running Transport DP `a8` and `a1`.
+- Square DP `a8` / `a1` and LongSquare DP `a8` / `a1` had stopped at the first rollout/checkpoint boundary around epoch `99` before producing checkpoint or MP4 files.
+- Failure reason found in the Square and LongSquare logs:
+- `TypeError: AsyncVectorEnv.reset_async() got an unexpected keyword argument 'seed'`
+- source path in traceback:
+- `/mnt/3fs2/data/tingwen.du/workspace/ldp/diffusion_policy/gym_util/async_vector_env.py`
+- trigger point:
+- `env.reset()` inside the Robomimic image env runners during the epoch-100 rollout
+- interpretation:
+- this was a Gym 0.25 compatibility error in the vector env wrapper, not a model-success-rate or data-quality result
+- Tool-Hang and Transport had not reached epoch 100 yet but would have hit the same reset API incompatibility.
+- Applied compatibility patch locally and synced it to the remote repo:
+- file: `diffusion_policy/gym_util/async_vector_env.py`
+- `reset_async` now accepts `seed`, `return_info`, and `options`
+- `reset_wait` now accepts the same Gym 0.25 keyword arguments and returns empty info dicts if `return_info=true`
+- worker reset code seeds each sub-env before calling old-style `env.reset()` when a seed is supplied
+- Verified with local `py_compile` and remote `/root/venv/bin/python -m py_compile`.
+- Stopped the remaining doomed `1778070500` processes using a process filter on the stamp.
+- Relaunched the full 4x2x2 queue with new stamp `1778073162`.
+- New active roots:
+- outputs: `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/outputs/session89_4x2x2_2000ep_1778073162`
+- logs: `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/logs/session89_4x2x2_2000ep_1778073162`
+- Current sampled live state after relaunch:
+- GPU0: Square DP `a8` and Square DP `a1`, about `5553 MiB`, utilization sampled around `63%`
+- GPU1: Tool-Hang DP `a8` and Tool-Hang DP `a1`, about `6027 MiB`, utilization sampled around `94%`
+- GPU2: Transport DP `a8` and Transport DP `a1`, about `10755 MiB`, utilization sampled around `97%`
+- GPU3: LongSquare DP `a8` and LongSquare DP `a1`, about `5551 MiB`, utilization sampled around `94%`
+- Each of the eight DP runs had live processes and no startup traceback in the sampled logs.
+- Logs showed active `Training epoch 0` / early epoch progress for all tasks.
+- PTP is still queued by lane script and will start after the matching DP run exits.
+- Old failed output/log roots are preserved for diagnosis and were not overwritten:
+- `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/outputs/session89_4x2x2_2000ep_1778070500`
+- `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/logs/session89_4x2x2_2000ep_1778070500`
 
 ## Session 89
 - User requested:

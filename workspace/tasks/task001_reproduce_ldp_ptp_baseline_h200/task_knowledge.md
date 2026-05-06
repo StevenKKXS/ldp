@@ -1,6 +1,40 @@
 # Task Knowledge
 
-<!-- METADATA:SESSION=89 -->
+<!-- METADATA:SESSION=90 -->
+
+## Session 90 Knowledge
+- Current effective 4x2x2 run stamp is `1778073162`.
+- Current output root:
+- `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/outputs/session89_4x2x2_2000ep_1778073162`
+- Current log root:
+- `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/logs/session89_4x2x2_2000ep_1778073162`
+- The previous stamp `1778070500` is a failed / stopped incident run, not the effective queue.
+- Failure in `1778070500`:
+- Square and LongSquare reached epoch `99` and failed when the epoch-100 rollout called `env.reset()`
+- error: `AsyncVectorEnv.reset_async() got an unexpected keyword argument 'seed'`
+- no checkpoint or MP4 was produced by those failed runs because the crash happened at the rollout/checkpoint boundary
+- Tool-Hang and Transport were stopped before the same failure point after the compatibility problem was identified
+- Compatibility patch needed for Gym 0.25:
+- `diffusion_policy/gym_util/async_vector_env.py`
+- `reset_async(seed=None, return_info=False, options=None)`
+- `reset_wait(timeout=None, seed=None, return_info=False, options=None)`
+- worker reset seeds the sub-env via `env.seed(seed)` and then calls old-style `env.reset()`
+- The existing runner patch remains required:
+- Robomimic image runners instantiate `AsyncVectorEnv(..., shared_memory=False)` to support custom observation spaces during rollout.
+- Active lane layout for stamp `1778073162`:
+- GPU0: Square DP `a8`, Square DP `a1`
+- GPU1: Tool-Hang DP `a8`, Tool-Hang DP `a1`
+- GPU2: Transport DP `a8`, Transport DP `a1`
+- GPU3: LongSquare DP `a8`, LongSquare DP `a1`
+- PTP runs are launched by the lane script after each matching DP run completes.
+- Current sampled GPU state after relaunch:
+- GPU0 around `5553 / 143771 MiB`, utilization around `63%`
+- GPU1 around `6027 / 143771 MiB`, utilization around `94%`
+- GPU2 around `10755 / 143771 MiB`, utilization around `97%`
+- GPU3 around `5551 / 143771 MiB`, utilization around `94%`
+- Current sampled log state:
+- all eight DP runs have entered training and show no startup traceback
+- early logs show `Training epoch 0` / early epoch progress
 
 ## Session 89 Knowledge
 - LongSquare released-encoder preprocessing output:
