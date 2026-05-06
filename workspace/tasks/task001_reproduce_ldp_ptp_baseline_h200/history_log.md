@@ -1,6 +1,35 @@
 # History Log
 
-<!-- METADATA:SESSION=65 -->
+<!-- METADATA:SESSION=66 -->
+
+## Session 66
+- User asked for analysis of why many tasks have zero success rate and how to adjust.
+- Current Session 65 video eval status at analysis time:
+- completed `eval_log.json` files: Square DP/PTP, LongSquare DP/PTP, Tool-Hang DP/PTP.
+- current completed scores: Square DP `0.0`, Square PTP `0.36`, LongSquare DP `0.0`, LongSquare PTP `0.0`, Tool-Hang DP `0.0`, Tool-Hang PTP `0.0`.
+- Transport DP/PTP still running at roughly `20/25` chunks at `2026-05-06 03:27 UTC`.
+- 32 local mp4 videos remain saved under `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/evals/session65_video_1778035802/<run>/media/`.
+- Evidence reviewed:
+- checkpoint filename scores show Square PTP had nonzero training-time rollout scores, while Tool-Hang, Transport, and LongSquare were zero across all saved checkpoints.
+- final training logs show low losses are not sufficient for success: Tool-Hang PTP final `val_loss=0.0165` but `test/mean_score=0.0`; LongSquare PTP final `val_loss=0.00151` but `test/mean_score=0.0`.
+- Session 65 videos confirm eval rendering and video recording work; sampled final frames show policies interact weakly or stall before completing task-specific success conditions.
+- HDF5 check on the H200 host confirmed cached embeddings exist in current training files:
+- Square `image_abs_emb.hdf5` has `obs/embedding` shape `(T, 137)`.
+- Tool-Hang compact embedding file has `obs/embedding` shape `(T, 137)`.
+- Transport compact embedding file has `obs/embedding` shape `(T, 274)`.
+- LongSquare `demos.hdf5` has `obs/embedding` shape `(T, 137)`; `demos_emb.hdf5` is absent, but current `demos.hdf5` is not missing the embedding key.
+- Analysis:
+- The evaluator is unlikely to be globally broken because Square PTP succeeds under the same runtime path and video saving is valid.
+- For Tool-Hang, Transport, and LongSquare, the stronger explanation is that the selected training runs never reached successful rollout behavior under sparse task rewards.
+- A task-specific cached-embedding versus online-encoder mismatch remains plausible because training conditions on cached `embedding`, while online rollout conditions on raw env images encoded by the frozen obs encoder when no `embedding` key is present.
+- Sparse rewards make checkpoint selection fragile: all-zero filename scores force selecting epoch `499`, which may not be the most behaviorally useful checkpoint.
+- Recommended adjustment order:
+- first run a representation sanity check comparing cached HDF5 embeddings against online frozen-encoder embeddings for the same frames and task encoders.
+- then run a small all-checkpoint eval sweep for zero-score tasks, e.g. `n_test=20`, `n_test_vis=2`, across saved checkpoints before retraining.
+- then continue only the strongest PTP candidates, prioritizing Tool-Hang PTP and Transport PTP, to `1000` or `1500` epochs with eval every `100`.
+- if representation mismatch is found, regenerate cached embeddings and rerun the affected tasks rather than extending flawed runs.
+- keep `global_obs=16`, `global_horizon=32`, `global_action=8`, `past_steps_reg=-1`, and `n_samples=1` for Fig. 9 main-result comparability.
+- optionally run a diagnostic PTP eval with `n_samples=3` or `5` to test whether self-verification can find successful samples, but do not mix that with the main Fig. 9 score.
 
 ## Session 65
 - User asked to configure video saving, rerun the original selected-checkpoint eval tasks, and report the save path.

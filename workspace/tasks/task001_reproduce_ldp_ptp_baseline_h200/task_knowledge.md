@@ -1,6 +1,23 @@
 # Task Knowledge
 
-<!-- METADATA:SESSION=65 -->
+<!-- METADATA:SESSION=66 -->
+
+## Session 66 Knowledge
+- Current zero-success diagnosis:
+- The evaluator is not globally broken; Square PTP reaches `0.36` under the same selected-checkpoint eval setup.
+- Tool-Hang, Transport, and LongSquare had zero training-time checkpoint scores across saved checkpoints, so final zero scores are consistent with training underperformance.
+- Low validation loss does not imply task success for these sparse-reward Robomimic tasks.
+- Cached embedding state:
+- Square, Tool-Hang, Transport, and LongSquare current training HDF5 files all contain `obs/embedding`.
+- LongSquare uses `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/datasets/longhistsquare100/demos.hdf5`; this file contains `obs/embedding`, while `demos_emb.hdf5` is absent.
+- Highest-priority diagnostic:
+- compare cached HDF5 `obs/embedding` to online frozen-encoder output on the same raw frames for each task.
+- if mismatch is large, regenerate embeddings and rerun affected tasks.
+- Adjustment plan:
+- run all-checkpoint small eval sweeps for zero-score tasks before retraining.
+- prioritize extending PTP runs, not all DP/no-PTP runs, once representation sanity is confirmed.
+- keep Fig. 9 main settings unchanged for comparable scores: `global_obs=16`, `global_horizon=32`, `global_action=8`, `n_samples=1`, `past_steps_reg=-1`.
+- use `n_samples>1` only as a diagnostic for PTP self-verification, not as the main Fig. 9 result.
 
 ## Session 65 Knowledge
 - Video-enabled selected-checkpoint eval rerun stamp: `1778035802`.
