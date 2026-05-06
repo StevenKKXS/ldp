@@ -1,6 +1,26 @@
 # Task Knowledge
 
-<!-- METADATA:SESSION=64 -->
+<!-- METADATA:SESSION=65 -->
+
+## Session 65 Knowledge
+- Video-enabled selected-checkpoint eval rerun stamp: `1778035802`.
+- Output root: `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/evals/session65_video_1778035802`.
+- Logs: `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/logs/session65_video_eval_<run>_1778035802.log`.
+- Video path pattern:
+- `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/evals/session65_video_1778035802/<run>/media/*.mp4`.
+- Confirmed video count after launch:
+- 4 mp4 files per run.
+- 32 mp4 files total across 8 runs.
+- Eval settings:
+- `n_test=100`, `n_train=0`, `n_envs=4`, `n_samples=1`, `test_start_seed=100000`, `n_test_vis=4`, `n_train_vis=0`.
+- Runtime caveat:
+- scripts were created under `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/`, outside git-tracked repository code.
+- `AsyncVectorEnv` is patched at runtime to `SimpleVectorEnv` for Robomimic image runner modules.
+- `wandb.log` is no-op and `WANDB_MODE=disabled`; videos are retained locally as mp4 files.
+- LongSquare required patching `robomimic_longhist_image_runner` and `robomimic_square_long_image_runner`; the first failed LongSquare subdirectories were removed before relaunch into the same output root.
+- Latest known state at record time:
+- full 100-episode eval processes were still running.
+- no failure signature observed in active logs.
 
 ## Session 64 Knowledge
 - Session 63 selected-checkpoint eval did not save videos.

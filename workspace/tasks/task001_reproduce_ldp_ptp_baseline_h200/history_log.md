@@ -1,6 +1,47 @@
 # History Log
 
-<!-- METADATA:SESSION=64 -->
+<!-- METADATA:SESSION=65 -->
+
+## Session 65
+- User asked to configure video saving, rerun the original selected-checkpoint eval tasks, and report the save path.
+- Created runtime-only shared scripts outside the repository:
+- `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/session65_eval_with_video.py`.
+- `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/session65_launch_eval_with_video.sh`.
+- No repository source code was changed for the eval runtime.
+- Launched the same 8 selected-checkpoint eval tasks on H200 host `10.100.0.29:30103`.
+- Stamp: `1778035802`.
+- Output root: `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/evals/session65_video_1778035802`.
+- Log root: `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/logs/session65_video_eval_<run>_1778035802.log`.
+- Eval settings:
+- `n_test=100`.
+- `n_train=0`.
+- `n_envs=4`.
+- `n_samples=1`.
+- `test_start_seed=100000`.
+- `n_test_vis=4`.
+- `n_train_vis=0`.
+- `WANDB_MODE=disabled`.
+- `wandb.log` is a runtime no-op.
+- runner `AsyncVectorEnv` bindings are patched at runtime to `SimpleVectorEnv` for the relevant Robomimic image runner modules.
+- Video save status:
+- each run has 4 local mp4 files under `<output_root>/<run>/media/`.
+- confirmed 32 mp4 files total across the 8 runs.
+- per-run save paths:
+- Square DP: `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/evals/session65_video_1778035802/square_dp/media/`.
+- Square PTP: `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/evals/session65_video_1778035802/square_ptp/media/`.
+- Tool-Hang DP: `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/evals/session65_video_1778035802/toolhang_dp/media/`.
+- Tool-Hang PTP: `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/evals/session65_video_1778035802/toolhang_ptp/media/`.
+- Transport DP: `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/evals/session65_video_1778035802/transport_dp/media/`.
+- Transport PTP: `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/evals/session65_video_1778035802/transport_ptp/media/`.
+- LongSquare DP: `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/evals/session65_video_1778035802/longsquare_dp/media/`.
+- LongSquare PTP: `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/evals/session65_video_1778035802/longsquare_ptp/media/`.
+- Launch note:
+- the first LongSquare launch used ordinary runner patching and failed during runner instantiation with the same `AsyncVectorEnv(shared_memory=True)` custom-space incompatibility.
+- patched `robomimic_longhist_image_runner` and `robomimic_square_long_image_runner` as well, removed the failed LongSquare output subdirectories, and relaunched LongSquare DP/PTP successfully into the same output root.
+- Latest observed status before recording:
+- full `n_test=100` evals were still running.
+- latest approximate progress: Square `18-19/25`, LongSquare `17/25`, Tool-Hang `12-13/25`, Transport `7-8/25`.
+- no `FAILED` or `Traceback` signature was observed in active logs at that check.
 
 ## Session 64
 - User asked whether videos were saved for the selected-checkpoint evaluation.
