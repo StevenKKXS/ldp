@@ -1,6 +1,21 @@
 # Task Knowledge
 
-<!-- METADATA:SESSION=68 -->
+<!-- METADATA:SESSION=69 -->
+
+## Session 69 Knowledge
+- Six-task embedding consistency status:
+- `Square`, `Tool-Hang`, and `Transport` are consistent with their official frozen encoders under raw-frame online recomputation.
+- `Push-T` currently has no cached embedding in `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/datasets/pusht/pusht_cchi_v7_replay.zarr`; the zarr contains `action`, `img`, `keypoint`, `n_contacts`, and `state`.
+- `LongSquare` has cached embeddings in `longhistsquare100/demos.hdf5`, but they are inconsistent with `longhist_encoder.ckpt`.
+- `ALOHA/Cube` has cached embeddings in `aloha_twomodes_single/demos.hdf5`, but they are inconsistent with `aloha_encoder.ckpt`.
+- `ALOHA/Cube` has a structural dataset/encoder mismatch: `aloha_encoder.ckpt` expects `qpos.shape=[14]` and references `data/aloha_two_modes/demos.hdf5`, while the available current dataset `aloha_twomodes_single/demos.hdf5` stores `qpos.shape=(T,7)`.
+- `ALOHA/Cube` regeneration should not proceed blindly with the current encoder and current HDF5. First choose either a compatible 14D dataset for `aloha_encoder.ckpt`, or a compatible 7D short-context encoder/config for `aloha_twomodes_single`.
+- Session 69 result JSON:
+- `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/debug/session69_all_embedding_check/all_embedding_consistency_summary.json`.
+- Current regeneration priorities:
+- create a Push-T cached embedding path or zarr-compatible embedding path.
+- regenerate LongSquare embeddings with a new filename in the same directory using `longhist_encoder.ckpt`.
+- resolve ALOHA/Cube encoder/data dimensionality before generating a replacement file.
 
 ## Session 68 Knowledge
 - Compact embedding HDF5 files for Tool-Hang and Transport can intentionally omit or empty raw image arrays if cached training uses `obs/embedding`.

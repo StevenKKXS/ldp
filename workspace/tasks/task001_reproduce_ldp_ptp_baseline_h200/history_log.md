@@ -1,6 +1,30 @@
 # History Log
 
-<!-- METADATA:SESSION=68 -->
+<!-- METADATA:SESSION=69 -->
+
+## Session 69
+- User asked to check the six tasks one by one and report inconsistent datasets.
+- Created and copied a runtime-only diagnostic script:
+- local source: `/work-agents/intern_ldp_explorer/debug/session69_check_all_embeddings.py`.
+- remote script: `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/session69_check_all_embeddings.py`.
+- remote result JSON: `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/debug/session69_all_embedding_check/all_embedding_consistency_summary.json`.
+- The script checks `Push-T`, `Square`, `Tool-Hang`, `Transport`, `ALOHA/Cube`, and `LongSquare`.
+- For HDF5 datasets, it loads the official frozen encoder checkpoint, recomputes online embeddings from raw observations at eight sampled timesteps from `demo_0`, and compares to cached `obs/embedding`.
+- For Push-T, it inspects the zarr keys because the current path is not HDF5.
+- Per-task results:
+- `Push-T`: `/datasets/pusht/pusht_cchi_v7_replay.zarr` has data keys `action`, `img`, `keypoint`, `n_contacts`, and `state`; no embedding key is present. Status: missing embedding / needs zarr embedding adaptation or a derived cached dataset.
+- `Square`: `/datasets/robomimic/datasets/square/mh/image_abs_emb.hdf5` matches `square_encoder.ckpt`; `rel_l2_mean=0.000438`, `l2_mean=0.001439`, `max_abs=0.000750`, `cosine_mean=0.9999999`.
+- `Tool-Hang`: `/datasets/robomimic/datasets/tool_hang/ph/image_abs_emb_compact.hdf5` matches `tool_hang_encoder.ckpt` when raw frames are read from `/datasets/robomimic/datasets/tool_hang/ph/image_abs.hdf5`; `rel_l2_mean=0.000125`, `l2_mean=0.000399`, `max_abs=0.000213`, `cosine_mean=1.0`.
+- `Transport`: `/datasets/robomimic/datasets/transport/mh/image_abs_emb_compact.hdf5` matches `transport_encoder.ckpt` when raw frames are read from `/datasets/robomimic/datasets/transport/mh/image_abs.hdf5`; `rel_l2_mean=0.000171`, `l2_mean=0.000415`, `max_abs=0.000210`, `cosine_mean=1.0`.
+- `ALOHA/Cube`: `/datasets/aloha_twomodes_single/demos.hdf5` does not match `aloha_encoder.ckpt`; `rel_l2_mean=6.760882`, `l2_mean=25.045616`, `max_abs=69.094444`, `cosine_mean=0.278525`.
+- `ALOHA/Cube` follow-up probe: neither `model` nor `ema_model` from `aloha_encoder.ckpt` matches; `ema` still has `rel_l2_mean=6.758839` and `cosine_mean=0.282563`.
+- `ALOHA/Cube` structural mismatch: `aloha_encoder.ckpt` config expects `qpos.shape=[14]` and was trained against `data/aloha_two_modes/demos.hdf5`, while the available dataset is `aloha_twomodes_single/demos.hdf5` with `qpos.shape=(T,7)`. This is not just stale cached values; the dataset/encoder/config combination is inconsistent.
+- `LongSquare`: `/datasets/longhistsquare100/demos.hdf5` does not match `longhist_encoder.ckpt`; `rel_l2_mean=1.141390`, `l2_mean=3.073095`, `max_abs=2.046087`, `cosine_mean=0.479090`.
+- Current generation/action classification:
+- OK to keep: Square, Tool-Hang, Transport.
+- Needs generated/derived cached data path: Push-T.
+- Needs regeneration or replacement with a compatible source: LongSquare.
+- Needs compatible encoder/data/config resolution before useful regeneration: ALOHA/Cube, because the current encoder expects 14D `qpos` but the available HDF5 stores 7D `qpos`.
 
 ## Session 68
 - User asked whether the previously mentioned empty image arrays in compact HDF5 files mean Tool-Hang and Transport need retraining, and whether the zero success rates are related to that issue.
