@@ -1,6 +1,19 @@
 # Task Knowledge
 
-<!-- METADATA:SESSION=71 -->
+<!-- METADATA:SESSION=72 -->
+
+## Session 72 Knowledge
+- Square PTP training-time checkpoint rollout scores over `n_test=40`:
+- epoch 99 `0.475` (`19/40`), epoch 199 `0.400` (`16/40`), epoch 299 `0.250` (`10/40`), epoch 399 `0.400` (`16/40`), epoch 499 `0.425` (`17/40`).
+- Square PTP final selected-checkpoint eval over `n_test=100`, `n_samples=1`:
+- `0.36` (`36/100`) from `epoch=0099-test_mean_score=0.475.ckpt`.
+- Square no-PTP / DP training-time rollout scores:
+- epoch 99 `0.000`, epoch 199 `0.000`, epoch 299 `0.000`, epoch 399 `0.000`, epoch 499 `0.025` (`1/40`).
+- Square no-PTP / DP final selected-checkpoint eval:
+- `0.00` (`0/100`) from `epoch=0499-test_mean_score=0.025.ckpt`.
+- Square reproduction interpretation:
+- current run reproduces the direction of the PTP benefit on Square, but not the paper's absolute Square PTP performance.
+- compared with paper Square PTP `0.89±0.01`, best current training rollout `0.475` is about `53%` of paper, and current 100-episode selected eval `0.36` is about `40%` of paper.
 
 ## Session 71 Knowledge
 - Current table-ready reproduction results use Session 65 selected-checkpoint evals:

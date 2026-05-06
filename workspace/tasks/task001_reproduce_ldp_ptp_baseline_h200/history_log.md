@@ -1,6 +1,34 @@
 # History Log
 
-<!-- METADATA:SESSION=71 -->
+<!-- METADATA:SESSION=72 -->
+
+## Session 72
+- User asked to confirm Square reproduction level and list the other rollout/eval results, noting that the highest training-time rollout was epoch 99 at `47.5%`.
+- Rechecked Square logs and selected-checkpoint eval output.
+- Square PTP training-time rollout scores:
+- epoch 99: `test/mean_score=0.475`, equivalent to `19/40` successes because training rollout uses `n_test=40`.
+- epoch 199: `0.400`, equivalent to `16/40`.
+- epoch 299: `0.250`, equivalent to `10/40`.
+- epoch 399: `0.400`, equivalent to `16/40`.
+- epoch 499: `0.425`, equivalent to `17/40`.
+- Square PTP selected-checkpoint 100-episode eval:
+- selected checkpoint: `epoch=0099-test_mean_score=0.475.ckpt`.
+- eval path: `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/evals/session65_video_1778035802/square_ptp/eval_log.json`.
+- setting: `n_test=100`, `n_samples=1`.
+- result: `test/mean_score=0.36`, equivalent to `36/100`.
+- Square no-PTP / DP training-time rollout scores:
+- epoch 99: `0.000`.
+- epoch 199: `0.000`.
+- epoch 299: `0.000`.
+- epoch 399: `0.000`.
+- epoch 499: `0.025`, equivalent to `1/40`.
+- Square no-PTP / DP selected-checkpoint 100-episode eval:
+- selected checkpoint: `epoch=0499-test_mean_score=0.025.ckpt`.
+- result: `test/mean_score=0.0`, equivalent to `0/100`.
+- Interpretation:
+- Square PTP does reproduce a clear positive PTP-vs-no-PTP gap under the current code/data/eval path.
+- Absolute reproduction is still far below the paper's Square PTP `0.89±0.01`: best training rollout `0.475` is about `53%` of the paper value, and the 100-episode selected-checkpoint eval `0.36` is about `40%` of the paper value.
+- The epoch 99 `0.475` and Session 65 `0.36` numbers are different evaluation budgets and seeds, so they should be reported separately.
 
 ## Session 71
 - User asked to insert the current reproduction results into the paper-result table by adding reproduction rows under the paper rows.
