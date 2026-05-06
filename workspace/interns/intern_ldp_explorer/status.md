@@ -8,5 +8,5 @@
 | Status | Working |
 | Current Task | task001_reproduce_ldp_ptp_baseline_h200 |
 | PR | https://github.com/StevenKKXS/ldp/pull/new/intern_ldp_explorer/task001_reproduce_ldp_ptp_baseline_h200 |
-| Session | 81 |
-| Recent Progress | Saved Tool-Hang replay videos on the H200 node for four diagnostic cases, two demos each. Video outputs landed under `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/debug/session81_toolhang_replay_videos/` with `manifest.json`. The image-enabled video path exposed an additional sensitivity: `image_abs` replay with offscreen image observations succeeded on `demo_0` and `demo_5`, while the original delta-action cases still failed on both demos, and `abs_hard_reset_false` showed one success and one failure. This means Tool-Hang behavior depends not only on dataset/action path but also on how the environment is instantiated for replay. |
+| Session | 82 |
+| Recent Progress | Reorganized the four Tool-Hang replay experiments into a clearer natural-language explanation. The key framing is: these are replay diagnostics rather than training runs, and they vary only a small set of parameters around the same stored Tool-Hang demos. The main explanatory split is between `image_abs` versus original `image` actions, `use_object_obs` false versus true, and default reset behavior versus `hard_reset=False`, with all cases keeping states-only reset and video-enabled environment construction. |

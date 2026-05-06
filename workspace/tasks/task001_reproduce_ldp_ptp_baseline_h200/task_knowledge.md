@@ -1,6 +1,24 @@
 # Task Knowledge
 
-<!-- METADATA:SESSION=81 -->
+<!-- METADATA:SESSION=82 -->
+
+## Session 82 Knowledge
+- Best user-facing explanation of the four Tool-Hang replay video experiments:
+- `abs_runner_like`: tests the absolute-action replay path closest to current eval assumptions
+- `delta_runner_like`: tests whether original delta actions fix the problem
+- `delta_object_obs_true`: tests whether object observations are the missing ingredient
+- `abs_hard_reset_false`: tests whether robosuite hard reset is the main instability source
+- Shared setup across all four:
+- replay only, not training
+- reset from stored `states[0]`
+- no `model_file` reset
+- video-enabled env construction with `render_offscreen=true`, `use_image_obs=true`
+- Main conclusions:
+- absolute-action replay can succeed in the image-enabled path
+- original delta-action replay still fails
+- object observations do not rescue delta replay
+- `hard_reset=False` is only a partial improvement
+- Tool-Hang replay sensitivity depends on both action representation and environment construction details
 
 ## Session 81 Knowledge
 - Tool-Hang replay videos are saved under:

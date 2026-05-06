@@ -1,6 +1,73 @@
 # History Log
 
-<!-- METADATA:SESSION=81 -->
+<!-- METADATA:SESSION=82 -->
+
+## Session 82
+- User asked for a detailed natural-language explanation of the four Tool-Hang experiments: what each one means, how the parameters were set, what was observed, and what conclusion should be drawn.
+- Clarified the common setup first:
+- these were replay diagnostics, not training runs
+- all four cases replay stored Tool-Hang demos from HDF5
+- all four cases reset from stored `states[0]` only
+- none of the four cases use `model_file`, because current runner path does not use it
+- the video runs used `render_offscreen=true` and `use_image_obs=true` so videos could be written
+- Experiment 1 explanation:
+- name: `abs_runner_like`
+- intent: mimic the current main eval / rollout style as closely as possible for the absolute-action dataset
+- parameter choices:
+- dataset `tool_hang/ph/image_abs.hdf5`
+- `use_object_obs=false`
+- `controller_configs.control_delta=false`
+- action handling uses the same abs-action roundtrip logic as the training / eval path: axis-angle absolute action -> rotation6d representation -> inverse back to env action
+- demos recorded: `0` and `5`
+- observed phenomenon:
+- both demos succeeded in the video-enabled run
+- conclusion:
+- under image-enabled environment construction, the absolute-action Tool-Hang replay path can succeed
+- this weakens any claim that Tool-Hang is fundamentally impossible to replay in the current setup
+- Experiment 2 explanation:
+- name: `delta_runner_like`
+- intent: remove the abs-action path and ask whether original delta actions replay cleanly under otherwise similar runner assumptions
+- parameter choices:
+- dataset `tool_hang/ph/image.hdf5`
+- `use_object_obs=false`
+- keep original delta actions directly
+- do not force the controller into absolute mode
+- demos recorded: `0` and `5`
+- observed phenomenon:
+- both demos failed
+- conclusion:
+- the Tool-Hang replay issue is not solved by falling back to the original delta-action dataset
+- Experiment 3 explanation:
+- name: `delta_object_obs_true`
+- intent: test whether restoring object observations helps replay fidelity for the original delta-action dataset
+- parameter choices:
+- dataset `tool_hang/ph/image.hdf5`
+- `use_object_obs=true`
+- keep original delta actions directly
+- demos recorded: `0` and `5`
+- observed phenomenon:
+- both demos still failed
+- conclusion:
+- turning object observations back on does not explain the Tool-Hang replay failure
+- Experiment 4 explanation:
+- name: `abs_hard_reset_false`
+- intent: test whether robosuite hard-reset behavior is a major source of replay instability for the absolute-action dataset
+- parameter choices:
+- dataset `tool_hang/ph/image_abs.hdf5`
+- `use_object_obs=false`
+- `controller_configs.control_delta=false`
+- abs-action roundtrip path
+- set `env.env.hard_reset=false`
+- demos recorded: `0` and `3`
+- observed phenomenon:
+- `demo_0` succeeded, `demo_3` failed
+- conclusion:
+- disabling hard reset may help in some instances, but it is not a complete fix
+- Overall conclusion summarized for the user:
+- the four experiments collectively say Tool-Hang replay is highly sensitive to environment construction and action path details
+- delta-action replay remains fragile
+- absolute-action replay can succeed in the image-enabled path, but not consistently across demos and not consistently across environment construction settings
+- therefore Tool-Hang zero success cannot yet be treated as a pure policy-learning failure without first pinning down the replay / env fidelity conditions
 
 ## Session 81
 - User asked to save Tool-Hang replay videos, with two simple replays per case for inspection.
