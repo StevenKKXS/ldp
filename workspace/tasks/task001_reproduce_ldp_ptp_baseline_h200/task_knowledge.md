@@ -1,6 +1,28 @@
 # Task Knowledge
 
-<!-- METADATA:SESSION=75 -->
+<!-- METADATA:SESSION=76 -->
+
+## Session 76 Knowledge
+- Parameter-history recap should separate exploratory settings from the final reproduction line.
+- Older exploratory / intermediate settings included:
+- short-context `global_obs=2`
+- an earlier `global_action=1` idea before correction
+- older `num_epochs=3500` long-history or cached runs
+- raw-image pilots and some `rollout_every=50` / `checkpoint_every=50` variants
+- Final intended Figure 9 diffusion-subset reproduction settings are:
+- `global_obs=16`
+- `global_horizon=32`
+- `global_action=8`
+- `training.num_epochs=500`
+- `dataloader.batch_size=64`
+- `val_dataloader.batch_size=64`
+- `policy.past_steps_reg=-1` for both DP and PTP
+- no-PTP / DP: `policy.past_action_pred=false`
+- PTP: `policy.past_action_pred=true`
+- cached-embedding training with `policy.use_embed_if_present=true` and `task.dataset.use_embed_if_present=true`
+- frozen official short-context encoder
+- training dataset uses cached embedding HDF5; rollout / env-runner keeps raw HDF5
+- final comparable eval target remains `n_samples=1`, with paper-style reporting intended at `n_test=100` and multi-seed aggregation later
 
 ## Session 75 Knowledge
 - Recommended direct inspection commands should parse `logs.json.txt` instead of `train.log`.

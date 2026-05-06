@@ -8,5 +8,5 @@
 | Status | Working |
 | Current Task | task001_reproduce_ldp_ptp_baseline_h200 |
 | PR | https://github.com/StevenKKXS/ldp/pull/new/intern_ldp_explorer/task001_reproduce_ldp_ptp_baseline_h200 |
-| Session | 75 |
-| Recent Progress | Finished the continuation of the loss answer by preparing direct command-line recipes. Added one-run and 8-run batch JSONL parsing patterns for `logs.json.txt`, centered on rows containing `test/mean_score`. Reaffirmed the main interpretation: the present evidence does not support “simply training不足” as the primary explanation for Tool-Hang / Transport, because optimization proceeds while success remains zero or val loss worsens. |
+| Session | 76 |
+| Recent Progress | Consolidated the parameter-design history into two layers so later analysis does not mix exploratory runs with the main paper-aligned reproduction line. Recorded that the final 4x2 diffusion subset switched to `global_obs=16`, `global_horizon=32`, `global_action=8`, `num_epochs=500`, `batch_size=64`, explicit `past_steps_reg=-1`, DP/PTP split via `past_action_pred`, and cached-embedding training with a frozen official short-context encoder, while older exploratory runs included short-context `global_obs=2`, `global_action=1`, `num_epochs=3500`, raw-image pilots, and different checkpoint / rollout cadences. |

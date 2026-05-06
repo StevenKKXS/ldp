@@ -1,6 +1,36 @@
 # History Log
 
-<!-- METADATA:SESSION=75 -->
+<!-- METADATA:SESSION=76 -->
+
+## Session 76
+- User asked which parameter designs had been changed previously.
+- Consolidated the answer into two categories so later comparisons stay clean:
+- early exploratory / intermediate settings that were discussed or used before the current main line.
+- final paper-aligned settings that were actually used for the current seed-42 4x2 diffusion subset.
+- Early exploratory / intermediate settings recalled:
+- earlier short-context pilots used `global_obs=2`.
+- an intermediate plan mistakenly kept `global_action=1`; this was later corrected for the main Figure 9 line.
+- older long-history or cached runs used `training.num_epochs=3500`.
+- some older runs used different cadence such as `rollout_every=50` and `checkpoint_every=50`.
+- raw-image pilot runs also existed before the cached-embedding line was stabilized.
+- Final main-line settings recalled for the current 4x2 diffusion subset:
+- `global_obs=16`
+- `global_horizon=32`
+- `global_action=8`
+- `training.num_epochs=500`
+- `dataloader.batch_size=64`
+- `val_dataloader.batch_size=64`
+- DP / no-PTP uses `policy.past_action_pred=false`
+- PTP uses `policy.past_action_pred=true`
+- both explicitly set `policy.past_steps_reg=-1`
+- cached-embedding path uses `policy.use_embed_if_present=true` and `task.dataset.use_embed_if_present=true`
+- long-context policies use a frozen official short-context encoder
+- cached-embedding HDF5 is used for training, while raw HDF5 remains the rollout / env-runner data source
+- final comparable eval line is `n_samples=1`; the selected-checkpoint evals already used `n_test=100`
+- Task-specific cadence differences retained inside the main line:
+- Square used `max_steps=500` with `rollout_every=100` and `checkpoint_every=100`.
+- Tool-Hang used `max_steps=700` with `rollout_every=50` and `checkpoint_every=50`.
+- Transport used `max_steps=700` with `rollout_every=100` and `checkpoint_every=100`.
 
 ## Session 75
 - User asked to continue once more after the command-line guidance.
