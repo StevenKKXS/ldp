@@ -63,6 +63,12 @@
 - GPU1: 6031 MiB
 - GPU2: 10755 MiB
 - GPU3: 5551 MiB
+- Hook compliance correction after the first close-out:
+- `history_log.md` contained duplicate second-level headings for `Session 32` and `Session 33`
+- converted the compatibility-record headings to third-level non-Session headings:
+- `### Session 32 Hook Compatibility Record`
+- `### Session 33 Hook Compatibility Record`
+- this preserves the historical content while keeping second-level Session IDs unique for those records
 
 ## Session 88
 - User asked whether the current task datasets are delta or absolute action, and whether rollout is delta or absolute.
@@ -3682,7 +3688,7 @@
 - Session 29 official-encoder close-out:
 - `history_log.md` records the official encoder first decision and compatibility snapshot at the file tail
 
-## Session 29
+### Session 29 Official Encoder Hook Compatibility Record
 - Hook compatibility record for the official encoder first update.
 - `history_log.md` metadata is now `METADATA:SESSION=29`.
 - The Figure 9 plan now explicitly says official `obs_encoders.zip` checkpoints are used first as released short-history encoder assets.
@@ -3715,7 +3721,7 @@
 - no Figure 9-aligned cached/multistage result has been launched yet
 - current plan remains to switch to official-encoder cached smoke after approval: first `Long Square cached DP/PTP`, then `Square` embedding generation and validation
 
-## Session 30
+### Session 30 Hook Compatibility Record
 - Hook compatibility record for the current progress report.
 - `history_log.md` metadata is `METADATA:SESSION=30`.
 - This exact `## Session 30` tail section exists so strict stop-hook checks can identify the session record.
@@ -3768,7 +3774,7 @@
 - GPU0: Square embedding rewrite, low memory but image-encoder-bound
 - GPU1: Long Square cached DP/PTP full Figure 9 pair, active training around epoch `5` in the latest sample
 
-## Session 31
+### Session 31 Hook Compatibility Record
 - Hook compatibility record for the Session 31 close-out.
 - `history_log.md` metadata is `METADATA:SESSION=31`.
 - Session 31 actions recorded:
@@ -3778,7 +3784,7 @@
 - launched the full Long Square cached DP/PTP Figure 9 pair
 - continued Square official-encoder embedding rewrite on the derived HDF5 copy
 
-## Session 32
+### Session 32 Hook Compatibility Record
 - User asked whether other tasks also need embedding processing.
 - Answer recorded:
 - `Long Square` does not need new embedding generation for the current Figure 9 path because `longhistsquare100/demos.hdf5` already contains `obs/embedding`; it still needs explicit config overrides to use the existing file and omit dataset image preload.
@@ -3789,7 +3795,7 @@
 - `Push-T` also needs an embedding/cache path, but it is not the same HDF5 rewrite path because the dataset is zarr; keep it out of the main Figure 9 batch until zarr embedding rewrite/cache support is implemented and smoke-tested.
 - Practical order remains: finish Square rewrite, then generate Tool-Hang and Transport embeddings; ALOHA can be launched from its existing embeddings after Long Square is stable.
 
-## Session 32
+### Session 32 Close-Out Compatibility Record
 - Hook compatibility record for the Session 32 close-out.
 - `history_log.md` metadata is `METADATA:SESSION=32`.
 - Session 32 answer recorded:
@@ -3797,7 +3803,7 @@
 - `Square`, `Tool-Hang`, and `Transport` need generated HDF5 embeddings for Figure 9-aligned cached long-history runs
 - `Push-T` needs a separate zarr embedding/cache implementation before it can enter the main Figure 9 cached batch
 
-## Session 33
+### Session 33 Hook Compatibility Record
 - User asked to check GPU status, use the H200 node as fully as practical, schedule the remaining embedding processing sequentially, and validate embeddings that were not produced today.
 - Re-sampled the 96h H200 node `10.100.2.47:15744` on `2026-05-04`.
 - Initial GPU state:
@@ -3858,7 +3864,7 @@
 - dataset shape metadata should include `embedding + lowdim` and omit raw image arrays.
 - policy shape metadata should stay raw-image compatible so official encoders can load and rollout normalizers remain compatible.
 
-## Session 33
+### Session 33 GPU / Embedding Close-Out Record
 - Hook compatibility record for the Session 33 GPU / embedding close-out.
 - `history_log.md` metadata is `METADATA:SESSION=33`.
 - Session 33 actions recorded:

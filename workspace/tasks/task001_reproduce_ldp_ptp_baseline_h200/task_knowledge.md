@@ -32,6 +32,9 @@
 - `task.env_runner.n_test_vis=4`, `task.env_runner.n_train_vis=2`
 - `training.rollout_every=100`, `training.checkpoint_every=100`
 - `policy.past_steps_reg=-1`
+- Hook compliance note:
+- `history_log.md` compatibility records should not use second-level `## Session N` headings when the real session block already exists.
+- Use a subheading such as `### Session N Hook Compatibility Record` to preserve context without creating duplicate Session IDs.
 
 ## Session 88 Knowledge
 - Current main 4x2 repro line action semantics:
