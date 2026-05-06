@@ -1,6 +1,15 @@
 # Task Knowledge
 
-<!-- METADATA:SESSION=73 -->
+<!-- METADATA:SESSION=74 -->
+
+## Session 74 Knowledge
+- Command-line inspection recipe:
+- connect to the H200 node and parse `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/outputs/<run>/logs.json.txt`.
+- rows containing `test/mean_score` are the safest compact rows for checkpoint-level loss and score comparison.
+- one-run quick command pattern:
+- `python - <<'PY' ... json.loads(line) ... if "test/mean_score" in r: print(r["epoch"], r["train_loss"], r["val_loss"], r["test/mean_score"])`.
+- current loss interpretation should not treat lower train loss as proof of better rollout success.
+- for reruns, prefer selecting by rollout score when nonzero, and use val loss only as a diagnostic when rollout scores are all zero.
 
 ## Session 73 Knowledge
 - 4x2 loss inspection source:

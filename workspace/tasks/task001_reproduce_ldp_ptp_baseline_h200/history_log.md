@@ -1,6 +1,21 @@
 # History Log
 
-<!-- METADATA:SESSION=73 -->
+<!-- METADATA:SESSION=74 -->
+
+## Session 74
+- User asked to continue after the loss-curve summary.
+- Continued the answer with practical command-line guidance for inspecting the current 4x2 loss curves.
+- Recommended using the remote H200 workspace and parsing each run's `logs.json.txt`.
+- The compact checkpoint-level view is obtained by filtering JSONL records that contain `test/mean_score`; these rows include `epoch`, `global_step`, `train_loss`, `val_loss`, `train/mean_score`, `test/mean_score`, and `lr`.
+- Reiterated the interpretation:
+- all 8 runs reduce `train_loss`, so the supervised imitation objective is being optimized.
+- Square PTP's best score is early, at epoch 99, aligned with lowest val loss.
+- Square no-PTP and Transport show overfit-like behavior where train loss continues down while val loss rises.
+- Tool-Hang PTP reaches low val loss but stays at zero sparse success, so scalar loss is not enough to confirm task completion behavior.
+- LongSquare remains confounded by known cached-embedding inconsistency.
+- Practical answer to the user:
+- not enough evidence to say Tool-Hang/Transport are simply undertrained.
+- longer training may still be useful, but only after runner/action conversion is validated by expert replay.
 
 ## Session 73
 - User asked how the losses changed, whether zero success is due to insufficient training, and how to inspect the 4x2 task loss curves from the command line.
