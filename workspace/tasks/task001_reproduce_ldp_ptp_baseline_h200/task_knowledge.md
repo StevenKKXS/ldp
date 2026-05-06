@@ -1,6 +1,22 @@
 # Task Knowledge
 
-<!-- METADATA:SESSION=80 -->
+<!-- METADATA:SESSION=81 -->
+
+## Session 81 Knowledge
+- Tool-Hang replay videos are saved under:
+- `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/debug/session81_toolhang_replay_videos`
+- `manifest.json` records case setup, demo ids, replay success flags, and video paths.
+- Four recorded cases:
+- `abs_runner_like`
+- `delta_runner_like`
+- `delta_object_obs_true`
+- `abs_hard_reset_false`
+- Two demos per case were recorded.
+- Important new replay sensitivity:
+- when replay is run with `render_offscreen=true` and `use_image_obs=true` for video capture, `abs_runner_like` succeeded on demos `0` and `5`
+- this differs from the earlier headless Session 79 replay where the corresponding broad case succeeded only `1/8`
+- delta-action Tool-Hang replay still failed on both recorded demos even in the image-enabled path
+- Tool-Hang replay stability therefore depends on environment instantiation details, not only on dataset action representation
 
 ## Session 80 Knowledge
 - Best concise explanation of the Tool-Hang replay diagnosis:

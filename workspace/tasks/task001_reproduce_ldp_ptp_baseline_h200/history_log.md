@@ -1,6 +1,35 @@
 # History Log
 
-<!-- METADATA:SESSION=80 -->
+<!-- METADATA:SESSION=81 -->
+
+## Session 81
+- User asked to save Tool-Hang replay videos, with two simple replays per case for inspection.
+- Generated videos on `10.100.0.29:30103` using `/root/venv`.
+- Output directory:
+- `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/debug/session81_toolhang_replay_videos`
+- Manifest:
+- `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/debug/session81_toolhang_replay_videos/manifest.json`
+- Cases recorded:
+- `abs_runner_like`: `image_abs.hdf5`, `use_object_obs=false`, `control_delta=false`, abs-action roundtrip path, demos `0` and `5`
+- `delta_runner_like`: original `image.hdf5`, `use_object_obs=false`, original delta actions, demos `0` and `5`
+- `delta_object_obs_true`: original `image.hdf5`, metadata-default object observations, original delta actions, demos `0` and `5`
+- `abs_hard_reset_false`: `image_abs.hdf5`, `use_object_obs=false`, `control_delta=false`, `hard_reset=false`, demos `0` and `3`
+- Saved video outcomes:
+- `abs_runner_like/demo_0.mp4`: success
+- `abs_runner_like/demo_5.mp4`: success
+- `delta_runner_like/demo_0.mp4`: failure
+- `delta_runner_like/demo_5.mp4`: failure
+- `delta_object_obs_true/demo_0.mp4`: failure
+- `delta_object_obs_true/demo_5.mp4`: failure
+- `abs_hard_reset_false/demo_0.mp4`: success
+- `abs_hard_reset_false/demo_3.mp4`: failure
+- Important new finding:
+- these video replays were run with `render_offscreen=true` and `use_image_obs=true` so frames could be recorded
+- under this image-enabled environment instantiation, the `image_abs` case behaved better than the earlier headless replay summary from Session 79
+- therefore Tool-Hang replay sensitivity is broader than only action format; environment construction itself affects whether the same demo replays successfully
+- Practical interpretation:
+- Tool-Hang remains unstable under replay, but the instability boundary moved when switching from headless replay to image-enabled replay
+- this makes Tool-Hang even less trustworthy as a pure policy-quality indicator until replay conditions are pinned down exactly
 
 ## Session 80
 - User said the previous Tool-Hang replay explanation was hard to follow and asked for a clearer description of the experiments, phenomena, and conclusion.
