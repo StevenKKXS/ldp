@@ -1,6 +1,64 @@
 # History Log
 
-<!-- METADATA:SESSION=90 -->
+<!-- METADATA:SESSION=91 -->
+
+## Session 91
+- User asked for current progress.
+- Checked active stamp `1778073162` on `10.100.0.29:30103`.
+- Initial sampled state at `2026-05-06T13:38:58Z`:
+- GPU0: Square DP `a8` / `a1`, about `5559 MiB`, utilization around `93%`
+- GPU1: Tool-Hang DP `a8` / `a1`, about `6031 MiB`, utilization around `90%`
+- GPU2: Transport DP `a8` / `a1`, about `10799 MiB`, utilization around `99%`
+- GPU3: LongSquare DP `a8` / `a1`, about `5551 MiB`, utilization around `93%`
+- Progress then:
+- Square DP `a8`: epoch `48`, no error
+- Square DP `a1`: epoch `45`, no error
+- Tool-Hang DP `a8`: epoch `38`, no error
+- Tool-Hang DP `a1`: epoch `40`, no error
+- Transport DP `a8`: epoch `12`, no error
+- Transport DP `a1`: epoch `12`, no error
+- LongSquare DP `a8`: epoch `86`, no error
+- LongSquare DP `a1`: epoch `86`, no error
+- Waited for LongSquare to approach the first epoch-100 rollout boundary.
+- Follow-up sampled state at `2026-05-06T13:44:06Z`:
+- Square / Tool-Hang / Transport were still active and had not reached epoch 100.
+- LongSquare DP `a8` and `a1` had stopped at epoch `99`, with `proc=0`, no checkpoint, and no MP4.
+- Full LongSquare traceback showed a second custom vector-env compatibility problem:
+- after the Session 90 `seed` patch, `env.reset()` reached `reset_wait`
+- `reset_wait` called Gym 0.25 `concatenate` with the old argument order
+- error: `ValueError: Space of type <class 'tuple'> is not a valid gym.Space instance`
+- interpretation:
+- LongSquare still failed at the rollout boundary, but the failure remained in local Gym/vector-env compatibility code
+- it is not evidence of training failure, low reward, or dataset inconsistency
+- Applied the second compatibility patch:
+- `diffusion_policy/gym_util/async_vector_env.py`
+- `diffusion_policy/gym_util/sync_vector_env.py`
+- changed local `concatenate(...)` calls to Gym 0.25 order: `concatenate(space, items, out)`
+- py-compiled locally and remotely.
+- Synced patched files to:
+- `/mnt/3fs2/data/tingwen.du/workspace/ldp/diffusion_policy/gym_util/async_vector_env.py`
+- `/mnt/3fs2/data/tingwen.du/workspace/ldp/diffusion_policy/gym_util/sync_vector_env.py`
+- Stopped the doomed `1778073162` processes before Square / Tool-Hang / Transport reached the same epoch-100 rollout error.
+- Relaunched the full 4x2x2 queue with effective stamp `1778075154`.
+- New active roots:
+- outputs: `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/outputs/session89_4x2x2_2000ep_1778075154`
+- logs: `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/logs/session89_4x2x2_2000ep_1778075154`
+- Post-relaunch sampled state at `2026-05-06T13:47:00Z`:
+- GPU0: `5547 / 143771 MiB`, utilization `95%`
+- GPU1: `6027 / 143771 MiB`, utilization `93%`
+- GPU2: `10755 / 143771 MiB`, utilization `97%`
+- GPU3: `5551 / 143771 MiB`, utilization `92%`
+- DP lane health:
+- Square DP `a8`: epoch `0`, step `749`, no error
+- Square DP `a1`: epoch `0`, step `856`, no error
+- Tool-Hang DP `a8`: epoch `0`, step `611`, no error
+- Tool-Hang DP `a1`: epoch `0`, step `636`, no error
+- Transport DP `a8`: epoch `0`, step `141`, no error
+- Transport DP `a1`: epoch `0`, step `156`, no error
+- LongSquare DP `a8`: epoch `1`, step `892`, no error
+- LongSquare DP `a1`: epoch `1`, step `920`, no error
+- PTP remains queued by the lane script after each matching DP run completes.
+- The next meaningful health check is whether stamp `1778075154` reaches epoch 100 and produces checkpoint/media without a vector-env traceback.
 
 ## Session 90
 - User asked for the current run status.

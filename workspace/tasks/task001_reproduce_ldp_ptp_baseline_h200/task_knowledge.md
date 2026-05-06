@@ -1,6 +1,32 @@
 # Task Knowledge
 
-<!-- METADATA:SESSION=90 -->
+<!-- METADATA:SESSION=91 -->
+
+## Session 91 Knowledge
+- Current effective 4x2x2 run stamp is `1778075154`.
+- Current output root:
+- `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/outputs/session89_4x2x2_2000ep_1778075154`
+- Current log root:
+- `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/logs/session89_4x2x2_2000ep_1778075154`
+- Previous stamp `1778073162` is no longer effective:
+- LongSquare DP `a8` and `a1` reached epoch `99` and failed before producing checkpoint or MP4
+- Square / Tool-Hang / Transport were stopped before reaching the same rollout error
+- Session 91 failure reason:
+- `AsyncVectorEnv.reset_wait` used the older Gym vector `concatenate(items, out, space)` order
+- remote Gym 0.25 expects `concatenate(space, items, out)`
+- observed error: `ValueError: Space of type <class 'tuple'> is not a valid gym.Space instance`
+- Required local vector-env compatibility fixes now include:
+- `AsyncVectorEnv.reset_async` / `reset_wait` accept Gym 0.25 reset kwargs (`seed`, `return_info`, `options`)
+- `AsyncVectorEnv` uses `concatenate(self.single_observation_space, results, self.observations)` for reset batching
+- `AsyncVectorEnv` uses `concatenate(self.single_observation_space, observations_list, self.observations)` for step batching
+- `SyncVectorEnv` uses the same Gym 0.25 concatenate argument order
+- Current sampled post-relaunch state:
+- GPU0: Square DP `a8` / `a1`, active
+- GPU1: Tool-Hang DP `a8` / `a1`, active
+- GPU2: Transport DP `a8` / `a1`, active
+- GPU3: LongSquare DP `a8` / `a1`, active
+- all eight DP lanes entered epoch `0` or `1` with no startup error
+- PTP lanes remain queued after matching DP completion
 
 ## Session 90 Knowledge
 - Current effective 4x2x2 run stamp is `1778073162`.
