@@ -1,6 +1,34 @@
 # History Log
 
-<!-- METADATA:SESSION=86 -->
+<!-- METADATA:SESSION=87 -->
+
+## Session 87
+- User asked what the current default replay result is and why Tool-Hang default replay would be zero.
+- Re-checked the actual `RobomimicImageRunner` defaults instead of relying only on the earlier custom replay shorthand.
+- Code-path findings from `diffusion_policy/env_runner/robomimic_image_runner.py`:
+- envs are created through `create_env(..., enable_render=True)` in the main worker path, which means `render_offscreen=true` and `use_image_obs=true`
+- `env_meta['env_kwargs']['use_object_obs']` is forced to `False`
+- if `abs_action=true`, the runner overrides `controller_configs.control_delta=false`
+- `robomimic_env.env.hard_reset = False`
+- train replay-style resets use only `states[0]` by assigning `env.env.env.init_state = init_state`
+- `diffusion_policy/env/robomimic/robomimic_image_wrapper.py` confirms reset happens through `reset_to({'states': self.init_state})`
+- Confirmed the Tool-Hang HDF5 nuance:
+- `model_file` exists as a demo-group attribute in both `tool_hang/ph/image_abs.hdf5` and `tool_hang/ph/image.hdf5`
+- the current runner still does not pass `model_file`; it only resets with `states`
+- Clarified the replay result wording:
+- the all-zero numbers in current repro tables are policy rollout results, not a single stable expert-replay baseline
+- for expert replay, the broad states-only Tool-Hang sweep on `image_abs.hdf5` was `1/8`
+- the original delta-action replay was `0/8`
+- the image-enabled runner-like video case on selected demos `0` and `5` was `2/2`
+- Therefore there is no single honest statement of “Tool-Hang default replay = 0”
+- The correct diagnosis is:
+- Tool-Hang replay success is highly sensitive to environment construction details even before evaluating a learned policy
+- because the current runner ignores `model_file` and resets only from stored `states[0]`, Tool-Hang rollout fidelity is likely weaker than Square and Transport
+- this replay instability is the strongest reason the learned Tool-Hang policy rollout remains at `0`, because the evaluation path is not a cleanly validated expert-replay baseline
+- Final answer framing chosen for the user:
+- separate expert-action replay from learned-policy rollout
+- say explicitly that Tool-Hang policy rollout is currently `0`, but expert replay is not uniformly `0`
+- explain that the main failure mode is replay / env fidelity sensitivity, not a proven absolute-vs-relative controller mismatch
 
 ## Session 86
 - User asked how `control_delta=false` is set for these robomimic tasks and whether each task differs.

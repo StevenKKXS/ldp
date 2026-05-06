@@ -1,6 +1,27 @@
 # Task Knowledge
 
-<!-- METADATA:SESSION=86 -->
+<!-- METADATA:SESSION=87 -->
+
+## Session 87 Knowledge
+- Clarification for future answers about “default replay” on Tool-Hang:
+- do not conflate expert-action replay with learned-policy rollout
+- the current all-zero figure belongs to learned policy evaluation, not to a single stable expert replay baseline
+- The default `RobomimicImageRunner` path for these image tasks is:
+- `use_object_obs=false`
+- if `abs_action=true`, force `control_delta=false`
+- create env with `render_offscreen=true` and `use_image_obs=true`
+- set `hard_reset=false`
+- reset from stored `states[0]` only through `reset_to({'states': init_state})`
+- Tool-Hang-specific replay summary under this clarification:
+- broader states-only absolute-action sweep: `1/8`
+- original delta-action sweep: `0/8`
+- image-enabled runner-like recorded case on selected demos `0` and `5`: `2/2`
+- Therefore do not say “Tool-Hang default replay is zero” without qualification.
+- Better phrasing:
+- Tool-Hang learned-policy rollout is currently zero
+- expert replay is unstable and environment-sensitive, which is the leading explanation for why Tool-Hang policy numbers cannot yet be trusted as clean learning outcomes
+- Tool-Hang `model_file` is stored as a demo-group attribute, not as a child dataset key.
+- The current runner ignores that attribute and resets only from `states[0]`.
 
 ## Session 86 Knowledge
 - For the robomimic tasks in this project, `control_delta=false` is mostly a shared runtime rule, not a different per-task hand-written setting.

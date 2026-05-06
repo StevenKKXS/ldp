@@ -8,5 +8,5 @@
 | Status | Working |
 | Current Task | task001_reproduce_ldp_ptp_baseline_h200 |
 | PR | https://github.com/StevenKKXS/ldp/pull/new/intern_ldp_explorer/task001_reproduce_ldp_ptp_baseline_h200 |
-| Session | 86 |
-| Recent Progress | Traced how `control_delta=false` is set for the robomimic tasks. The main finding is that Square, Tool-Hang, Transport, and LongSquare do not each carry a separate task-specific control-delta rule in the runner; instead, the runners uniformly override `env_meta['env_kwargs']['controller_configs']['control_delta'] = False` whenever `abs_action=true`. The HDF5 files themselves still report `control_delta=true` even for `image_abs.hdf5`, so the absolute-control switch is primarily a runtime override rather than a property stored back into dataset metadata. |
+| Session | 87 |
+| Recent Progress | Clarified the current meaning of “default replay” for Tool-Hang. The default `RobomimicImageRunner` path uses `image_abs.hdf5`, forces `control_delta=false` when `abs_action=true`, disables object observations, sets `hard_reset=false`, enables image observations / offscreen rendering, and resets from stored `states[0]` only. Under replay diagnostics, Tool-Hang is not a clean `0` on expert replay: the broader states-only sweep gave `1/8`, while the image-enabled runner-like video case succeeded on `2/2` selected demos. The all-zero numbers belong to policy rollout success, not to a single stable expert-replay baseline. |
