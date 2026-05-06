@@ -1,6 +1,20 @@
 # Task Knowledge
 
-<!-- METADATA:SESSION=72 -->
+<!-- METADATA:SESSION=73 -->
+
+## Session 73 Knowledge
+- 4x2 loss inspection source:
+- every run directory contains `logs.json.txt`, one JSON record per training step and checkpoint/eval row.
+- rows containing `test/mean_score` are the most compact checkpoint-level rows because they include `epoch`, `global_step`, `train_loss`, `val_loss`, `train/mean_score`, `test/mean_score`, and `lr`.
+- Loss interpretation for current 4x2 subset:
+- all runs decrease train loss.
+- Square PTP best score occurs at epoch 99, which is also min val loss; later training reduces train loss but worsens val loss.
+- Tool-Hang PTP reaches low val loss but still zero success, so behavior is not captured by scalar val loss.
+- Transport PTP and no-PTP show overfit-like behavior: train loss falls, val loss rises, and score remains zero.
+- LongSquare loss is not currently reliable for success interpretation because Session 69 found cached embedding inconsistency.
+- Current answer to "is this due to insufficient training":
+- simple undertraining is not the strongest explanation from loss curves.
+- longer training may still help Tool-Hang/Transport, but it should be run with a fresh LR schedule and after expert-action replay validates env/action conversion.
 
 ## Session 72 Knowledge
 - Square PTP training-time checkpoint rollout scores over `n_test=40`:

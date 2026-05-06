@@ -1,6 +1,30 @@
 # History Log
 
-<!-- METADATA:SESSION=72 -->
+<!-- METADATA:SESSION=73 -->
+
+## Session 73
+- User asked how the losses changed, whether zero success is due to insufficient training, and how to inspect the 4x2 task loss curves from the command line.
+- Parsed `logs.json.txt` for the current 4x2 diffusion subset: Square, Tool-Hang, Transport, and LongSquare, each no-PTP/DP and PTP.
+- Loss summary:
+- Square no-PTP / DP: train loss `0.011988 -> 0.006333`, val loss `0.058750 -> 0.088308`, min val at epoch 99, test score only reaches `0.025` at epoch 499.
+- Square PTP: train loss `0.012016 -> 0.006582`, val loss `0.042206 -> 0.058392`, min val at epoch 99, best score `0.475` at epoch 99.
+- Tool-Hang no-PTP / DP: train loss `0.020395 -> 0.010907`, val loss `0.024065 -> 0.021084`, min val `0.017933` at epoch 249, score always `0`.
+- Tool-Hang PTP: train loss `0.018243 -> 0.010399`, val loss `0.021266 -> 0.016481`, min val `0.015137` at epoch 349, score always `0`.
+- Transport no-PTP / DP: train loss `0.012941 -> 0.003928`, val loss `0.031680 -> 0.070030`, min val at epoch 99, score always `0`.
+- Transport PTP: train loss `0.009960 -> 0.003870`, val loss `0.021191 -> 0.032248`, min val `0.020922` at epoch 199, score always `0`.
+- LongSquare no-PTP / DP: train loss `0.015311 -> 0.001711`, val loss `0.014559 -> 0.001556`, min val `0.001429` at epoch 399, score always `0`.
+- LongSquare PTP: train loss `0.013285 -> 0.001785`, val loss `0.012503 -> 0.001511`, min val `0.001504` at epoch 399, score always `0`.
+- Interpretation:
+- all 8 runs optimized the imitation objective; train loss decreases in every run.
+- Square PTP is not undertrained by loss; its best score is at epoch 99 where val loss is lowest, then val loss worsens while score remains lower or comparable.
+- Transport no-PTP and PTP show strong overfitting signals: train loss keeps falling while val loss rises substantially, and success remains zero.
+- Tool-Hang losses improve but sparse success remains zero, which suggests loss is not a sufficient proxy for completing the task.
+- LongSquare loss improves strongly, but its task result is confounded by the already recorded cached-embedding inconsistency.
+- Current practical conclusion:
+- For Tool-Hang and Transport, low or improving loss does not prove the policies learned complete successful behavior.
+- The zero-success issue is not explained by lack of optimization alone; the next useful checks remain expert-action replay and train-seed rollout videos/action dumps.
+- Command-line guidance recorded:
+- use a Python JSONL parser over each run's `logs.json.txt` and filter rows with `test/mean_score` to view checkpoint-level `train_loss`, `val_loss`, `train/mean_score`, `test/mean_score`, and `lr`.
 
 ## Session 72
 - User asked to confirm Square reproduction level and list the other rollout/eval results, noting that the highest training-time rollout was epoch 99 at `47.5%`.
