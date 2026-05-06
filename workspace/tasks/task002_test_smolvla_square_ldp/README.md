@@ -1,6 +1,6 @@
 ## Task: Test SmolVLA Structure for LDP Square Training
 
-<!-- METADATA:STATUS=Open,ASSIGNEE= -->
+<!-- METADATA:STATUS=InProgress,ASSIGNEE=intern_method_developer -->
 
 ### Background
 - The supervisor asked to test whether the SmolVLA model structure can be used for the `square` task under the current LDP codebase.
