@@ -1,6 +1,24 @@
 # Task Knowledge
 
-<!-- METADATA:SESSION=66 -->
+<!-- METADATA:SESSION=67 -->
+
+## Session 67 Knowledge
+- Cached embedding consistency check method:
+- compare `obs/embedding` from the HDF5 file against online frozen-encoder output on the same raw frames, using the selected checkpoint's policy `obs_encoder` and `normalizer`.
+- include all modalities expected by `policy.obs_encoder.obs_shapes`, not images only, because Robomimic encoders concatenate image features and lowdim observations.
+- Current checked output JSON:
+- `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/debug/session67_embedding_check/embedding_consistency_summary.json`.
+- Current consistency state:
+- Square cached embeddings match the selected frozen encoder: `rel_l2_mean=0.000438`, `cosine_mean=0.9999999`.
+- Tool-Hang cached embeddings match the selected frozen encoder: `rel_l2_mean=0.000125`, `cosine_mean=1.0`.
+- Transport cached embeddings match the selected frozen encoder: `rel_l2_mean=0.000171`, `cosine_mean=1.0`.
+- LongSquare cached embeddings do not match the selected frozen encoder: `rel_l2_mean=1.141390`, `l2_mean=3.073095`, `max_abs=2.046087`, `cosine_mean=0.479090`.
+- LongSquare mismatch is not caused by checkpoint EMA selection: `model` and `ema_model` online encoder outputs are identical on sampled frames.
+- LongSquare mismatch is not caused by a different checkpoint encoder weight from the configured short-context encoder: the current policy encoder matches `longhist_encoder.ckpt` exactly across `264` compared tensors.
+- LongSquare mismatch is not caused by a different normalizer from `longhist_encoder.ckpt`: normalizer tensors match between the LongSquare policy checkpoint and `longhist_encoder.ckpt`.
+- Practical implication:
+- regenerate LongSquare `obs/embedding` from the exact `longhist_encoder.ckpt` / normalizer path before retraining or reporting LongSquare.
+- for Square, Tool-Hang, and Transport, investigate zero or low success through checkpoint sweeps, training length, eval seeds, and policy behavior rather than cached-embedding inconsistency.
 
 ## Session 66 Knowledge
 - Current zero-success diagnosis:

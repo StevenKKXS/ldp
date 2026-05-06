@@ -1,6 +1,33 @@
 # History Log
 
-<!-- METADATA:SESSION=66 -->
+<!-- METADATA:SESSION=67 -->
+
+## Session 67
+- User asked to quickly check whether cached embeddings are consistent with the frozen encoder.
+- Created a runtime-only diagnostic script outside the git-tracked repository:
+- `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/session67_check_embedding_consistency.py`.
+- The script loads each selected PTP checkpoint, uses the checkpoint policy's frozen `obs_encoder` and `normalizer`, reads `obs/embedding` from the HDF5 training file, reads the same raw frames from the raw HDF5 source where needed, recomputes embeddings online, and reports L2 / relative L2 / max-abs / cosine metrics.
+- Initial Square run failed because the online encoder expects both image and lowdim modalities. The script was fixed to infer `policy.obs_encoder.obs_shapes.keys()` and include all expected image and lowdim observation keys.
+- Result JSON:
+- `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/debug/session67_embedding_check/embedding_consistency_summary.json`.
+- Consistency results on eight sampled timesteps from `demo_0`:
+- Square PTP checkpoint `epoch=0099-test_mean_score=0.475.ckpt`: `rel_l2_mean=0.000438`, `l2_mean=0.001439`, `max_abs=0.000750`, `cosine_mean=0.9999999`; cached embedding matches the frozen online encoder.
+- Tool-Hang PTP checkpoint `epoch=0499-test_mean_score=0.000.ckpt`: `rel_l2_mean=0.000125`, `l2_mean=0.000399`, `max_abs=0.000213`, `cosine_mean=1.0`; cached embedding matches the frozen online encoder.
+- Transport PTP checkpoint `epoch=0499-test_mean_score=0.000.ckpt`: `rel_l2_mean=0.000171`, `l2_mean=0.000415`, `max_abs=0.000210`, `cosine_mean=1.0`; cached embedding matches the frozen online encoder.
+- LongSquare PTP checkpoint `epoch=0499-test_mean_score=0.000.ckpt`: `rel_l2_mean=1.141390`, `l2_mean=3.073095`, `max_abs=2.046087`, `cosine_mean=0.479090`; cached embedding does not match the frozen online encoder.
+- Follow-up checks for LongSquare:
+- current LongSquare checkpoint config points both train and env data to `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/datasets/longhistsquare100/demos.hdf5`.
+- that file contains raw image keys and `obs/embedding`; `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/datasets/longhistsquare100/demos_emb.hdf5` is absent.
+- LongSquare checkpoint `policy.obs_encoder_dir` is `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/obs_encoders/obs_encoders/longhist_encoder.ckpt`.
+- LongSquare checkpoint `model` and `ema_model` online embeddings are identical for the sampled frames.
+- LongSquare checkpoint obs-encoder tensors match `longhist_encoder.ckpt` exactly across `264` compared tensors, `max_abs_diff=0`.
+- LongSquare checkpoint normalizer tensors match `longhist_encoder.ckpt`; no differing normalizer tensor was found.
+- Dimension probe shows the LongSquare mismatch is dominated by image-feature dimensions rather than only lowdim normalization.
+- Interpretation:
+- Square, Tool-Hang, and Transport cached embeddings are representation-consistent with their frozen encoders.
+- LongSquare `demos.hdf5` contains stale or wrong cached embeddings relative to the actual frozen `longhist_encoder.ckpt` used by the current policy.
+- LongSquare should have embeddings regenerated from the exact frozen encoder and normalizer before rerunning or extending LongSquare results.
+- Tool-Hang and Transport zero success rates are not explained by cached embedding mismatch under this check.
 
 ## Session 66
 - User asked for analysis of why many tasks have zero success rate and how to adjust.
