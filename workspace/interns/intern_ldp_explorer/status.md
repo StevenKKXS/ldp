@@ -8,5 +8,5 @@
 | Status | Working |
 | Current Task | task001_reproduce_ldp_ptp_baseline_h200 |
 | PR | https://github.com/StevenKKXS/ldp/pull/new/intern_ldp_explorer/task001_reproduce_ldp_ptp_baseline_h200 |
-| Session | 88 |
-| Recent Progress | Verified the actual data and action semantics used by the current 4x2 repro runs. Square, Tool-Hang, and Transport train on derived `image_abs_*emb*.hdf5` files and roll out against raw `image_abs.hdf5`; LongSquare currently trains and rolls out from `demos.hdf5` with `abs_action=true`. In other words, the active robomimic/longhist reproduction line is on the absolute-action path for both training semantics and rollout semantics, while the earlier delta replay cases were only diagnostics. |
+| Session | 89 |
+| Recent Progress | Preprocessed LongSquare by copying `demos.hdf5` to `image.hdf5` and rewriting cached embeddings with the released `longhist_encoder.ckpt`. Fixed the Robomimic image runners to instantiate `AsyncVectorEnv(..., shared_memory=False)`, because `n_test=100` video rollouts hit Gym's custom-space shared-memory limitation. Relaunched the 4x2x2 2000-epoch queue with action horizons `8` and `1`; all eight first-stage DP runs are active and writing `logs.json.txt`, with PTP queued after each corresponding DP lane finishes. |

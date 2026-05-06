@@ -1,6 +1,68 @@
 # History Log
 
-<!-- METADATA:SESSION=88 -->
+<!-- METADATA:SESSION=89 -->
+
+## Session 89
+- User requested:
+- preprocess the leftover LongSquare / LH-Square dataset into `image.hdf5` using the released encoder checkpoint
+- expand the current 4x2 setup to 4x2x2 by adding action horizon ablation `global_action=8` and `global_action=1`
+- set rollout to `100`
+- save MP4s for checking
+- train all runs for `2000` epochs
+- run the `8` and `1` action horizon lanes directly on the existing H200 node
+- LongSquare preprocessing completed:
+- source: `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/datasets/longhistsquare100/demos.hdf5`
+- new file: `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/datasets/longhistsquare100/image.hdf5`
+- original file was not overwritten
+- encoder: `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/obs_encoders/obs_encoders/longhist_encoder.ckpt`
+- command used the repo `rewrite_with_embeddings.py` on GPU0
+- rewrite log: `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/logs/session89_longsquare_image_rewrite_1778068331.log`
+- post-check confirmed 100 demos and `obs/embedding` shape `(T, 137)` in the new `image.hdf5`
+- Added local launcher:
+- `workspace/tasks/task001_reproduce_ldp_ptp_baseline_h200/session89_launch_4x2x2_2000ep.sh`
+- copied to remote as `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/session89_launch_4x2x2_2000ep.sh`
+- launcher structure:
+- 8 lanes total: one `a8` lane and one `a1` lane for each of Square, Tool-Hang, Transport, and LongSquare
+- each lane runs DP first, then PTP automatically after DP exits
+- Square uses GPU0, Tool-Hang GPU1, Transport GPU2, LongSquare GPU3
+- training settings: `global_obs=16`, `global_horizon=32`, `global_action` in `{8,1}`, `training.num_epochs=2000`, `batch_size=64`, `past_steps_reg=-1`
+- rollout settings: `task.env_runner.n_test=100`, `n_test_vis=4`, `n_train_vis=2`, `n_envs=4`
+- ckpt / rollout cadence: `training.rollout_every=100`, `training.checkpoint_every=100`
+- First launch stamp `1778069300` failed during env runner construction.
+- Error:
+- `AsyncVectorEnv` defaulted to `shared_memory=True`
+- Gym rejects shared-memory batching for custom observation spaces
+- resulting exception: `Using shared_memory=True in AsyncVectorEnv is incompatible with non-standard Gym observation spaces`
+- Applied the minimal runner fix:
+- `diffusion_policy/env_runner/robomimic_image_runner.py`
+- `diffusion_policy/env_runner/robomimic_longhist_image_runner.py`
+- `diffusion_policy/env_runner/robomimic_square_long_image_runner.py`
+- changed each image runner to instantiate `AsyncVectorEnv(env_fns, dummy_env_fn=dummy_env_fn, shared_memory=False)`
+- Ran local `py_compile` for the three modified runner files and synced them to the remote execution repo.
+- Relaunched with stamp `1778070500`.
+- Active output root:
+- `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/outputs/session89_4x2x2_2000ep_1778070500`
+- Active log root:
+- `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/logs/session89_4x2x2_2000ep_1778070500`
+- Active first-stage DP runs:
+- `session89_square_dp_a8_2000ep_s42_1778070500`
+- `session89_square_dp_a1_2000ep_s42_1778070500`
+- `session89_toolhang_dp_a8_2000ep_s42_1778070500`
+- `session89_toolhang_dp_a1_2000ep_s42_1778070500`
+- `session89_transport_dp_a8_2000ep_s42_1778070500`
+- `session89_transport_dp_a1_2000ep_s42_1778070500`
+- `session89_longsquare_dp_a8_2000ep_s42_1778070500`
+- `session89_longsquare_dp_a1_2000ep_s42_1778070500`
+- Verification after relaunch:
+- all eight first-stage DP runs are alive
+- all eight are writing `logs.json.txt`
+- no repeated `shared_memory` / `ValueError` / `Traceback` errors were found in the new log root
+- PTP runs are queued inside their lanes and will start after each matching DP run finishes
+- GPU snapshot after relaunch showed work active on all four H200s, with memory used approximately:
+- GPU0: 5559 MiB
+- GPU1: 6031 MiB
+- GPU2: 10755 MiB
+- GPU3: 5551 MiB
 
 ## Session 88
 - User asked whether the current task datasets are delta or absolute action, and whether rollout is delta or absolute.
