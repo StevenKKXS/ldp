@@ -1,6 +1,30 @@
 # History Log
 
-<!-- METADATA:SESSION=82 -->
+<!-- METADATA:SESSION=83 -->
+
+## Session 83
+- User asked whether experiment 2 changed from absolute to relative control, what was actually fed into the replay environment, and whether that could itself explain the failure.
+- Clarified the exact semantics for experiment 1 vs experiment 2.
+- Experiment 1 (`abs_runner_like`):
+- dataset: `tool_hang/ph/image_abs.hdf5`
+- replay env explicitly set `controller_configs.control_delta=false`
+- raw HDF5 action is treated as absolute 7D action
+- to mirror the training / eval path, the replay code applies axis-angle -> rotation6d -> inverse roundtrip
+- the final action fed into `env.step(...)` is still an absolute 7D action in axis-angle form plus gripper
+- Experiment 2 (`delta_runner_like`):
+- dataset: `tool_hang/ph/image.hdf5`
+- replay env keeps delta-control semantics and does not force `control_delta=false`
+- the final action fed into `env.step(...)` is the raw relative 7D delta action from HDF5
+- Answer to the user's core question:
+- no, experiment 2 was not accidentally feeding absolute values into a relative controller
+- and experiment 1 was not accidentally feeding relative values into an absolute controller
+- that semantic mismatch was intentionally avoided in the replay setup
+- Important nuance:
+- if one were to replay `image_abs.hdf5` while leaving `control_delta=true`, that would indeed be a serious mistake and could create an artificial failure
+- but that is not what was done in experiment 1
+- Therefore:
+- the failure of experiment 2 is not explained by a simple absolute-vs-relative semantic mismatch in the replay script
+- Tool-Hang replay remains sensitive for other reasons already recorded: environment construction, reset fidelity, and broader replay-path instability
 
 ## Session 82
 - User asked for a detailed natural-language explanation of the four Tool-Hang experiments: what each one means, how the parameters were set, what was observed, and what conclusion should be drawn.

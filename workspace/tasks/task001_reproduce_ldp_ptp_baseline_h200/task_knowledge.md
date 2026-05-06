@@ -1,6 +1,16 @@
 # Task Knowledge
 
-<!-- METADATA:SESSION=82 -->
+<!-- METADATA:SESSION=83 -->
+
+## Session 83 Knowledge
+- Tool-Hang experiment 1 vs experiment 2 control semantics:
+- experiment 1 `abs_runner_like` sends absolute 7D actions to an env configured with `control_delta=false`
+- experiment 2 `delta_runner_like` sends raw relative 7D delta actions to an env left in delta-control semantics
+- experiment 1 uses rotation representation roundtrip only to mirror the policy path; the final `env.step` input is still absolute axis-angle action
+- experiment 2 does not convert to absolute values before `env.step`
+- Therefore the replay script did not introduce an absolute-vs-relative semantic mismatch between experiments 1 and 2
+- A real mismatch would be: `image_abs.hdf5` with `control_delta=true`, or original `image.hdf5` with `control_delta=false`
+- That mismatch was intentionally avoided
 
 ## Session 82 Knowledge
 - Best user-facing explanation of the four Tool-Hang replay video experiments:
