@@ -1,6 +1,18 @@
 # Task Knowledge
 
-<!-- METADATA:SESSION=87 -->
+<!-- METADATA:SESSION=88 -->
+
+## Session 88 Knowledge
+- Current main 4x2 repro line action semantics:
+- `Square` trains on `image_abs_emb.hdf5` and rolls out on `image_abs.hdf5`
+- `Tool-Hang` trains on `image_abs_emb_compact.hdf5` and rolls out on `image_abs.hdf5`
+- `Transport` trains on `image_abs_emb_compact.hdf5` and rolls out on `image_abs.hdf5`
+- `LongSquare` currently trains and rolls out on `demos.hdf5`
+- all four current main-line runs set `abs_action: true`
+- Therefore the active current repro line is on the absolute-action path for both training semantics and rollout semantics.
+- The only delta-action runs discussed recently were manual Tool-Hang diagnostic replays using original `image.hdf5`; they are not the current production training/eval line.
+- Useful exception:
+- the ALOHA configs in this repo currently set `abs_action: false`, so do not generalize the robomimic answer to ALOHA.
 
 ## Session 87 Knowledge
 - Clarification for future answers about “default replay” on Tool-Hang:

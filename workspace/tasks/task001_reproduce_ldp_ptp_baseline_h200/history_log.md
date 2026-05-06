@@ -1,6 +1,38 @@
 # History Log
 
-<!-- METADATA:SESSION=87 -->
+<!-- METADATA:SESSION=88 -->
+
+## Session 88
+- User asked whether the current task datasets are delta or absolute action, and whether rollout is delta or absolute.
+- Re-checked the actual launched `fig9_diffusion_subset_*` run configs under each output directory instead of relying only on the template YAMLs.
+- Confirmed current active main-line semantics for the 4x2 repro subset:
+- `Square`:
+- training dataset path: `.../square/mh/image_abs_emb.hdf5`
+- rollout / env-runner dataset path: `.../square/mh/image_abs.hdf5`
+- `abs_action: true`
+- `Tool-Hang`:
+- training dataset path: `.../tool_hang/ph/image_abs_emb_compact.hdf5`
+- rollout / env-runner dataset path: `.../tool_hang/ph/image_abs.hdf5`
+- `abs_action: true`
+- `Transport`:
+- training dataset path: `.../transport/mh/image_abs_emb_compact.hdf5`
+- rollout / env-runner dataset path: `.../transport/mh/image_abs.hdf5`
+- `abs_action: true`
+- `LongSquare`:
+- training dataset path: `.../longhistsquare100/demos.hdf5`
+- rollout / env-runner dataset path: `.../longhistsquare100/demos.hdf5`
+- `abs_action: true`
+- Clarified the semantic interpretation:
+- for Square / Tool-Hang / Transport, the current training files are embedding-augmented derivatives of absolute-action datasets
+- rollout still uses the raw absolute-action datasets
+- for LongSquare, the current run config also sets `abs_action: true`, so both training and rollout are on the absolute-action code path even though the filename is `demos.hdf5`
+- Re-stated the important separation:
+- the earlier `delta` replays on Tool-Hang came from manual diagnostic experiments using original `image.hdf5`
+- those delta runs are not the current main reproduction line
+- Final answer framing chosen for the user:
+- current robomimic / longhist main-line repro uses absolute-action semantics for both dataset consumption and rollout
+- only the special diagnostic replay cases used delta-action data
+- note a useful exception outside this current 4x2 line: the ALOHA configs in the repo still use `abs_action: false`
 
 ## Session 87
 - User asked what the current default replay result is and why Tool-Hang default replay would be zero.
