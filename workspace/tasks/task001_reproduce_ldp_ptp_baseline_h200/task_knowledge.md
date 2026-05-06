@@ -1,6 +1,22 @@
 # Task Knowledge
 
-<!-- METADATA:SESSION=77 -->
+<!-- METADATA:SESSION=78 -->
+
+## Session 78 Knowledge
+- Current likely causes for success below paper and zero-success tasks:
+- not a global cached-embedding pipeline failure, because Square PTP reaches nonzero success.
+- not likely cached embedding mismatch for Square / Tool-Hang / Transport, because those embeddings match their frozen encoders.
+- LongSquare is separately confounded by stale or mismatched cached embeddings.
+- evaluation / reporting mismatch remains possible: current repro rows are mostly single-seed selected evals, while paper numbers are multi-seed aggregates.
+- checkpoint selection is brittle with sparse binary rewards, especially when all Tool-Hang / Transport checkpoints report zero.
+- current `500` epoch line follows the appendix text, but released `_emb` configs use longer training; harder tasks may need longer runs with a fresh LR schedule.
+- runner and action-conversion validity are the highest-priority checks for Tool-Hang / Transport.
+- Tool-Hang / Transport task difficulty is materially higher than Square: multi-stage Tool-Hang and dual-arm high-dimensional Transport can have low imitation loss but zero complete success.
+- Recommended action order:
+- first run expert-action replay through the same runner / action path.
+- then inspect current checkpoint rollout videos and action dumps.
+- then compare EMA vs non-EMA checkpoint behavior.
+- then run controlled longer Tool-Hang / Transport training only if replay validates the environment/action path.
 
 ## Session 77 Knowledge
 - For the current paper-aligned cached-embedding 4x2 diffusion subset, the observation encoder is frozen during training.

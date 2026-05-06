@@ -1,6 +1,28 @@
 # History Log
 
-<!-- METADATA:SESSION=77 -->
+<!-- METADATA:SESSION=78 -->
+
+## Session 78
+- User asked for likely causes of lower-than-reported success rates and some tasks having zero success, plus recommendations.
+- Current diagnosis:
+- Square PTP reaching nonzero success proves the whole cached-embedding, frozen-encoder, and eval path is not globally broken.
+- Tool-Hang and Transport remain zero in both training rollout checkpoints and selected-checkpoint evals, so their issue is not only final eval seed generalization.
+- Square, Tool-Hang, and Transport cached embeddings were already checked against their frozen encoders and are consistent; this makes embedding mismatch unlikely for Tool-Hang / Transport.
+- LongSquare remains separately confounded by cached-embedding inconsistency and should not be used as evidence for the Tool-Hang / Transport failure mode.
+- Likely causes ranked for current results:
+- evaluation / reporting mismatch: current table has mostly single-seed selected evals, while the paper reports multi-seed results; training rollout uses `n_test=40`, while selected eval used `n_test=100`.
+- checkpoint selection brittleness: sparse binary success gives little signal when all checkpoints are zero, and val loss can improve without producing complete task success.
+- recipe mismatch: current main reproduction uses `500` epochs from the paper appendix, while released embedding YAMLs use longer settings such as `3500`; harder tasks may require longer training or a different schedule.
+- runner / action-conversion risk: Tool-Hang and Transport should be validated by expert-action replay under the same env runner, action normalization, `abs_action`, rotation conversion, max steps, and initial-state handling.
+- task difficulty: Tool-Hang is multi-stage, and Transport is dual-arm with larger action and embedding dimensions; Square is simpler and therefore can show success earlier.
+- data / task pairing risk: dataset path, env metadata, PH/MH split, and compact-HDF5 lowdim/action normalizer correctness should be checked per task.
+- inference setting mismatch: main Fig. 9 comparison should use `n_samples=1`; multi-sample verification is diagnostic and should not be mixed into the main table.
+- Recommendations recorded:
+- run expert-action replay for Tool-Hang and Transport first.
+- inspect rollout videos and action dumps from current PTP checkpoints to identify whether failures are static actions, wrong scale, wrong object, partial skill, or late-stage failure.
+- compare EMA and non-EMA checkpoints where available.
+- rerun Tool-Hang / Transport only after runner/action replay passes; use fresh LR schedule rather than continuing from a cosine schedule at near-zero LR.
+- keep LongSquare separate until regenerated embeddings are available, and keep Push-T / ALOHA out of comparable tables until their data/encoder issues are resolved.
 
 ## Session 77
 - User asked whether the encoder is frozen during training.
