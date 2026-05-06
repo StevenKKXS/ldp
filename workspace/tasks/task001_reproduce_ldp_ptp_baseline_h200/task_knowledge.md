@@ -1,6 +1,33 @@
 # Task Knowledge
 
-<!-- METADATA:SESSION=62 -->
+<!-- METADATA:SESSION=63 -->
+
+## Session 63 Knowledge
+- Selected-checkpoint one-pass eval completed for all 8 seed42 diffusion subset runs.
+- Eval output root: `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/evals/session63_1778032161`.
+- Eval settings: `n_test=100`, `n_train=0`, `n_envs=4`, `n_samples=1`, `test_start_seed=100000`, no perturb config.
+- Checkpoint selection rule:
+- choose highest checkpoint filename `test_mean_score` if any score is better.
+- choose epoch `499` when all checkpoint filename scores are `0.000`.
+- Selected checkpoints and final `test/mean_score`:
+- Square DP/no-PTP: selected `epoch=0499-test_mean_score=0.025.ckpt`, eval score `0.0`.
+- Square PTP: selected `epoch=0099-test_mean_score=0.475.ckpt`, eval score `0.36`.
+- Tool-Hang DP/no-PTP: selected `epoch=0499-test_mean_score=0.000.ckpt`, eval score `0.0`.
+- Tool-Hang PTP: selected `epoch=0499-test_mean_score=0.000.ckpt`, eval score `0.0`.
+- Transport DP/no-PTP: selected `epoch=0499-test_mean_score=0.000.ckpt`, eval score `0.0`.
+- Transport PTP: selected `epoch=0499-test_mean_score=0.000.ckpt`, eval score `0.0`.
+- LongSquare DP/no-PTP: selected `epoch=0499-test_mean_score=0.000.ckpt`, eval score `0.0`.
+- LongSquare PTP: selected `epoch=0499-test_mean_score=0.000.ckpt`, eval score `0.0`.
+- Runtime eval caveat:
+- The repository `eval.py` path is not directly suitable for this exact eval because it enters `IPython.embed()` and the perturb path changes `n_test` to `150`.
+- The project `AsyncVectorEnv` path is incompatible with the current Gym vector API for these observation spaces in a standalone eval process.
+- Final eval therefore used a runtime-only `SimpleVectorEnv` monkeypatch and no-op `wandb.log`; no repository code was changed for this.
+- Final eval status:
+- all 8 final eval logs have status `DONE`.
+- final eval logs had zero matches for `Traceback`, `Error executing job`, `RuntimeError`, `EOFError`, `CUDA out of memory`, `ValueError`, `TypeError`, and `wandb.errors`.
+- Reporting caveat:
+- These are one-pass selected-checkpoint results from the seed42 training batch.
+- They are not yet a three-training-seed aggregate and not a multi-eval-seed confidence estimate.
 
 ## Session 62 Knowledge
 - Latest monitoring snapshot time: `2026-05-06 01:27 UTC`.

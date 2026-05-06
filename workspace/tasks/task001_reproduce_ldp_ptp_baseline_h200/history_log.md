@@ -1,6 +1,111 @@
 # History Log
 
-<!-- METADATA:SESSION=62 -->
+<!-- METADATA:SESSION=63 -->
+
+## Session 63
+- User asked to select the best checkpoint for each run, choose the last checkpoint if there is no score, run one evaluation, and summarize the results.
+- Evaluation selection rule used:
+- if checkpoint filenames had a nonzero or higher `test_mean_score`, select the highest filename score.
+- if all checkpoint filename scores were `0.000`, select the epoch `499` checkpoint.
+- Selected checkpoints:
+- Square DP/no-PTP: `epoch=0499-test_mean_score=0.025.ckpt`.
+- Square PTP: `epoch=0099-test_mean_score=0.475.ckpt`.
+- Tool-Hang DP/no-PTP: `epoch=0499-test_mean_score=0.000.ckpt`.
+- Tool-Hang PTP: `epoch=0499-test_mean_score=0.000.ckpt`.
+- Transport DP/no-PTP: `epoch=0499-test_mean_score=0.000.ckpt`.
+- Transport PTP: `epoch=0499-test_mean_score=0.000.ckpt`.
+- LongSquare DP/no-PTP: `epoch=0499-test_mean_score=0.000.ckpt`.
+- LongSquare PTP: `epoch=0499-test_mean_score=0.000.ckpt`.
+- Final evaluation settings:
+- stamp `1778032161`.
+- `n_test=100`.
+- `n_train=0`.
+- `n_envs=4`.
+- `n_samples=1`.
+- `test_start_seed=100000`.
+- `n_test_vis=0` and `n_train_vis=0`.
+- no perturb config and no test-time verification sampling.
+- output root `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/evals/session63_1778032161`.
+- log root `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/logs/session63_eval_<name>_1778032161.log`.
+- Evaluation execution notes:
+- The first direct `eval.py`-style attempt was not used because `eval.py` enters `IPython.embed()` and the perturb path overwrites `n_test` to `150`.
+- The first independent eval attempt failed at env construction because `AsyncVectorEnv(shared_memory=True)` is incompatible with the current Gym batching path for the runner observation spaces.
+- The second attempt set `shared_memory=False`, but the current Gym `VectorEnv.reset()` API passed `seed=` into the project `AsyncVectorEnv.reset_async()` old signature.
+- The third attempt added reset signature compatibility, then failed when Gym `concatenate` rejected the tuple/custom observation space.
+- A probe with a runtime-only `SimpleVectorEnv` completed one Square DP rollout; it then failed only at `wandb.log()` because no W&B run was initialized in independent eval.
+- The final eval used runtime-only monkeypatches, not repository edits:
+- runner modules' `AsyncVectorEnv` binding was replaced at runtime with `SimpleVectorEnv`, which implements only `reset`, `step`, `call`, `call_each`, `render`, and `close` and batches observation dicts via `np.stack`.
+- `wandb.log` was replaced with a no-op for the eval process.
+- Final evaluation results:
+- Square DP/no-PTP:
+- selected checkpoint `epoch=0499-test_mean_score=0.025.ckpt`.
+- eval output `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/evals/session63_1778032161/square_dp/eval_log.json`.
+- status `DONE`.
+- start `2026-05-06 01:53:20 UTC`.
+- end `2026-05-06 02:11:00 UTC`.
+- final `test/mean_score=0.0`.
+- final log error scan count `0`.
+- Square PTP:
+- selected checkpoint `epoch=0099-test_mean_score=0.475.ckpt`.
+- eval output `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/evals/session63_1778032161/square_ptp/eval_log.json`.
+- status `DONE`.
+- start `2026-05-06 01:53:20 UTC`.
+- end `2026-05-06 02:11:12 UTC`.
+- final `test/mean_score=0.36`.
+- final log error scan count `0`.
+- Tool-Hang DP/no-PTP:
+- selected checkpoint `epoch=0499-test_mean_score=0.000.ckpt`.
+- eval output `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/evals/session63_1778032161/toolhang_dp/eval_log.json`.
+- status `DONE`.
+- start `2026-05-06 01:53:21 UTC`.
+- end `2026-05-06 02:20:15 UTC`.
+- final `test/mean_score=0.0`.
+- final log error scan count `0`.
+- Tool-Hang PTP:
+- selected checkpoint `epoch=0499-test_mean_score=0.000.ckpt`.
+- eval output `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/evals/session63_1778032161/toolhang_ptp/eval_log.json`.
+- status `DONE`.
+- start `2026-05-06 01:53:21 UTC`.
+- end `2026-05-06 02:20:37 UTC`.
+- final `test/mean_score=0.0`.
+- final log error scan count `0`.
+- Transport DP/no-PTP:
+- selected checkpoint `epoch=0499-test_mean_score=0.000.ckpt`.
+- eval output `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/evals/session63_1778032161/transport_dp/eval_log.json`.
+- status `DONE`.
+- start `2026-05-06 01:53:20 UTC`.
+- end `2026-05-06 02:38:15 UTC`.
+- final `test/mean_score=0.0`.
+- final log error scan count `0`.
+- Transport PTP:
+- selected checkpoint `epoch=0499-test_mean_score=0.000.ckpt`.
+- eval output `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/evals/session63_1778032161/transport_ptp/eval_log.json`.
+- status `DONE`.
+- start `2026-05-06 01:53:20 UTC`.
+- end `2026-05-06 02:39:53 UTC`.
+- final `test/mean_score=0.0`.
+- final log error scan count `0`.
+- LongSquare DP/no-PTP:
+- selected checkpoint `epoch=0499-test_mean_score=0.000.ckpt`.
+- eval output `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/evals/session63_1778032161/longsquare_dp/eval_log.json`.
+- status `DONE`.
+- start `2026-05-06 01:53:20 UTC`.
+- end `2026-05-06 02:11:10 UTC`.
+- final `test/mean_score=0.0`.
+- final log error scan count `0`.
+- LongSquare PTP:
+- selected checkpoint `epoch=0499-test_mean_score=0.000.ckpt`.
+- eval output `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/evals/session63_1778032161/longsquare_ptp/eval_log.json`.
+- status `DONE`.
+- start `2026-05-06 01:53:21 UTC`.
+- end `2026-05-06 02:10:45 UTC`.
+- final `test/mean_score=0.0`.
+- final log error scan count `0`.
+- Interpretation:
+- In this one-pass 100-episode evaluation, only Square PTP achieved a nonzero score, `0.36`.
+- Square DP dropped from training checkpoint filename score `0.025` to eval score `0.0`.
+- Tool-Hang, Transport, and LongSquare remained `0.0` for both no-PTP and PTP under this selected-checkpoint one-pass eval.
+- These are single-pass results for the selected seed-42 training checkpoints, not a three-seed aggregate.
 
 ## Session 62
 - User asked for a fresh current run-status statistic.
