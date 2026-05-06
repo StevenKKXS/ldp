@@ -1,6 +1,32 @@
 # Task Knowledge
 
-<!-- METADATA:SESSION=61 -->
+<!-- METADATA:SESSION=62 -->
+
+## Session 62 Knowledge
+- Latest monitoring snapshot time: `2026-05-06 01:27 UTC`.
+- All 8 seed42 Wave A/B training parent PIDs have exited after reaching configured epoch `499`.
+- Current checked H200 allocations:
+- Wave A `10.100.0.29:30103`: 4 x H200 idle, each about `1 MiB` used and `0%` utilization.
+- Wave B `10.100.0.29:36645`: 4 x H200 idle, each about `1 MiB` used and `0%` utilization.
+- Shared `/mnt/3fs2` now reports `448T` size, `317T` used, `131T` available, `71%` used.
+- Completed seed42 training-time checkpoint scores:
+- Square DP/no-PTP `fig9_diffusion_subset_square_dp_s42_1777979501`: best `0.025`, final epoch `499` score `0.025`.
+- Square PTP `fig9_diffusion_subset_square_ptp_s42_1777979501`: best `0.475` at epoch `99`, final epoch `499` score `0.425`.
+- Tool-Hang DP/no-PTP `fig9_diffusion_subset_toolhang_dp_s42_1777979501`: best `0.000`, final epoch `499` score `0.000`.
+- Tool-Hang PTP `fig9_diffusion_subset_toolhang_ptp_s42_1777979501`: best `0.000`, final epoch `499` score `0.000`.
+- Transport DP/no-PTP `fig9_diffusion_subset_transport_dp_s42_1777981819`: best `0.000`, final epoch `499` score `0.000`.
+- Transport PTP `fig9_diffusion_subset_transport_ptp_s42_1777981819`: best `0.000`, final epoch `499` score `0.000`.
+- LongSquare DP/no-PTP `fig9_diffusion_subset_longsquare_dp_s42_1777981819`: best `0.000`, final epoch `499` score `0.000`.
+- LongSquare PTP `fig9_diffusion_subset_longsquare_ptp_s42_1777981819`: best `0.000`, final epoch `499` score `0.000`.
+- Checkpoint integrity note:
+- LongSquare PTP has one async checkpoint-save incident near epoch `450` due `No space left on device`.
+- LongSquare PTP `epoch=0449-test_mean_score=0.000.ckpt` is `0` bytes and not loadable.
+- LongSquare PTP `epoch=0499-test_mean_score=0.000.ckpt` and `latest.ckpt` were verified loadable with `torch.load`.
+- A zero-size checkpoint scan over the active output root found only the LongSquare PTP epoch `0449` file.
+- Current checkpoint-score caution:
+- checkpoint filenames reflect training-time rollout with `n_test=40`.
+- do not report these as final paper-style results.
+- final reporting still requires selected checkpoints evaluated with `n_test=100`, `n_samples=1`, and seeds `[42,43,44]`.
 
 ## Session 61 Knowledge
 - Latest monitoring snapshot time: `2026-05-05 13:09 UTC`.

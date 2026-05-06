@@ -1,6 +1,103 @@
 # History Log
 
-<!-- METADATA:SESSION=61 -->
+<!-- METADATA:SESSION=62 -->
+
+## Session 62
+- User asked for a fresh current run-status statistic.
+- Snapshot time: `2026-05-06 01:27 UTC`.
+- Local repo state before recording:
+- branch `intern_ldp_explorer/task001_reproduce_ldp_ptp_baseline_h200`.
+- pre-existing uncommitted local file remains `workspace/interns/intern_ldp_explorer/knowledge.md`; it was not staged.
+- Shared storage on both checked containers:
+- `/mnt/3fs2` reports `448T` size, `317T` used, `131T` available, `71%` used.
+- Wave A host `10.100.0.29:30103`:
+- hostname `lg-cmc-b7r201-b04u06-h200-000040`.
+- GPU0 `1 MiB`, `0%`.
+- GPU1 `1 MiB`, `0%`.
+- GPU2 `1 MiB`, `0%`.
+- GPU3 `1 MiB`, `0%`.
+- parent PIDs `299641`, `299643`, `299645`, and `299647` are no longer alive.
+- Wave B host `10.100.0.29:36645`:
+- hostname `lg-cmc-b7r201-b04u06-h200-000040`.
+- GPU0 `1 MiB`, `0%`.
+- GPU1 `1 MiB`, `0%`.
+- GPU2 `1 MiB`, `0%`.
+- GPU3 `1 MiB`, `0%`.
+- parent PIDs `27557`, `27559`, `27562`, and `27565` are no longer alive.
+- Run completion and checkpoint summary:
+- Square DP/no-PTP:
+- run `fig9_diffusion_subset_square_dp_s42_1777979501`.
+- log mtime `2026-05-05 15:58:26 UTC`.
+- latest parsed training progress reached `Training epoch 499`, step `1253/1272`, latest parsed loss `0.00732`.
+- latest parsed validation reached epoch `499`.
+- scored checkpoints: `epoch=0099-test_mean_score=0.000.ckpt`, `epoch=0199-test_mean_score=0.000.ckpt`, `epoch=0299-test_mean_score=0.000.ckpt`, `epoch=0399-test_mean_score=0.000.ckpt`, `epoch=0499-test_mean_score=0.025.ckpt`.
+- best parsed checkpoint score `0.025`; final epoch `499` checkpoint score `0.025`.
+- error scan count `0`.
+- Square PTP:
+- run `fig9_diffusion_subset_square_ptp_s42_1777979501`.
+- log mtime `2026-05-05 15:53:03 UTC`.
+- latest parsed training progress reached `Training epoch 499`, step `1240/1272`, latest parsed loss `0.00716`.
+- latest parsed validation reached epoch `499`.
+- scored checkpoints: `epoch=0099-test_mean_score=0.475.ckpt`, `epoch=0199-test_mean_score=0.400.ckpt`, `epoch=0299-test_mean_score=0.250.ckpt`, `epoch=0399-test_mean_score=0.400.ckpt`, `epoch=0499-test_mean_score=0.425.ckpt`.
+- best parsed checkpoint score `0.475`; final epoch `499` checkpoint score `0.425`.
+- error scan count `0`.
+- Tool-Hang DP/no-PTP:
+- run `fig9_diffusion_subset_toolhang_dp_s42_1777979501`.
+- log mtime `2026-05-05 17:55:18 UTC`.
+- latest parsed training progress reached `Training epoch 499`, step `1475/1516`, latest parsed loss `0.00976`.
+- latest parsed validation reached epoch `499`.
+- scored checkpoints every 50 epochs from `0049` through `0499`, all with `test_mean_score=0.000`.
+- best parsed checkpoint score `0.000`; final epoch `499` checkpoint score `0.000`.
+- error scan count `0`.
+- Tool-Hang PTP:
+- run `fig9_diffusion_subset_toolhang_ptp_s42_1777979501`.
+- log mtime `2026-05-05 17:44:23 UTC`.
+- latest parsed training progress reached `Training epoch 499`, step `1508/1516`, latest parsed loss `0.0097`.
+- latest parsed validation reached epoch `499`.
+- scored checkpoints every 50 epochs from `0049` through `0499`, all with `test_mean_score=0.000`.
+- best parsed checkpoint score `0.000`; final epoch `499` checkpoint score `0.000`.
+- error scan count `0`.
+- Transport DP/no-PTP:
+- run `fig9_diffusion_subset_transport_dp_s42_1777981819`.
+- log mtime `2026-05-05 22:39:36 UTC`.
+- latest parsed training progress reached `Training epoch 499`, step `2857/2887`, latest parsed loss `0.00252`.
+- latest parsed validation reached epoch `499`.
+- scored checkpoints every 100 epochs from `0099` through `0499`, all with `test_mean_score=0.000`.
+- best parsed checkpoint score `0.000`; final epoch `499` checkpoint score `0.000`.
+- error scan count `0`.
+- Transport PTP:
+- run `fig9_diffusion_subset_transport_ptp_s42_1777981819`.
+- log mtime `2026-05-05 22:22:32 UTC`.
+- latest parsed training progress reached `Training epoch 499`, step `2884/2887`, latest parsed loss `0.00569`.
+- latest parsed validation reached epoch `499`.
+- scored checkpoints every 100 epochs from `0099` through `0499`, all with `test_mean_score=0.000`.
+- best parsed checkpoint score `0.000`; final epoch `499` checkpoint score `0.000`.
+- error scan count `0`.
+- LongSquare DP/no-PTP:
+- run `fig9_diffusion_subset_longsquare_dp_s42_1777981819`.
+- log mtime `2026-05-05 15:21:15 UTC`.
+- latest parsed training progress reached `Training epoch 499`, step `659/702`, latest parsed loss `0.000835`.
+- latest parsed validation reached epoch `499`.
+- scored checkpoints every 50 epochs from `0049` through `0499`, all with `test_mean_score=0.000`.
+- best parsed checkpoint score `0.000`; final epoch `499` checkpoint score `0.000`.
+- error scan count `0`.
+- LongSquare PTP:
+- run `fig9_diffusion_subset_longsquare_ptp_s42_1777981819`.
+- log mtime `2026-05-05 15:15:53 UTC`.
+- latest parsed training progress reached `Training epoch 499`, step `691/702`, latest parsed loss `0.00184`.
+- latest parsed validation reached epoch `499`.
+- scored checkpoints every 50 epochs from `0049` through `0499`, all with `test_mean_score=0.000`.
+- best parsed checkpoint score `0.000`; final epoch `499` checkpoint score `0.000`.
+- error scan count `4` when including `No space left on device`; context shows one async checkpoint-save thread failure around epoch `450`.
+- corrupted checkpoint: `epoch=0449-test_mean_score=0.000.ckpt` is `0` bytes and raises `EOFError` on `torch.load`.
+- verified loadable: `epoch=0499-test_mean_score=0.000.ckpt` and `latest.ckpt`, both size `502857298` bytes and loading as dict with `torch.load`.
+- zero-size checkpoint scan across the active output root found only LongSquare PTP epoch `0449`.
+- Interpretation:
+- the 8 first-pass seed42 training jobs have completed the configured 500 epochs and are no longer running.
+- both GPU allocations are currently idle and available.
+- Square PTP remains the strongest training-time checkpoint result with best score `0.475`; Square DP has a late nonzero score `0.025`.
+- Tool-Hang, Transport, and LongSquare training-time checkpoint scores are all `0.000` for both DP/no-PTP and PTP.
+- checkpoint scores are training-time `n_test=40` scores and are not final paper-style `n_test=100`, `n_samples=1`, seeds `[42,43,44]` results.
 
 ## Session 61
 - User again asked for a current run-status statistic; a fresh snapshot was taken instead of reusing the previous parse.
