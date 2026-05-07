@@ -1,6 +1,23 @@
 # Task Knowledge
 
-<!-- METADATA:SESSION=93 -->
+<!-- METADATA:SESSION=94 -->
+
+## Session 94 Knowledge
+- Effective active stamp remains `1778075154`.
+- PTP priority queue is active and healthy as of `2026-05-07T10:40:49Z`.
+- All eight PTP jobs are running:
+- Square PTP `a8`: epoch `244`, latest score `0.34`, ckpt `3`, mp4 `16`
+- Square PTP `a1`: epoch `99`, no score event yet, ckpt `0`, mp4 `6`
+- Tool-Hang PTP `a8`: epoch `199`, latest score `0.0`, ckpt `2`, mp4 `14`
+- Tool-Hang PTP `a1`: epoch `99`, no score event yet, ckpt `0`, mp4 `6`
+- Transport PTP `a8`: epoch `80`, no score event yet, ckpt `0`, mp4 `0`
+- Transport PTP `a1`: epoch `79`, no score event yet, ckpt `0`, mp4 `0`
+- LongSquare PTP `a8`: epoch `751`, latest score `0.0`, ckpt `8`, mp4 `56`
+- LongSquare PTP `a1`: epoch `127`, latest score `0.0`, ckpt `2`, mp4 `8`
+- All paused DP jobs still have process count `0`; use `session93_resume_paused_dp.sh` when ready to fill in DP.
+- Current paths:
+- outputs: `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/outputs/session89_4x2x2_2000ep_1778075154`
+- logs: `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/logs/session89_4x2x2_2000ep_1778075154`
 
 ## Session 93 Knowledge
 - Resume is supported for the current transformer hybrid workspace:

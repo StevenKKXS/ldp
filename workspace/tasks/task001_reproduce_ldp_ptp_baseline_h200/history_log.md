@@ -1,6 +1,35 @@
 # History Log
 
-<!-- METADATA:SESSION=93 -->
+<!-- METADATA:SESSION=94 -->
+
+## Session 94
+- User asked for current progress.
+- Checked PTP-priority queue under effective stamp `1778075154` on `10.100.0.29:30103`.
+- Sample time: `2026-05-07T10:40:49Z`.
+- GPU sample:
+- GPU0: `5679 / 143771 MiB`, utilization around `77%`
+- GPU1: `7291 / 143771 MiB`, utilization around `61%`
+- GPU2: `10799 / 143771 MiB`, utilization around `99%`
+- GPU3: `5675 / 143771 MiB`, utilization around `94%`
+- Current PTP status:
+- Square PTP `a8`: running, epoch `244`, step `311521`, train loss `0.01014411449432373`, latest score `0.34`, score events `2`, checkpoints `3`, latest top checkpoint `epoch=0199-test_mean_score=0.340.ckpt`, MP4s `16`, no error
+- Square PTP `a1`: running, epoch `99`, step `127198`, train loss `0.011940664611756802`, no score event yet, checkpoints `0`, MP4s `6`, no error
+- Tool-Hang PTP `a8`: running, epoch `199`, step `303198`, train loss `0.009002760984003544`, latest score `0.0`, score events `1`, checkpoints `2`, latest top checkpoint `epoch=0099-test_mean_score=0.000.ckpt`, MP4s `14`, no error
+- Tool-Hang PTP `a1`: running, epoch `99`, step `151598`, train loss `0.01439407467842102`, no score event yet, checkpoints `0`, MP4s `6`, no error
+- Transport PTP `a8`: running, epoch `80`, step `231180`, train loss `0.00819277111440897`, no score event yet, checkpoints `0`, MP4s `0`, no error
+- Transport PTP `a1`: running, epoch `79`, step `230025`, train loss `0.008418993093073368`, no score event yet, checkpoints `0`, MP4s `0`, no error
+- LongSquare PTP `a8`: running, epoch `751`, step `527606`, train loss `0.002215984044596553`, latest score `0.0`, score events `7`, checkpoints `8`, latest top checkpoint `epoch=0699-test_mean_score=0.000.ckpt`, MP4s `56`, no error
+- LongSquare PTP `a1`: running, epoch `127`, step `89783`, train loss `0.005948388017714024`, latest score `0.0`, score events `1`, checkpoints `2`, latest top checkpoint `epoch=0099-test_mean_score=0.000.ckpt`, MP4s `8`, no error
+- Paused DP process counts remain `0` for:
+- Square DP `a8/a1`
+- Tool-Hang DP `a8/a1`
+- Transport DP `a8/a1`
+- LongSquare DP `a1`
+- Interpretation:
+- PTP-priority switch is holding
+- all PTP jobs are live with no traceback markers
+- Square PTP `a8` is the only current nonzero intermediate score among sampled PTP runs
+- score values are training-time rollout diagnostics, not final selected-checkpoint evaluation
 
 ## Session 93
 - User asked whether unfinished runs can resume, and requested PTP priority first, with DP filled in afterward if resume is possible.
