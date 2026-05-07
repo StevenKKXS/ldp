@@ -8,5 +8,5 @@
 | Status | Working |
 | Current Task | task001_reproduce_ldp_ptp_baseline_h200 |
 | PR | https://github.com/StevenKKXS/ldp/pull/new/intern_ldp_explorer/task001_reproduce_ldp_ptp_baseline_h200 |
-| Session | 95 |
-| Recent Progress | Checked the PTP-priority queue under stamp `1778075154` at `2026-05-07T11:16:53Z`. All eight PTP jobs are still running with no traceback markers, and paused DP process counts remain `0`. Current PTP progress: Square `a8` epoch `299`, latest score `0.34`, best score `0.38` at epoch `99`; Square `a1` epoch `140`, latest/best score `0.25`; Tool-Hang `a8` epoch `231`, score `0.0`; Tool-Hang `a1` epoch `99` with no score event yet; Transport `a8/a1` epochs `98/97` approaching first rollout/checkpoint; LongSquare `a8` epoch `813`, score `0.0`; LongSquare `a1` epoch `199`, score `0.0`. |
+| Session | 96 |
+| Recent Progress | Checked accessible GPU resources at `2026-05-07T12:15:33Z`. Local workspace has no `nvidia-smi`; remote `10.100.0.29:30103` exposes four NVIDIA H200 GPUs and is actively occupied by the current PTP priority queue under stamp `1778075154`; remote `10.100.0.29:36645` also exposes four NVIDIA H200 GPUs and currently shows no compute processes in its namespace. |

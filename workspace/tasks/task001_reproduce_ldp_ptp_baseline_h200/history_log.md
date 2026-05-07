@@ -1,6 +1,36 @@
 # History Log
 
-<!-- METADATA:SESSION=95 -->
+<!-- METADATA:SESSION=96 -->
+
+## Session 96
+- User asked how many GPUs are currently accessible and how they are occupied.
+- Checked local workspace:
+- `nvidia-smi` is not installed locally, so no local GPU telemetry is available from this container.
+- Checked remote `10.100.0.29:30103` at `2026-05-07T12:15:33Z`:
+- hostname `lg-cmc-b7r201-b04u06-h200-000040`
+- visible GPUs: four NVIDIA H200 cards, each with `143771 MiB` total memory
+- GPU0: `5679 / 143771 MiB`, utilization `78%`
+- GPU1: `7291 / 143771 MiB`, utilization `38%`
+- GPU2: `10815 / 143771 MiB`, utilization `62%`
+- GPU3: `5675 / 143771 MiB`, utilization `95%`
+- compute processes on `30103` include eight active `/root/venv/bin/python train.py` parents for the PTP-priority queue:
+- Square PTP `a8/a1`
+- Tool-Hang PTP `a8/a1`
+- Transport PTP `a8/a1`
+- LongSquare PTP `a8/a1`
+- Checked remote `10.100.0.29:36645` at `2026-05-07T12:15:33Z`:
+- hostname `lg-cmc-b7r201-b04u06-h200-000040`
+- visible GPUs: four NVIDIA H200 cards, each with `143771 MiB` total memory
+- GPU0: `1 / 143771 MiB`, utilization `0%`
+- GPU1: `1 / 143771 MiB`, utilization `0%`
+- GPU2: `1 / 143771 MiB`, utilization `0%`
+- GPU3: `1 / 143771 MiB`, utilization `0%`
+- no compute processes were reported by `nvidia-smi` on `36645`.
+- Interpretation:
+- I can currently access two SSH GPU entrypoints, each exposing four H200 cards.
+- `30103` is occupied by the active PTP experiments.
+- `36645` appears idle from its current process and memory namespace.
+- Because both entrypoints report the same hostname but different GPU process and memory views, keep them recorded as separate accessible SSH allocations rather than assuming a single shared process namespace.
 
 ## Session 95
 - User asked for current progress.

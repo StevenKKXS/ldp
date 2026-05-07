@@ -1,6 +1,21 @@
 # Task Knowledge
 
-<!-- METADATA:SESSION=95 -->
+<!-- METADATA:SESSION=96 -->
+
+## Session 96 Knowledge
+- Accessible GPU resources checked at `2026-05-07T12:15:33Z`.
+- Local workspace has no `nvidia-smi`.
+- `10.100.0.29:30103`:
+- visible GPUs: four NVIDIA H200 cards
+- per-card total memory: `143771 MiB`
+- current usage sample: GPU0 `5679 MiB` / `78%`, GPU1 `7291 MiB` / `38%`, GPU2 `10815 MiB` / `62%`, GPU3 `5675 MiB` / `95%`
+- active compute processes correspond to the eight PTP-priority runs under stamp `1778075154`.
+- `10.100.0.29:36645`:
+- visible GPUs: four NVIDIA H200 cards
+- per-card total memory: `143771 MiB`
+- current usage sample: all four GPUs `1 MiB` and `0%`
+- no compute processes reported by `nvidia-smi`.
+- Treat `30103` and `36645` as separate accessible SSH allocations for scheduling purposes because their GPU process and memory views differ despite the same hostname.
 
 ## Session 95 Knowledge
 - Effective active stamp remains `1778075154`.
