@@ -1,6 +1,35 @@
 # Task Knowledge
 
-<!-- METADATA:SESSION=92 -->
+<!-- METADATA:SESSION=93 -->
+
+## Session 93 Knowledge
+- Resume is supported for the current transformer hybrid workspace:
+- set `training.resume=true`
+- keep `hydra.run.dir` equal to the original run directory
+- the workspace loads `checkpoints/latest.ckpt` from that run directory
+- checkpoint payload restores model / EMA / optimizer / scheduler state plus pickled workspace fields such as `epoch` and `global_step`
+- Paused DP runs under stamp `1778075154` have stable `latest.ckpt` files and can be resumed later:
+- Square DP `a8`: paused after latest stable checkpoint at epoch `1599`
+- Square DP `a1`: paused after latest stable checkpoint at epoch `0599`
+- Tool-Hang DP `a8`: paused after latest stable checkpoint; latest top-k checkpoint list showed epoch `0999`, `latest.ckpt` stable
+- Tool-Hang DP `a1`: paused after latest stable checkpoint at epoch `0399`
+- Transport DP `a8`: paused after latest stable checkpoint at epoch `0499`
+- Transport DP `a1`: paused after latest stable checkpoint at epoch `0199`
+- LongSquare DP `a1`: paused after latest stable checkpoint at epoch `0699`
+- LongSquare DP `a8` is complete and does not need resume for the 2000-epoch DP target.
+- PTP priority scripts:
+- local PTP launcher: `workspace/tasks/task001_reproduce_ldp_ptp_baseline_h200/session93_ptp_priority.sh`
+- remote PTP launcher: `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/session93_ptp_priority.sh`
+- local DP resume launcher: `workspace/tasks/task001_reproduce_ldp_ptp_baseline_h200/session93_resume_paused_dp.sh`
+- remote DP resume launcher: `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/session93_resume_paused_dp.sh`
+- Current active PTP-priority state after switch:
+- Square PTP `a8/a1`: running on GPU0
+- Tool-Hang PTP `a8/a1`: running on GPU1
+- Transport PTP `a8/a1`: running on GPU2
+- LongSquare PTP `a8/a1`: running on GPU3
+- The active PTP output/log root is still stamp `1778075154`:
+- outputs: `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/outputs/session89_4x2x2_2000ep_1778075154`
+- logs: `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/logs/session89_4x2x2_2000ep_1778075154`
 
 ## Session 92 Knowledge
 - Effective active stamp remains `1778075154`.

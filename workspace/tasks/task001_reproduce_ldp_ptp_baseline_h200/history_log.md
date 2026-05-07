@@ -1,6 +1,66 @@
 # History Log
 
-<!-- METADATA:SESSION=92 -->
+<!-- METADATA:SESSION=93 -->
+
+## Session 93
+- User asked whether unfinished runs can resume, and requested PTP priority first, with DP filled in afterward if resume is possible.
+- Checked code behavior:
+- `train_diffusion_transformer_hybrid_workspace.py` checks `cfg.training.resume`
+- when true, it calls `self.get_checkpoint_path()` and loads `hydra.run.dir/checkpoints/latest.ckpt`
+- `BaseWorkspace.load_checkpoint()` restores payload state dicts and pickled fields
+- this includes workspace training state such as `epoch` / `global_step`, plus model, EMA, optimizer, and scheduler state objects
+- Therefore the unfinished DP runs can be paused and later resumed from their original run directories using `training.resume=true`.
+- Verified unfinished DP checkpoint stability before pausing:
+- Square DP `a8`: latest ckpt size `502856786`, latest stable at epoch `1599`
+- Square DP `a1`: latest ckpt size `502856786`, latest stable at epoch `0599`
+- Tool-Hang DP `a8`: latest ckpt size `502859858`, latest stable at latest/top-k epoch around `0999`
+- Tool-Hang DP `a1`: latest ckpt size `502859858`, latest stable at epoch `0399`
+- Transport DP `a8`: latest ckpt size `2007111622`, latest stable at epoch `0499`
+- Transport DP `a1`: latest ckpt size `2007111622`, latest stable at epoch `0199`
+- LongSquare DP `a1`: latest ckpt size `502857298`, latest stable at epoch `0699`
+- the latest ckpt files were re-stat'ed after 5 seconds and remained unchanged
+- Added and synced PTP-priority launcher:
+- local: `workspace/tasks/task001_reproduce_ldp_ptp_baseline_h200/session93_ptp_priority.sh`
+- remote: `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/session93_ptp_priority.sh`
+- behavior:
+- launches PTP runs directly under existing stamp `1778075154`
+- skips a PTP run if the same run name is already active
+- uses `training.resume=true` only if a target PTP run already has `checkpoints/latest.ckpt`; new PTP runs start with `training.resume=false`
+- keeps the same task paths, embedding settings, `global_obs=16`, `global_horizon=32`, `global_action in {8,1}`, `num_epochs=2000`, rollout/checkpoint interval `100`, and `n_test=100`
+- Added and synced paused-DP resume launcher:
+- local: `workspace/tasks/task001_reproduce_ldp_ptp_baseline_h200/session93_resume_paused_dp.sh`
+- remote: `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/session93_resume_paused_dp.sh`
+- behavior:
+- resumes paused DP jobs from their original run directories with `training.resume=true`
+- skips a DP run if no `checkpoints/latest.ckpt` exists or if it is already running
+- Executed the priority switch:
+- stopped lane shell PIDs for Square `a8/a1`, Tool-Hang `a8/a1`, Transport `a8/a1`, and LongSquare `a1`
+- killed active unfinished DP processes for those seven runs
+- preserved already completed LongSquare DP `a8`
+- preserved already-running LongSquare PTP `a8`
+- launched the remaining seven PTP jobs
+- PTP health check at `2026-05-07T08:04:25Z`:
+- GPU0: `5559 / 143771 MiB`, utilization `96%`
+- GPU1: `6031 / 143771 MiB`, utilization `92%`
+- GPU2: `10755 / 143771 MiB`, utilization `98%`
+- GPU3: `5613 / 143771 MiB`, utilization `95%`
+- PTP status:
+- Square PTP `a8`: running, epoch `2`, step `2722`, no error
+- Square PTP `a1`: running, epoch `2`, step `2700`, no error
+- Tool-Hang PTP `a8`: running, epoch `1`, step `2792`, no error
+- Tool-Hang PTP `a1`: running, epoch `1`, step `2786`, no error
+- Transport PTP `a8`: running, epoch `0`, step `1186`, no error
+- Transport PTP `a1`: running, epoch `0`, step `1181`, no error
+- LongSquare PTP `a8`: running, epoch `399`, step `280798`, score `0.0`, checkpoint count `4`, no error
+- LongSquare PTP `a1`: running, epoch `4`, step `3054`, no error
+- Paused DP process check after switch:
+- Square DP `a8/a1`: process count `0`
+- Tool-Hang DP `a8/a1`: process count `0`
+- Transport DP `a8/a1`: process count `0`
+- LongSquare DP `a1`: process count `0`
+- Current effective plan:
+- prioritize all PTP runs under stamp `1778075154`
+- after PTP priority runs have progressed or completed, run `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/session93_resume_paused_dp.sh 1778075154` to fill in the paused DP experiments from checkpoint
 
 ## Session 92
 - User asked for the current status of all tasks.
