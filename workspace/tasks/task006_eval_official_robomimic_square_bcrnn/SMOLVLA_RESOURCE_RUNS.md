@@ -30,5 +30,8 @@ Run base:
 - `official_ph_v141_abs10_seed43`, epoch 10: `val_loss=0.2338462323`, `val_sample_action_mse=0.1962940693`
 - `official_ph_v141_abs10_seed43`, epoch 20: `val_loss=0.2210917920`, `val_sample_action_mse=0.1815359592`
 - `official_ph_v141_abs10_seed43`, epoch 30: `val_loss=0.2227935046`, `val_sample_action_mse=0.1762230098`
+- `official_ph_v141_abs10_seed43`, epoch 40: `val_loss=0.2306858152`, `val_sample_action_mse=0.1765893400`
+- `official_ph_v141_abs10_seed43`, epoch 50: `val_loss=0.2374282479`, `val_sample_action_mse=0.1726914048`
+- `ldp_mh_abs10_big384_seed44`, epoch 10: `val_loss=0.1848952621`, `val_sample_action_mse=0.1609523296`
 
-The big384 run was launched after the two required runs and had not reached epoch 10 at the time of this note.
+Latest sampled GPU utilization after all three SmolVLA jobs were running: GPU0 91%, GPU1 59%.
