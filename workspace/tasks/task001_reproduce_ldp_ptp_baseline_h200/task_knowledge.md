@@ -1,6 +1,32 @@
 # Task Knowledge
 
-<!-- METADATA:SESSION=91 -->
+<!-- METADATA:SESSION=92 -->
+
+## Session 92 Knowledge
+- Effective active stamp remains `1778075154`.
+- Current output root:
+- `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/outputs/session89_4x2x2_2000ep_1778075154`
+- Current log root:
+- `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/logs/session89_4x2x2_2000ep_1778075154`
+- The Session 90/91 vector-env compatibility fixes are validated in practice:
+- active runs have crossed the epoch-100 rollout/checkpoint boundary
+- checkpoint files and MP4 files exist in the run directories
+- no sampled active log has a current traceback marker
+- Current lane sequencing:
+- each lane runs DP before PTP
+- only LongSquare `a8` has advanced from DP to PTP so far
+- all other PTP lanes are waiting on their matching DP lane
+- Latest sampled progress at `2026-05-07T07:44:55Z`:
+- Square DP `a8`: epoch `1599`, latest score `0.02`, ckpt `16`, mp4 `126`
+- Square DP `a1`: epoch `682`, latest score `0.0`, ckpt `7`, mp4 `48`
+- Tool-Hang DP `a8`: epoch `1293`, latest score `0.0`, ckpt `11`, mp4 `96`
+- Tool-Hang DP `a1`: epoch `426`, latest score `0.0`, ckpt `5`, mp4 `32`
+- Transport DP `a8`: epoch `511`, latest score `0.0`, ckpt `6`, mp4 `40`
+- Transport DP `a1`: epoch `252`, latest score `0.0`, ckpt `3`, mp4 `16`
+- LongSquare DP `a8`: completed epoch `1999`, latest score `0.0`, ckpt `11`, mp4 `160`
+- LongSquare PTP `a8`: epoch `384`, latest score `0.0`, ckpt `4`, mp4 `24`
+- LongSquare DP `a1`: epoch `799`, latest score `0.0`, ckpt `8`, mp4 `60`
+- Training-time rollout scores are intermediate diagnostics and should not be reported as final reproduction scores without selected-checkpoint evaluation.
 
 ## Session 91 Knowledge
 - Current effective 4x2x2 run stamp is `1778075154`.

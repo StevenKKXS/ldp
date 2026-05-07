@@ -1,6 +1,38 @@
 # History Log
 
-<!-- METADATA:SESSION=91 -->
+<!-- METADATA:SESSION=92 -->
+
+## Session 92
+- User asked for the current status of all tasks.
+- Checked effective stamp `1778075154` on `10.100.0.29:30103` at `2026-05-07T07:44:55Z`.
+- GPU sample:
+- GPU0: `5679 / 143771 MiB`, utilization around `81%`
+- GPU1: `7291 / 143771 MiB`, utilization around `95%`
+- GPU2: `10815 / 143771 MiB`, utilization around `98%`
+- GPU3: `5675 / 143771 MiB`, utilization around `85%`
+- Important health conclusion:
+- stamp `1778075154` successfully crossed the epoch-100 rollout/checkpoint boundary
+- checkpoints and MP4 files are being produced
+- no current traceback markers were found in the sampled active logs
+- Current run status:
+- Square DP `a8`: running, epoch `1599`, latest train loss `0.0052558970637619495`, latest rollout score `0.02`, score events `15`, checkpoints `16`, MP4s `126`
+- Square DP `a1`: running, epoch `682`, latest train loss `0.005781268700957298`, latest rollout score `0.0`, score events `6`, checkpoints `7`, MP4s `48`
+- Tool-Hang DP `a8`: running, epoch `1293`, latest train loss `0.00419485941529274`, latest rollout score `0.0`, score events `12`, checkpoints `11`, MP4s `96`
+- Tool-Hang DP `a1`: running, epoch `426`, latest train loss `0.011680481024086475`, latest rollout score `0.0`, score events `4`, checkpoints `5`, MP4s `32`
+- Transport DP `a8`: running, epoch `511`, latest train loss `0.0023507520090788603`, latest rollout score `0.0`, score events `5`, checkpoints `6`, MP4s `40`
+- Transport DP `a1`: running, epoch `252`, latest train loss `0.007355323992669582`, latest rollout score `0.0`, score events `2`, checkpoints `3`, MP4s `16`
+- LongSquare DP `a8`: completed cleanly, epoch `1999`, latest train loss `0.0007172443539272673`, val loss `0.0006463319296017289`, latest rollout score `0.0`, score events `20`, checkpoints `11`, MP4s `160`
+- LongSquare PTP `a8`: running, epoch `384`, latest train loss `0.0034509615506976843`, latest rollout score `0.0`, score events `3`, checkpoints `4`, MP4s `24`
+- LongSquare DP `a1`: running, epoch `799`, latest train loss `0.0009833697695285082`, latest rollout score `0.0`, score events `7`, checkpoints `8`, MP4s `60`
+- PTP status:
+- LongSquare PTP `a8` has started because the matching DP `a8` completed at `2026-05-07T05:02:46Z`
+- Square PTP `a8/a1`, Tool-Hang PTP `a8/a1`, Transport PTP `a8/a1`, and LongSquare PTP `a1` have not started because their matching DP lanes are still running
+- Current roots:
+- outputs: `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/outputs/session89_4x2x2_2000ep_1778075154`
+- logs: `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/logs/session89_4x2x2_2000ep_1778075154`
+- Intermediate score interpretation:
+- latest rollout scores are mostly `0.0`, except Square DP `a8` latest rollout score `0.02`
+- these are training-time rollout snapshots, not final selected-checkpoint evaluation results
 
 ## Session 91
 - User asked for current progress.
