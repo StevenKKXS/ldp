@@ -1,9 +1,9 @@
 # Task Knowledge
 
-<!-- METADATA:SESSION=1 -->
+<!-- METADATA:SESSION=2 -->
 
 ## Working Rules
-- Do not train; only evaluate the official pretrained BC-RNN checkpoint.
+- The task expanded from no-training BC-RNN evaluation to include issue #157 retraining checks and SmolVLA resource-utilization training runs.
 - Keep all downloaded checkpoints, rollout logs, videos, and reports under the intern_method_developer task directory.
 - Treat robomimic / robosuite version differences as first-order experimental variables.
 
@@ -22,3 +22,7 @@
 - Local `intern_ldp_explorer` Square MH image dataset: 300 demos, 80,731 timesteps, path `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/datasets/robomimic/datasets/square/mh/image.hdf5`.
 - The task003 SmolVLA training copy is Square MH `image_abs.hdf5`, 300 demos, 80,731 timesteps, copied from the local `intern_ldp_explorer` dataset and using image observations plus absolute-action conversion.
 - Issue #157 is relevant: maintainers point to robosuite branch/version mismatch and say image-observation performance can degrade because textures changed between robosuite v1.2 and v1.4; model-zoo pretrained links were trained on robosuite v1.2 / old stack.
+- Issue #157 final fix path is to train/evaluate with image observations generated for the active robosuite 1.4.x visual stack. For this task, official `demo_v141.hdf5` was converted to `image_v141.hdf5` and then to `image_abs_v141.hdf5` for SmolVLA-style absolute-action training.
+- SmolVLA resource run base: `/mnt/3fs2/data/tingwen.du/intern_method_developer/task006_eval_official_robomimic_square_bcrnn/runs/smolvla_resource_1000ep_early10_20260507_122849`.
+- Required SmolVLA runs: `ldp_mh_abs10_seed42` on the LDP-MH own copy `/mnt/3fs2/data/tingwen.du/intern_method_developer/task003_formal_smolvla_square_train_eval/data/square_mh_image_abs.hdf5`, and `official_ph_v141_abs10_seed43` on `/mnt/3fs2/data/tingwen.du/intern_method_developer/task006_eval_official_robomimic_square_bcrnn/data/square/ph/image_abs_v141.hdf5`.
+- Exploratory SmolVLA run: `ldp_mh_abs10_big384_seed44`, using emb_dim 384 and 8 expert layers on the same LDP-MH dataset.

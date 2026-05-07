@@ -8,7 +8,7 @@
 | Status | Working |
 | Current Task | task006_eval_official_robomimic_square_bcrnn |
 | PR | https://github.com/StevenKKXS/ldp/pull/new/intern_method_developer/task006_eval_official_robomimic_square_bcrnn |
-| Session | 1 |
+| Session | 2 |
 
 ## 最近进展
-- 核对官方 Square(PH) low-dim BC-RNN checkpoint、本地 Square HDF5 数据和 issue #157；当前 50-rollout 评测在 robomimic 0.3 / robosuite 1.4.1 兼容环境得到 33/50 = 66%，视频已保存。
+- 已按资源利用目标挂起 3 个 SmolVLA Square 1000-epoch 训练：LDP-MH baseline、official PH v141 baseline、LDP-MH big384；eval 调度为 10/20/.../100 后每 100 epoch，首批 epoch-10 offline eval 已写入日志。
