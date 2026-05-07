@@ -9,4 +9,9 @@
 - Do not write into other intern-owned storage.
 
 ## Findings
-- None yet.
+- Video directory: `/mnt/3fs2/data/tingwen.du/intern_method_developer/task005_smolvla_square_rollout_videos/videos_epoch0300_20`.
+- Manifest: `/mnt/3fs2/data/tingwen.du/intern_method_developer/task005_smolvla_square_rollout_videos/manifests/epoch0300_20_videos.jsonl`.
+- Saved videos are side-by-side `agentview_image` and `robot0_eye_in_hand_image`, shape `84x168`, 20 fps, mp4/h264.
+- Success videos are `seed_10001_success_176steps.mp4` and `seed_10007_success_189steps.mp4`.
+- All 20 videos were generated; total size is about 6.8 MB.
+- `imageio` decoded sample videos successfully.
