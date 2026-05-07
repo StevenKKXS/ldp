@@ -1,6 +1,23 @@
 # Task Knowledge
 
-<!-- METADATA:SESSION=94 -->
+<!-- METADATA:SESSION=95 -->
+
+## Session 95 Knowledge
+- Effective active stamp remains `1778075154`.
+- PTP priority queue is active and healthy as of `2026-05-07T11:16:53Z`.
+- All eight PTP jobs are running:
+- Square PTP `a8`: epoch `299`, latest score `0.34`, best score `0.38`, ckpt `3`, mp4 `22`
+- Square PTP `a1`: epoch `140`, latest/best score `0.25`, ckpt `2`, mp4 `8`
+- Tool-Hang PTP `a8`: epoch `231`, latest/best score `0.0`, ckpt `3`, mp4 `16`
+- Tool-Hang PTP `a1`: epoch `99`, no score event yet, ckpt `0`, mp4 `6`
+- Transport PTP `a8`: epoch `98`, no score event yet, ckpt `0`, mp4 `0`
+- Transport PTP `a1`: epoch `97`, no score event yet, ckpt `0`, mp4 `0`
+- LongSquare PTP `a8`: epoch `813`, latest/best score `0.0`, ckpt `9`, mp4 `64`
+- LongSquare PTP `a1`: epoch `199`, latest/best score `0.0`, ckpt `2`, mp4 `14`
+- All paused DP jobs still have process count `0`; use `session93_resume_paused_dp.sh` when the priority decision is to fill in DP.
+- Current paths:
+- outputs: `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/outputs/session89_4x2x2_2000ep_1778075154`
+- logs: `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/logs/session89_4x2x2_2000ep_1778075154`
 
 ## Session 94 Knowledge
 - Effective active stamp remains `1778075154`.
