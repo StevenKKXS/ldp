@@ -1,6 +1,6 @@
 ## Task: SmolVLA Square Rollout with Internal GPU Image
 
-<!-- METADATA:STATUS=InProgress,ASSIGNEE=intern_method_developer -->
+<!-- METADATA:STATUS=Completed,ASSIGNEE=intern_method_developer -->
 
 ### Background
 - The previous formal SmolVLA-style square run completed offline evaluation but could not run Robosuite rollout because the available GPU environment lacked simulator dependencies.
@@ -17,3 +17,9 @@
 - Setup artifacts and logs are saved under `/mnt/3fs2/data/tingwen.du/intern_method_developer/task004_smolvla_square_rollout_internal_image`.
 - A report records setup steps, environment status, rollout command, checkpoint used, and success-rate result or blocker.
 - The LDP repo task status and knowledge are updated.
+
+### Result
+- Report: `/mnt/3fs2/data/tingwen.du/intern_method_developer/task004_smolvla_square_rollout_internal_image/reports/REPORT.md`
+- Environment setup succeeded with the copied internal-image setup script.
+- Best checkpoint evaluated: task003 `epoch_0300.pt`.
+- Robosuite square rollout result: `2/20 = 10%` success rate on seeds `10000-10019`.
