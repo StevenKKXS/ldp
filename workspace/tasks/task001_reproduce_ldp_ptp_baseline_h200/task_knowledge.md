@@ -1,6 +1,26 @@
 # Task Knowledge
 
-<!-- METADATA:SESSION=96 -->
+<!-- METADATA:SESSION=97 -->
+
+## Session 97 Knowledge
+- Paused DP experiments can run on `10.100.0.29:36645` while PTP priority runs continue on `10.100.0.29:30103`.
+- Two-GPU resume launcher:
+- local: `workspace/tasks/task001_reproduce_ldp_ptp_baseline_h200/session97_resume_dp_2gpu_36645.sh`
+- remote: `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/session97_resume_dp_2gpu_36645.sh`
+- master log: `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/logs/session89_4x2x2_2000ep_1778075154/session97_resume_dp_2gpu_36645.master.log`
+- Active DP resume placement on `36645`:
+- GPU0: Square DP `a8`, Square DP `a1`, Transport DP `a8`, Transport DP `a1`
+- GPU1: Tool-Hang DP `a8`, Tool-Hang DP `a1`, LongSquare DP `a1`
+- GPU2/GPU3 are free after the Session 97 launch.
+- All seven DP resume jobs were checked at `2026-05-07T12:22:30Z`; each loaded `checkpoints/latest.ckpt`, entered its resumed training epoch, and had no traceback marker in the Session 97 resume log.
+- Resume epochs observed:
+- Square DP `a8`: epoch `1599`
+- Square DP `a1`: epoch `599`
+- Transport DP `a8`: epoch `499`
+- Transport DP `a1`: epoch `199`
+- Tool-Hang DP `a8`: epoch `1199`
+- Tool-Hang DP `a1`: epoch `399`
+- LongSquare DP `a1`: epoch `699`
 
 ## Session 96 Knowledge
 - Accessible GPU resources checked at `2026-05-07T12:15:33Z`.

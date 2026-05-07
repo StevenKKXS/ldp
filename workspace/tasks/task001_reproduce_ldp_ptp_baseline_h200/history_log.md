@@ -1,6 +1,44 @@
 # History Log
 
-<!-- METADATA:SESSION=96 -->
+<!-- METADATA:SESSION=97 -->
+
+## Session 97
+- User requested resuming the previously paused DP experiments on `10.100.0.29:36645`, using two GPUs so they are not idle.
+- Created a two-GPU DP resume launcher:
+- local: `workspace/tasks/task001_reproduce_ldp_ptp_baseline_h200/session97_resume_dp_2gpu_36645.sh`
+- remote: `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/session97_resume_dp_2gpu_36645.sh`
+- The launcher keeps the same effective stamp and original DP output directories:
+- stamp: `1778075154`
+- output root: `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/outputs/session89_4x2x2_2000ep_1778075154`
+- log root: `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/logs/session89_4x2x2_2000ep_1778075154`
+- Resume settings:
+- `training.resume=true`
+- same `hydra.run.dir` as each paused DP run
+- same `global_obs=16`, `global_horizon=32`, `training.num_epochs=2000`, rollout/checkpoint interval `100`, `n_test=100`
+- DP settings remain `policy.past_action_pred=false`, `policy.past_steps_reg=-1`
+- Two-GPU placement on `36645`:
+- GPU0: Square DP `a8`, Square DP `a1`, Transport DP `a8`, Transport DP `a1`
+- GPU1: Tool-Hang DP `a8`, Tool-Hang DP `a1`, LongSquare DP `a1`
+- GPU2/GPU3 intentionally left free.
+- Launched the script with `nohup`:
+- master log: `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/logs/session89_4x2x2_2000ep_1778075154/session97_resume_dp_2gpu_36645.master.log`
+- Launch result:
+- Square DP `a8` resumed from `latest.ckpt`, entered training epoch `1599`, no traceback
+- Square DP `a1` resumed from `latest.ckpt`, entered training epoch `599`, no traceback
+- Transport DP `a8` resumed from `latest.ckpt`, entered training epoch `499`, no traceback
+- Transport DP `a1` resumed from `latest.ckpt`, entered training epoch `199`, no traceback
+- Tool-Hang DP `a8` resumed from `latest.ckpt`, entered training epoch `1199`, no traceback
+- Tool-Hang DP `a1` resumed from `latest.ckpt`, entered training epoch `399`, no traceback
+- LongSquare DP `a1` resumed from `latest.ckpt`, entered training epoch `699`, no traceback
+- GPU sample on `36645` at `2026-05-07T12:22:30Z`:
+- GPU0: `16433 / 143771 MiB`, utilization `100%`
+- GPU1: `8854 / 143771 MiB`, utilization `98%`
+- GPU2: `1 / 143771 MiB`, utilization `0%`
+- GPU3: `1 / 143771 MiB`, utilization `0%`
+- Compute-app mapping on `36645`:
+- GPU0 has four DP parent processes: Square `a8/a1`, Transport `a8/a1`
+- GPU1 has three DP parent processes: Tool-Hang `a8/a1`, LongSquare `a1`
+- `30103` remains reserved for the active PTP-priority queue.
 
 ## Session 96
 - User asked how many GPUs are currently accessible and how they are occupied.
