@@ -1,6 +1,81 @@
 # History Log
 
-<!-- METADATA:SESSION=116 -->
+<!-- METADATA:SESSION=117 -->
+
+## Session 117
+- User asked to continue on the task branch with four-task smoke and experiment preparation, using all assigned GPUs.
+- Confirmed local task branch:
+- `intern_ldp_explorer/task001_reproduce_ldp_ptp_baseline_h200`
+- Confirmed remote training checkout on both assigned GPU endpoints:
+- path: `/mnt/3fs2/data/tingwen.du/workspace/ldp`
+- branch: `intern_ldp_explorer/task001_ptp_py39_rerun`
+- commit: `529857f`
+- Assigned GPU endpoints checked:
+- `10.100.0.29:36645`: 4 x H200, initially idle, `/root/ptp_ldp_py39` present.
+- `10.100.0.29:30103`: 4 x H200, initially idle, `/root/ptp_ldp_py39` missing at start of the session.
+- Synchronized the PTP-version environment and MuJoCo assets from `36645` to `30103`:
+- `/root/ptp_ldp_py39`
+- `/root/.mujoco/mujoco210`
+- `/root/robosuite-277ab9588ad7a4f4b55cf75508b44aa67ec171f0.tar.gz`
+- `/root/mujoco210-linux-x86_64.tar.gz`
+- Installed the required Python 3.9 and OpenGL / OSMesa / ffmpeg system packages on `30103`.
+- Verified `/root/ptp_ldp_py39` on `30103`:
+- Python `3.9.25`
+- Torch `2.5.1`
+- RoboMimic `0.2.0`
+- RoboSuite source version `1.2.0`
+- MuJoCo `2.3.7`
+- mujoco-py `2.1.2.14`
+- diffusers `0.11.1`
+- gym `0.21.0`
+- Verified key imports and RoboSuite task registration on `30103`, including `ToolHang` and `TwoArmTransport`.
+- Ran four-task environment smoke on both `36645` and `30103` under `/root/ptp_ldp_py39`:
+- Square: `NutAssemblySquare` reset, state reset, and model-plus-state reset passed.
+- Tool-Hang: `ToolHang` reset, state reset, and model-plus-state reset passed.
+- Transport: `TwoArmTransport` reset, state reset, and model-plus-state reset passed.
+- LongSquare: `NutAssemblySquare` reset passed; the derived LongSquare image HDF5 has no `states` or `model_file`, so state-reset checks are not applicable for that file.
+- Video write/read smoke passed on both endpoints:
+- `36645`: `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/debug/session117_smoke/36645_tiny_video.mp4`
+- `30103`: `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/debug/session117_smoke/30103_tiny_video.mp4`
+- Added launch script:
+- `/work-agents/intern_ldp_explorer/ldp/workspace/tasks/task001_reproduce_ldp_ptp_baseline_h200/session117_launch_ptp_py39_4x2x2_2000ep.sh`
+- Deployed runtime copy:
+- `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/scripts/session117_launch_ptp_py39_4x2x2_2000ep.sh`
+- Hydra compose checks passed for Square, Tool-Hang, Transport, and LongSquare with:
+- `global_obs=16`
+- `global_horizon=32`
+- `global_action=8` compose test
+- `training.num_epochs=2000`
+- `training.rollout_every=100`
+- `training.checkpoint_every=100`
+- `task.env_runner.n_test=100`
+- `policy.past_action_pred=true`
+- `policy.past_steps_reg=-1`
+- First launch stamp `20260508_144310` exited before training because `LD_LIBRARY_PATH` lacked `/root/.mujoco/mujoco210/bin`; Hydra reported this as an env_runner target-location failure after data loading.
+- Patched the launch script to export:
+- `MUJOCO_PY_MUJOCO_PATH=/root/.mujoco/mujoco210`
+- `LD_LIBRARY_PATH=...:/root/.mujoco/mujoco210/bin`
+- Also made shared-directory creation tolerant to a concurrent `mkdir -p` race.
+- Verified MuJoCo and env-runner imports on both GPU endpoints after the patch.
+- Relaunched the full batch with active stamp `20260508_144657`.
+- Active output root:
+- `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/outputs/session117_ptp_py39_4x2x2_2000ep_20260508_144657`
+- Active log root:
+- `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/logs/session117_ptp_py39_4x2x2_2000ep_20260508_144657`
+- Lane allocation:
+- `36645` GPU0: Square, action horizon 8, PTP then DP.
+- `36645` GPU1: Tool-Hang, action horizon 8, PTP then DP.
+- `36645` GPU2: Transport, action horizon 8, PTP then DP.
+- `36645` GPU3: LongSquare, action horizon 8, PTP then DP.
+- `30103` GPU0: Square, action horizon 1, PTP then DP.
+- `30103` GPU1: Tool-Hang, action horizon 1, PTP then DP.
+- `30103` GPU2: Transport, action horizon 1, PTP then DP.
+- `30103` GPU3: LongSquare, action horizon 1, PTP then DP.
+- Sampled status after relaunch:
+- both endpoints show all four H200 GPUs occupied by `train.py` processes
+- all eight active jobs created RoboMimic environments and entered epoch training
+- no sampled traceback in active stamp logs at the time of this record
+- Inactive failed-launch logs are retained under stamp `20260508_144310` for debugging provenance and should not be treated as experiment outputs.
 
 ## Session 116
 - User asked to merge the shared environment documentation.

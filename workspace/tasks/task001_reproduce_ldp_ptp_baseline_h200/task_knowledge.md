@@ -1,6 +1,47 @@
 # Task Knowledge
 
-<!-- METADATA:SESSION=116 -->
+<!-- METADATA:SESSION=117 -->
+
+## Session 117 Knowledge
+- Active PTP-version 4-task rerun stamp:
+- `20260508_144657`
+- Active output root:
+- `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/outputs/session117_ptp_py39_4x2x2_2000ep_20260508_144657`
+- Active log root:
+- `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/logs/session117_ptp_py39_4x2x2_2000ep_20260508_144657`
+- Runtime launch script:
+- `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/scripts/session117_launch_ptp_py39_4x2x2_2000ep.sh`
+- Source launch script tracked in this task:
+- `/work-agents/intern_ldp_explorer/ldp/workspace/tasks/task001_reproduce_ldp_ptp_baseline_h200/session117_launch_ptp_py39_4x2x2_2000ep.sh`
+- Active lane mapping:
+- `10.100.0.29:36645` uses action horizon `8`; GPU0 Square, GPU1 Tool-Hang, GPU2 Transport, GPU3 LongSquare.
+- `10.100.0.29:30103` uses action horizon `1`; GPU0 Square, GPU1 Tool-Hang, GPU2 Transport, GPU3 LongSquare.
+- Each lane runs PTP first and DP second, so the first active wave is all PTP.
+- Core training settings for this rerun:
+- `global_obs=16`
+- `global_horizon=32`
+- `global_action in {8, 1}`
+- `training.num_epochs=2000`
+- `training.rollout_every=100`
+- `training.checkpoint_every=100`
+- `task.env_runner.n_test=100`
+- `dataloader.batch_size=64`
+- `val_dataloader.batch_size=64`
+- `policy.past_steps_reg=-1`
+- PTP uses `policy.past_action_pred=true`; DP uses `policy.past_action_pred=false`.
+- Important environment requirement for `/root/ptp_ldp_py39`:
+- set `MUJOCO_PY_MUJOCO_PATH=/root/.mujoco/mujoco210`
+- append `/root/.mujoco/mujoco210/bin` to `LD_LIBRARY_PATH`
+- Without the MuJoCo 2.1 binary path in `LD_LIBRARY_PATH`, Hydra reports an env_runner target-location failure because importing `mujoco_py` fails.
+- `30103` now has the synchronized `/root/ptp_ldp_py39` environment and `/root/.mujoco/mujoco210` assets copied from `36645`.
+- Four-task smoke passed on both `36645` and `30103` under `/root/ptp_ldp_py39`.
+- Tiny video smoke outputs:
+- `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/debug/session117_smoke/36645_tiny_video.mp4`
+- `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/debug/session117_smoke/30103_tiny_video.mp4`
+- Inactive failed-launch stamp:
+- `20260508_144310`
+- Failure reason: missing MuJoCo 2.1 binary path in `LD_LIBRARY_PATH`.
+- Do not use `20260508_144310` as an experiment result root.
 
 ## Session 116 Knowledge
 - Shared PTP py39 H200 environment documentation is now merged into `/work-agents/ldp` `main`.
