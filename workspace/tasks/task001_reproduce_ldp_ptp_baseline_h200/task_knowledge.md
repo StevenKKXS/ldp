@@ -1,6 +1,21 @@
 # Task Knowledge
 
-<!-- METADATA:SESSION=120 -->
+<!-- METADATA:SESSION=121 -->
+
+## Session 121 Knowledge
+- Current Session 120 high-throughput run remains active under stamp `20260508_151035`.
+- At `2026-05-08T15:24:01+00:00`, both SSH entries showed all four H200 GPUs occupied.
+- `36645`: PTP paired `a8+a1` lanes; sampled utilization `92%, 92%, 99%, 95%`.
+- `30103`: DP paired `a8+a1` lanes; sampled utilization `93%, 94%, 99%, 92%`.
+- Per-GPU memory remains low relative to H200 capacity:
+- Square/Tool-Hang/LongSquare GPUs use about `3.3 GiB`.
+- Transport GPU uses about `7.9 GiB`.
+- Active training progress at this sample:
+- LongSquare around epoch `23-24`.
+- Square around epoch `12-13`.
+- Tool-Hang around epoch `11`.
+- Transport around epoch `4`.
+- No rollout score is expected before epoch `100` because `training.rollout_every=100`.
 
 ## Session 120 Knowledge
 - Current active high-throughput py39 rerun stamp:

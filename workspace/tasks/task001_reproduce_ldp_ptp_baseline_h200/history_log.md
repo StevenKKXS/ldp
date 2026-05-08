@@ -1,6 +1,37 @@
 # History Log
 
-<!-- METADATA:SESSION=120 -->
+<!-- METADATA:SESSION=121 -->
+
+## Session 121
+- User asked for current GPU occupancy.
+- Sampled active stamp:
+- `20260508_151035`
+- Active output root:
+- `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/outputs/session120_ptp_py39_ht_4x2x2_2000ep_20260508_151035`
+- Active log root:
+- `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/logs/session120_ptp_py39_ht_4x2x2_2000ep_20260508_151035`
+- Sample time:
+- `2026-05-08T15:24:01+00:00`
+- `10.100.0.29:36645` GPU summary:
+- GPU0 H200: `3283 / 143771 MiB`, `92%` util, about `195.51 W`.
+- GPU1 H200: `3279 / 143771 MiB`, `92%` util, about `191.80 W`.
+- GPU2 H200: `7855 / 143771 MiB`, `99%` util, about `349.72 W`.
+- GPU3 H200: `3279 / 143771 MiB`, `95%` util, about `191.87 W`.
+- `36645` pmon showed two Python compute processes on each GPU, matching paired `a8+a1` PTP lanes.
+- `10.100.0.29:30103` GPU summary:
+- GPU0 H200: `3287 / 143771 MiB`, `93%` util, about `203.51 W`.
+- GPU1 H200: `3279 / 143771 MiB`, `94%` util, about `199.94 W`.
+- GPU2 H200: `7855 / 143771 MiB`, `99%` util, about `386.61 W`.
+- GPU3 H200: `3279 / 143771 MiB`, `92%` util, about `204.94 W`.
+- `30103` pmon showed two Python compute processes on each GPU, matching paired `a8+a1` DP lanes.
+- Training log sample:
+- `16` `logs.json.txt` files present and still advancing.
+- LongSquare: around epoch `23-24`.
+- Square: around epoch `12-13`.
+- Tool-Hang: around epoch `11`.
+- Transport: around epoch `4`.
+- No `test/mean_score` yet because the first rollout is configured for epoch `100`.
+- Error grep over active logs found no sampled `Traceback`, Hydra execution error, OOM, killed-process, missing-path, or module-import markers.
 
 ## Session 120
 - User requested stopping the just-started run, cleaning its outputs, and rerunning with the earlier high-throughput layout.
