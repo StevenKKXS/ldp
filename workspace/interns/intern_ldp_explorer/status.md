@@ -8,5 +8,5 @@
 | Status | Working |
 | Current Task | task001_reproduce_ldp_ptp_baseline_h200 |
 | PR | https://github.com/StevenKKXS/ldp/pull/new/intern_ldp_explorer/task001_reproduce_ldp_ptp_baseline_h200 |
-| Session | 117 |
-| Recent Progress | Prepared and launched the PTP-version py39 4-task `4x2x2` rerun on all 8 assigned H200 GPUs: `36645` runs action horizon 8, `30103` runs action horizon 1, each lane runs PTP first and then DP under stamp `20260508_144657`. |
+| Session | 118 |
+| Recent Progress | Sampled active stamp `20260508_144657`: all 8 assigned H200 GPUs are occupied by the first PTP wave, runs are healthy with no sampled traceback, current epochs range from Transport around 7 to LongSquare around 36, and no epoch-100 rollout/checkpoint/mp4 has been produced yet. |

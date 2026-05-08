@@ -1,6 +1,17 @@
 # Task Knowledge
 
-<!-- METADATA:SESSION=117 -->
+<!-- METADATA:SESSION=118 -->
+
+## Session 118 Knowledge
+- Current active experiment remains stamp `20260508_144657`.
+- As of `2026-05-08T15:00:39Z`, the first wave is still all PTP; DP has not started because lanes are ordered PTP then DP.
+- First rollout/checkpoint/mp4 will be expected after epoch `100` for each run because `rollout_every=100` and `checkpoint_every=100`.
+- Current sampled epoch range:
+- Transport PTP `a1/a8`: about epoch `7`.
+- Tool-Hang PTP `a1/a8`: about epoch `16`.
+- Square PTP `a1/a8`: about epoch `19`.
+- LongSquare PTP `a1/a8`: about epoch `35-36`.
+- No active-stamp `test/mean_score`, checkpoint, or mp4 existed at the Session 118 sample.
 
 ## Session 117 Knowledge
 - Active PTP-version 4-task rerun stamp:

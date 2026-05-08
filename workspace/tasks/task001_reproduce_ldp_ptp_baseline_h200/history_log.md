@@ -1,6 +1,33 @@
 # History Log
 
-<!-- METADATA:SESSION=117 -->
+<!-- METADATA:SESSION=118 -->
+
+## Session 118
+- User asked for current task progress.
+- Sampled active PTP-version rerun stamp:
+- `20260508_144657`
+- Sample time:
+- `2026-05-08T15:00:39Z`
+- Active output root:
+- `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/outputs/session117_ptp_py39_4x2x2_2000ep_20260508_144657`
+- Active log root:
+- `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/logs/session117_ptp_py39_4x2x2_2000ep_20260508_144657`
+- GPU status:
+- `10.100.0.29:36645` action horizon 8: all 4 H200 GPUs occupied by PTP train jobs.
+- `10.100.0.29:30103` action horizon 1: all 4 H200 GPUs occupied by PTP train jobs.
+- DP jobs have not started because each lane runs PTP first, then DP.
+- Active run progress from `logs.json.txt`:
+- LongSquare PTP `a1`: epoch `36`, global step about `25973`, latest val loss about `0.01424`.
+- LongSquare PTP `a8`: epoch `35`, global step about `25271`, latest val loss about `0.01419`.
+- Square PTP `a1`: epoch `19`, global step about `25439`, latest val loss about `0.04175`.
+- Square PTP `a8`: epoch `19`, global step about `25439`, latest val loss about `0.04175`.
+- Tool-Hang PTP `a1`: epoch `16`, global step about `25771`, latest val loss about `0.02904`.
+- Tool-Hang PTP `a8`: epoch `16`, global step about `25771`, latest val loss about `0.02904`.
+- Transport PTP `a1`: epoch `7`, global step about `23095`, latest val loss about `0.03901`.
+- Transport PTP `a8`: epoch `7`, global step about `23095`, latest val loss about `0.03901`.
+- No `test/mean_score` has appeared yet because the active runs have not reached the first epoch-100 rollout.
+- No active-stamp checkpoint or mp4 file was present at this sample.
+- Grep for `Traceback`, `Error executing job`, `RuntimeError`, `CUDA out of memory`, and `Killed` in active PTP logs returned no sampled error markers.
 
 ## Session 117
 - User asked to continue on the task branch with four-task smoke and experiment preparation, using all assigned GPUs.
