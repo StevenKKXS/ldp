@@ -1,6 +1,6 @@
 # History Log
 
-<!-- METADATA:SESSION=8 -->
+<!-- METADATA:SESSION=9 -->
 
 ## Session 0
 - Created task for no-training evaluation of the official robomimic v0.1 Square(PH) low-dimensional BC-RNN checkpoint.
@@ -57,3 +57,8 @@
 - Paused DP no-hist execution after the user requested key parameters first.
 - Inspected the LDP Diffusion Policy configs and identified the intended short-history/common DP setting from the project README: `obs=2`, `act=1`, `horizon=16`.
 - Proposed the first experiment matrix as two one-GPU runs: Square LDP-MH absolute-action image data and Square official-PH v1.4.1 absolute-action image data, both with scheduled checkpoint/rollout at epochs `10,20,...,100,200,...,1000`.
+
+## Session 9
+- Clarified the meaning of DP `horizon=16` in the LDP code path.
+- Verified in `DiffusionUnetImagePolicy` that `horizon` controls the length of the action trajectory tensor denoised by the diffusion model, while `n_action_steps` controls how many predicted actions are returned for execution during rollout.
+- Verified in `RobomimicReplayImageDataset` that the training batch provides a 16-step action sequence when `horizon=16`, with observations truncated to `n_obs_steps`.

@@ -1,6 +1,6 @@
 # Task Knowledge
 
-<!-- METADATA:SESSION=8 -->
+<!-- METADATA:SESSION=9 -->
 
 ## Working Rules
 - The task expanded from no-training BC-RNN evaluation to include issue #157 retraining checks and SmolVLA resource-utilization training runs.
@@ -38,3 +38,4 @@
 - Completed issue #157 BC-RNN checkpoint/video highlight: best checkpoint `model_epoch_540_NutAssemblySquare_success_0.8.pth` and video `NutAssemblySquare_epoch_540.mp4` under `/mnt/3fs2/data/tingwen.du/intern_method_developer/task006_eval_official_robomimic_square_bcrnn/runs/issue157_v141/issue157_square_ph_image_v141_bc_rnn_600ep_s1/20260507120353`.
 - DP no-hist candidate for discussion: use `train_diffusion_unet_image_workspace.yaml` with `task=square_image_abs`, `n_obs_steps=2`, `dataset_obs_steps=2`, `n_action_steps=1`, `horizon=16`, no past-action prediction, and no object observation. This matches the README's short-history DP note (`obs=2, act=1, horizon=16`) more closely than the Square `unet_hybrid_square.yaml` default (`obs=16`, `horizon=32`, past action prediction enabled).
 - DP no-hist candidate datasets: LDP-MH absolute-action image data at `/mnt/3fs2/data/tingwen.du/intern_method_developer/task003_formal_smolvla_square_train_eval/data/square_mh_image_abs.hdf5` and official-PH v1.4.1 absolute-action image data at `/mnt/3fs2/data/tingwen.du/intern_method_developer/task006_eval_official_robomimic_square_bcrnn/data/square/ph/image_abs_v141.hdf5`.
+- DP `horizon=16` means the UNet diffusion policy denoises a 16-step action trajectory per sample. It is not the environment rollout horizon; the rollout limit remains PH 400 or MH 500 by task config. In inference, `DiffusionUnetImagePolicy.predict_action` samples `action_pred` with length `horizon`, then returns only the slice from `n_obs_steps - 1` through `n_obs_steps - 1 + n_action_steps`; therefore `n_action_steps=1` executes one action then replans, while `n_action_steps=8` executes an 8-action chunk from the same 16-step prediction.
