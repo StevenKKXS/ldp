@@ -1,6 +1,6 @@
 # Task Knowledge
 
-<!-- METADATA:SESSION=18 -->
+<!-- METADATA:SESSION=19 -->
 
 ## Working Rules
 - The task expanded from no-training BC-RNN evaluation to include issue #157 retraining checks and SmolVLA resource-utilization training runs.
@@ -57,3 +57,4 @@
 - Monitor behavior: wait until all four runs under `/mnt/3fs2/data/tingwen.du/intern_method_developer/task006_eval_official_robomimic_square_bcrnn/runs/smolvla_fourway_1000ep_20260508_130111` have `epoch_1000.pt` and no matching training processes remain; then run a 20-rollout all-checkpoint sweep, select the best checkpoint per run by rollout success rate and mean steps, run 50 rollouts on the four selected checkpoints, and write a markdown report.
 - Planned post-train rollout outputs: all-checkpoint sweep under `/mnt/3fs2/data/tingwen.du/intern_method_developer/task006_eval_official_robomimic_square_bcrnn/rollouts/smolvla_fourway_all_ckpts_20rollouts_20260508_132807`; best-50 results under `/mnt/3fs2/data/tingwen.du/intern_method_developer/task006_eval_official_robomimic_square_bcrnn/rollouts/smolvla_fourway_best_ckpts_50rollouts_20260508_132807`; final report at `/mnt/3fs2/data/tingwen.du/intern_method_developer/task006_eval_official_robomimic_square_bcrnn/reports/smolvla_fourway_rollout_after_train_20260508_132807.md`.
 - Session 18 progress check at 2026-05-08 14:02 UTC: four-way SmolVLA training had not finished. PTP/LDP-MH small and big384 were at epoch 200; official-PH v1.4.1 small and big384 were at epoch 500; `epoch_1000.pt` count was `0/4`. Monitor PID `62177` was still waiting and had not started rollout workers.
+- Codex model override options visible in this session: `gpt-5.5`, `gpt-5.4`, `gpt-5.4-mini`, `gpt-5.3-codex`, `gpt-5.3-codex-spark`, and `gpt-5.2`.

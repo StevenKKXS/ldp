@@ -1,6 +1,6 @@
 # History Log
 
-<!-- METADATA:SESSION=18 -->
+<!-- METADATA:SESSION=19 -->
 
 ## Session 0
 - Created task for no-training evaluation of the official robomimic v0.1 Square(PH) low-dimensional BC-RNN checkpoint.
@@ -121,3 +121,8 @@
 - GPU state remained active: H200 GPU0 used 3431 MiB with about 91% utilization, and GPU1 used 3435 MiB with about 99% utilization at the sampled instant.
 - Latest checkpoint/eval progress: PTP/LDP-MH small and big384 reached epoch 200, while official-PH v1.4.1 small and big384 reached epoch 500. No `epoch_1000.pt` existed yet, so the completion count was `0/4`.
 - The post-training monitor PID `62177` remained alive in the waiting phase. It has not launched rollout workers yet because training is still running; the report directory had no generated SmolVLA four-way report at this check.
+
+## Session 19
+- Answered the user's question about currently visible GPT/model access in this Codex session.
+- Current visible model override options are `gpt-5.5`, `gpt-5.4`, `gpt-5.4-mini`, `gpt-5.3-codex`, `gpt-5.3-codex-spark`, and `gpt-5.2`.
+- Clarified that these are model override options for Codex/sub-agent use in this environment, not access to a separate custom-GPT store.
