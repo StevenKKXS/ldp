@@ -1,6 +1,33 @@
 # History Log
 
-<!-- METADATA:SESSION=104 -->
+<!-- METADATA:SESSION=105 -->
+
+## Session 105
+- User asked about the robosuite version inference.
+- Rechecked local environment files:
+- `conda_environment.yaml` line `59` pins `robosuite @ https://github.com/cheng-chi/robosuite/archive/277ab9588ad7a4f4b55cf75508b44aa67ec171f0.tar.gz`
+- `requirements.txt` line `175` pins the same `cheng-chi/robosuite` commit
+- this is a commit pin, not a direct PyPI-style `robosuite==...` pin
+- Checked the pinned commit source:
+- `robosuite/__init__.py` at commit `277ab9588ad7a4f4b55cf75508b44aa67ec171f0` declares `__version__ = "1.2.0"`
+- `setup.py` at the same commit declares `version="1.2.0"`
+- GitHub API commit metadata:
+- commit date `2022-11-03T02:53:50Z`
+- commit message first line `updated dependency versions`
+- Checked relation to `offline_study`:
+- `cheng-chi/robosuite` branch `offline_study` currently points to `45a95d5f312fbc9356d13a5c5888f7c9ad900f3a`
+- GitHub compare `277ab9588...offline_study` reports `ahead_by=2`, `behind_by=0`, meaning `offline_study` is two commits ahead of the pinned commit on the same lineage
+- `offline_study` source also declares `__version__ = "1.2.0"`
+- Therefore the best robosuite inference is:
+- upstream PTP/LDP stack uses an offline-study-era `cheng-chi/robosuite` commit whose package version string is `1.2.0`
+- it should not be described as `robosuite 1.4.1`
+- it is close to but not exactly the current `offline_study` branch head
+- Current active training venv remains different:
+- active venv uses `robosuite 1.4.1`
+- active venv uses `robomimic 0.3.0`
+- active venv uses `mujoco 3.8.0`
+- Interpretation:
+- for Tool-Hang / Transport version isolation, the more faithful target is the pinned `cheng-chi/robosuite@277ab9588...` or nearby `offline_study` stack, with `robomimic==0.2.0` and MuJoCo / mujoco-py compatibility, not the current `robosuite 1.4.1` stack
 
 ## Session 104
 - User asked whether there had previously been a PTP RoboMimic version inference, remembering `0.2`.

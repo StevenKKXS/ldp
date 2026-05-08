@@ -1,6 +1,19 @@
 # Task Knowledge
 
-<!-- METADATA:SESSION=104 -->
+<!-- METADATA:SESSION=105 -->
+
+## Session 105 Knowledge
+- Robosuite version inference for upstream PTP/LDP:
+- local env files pin `cheng-chi/robosuite@277ab9588ad7a4f4b55cf75508b44aa67ec171f0`
+- this is a commit pin, not `robosuite==1.4.1`
+- source at that commit declares `__version__ = "1.2.0"` and `setup.py` `version="1.2.0"`
+- `offline_study` branch is on the same lineage and two commits ahead of the pinned commit
+- `offline_study` source also declares `__version__ = "1.2.0"`
+- Best phrasing:
+- upstream robosuite provenance is `cheng-chi/robosuite` offline-study-era commit `277ab9588...`, source version `1.2.0`
+- it is close to `offline_study`, but not exactly the current `offline_study` branch head
+- it is not equivalent to current active `robosuite 1.4.1`
+- Current active training environment remains `robosuite 1.4.1`, so this is a real stack mismatch to isolate.
 
 ## Session 104 Knowledge
 - Prior PTP/RoboMimic version inference:
