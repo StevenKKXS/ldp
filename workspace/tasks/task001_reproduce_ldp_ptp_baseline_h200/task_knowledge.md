@@ -1,6 +1,11 @@
 # Task Knowledge
 
-<!-- METADATA:SESSION=108 -->
+<!-- METADATA:SESSION=109 -->
+
+## Session 109 Knowledge
+- For current `session89_4x2x2_2000ep` success-rate checks, use `test/mean_score` from each run's `logs.json.txt`.
+- Report both latest rollout and best observed rollout because several runs are still in progress and some resumed DP logs have epochs beyond the nominal `2000` label.
+- As of Session 109, only Square shows meaningful success in this batch: best Square PTP `a=8` is `0.45`; Tool-Hang and LongSquare remain all-zero; Transport only has a small nonzero best point for PTP `a=8` at `0.01`.
 
 ## Session 108 Knowledge
 - Current active training output base for the 2000-epoch `4x2x2` ablation is `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/outputs/session89_4x2x2_2000ep_1778075154/`.

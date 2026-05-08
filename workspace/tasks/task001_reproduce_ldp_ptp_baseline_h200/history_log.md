@@ -1,6 +1,29 @@
 # History Log
 
-<!-- METADATA:SESSION=108 -->
+<!-- METADATA:SESSION=109 -->
+
+## Session 109
+- User asked for the current task success-rate report.
+- Parsed `test/mean_score` from all 16 logs under `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/outputs/session89_4x2x2_2000ep_1778075154/`.
+- Metric source is training-time rollout with `task.env_runner.n_test=100`; this is not a separate 3-seed final evaluation.
+- Latest / best observed test success rates:
+- `Square DP a=1`: current epoch `899`, latest eval epoch `799`, latest `0.00`, best `0.02` at epoch `699`
+- `Square DP a=8`: current epoch `2771`, latest eval epoch `2699`, latest `0.02`, best `0.08` at epoch `1299`
+- `Square PTP a=1`: current epoch `1099`, latest eval epoch `999`, latest `0.27`, best `0.28` at epoch `599`
+- `Square PTP a=8`: current epoch `1999`, latest eval epoch `1999`, latest `0.38`, best `0.45` at epoch `599`
+- `Tool-Hang DP a=1`: latest `0.00`, best `0.00`
+- `Tool-Hang DP a=8`: latest `0.00`, best `0.00`
+- `Tool-Hang PTP a=1`: latest `0.00`, best `0.00`
+- `Tool-Hang PTP a=8`: latest `0.00`, best `0.00`
+- `Transport DP a=1`: latest `0.00`, best `0.00`
+- `Transport DP a=8`: latest `0.00`, best `0.00`
+- `Transport PTP a=1`: latest `0.00`, best `0.00`
+- `Transport PTP a=8`: current epoch `847`, latest eval epoch `799`, latest `0.00`, best `0.01` at epoch `599`
+- `LongSquare DP a=1`: latest `0.00`, best `0.00`
+- `LongSquare DP a=8`: latest `0.00`, best `0.00`
+- `LongSquare PTP a=1`: latest `0.00`, best `0.00`
+- `LongSquare PTP a=8`: latest `0.00`, best `0.00`
+- Main readout: Square PTP is the only clearly nonzero family so far; Square DP is weak but nonzero; Transport PTP `a=8` has one small nonzero point; Tool-Hang and LongSquare are still zero in training-time rollout.
 
 ## Session 108
 - User asked what the current GPU tasks are running.
