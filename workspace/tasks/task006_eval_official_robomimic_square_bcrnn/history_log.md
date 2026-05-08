@@ -1,6 +1,6 @@
 # History Log
 
-<!-- METADATA:SESSION=17 -->
+<!-- METADATA:SESSION=18 -->
 
 ## Session 0
 - Created task for no-training evaluation of the official robomimic v0.1 Square(PH) low-dimensional BC-RNN checkpoint.
@@ -115,3 +115,9 @@
 - Added `workspace/tasks/task006_eval_official_robomimic_square_bcrnn/scripts/monitor_smolvla_fourway_rollout_best50.sh`, a post-training monitor that waits for all four `epoch_1000.pt` files and no matching training processes before launching rollout.
 - Started the post-training monitor on the new GPU host as PID `62177`, with log root `/mnt/3fs2/data/tingwen.du/intern_method_developer/task006_eval_official_robomimic_square_bcrnn/logs/smolvla_fourway_rollout_after_train_20260508_132807`.
 - The scheduled rollout plan is: all named checkpoints from the four-way run get 20 rollouts each with videos, then the best checkpoint per run is selected by rollout success rate and evaluated with 50 rollouts each. The final report path is `/mnt/3fs2/data/tingwen.du/intern_method_developer/task006_eval_official_robomimic_square_bcrnn/reports/smolvla_fourway_rollout_after_train_20260508_132807.md`.
+
+## Session 18
+- Rechecked four-way SmolVLA progress on `10.100.16.46:23989` at 2026-05-08 14:02 UTC. Main training PIDs `27745`, `27774`, `27801`, and `27816` were all still alive.
+- GPU state remained active: H200 GPU0 used 3431 MiB with about 91% utilization, and GPU1 used 3435 MiB with about 99% utilization at the sampled instant.
+- Latest checkpoint/eval progress: PTP/LDP-MH small and big384 reached epoch 200, while official-PH v1.4.1 small and big384 reached epoch 500. No `epoch_1000.pt` existed yet, so the completion count was `0/4`.
+- The post-training monitor PID `62177` remained alive in the waiting phase. It has not launched rollout workers yet because training is still running; the report directory had no generated SmolVLA four-way report at this check.
