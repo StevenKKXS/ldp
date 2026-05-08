@@ -1,6 +1,6 @@
 # History Log
 
-<!-- METADATA:SESSION=24 -->
+<!-- METADATA:SESSION=25 -->
 
 ## Session 0
 - Created task for no-training evaluation of the official robomimic v0.1 Square(PH) low-dimensional BC-RNN checkpoint.
@@ -158,3 +158,10 @@
 - Confirmed SmolVLA current training performs only offline action reconstruction eval, while closed-loop all-checkpoint rollout is deferred until all four `epoch_1000.pt` files exist.
 - Confirmed epoch counts are not comparable: DP uses batch size 64, while SmolVLA uses batch size 128. From current logs, official-PH DP has about 417 optimizer steps per epoch versus about 224 for SmolVLA, and LDP-MH DP has about 1150 steps per epoch versus about 598 for SmolVLA.
 - Conclusion: the main slowdown is expected from embedded rollout/video evaluation and heavier DP inference during eval; secondary causes are smaller DP batch size, 100-step diffusion sampling with one-action replanning, robosuite CPU/rendering overhead, and likely fp32 DP training versus AMP-enabled SmolVLA.
+
+## Session 25
+- Checked DP runtime at 2026-05-08 14:58 UTC. The four main DP processes had run for about `5h36m-5h37m`.
+- Current DP progress and average wall-clock rates: UNet LDP-MH epoch 74, about `13.1 epoch/hour`; DiT LDP-MH epoch 80, about `14.3 epoch/hour`; UNet official-PH epoch 196, about `34.8 epoch/hour`; DiT official-PH epoch 220, about `39.2 epoch/hour`.
+- Estimated effect of reducing scheduled eval from 50 rollout / 50 video to 20 rollout / 20 video, assuming rollout cost scales roughly linearly with episode count.
+- During the first 100 epochs where eval runs every 10 epochs, official-PH would likely improve from about `20-22.5 min / 10 epoch` to about `14-15.5 min / 10 epoch` (`40-45%` faster). LDP-MH would likely improve from about `39-43.5 min / 10 epoch` to about `32-33 min / 10 epoch` (`20-30%` faster).
+- After epoch 100, eval frequency drops to every 100 epochs, so 20-rollout eval gives much smaller total throughput gains, roughly `2-6%`, because training steps dominate the wall-clock time.
