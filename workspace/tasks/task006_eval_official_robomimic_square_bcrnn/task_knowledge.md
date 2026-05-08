@@ -1,6 +1,6 @@
 # Task Knowledge
 
-<!-- METADATA:SESSION=25 -->
+<!-- METADATA:SESSION=26 -->
 
 ## Working Rules
 - The task expanded from no-training BC-RNN evaluation to include issue #157 retraining checks and SmolVLA resource-utilization training runs.
@@ -68,3 +68,4 @@
 - DP speed caveat: current DP wall-clock speed should not be compared directly to current SmolVLA epoch speed. DP performs online robosuite rollout eval inside training with `n_test=50`, `n_test_vis=50`, `num_inference_steps=100`, and `n_action_steps=1`, so each scheduled eval can require roughly 2.0M diffusion denoising forward passes for PH (`50*400*100`) or 2.5M for MH (`50*500*100`), plus video encoding. SmolVLA defers closed-loop rollout until after training and currently logs offline action-MSE eval only.
 - DP optimizer-step caveat: DP uses batch size 64 while SmolVLA uses batch size 128, so one DP epoch is about twice as many optimizer steps for the same sequence dataset. Current logs show official-PH DP about 417 steps/epoch vs SmolVLA about 224, and LDP-MH DP about 1150 vs SmolVLA about 598.
 - DP 20-rollout speed estimate: reducing scheduled eval from 50 rollout / 50 video to 20 rollout / 20 video mostly helps before epoch 100, when eval happens every 10 epochs. Estimated early-stage speedup is about `40-45%` for official-PH and `20-30%` for LDP-MH. After epoch 100, eval happens every 100 epochs, so the overall speedup is small, about `2-6%`.
+- DP completion ETA as of 2026-05-08 15:03 UTC: official-PH runs are expected to finish around 2026-05-09 05:40-06:20 UTC based on the measured `100->200` interval. LDP-MH runs are the bottleneck; expected completion is 2026-05-10 night to 2026-05-11 morning UTC, with a conservative current-average extrapolation near 2026-05-11 13:00 UTC.
