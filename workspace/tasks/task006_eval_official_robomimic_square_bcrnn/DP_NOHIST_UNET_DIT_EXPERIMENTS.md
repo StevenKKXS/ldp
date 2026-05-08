@@ -1,6 +1,6 @@
 # DP No-Hist UNet and DiT Experiments
 
-<!-- METADATA:SESSION=10 -->
+<!-- METADATA:SESSION=11 -->
 
 ## Goal
 - Compare standard DP UNet and DiT-style transformer policies on Square with the same no-history parameters.
@@ -42,3 +42,11 @@
 - `nvidia-smi` reports two NVIDIA H200 GPUs.
 - All four run processes are alive as of 2026-05-08 09:25 UTC.
 - Current phase is HDF5 to zarr cache construction and cache-lock waiting; GPU utilization is expected to rise after cache loading completes.
+
+## Progress 2026-05-08 12:08 UTC
+- GPU state: both H200 GPUs have active DP no-hist processes; GPU0 uses about 26.9GB, GPU1 uses about 27.1GB.
+- `dp_nohist_unet_ldp_mh_seed42`: latest epoch 35; rollout scores `e10:0.04, e20:0.00, e30:0.00`; best `0.04`; 168 videos.
+- `dp_nohist_dit_ldp_mh_seed44`: latest epoch 38; rollout scores `e10:0.00, e20:0.04, e30:0.00`; best `0.04`; 168 videos.
+- `dp_nohist_unet_official_ph_seed43`: latest epoch 71; rollout scores `e10:0.28, e20:0.38, e30:0.58, e40:0.48, e50:0.62, e60:0.54, e70:0.66`; best `0.66`; 392 videos.
+- `dp_nohist_dit_official_ph_seed45`: latest epoch 83; rollout scores `e10:0.00, e20:0.06, e30:0.14, e40:0.36, e50:0.50, e60:0.56, e70:0.60, e80:0.46`; best `0.60`; 448 videos.
+- Current interpretation: official-PH v1.4.1 is training well for both UNet and DiT under no-history DP. LDP-MH is much slower or mismatched so far under the same protocol and remains near zero through the completed epoch-30 rollout checks.

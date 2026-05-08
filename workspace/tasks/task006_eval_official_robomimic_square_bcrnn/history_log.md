@@ -1,6 +1,6 @@
 # History Log
 
-<!-- METADATA:SESSION=10 -->
+<!-- METADATA:SESSION=11 -->
 
 ## Session 0
 - Created task for no-training evaluation of the official robomimic v0.1 Square(PH) low-dimensional BC-RNN checkpoint.
@@ -68,3 +68,10 @@
 - Added task-local scheduled DP workspaces for UNet and DiT-style transformer image policies, avoiding edits to the shared LDP source tree.
 - Added a task-local launcher for four Square no-history runs: UNet/DiT crossed with LDP-MH and official-PH v1.4.1 datasets.
 - Launched the four runs under `/mnt/3fs2/data/tingwen.du/intern_method_developer/task006_eval_official_robomimic_square_bcrnn/runs/dp_nohist_unet_dit_20260508_0915`; the processes are alive and currently building or waiting on zarr dataset caches.
+
+## Session 11
+- Checked DP no-hist progress on 2026-05-08 12:08 UTC. All four main processes are alive: UNet LDP-MH PID `172304`, UNet official-PH PID `172310`, DiT LDP-MH PID `176077`, DiT official-PH PID `176083`.
+- GPU state: both H200s have active processes, with about 26.9GB used on GPU0 and 27.1GB used on GPU1.
+- Current epoch progress: DiT LDP-MH epoch 38, UNet LDP-MH epoch 35, DiT official-PH epoch 83, UNet official-PH epoch 71.
+- Current 50-rollout best scores: DiT LDP-MH epoch 20 `0.04`, UNet LDP-MH epoch 10 `0.04`, DiT official-PH epoch 70 `0.60`, UNet official-PH epoch 70 `0.66`.
+- Video saving is working; current mp4 counts are 168, 168, 448, and 392 respectively across the four runs.

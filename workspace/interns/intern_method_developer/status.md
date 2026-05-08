@@ -8,7 +8,7 @@
 | Status | Working |
 | Current Task | task006_eval_official_robomimic_square_bcrnn |
 | PR | https://github.com/StevenKKXS/ldp/pull/new/intern_method_developer/task006_eval_official_robomimic_square_bcrnn |
-| Session | 10 |
+| Session | 11 |
 
 ## 最近进展
-- 已确认 GPU 主机可达且两张 H200 空闲；已实现 task-local DP no-hist scheduled workspace，启动 UNet/DiT × LDP-MH/official-PH 四个 1000-epoch run，当前在构建 zarr cache。
+- DP no-hist 四个 run 均存活并进入训练/rollout；截至 2026-05-08 12:08 UTC，两张 H200 共约 27GB/卡显存占用。official-PH 当前最好：UNet epoch70 `0.66`，DiT epoch70 `0.60`；LDP-MH 当前最好均为 `0.04`。
