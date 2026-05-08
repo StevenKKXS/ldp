@@ -1,6 +1,28 @@
 # Task Knowledge
 
-<!-- METADATA:SESSION=102 -->
+<!-- METADATA:SESSION=103 -->
+
+## Session 103 Knowledge
+- Effective stamp remains `1778075154`.
+- Current sample time: `2026-05-08T12:10:06Z`.
+- PTP on `30103`:
+- completed: Square PTP `a8`, LongSquare PTP `a8`
+- still running: Square PTP `a1`, Tool-Hang PTP `a8/a1`, Transport PTP `a8/a1`, LongSquare PTP `a1`
+- no sampled traceback
+- DP on `36645`:
+- completed: LongSquare DP `a8`
+- still running: Square DP `a8/a1`, Tool-Hang DP `a8/a1`, Transport DP `a8/a1`, LongSquare DP `a1`
+- no sampled traceback
+- Current nonzero best training-rollout checkpoint scores:
+- Square PTP `a8`: `0.45` at epoch `599`
+- Square PTP `a1`: `0.28` at epoch `599`
+- Square DP `a8`: `0.08` at epoch `1299`
+- Square DP `a1`: `0.02` at epoch `699`
+- Transport PTP `a8`: `0.01` at epoch `599`
+- Over-target processes:
+- Square DP `a8`: observed at epoch `2699`
+- Tool-Hang DP `a8`: observed at epoch `2499`
+- Treat over-target DP `a8` runs as non-clean for the 2000-epoch report unless explicitly labeled.
 
 ## Session 102 Knowledge
 - Main experiment stamp remains `1778075154`.

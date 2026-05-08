@@ -1,6 +1,48 @@
 # History Log
 
-<!-- METADATA:SESSION=102 -->
+<!-- METADATA:SESSION=103 -->
+
+## Session 103
+- User asked for the current progress.
+- Checked effective stamp `1778075154`.
+- Sample time: `2026-05-08T12:10:06Z`.
+- PTP queue on `10.100.0.29:30103`:
+- GPU0: `2842 / 143771 MiB`, utilization `36%`
+- GPU1: `7291 / 143771 MiB`, utilization `99%`
+- GPU2: `10815 / 143771 MiB`, utilization `44%`
+- GPU3: `2840 / 143771 MiB`, utilization `33%`
+- PTP status:
+- Square PTP `a8`: complete, last epoch `1999`, latest score `0.38`, best score `0.45` at epoch `599`, no traceback
+- Square PTP `a1`: running, last epoch `999`, latest score `0.21`, best score `0.28` at epoch `599`, no traceback
+- Tool-Hang PTP `a8`: running, last epoch `1899`, latest/best score `0.0`, no traceback
+- Tool-Hang PTP `a1`: running, last epoch `699`, latest/best score `0.0`, no traceback
+- Transport PTP `a8`: running, last epoch `799`, latest score `0.0`, best score `0.01` at epoch `599`, no traceback
+- Transport PTP `a1`: running, last epoch `399`, latest/best score `0.0`, no traceback
+- LongSquare PTP `a8`: complete, last epoch `1999`, latest/best score `0.0`, no traceback
+- LongSquare PTP `a1`: running, last epoch `1299`, latest/best score `0.0`, no traceback
+- DP queue on `10.100.0.29:36645`:
+- GPU0: `16623 / 143771 MiB`, utilization `100%`
+- GPU1: `10122 / 143771 MiB`, utilization `99%`
+- GPU2: `1 / 143771 MiB`, utilization `0%`
+- GPU3: `1 / 143771 MiB`, utilization `0%`
+- DP status:
+- Square DP `a8`: running, last epoch `2699`, latest score `0.04`, best score `0.08` at epoch `1299`, no traceback
+- Square DP `a1`: running, last epoch `899`, latest score `0.0`, best score `0.02` at epoch `699`, no traceback
+- Tool-Hang DP `a8`: running, last epoch `2499`, latest/best score `0.0`, no traceback
+- Tool-Hang DP `a1`: running, last epoch `799`, latest/best score `0.0`, no traceback
+- Transport DP `a8`: running, last epoch `932`, latest/best score `0.0`, no traceback
+- Transport DP `a1`: running, last epoch `389`, latest/best score `0.0`, no traceback
+- LongSquare DP `a8`: complete, last epoch `1999`, latest/best score `0.0`, no traceback
+- LongSquare DP `a1`: running, last epoch `1399`, latest/best score `0.0`, no traceback
+- Current best score table:
+- Square: DP `a8=0.08`, DP `a1=0.02`, PTP `a8=0.45`, PTP `a1=0.28`
+- Tool-Hang: all DP/PTP and `a8/a1` best scores remain `0.0`
+- Transport: PTP `a8=0.01`; DP `a8/a1` and PTP `a1` remain `0.0`
+- LongSquare: all DP/PTP and `a8/a1` best scores remain `0.0`
+- Important interpretation:
+- Queues are alive and sampled logs show no traceback.
+- No stronger nonzero result appeared since Session 102.
+- The main operational issue is still the DP `a8` over-target behavior: Square DP `a8` and Tool-Hang DP `a8` continue running beyond the intended 2000-epoch target.
 
 ## Session 102
 - User asked to return to the main line and report current progress.
