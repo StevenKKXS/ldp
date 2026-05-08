@@ -1,6 +1,6 @@
 # Task Knowledge
 
-<!-- METADATA:SESSION=16 -->
+<!-- METADATA:SESSION=17 -->
 
 ## Working Rules
 - The task expanded from no-training BC-RNN evaluation to include issue #157 retraining checks and SmolVLA resource-utilization training runs.
@@ -52,3 +52,7 @@
 - Four-way SmolVLA parameters: `chunk_size=16`, `batch_size=128`, `lr=1e-4`, `weight_decay=1e-4`, `heads=8`, `dropout=0.1`, `num_workers=4`, `val_ratio=0.05`, `sample_steps=10`, `action_repr=ldp_abs10`, AMP enabled. Small is `emb_dim=256`, `expert_layers=6`; big384 is `emb_dim=384`, `expert_layers=8`.
 - Four-way SmolVLA schedule: train 1000 epochs; eval and named checkpoint at epochs `10,20,...,100,200,...,1000`; `latest.pt` refreshes on those eval epochs and on every 25th epoch. Initial PIDs on the new host were `27745`, `27774`, `27801`, and `27816`.
 - Session 16 utilization check: the intended two-task-per-GPU layout is active on `10.100.16.46:23989`; GPU0 has PIDs `27745` and `27801`, GPU1 has PIDs `27774` and `27816`. A 5-sample `nvidia-smi dmon` check showed high SM utilization, roughly `89%-95%` on GPU0 and `94%-99%` on GPU1.
+- Four-way SmolVLA post-train rollout monitor: `workspace/tasks/task006_eval_official_robomimic_square_bcrnn/scripts/monitor_smolvla_fourway_rollout_best50.sh`; shared copy at `/mnt/3fs2/data/tingwen.du/intern_method_developer/task006_eval_official_robomimic_square_bcrnn/scripts/monitor_smolvla_fourway_rollout_best50.sh`.
+- Active monitor instance for the four-way SmolVLA run: PID `62177` on `10.100.16.46:23989`, stamp `20260508_132807`, log root `/mnt/3fs2/data/tingwen.du/intern_method_developer/task006_eval_official_robomimic_square_bcrnn/logs/smolvla_fourway_rollout_after_train_20260508_132807`.
+- Monitor behavior: wait until all four runs under `/mnt/3fs2/data/tingwen.du/intern_method_developer/task006_eval_official_robomimic_square_bcrnn/runs/smolvla_fourway_1000ep_20260508_130111` have `epoch_1000.pt` and no matching training processes remain; then run a 20-rollout all-checkpoint sweep, select the best checkpoint per run by rollout success rate and mean steps, run 50 rollouts on the four selected checkpoints, and write a markdown report.
+- Planned post-train rollout outputs: all-checkpoint sweep under `/mnt/3fs2/data/tingwen.du/intern_method_developer/task006_eval_official_robomimic_square_bcrnn/rollouts/smolvla_fourway_all_ckpts_20rollouts_20260508_132807`; best-50 results under `/mnt/3fs2/data/tingwen.du/intern_method_developer/task006_eval_official_robomimic_square_bcrnn/rollouts/smolvla_fourway_best_ckpts_50rollouts_20260508_132807`; final report at `/mnt/3fs2/data/tingwen.du/intern_method_developer/task006_eval_official_robomimic_square_bcrnn/reports/smolvla_fourway_rollout_after_train_20260508_132807.md`.

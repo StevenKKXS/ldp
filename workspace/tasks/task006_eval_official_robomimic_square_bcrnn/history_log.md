@@ -1,6 +1,6 @@
 # History Log
 
-<!-- METADATA:SESSION=16 -->
+<!-- METADATA:SESSION=17 -->
 
 ## Session 0
 - Created task for no-training evaluation of the official robomimic v0.1 Square(PH) low-dimensional BC-RNN checkpoint.
@@ -108,3 +108,10 @@
 - `nvidia-smi dmon` sampled both H200s at high SM utilization: GPU0 ranged roughly `89%-95%`, GPU1 ranged roughly `94%-99%`, with four compute-app PIDs visible.
 - Training is progressing normally: official-PH v1.4.1 runs have crossed epoch 100 and continue training; PTP/LDP-MH runs are around epoch 57 because that dataset has about 599 steps per epoch versus about 223 for official-PH v1.4.1.
 - No additional third-per-GPU process was launched because the target was exactly two tasks per card and current SM utilization is already high.
+
+## Session 17
+- Rechecked the four SmolVLA training runs on `10.100.16.46:23989` at 2026-05-08 13:24 UTC. All four main PIDs were still alive: `27745`, `27774`, `27801`, and `27816`.
+- Latest observed training progress: PTP/LDP-MH small and big384 had reached about epoch 80; official-PH v1.4.1 small and big384 had reached about epoch 200. No run had finished epoch 1000 yet.
+- Added `workspace/tasks/task006_eval_official_robomimic_square_bcrnn/scripts/monitor_smolvla_fourway_rollout_best50.sh`, a post-training monitor that waits for all four `epoch_1000.pt` files and no matching training processes before launching rollout.
+- Started the post-training monitor on the new GPU host as PID `62177`, with log root `/mnt/3fs2/data/tingwen.du/intern_method_developer/task006_eval_official_robomimic_square_bcrnn/logs/smolvla_fourway_rollout_after_train_20260508_132807`.
+- The scheduled rollout plan is: all named checkpoints from the four-way run get 20 rollouts each with videos, then the best checkpoint per run is selected by rollout success rate and evaluated with 50 rollouts each. The final report path is `/mnt/3fs2/data/tingwen.du/intern_method_developer/task006_eval_official_robomimic_square_bcrnn/reports/smolvla_fourway_rollout_after_train_20260508_132807.md`.

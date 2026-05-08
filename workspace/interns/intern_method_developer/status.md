@@ -8,9 +8,9 @@
 | Status | Working |
 | Current Task | task006_eval_official_robomimic_square_bcrnn |
 | PR | https://github.com/StevenKKXS/ldp/pull/new/intern_method_developer/task006_eval_official_robomimic_square_bcrnn |
-| Session | 16 |
+| Session | 17 |
 
 ## 最近进展
-- 已确认新 GPU 入口 `10.100.16.46:23989` 上 SmolVLA 四路训练按每卡两个任务运行：GPU0 运行 PTP small + official v1.4.1 big384，GPU1 运行 PTP big384 + official v1.4.1 small。
-- 2026-05-08 13:19 UTC 检查时四个主 PID 均存活，GPU dmon 采样显示两张 H200 的 SM util 基本在 89%-99%。
-- 当前进度：official-PH v1.4.1 两个任务已经越过 epoch 100，PTP/LDP-MH 两个任务在 epoch 57 附近继续推进。
+- 2026-05-08 13:24 UTC 检查 `10.100.16.46:23989`：四个 SmolVLA 主训练 PID 均存活，两张 H200 仍在训练负载中。
+- 当前进度：PTP/LDP-MH small 和 big384 到 epoch 80 附近，official-PH v1.4.1 small 和 big384 已到 epoch 200 附近，尚未完成 1000 epoch。
+- 已挂起 post-train monitor PID `62177`：训练完成后自动对全部命名 ckpt 做 20 rollout 扫描，然后选每个 run 的 best ckpt 做 50 rollout 并生成报告，日志目录为 `/mnt/3fs2/data/tingwen.du/intern_method_developer/task006_eval_official_robomimic_square_bcrnn/logs/smolvla_fourway_rollout_after_train_20260508_132807`。
