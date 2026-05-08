@@ -1,6 +1,11 @@
 # Task Knowledge
 
-<!-- METADATA:SESSION=107 -->
+<!-- METADATA:SESSION=108 -->
+
+## Session 108 Knowledge
+- Current active training output base for the 2000-epoch `4x2x2` ablation is `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/outputs/session89_4x2x2_2000ep_1778075154/`.
+- As of Session 108, `30103` is the active PTP endpoint and `36645` is the resumed DP endpoint.
+- `36645` still has idle GPU2 and GPU3 during the observed census, while GPU0 and GPU1 carry all resumed DP jobs.
 
 ## Session 107 Knowledge
 - PTP-compatible isolation venv:

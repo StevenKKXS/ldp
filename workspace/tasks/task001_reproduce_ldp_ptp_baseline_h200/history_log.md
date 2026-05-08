@@ -1,6 +1,25 @@
 # History Log
 
-<!-- METADATA:SESSION=107 -->
+<!-- METADATA:SESSION=108 -->
+
+## Session 108
+- User asked what the current GPU tasks are running.
+- Checked both active SSH endpoints:
+- `10.100.0.29:30103`
+- `10.100.0.29:36645`
+- `30103` GPU summary:
+- GPU0: H200, about 2.8 GiB used, running `session89_square_ptp_a1_2000ep_s42_1778075154`
+- GPU1: H200, about 7.3 GiB used, running `session89_toolhang_ptp_a8_2000ep_s42_1778075154` and `session89_toolhang_ptp_a1_2000ep_s42_1778075154`
+- GPU2: H200, about 10.8 GiB used, running `session89_transport_ptp_a8_2000ep_s42_1778075154` and `session89_transport_ptp_a1_2000ep_s42_1778075154`
+- GPU3: H200, about 2.8 GiB used, running `session89_longsquare_ptp_a1_2000ep_s42_1778075154`
+- `30103` jobs are PTP, seed `42`, `num_epochs=2000`, `rollout_every=100`, `checkpoint_every=100`, `n_test=100`, and `resume=false`.
+- `36645` GPU summary:
+- GPU0: H200, about 16.6 GiB used, running DP `session89_square_dp_a1_2000ep_s42_1778075154`, `session89_square_dp_a8_2000ep_s42_1778075154`, `session89_transport_dp_a1_2000ep_s42_1778075154`, and `session89_transport_dp_a8_2000ep_s42_1778075154`
+- GPU1: H200, about 10.1 GiB used, running DP `session89_longsquare_dp_a1_2000ep_s42_1778075154`, `session89_toolhang_dp_a1_2000ep_s42_1778075154`, and `session89_toolhang_dp_a8_2000ep_s42_1778075154`
+- GPU2: H200, about 1 MiB used, no active training process found
+- GPU3: H200, about 1 MiB used, no active training process found
+- `36645` jobs are DP, seed `42`, `num_epochs=2000`, `rollout_every=100`, `checkpoint_every=100`, `n_test=100`, and `resume=true`.
+- Active runs observed in this census: 13 total training runs, all under `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/outputs/session89_4x2x2_2000ep_1778075154/`.
 
 ## Session 107
 - User asked to configure a new venv adapted to the PTP-recommended environment and run smoke tests before further planning.
