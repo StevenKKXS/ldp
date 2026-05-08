@@ -1,6 +1,12 @@
 # Task Knowledge
 
-<!-- METADATA:SESSION=115 -->
+<!-- METADATA:SESSION=116 -->
+
+## Session 116 Knowledge
+- Shared PTP py39 H200 environment documentation is now merged into `/work-agents/ldp` `main`.
+- Main commit after merge: `968f3ca62bf571eb75fced7feda8745c03f11c5b`.
+- Shared document path on main: `/work-agents/ldp/workspace/shared/ldp_ptp_py39_h200_environment.md`.
+- Other interns can read the environment record directly from `main`; it includes activation, package versions, recreate steps, smoke tests, caveats, and related training-code branch details.
 
 ## Session 115 Knowledge
 - Shared PTP py39 H200 environment document branch:
