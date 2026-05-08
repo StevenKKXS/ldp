@@ -1,6 +1,45 @@
 # History Log
 
-<!-- METADATA:SESSION=111 -->
+<!-- METADATA:SESSION=112 -->
+
+## Session 112
+- User asked which branch we are on, what environment the previous 4x2x2 training used, and whether there were code changes.
+- Local workspace check:
+- path `/work-agents/intern_ldp_explorer/ldp`
+- branch `intern_ldp_explorer/task001_reproduce_ldp_ptp_baseline_h200`
+- HEAD `68d2a11`
+- local uncommitted change remains only in `workspace/interns/intern_ldp_explorer/knowledge.md`; no tracked source-code working-tree changes were found locally
+- Actual remote training checkout used by the stopped 4x2x2 batch:
+- path `/mnt/3fs2/data/tingwen.du/workspace/ldp`
+- branch `main`
+- HEAD `5113f46`
+- dirty local modifications existed during inspection
+- Previous 4x2x2 environment:
+- Python `3.12.3`
+- Torch `2.5.1`
+- RoboMimic `0.3.0`
+- RoboSuite `1.4.1`
+- MuJoCo `3.8.0`
+- Diffusers `0.30.0`
+- Gym `0.25.2`
+- no installed `mujoco-py` package reported by import metadata
+- The stopped 4x2x2 training used `/root/venv`, not `/root/ptp_ldp_py39`.
+- Remote dirty runtime files:
+- `diffusion_policy/dataset/robomimic_replay_image_dataset.py`
+- `diffusion_policy/env_runner/robomimic_image_runner.py`
+- `diffusion_policy/env_runner/robomimic_longhist_image_runner.py`
+- `diffusion_policy/env_runner/robomimic_square_long_image_runner.py`
+- `diffusion_policy/gym_util/async_vector_env.py`
+- `diffusion_policy/gym_util/sync_vector_env.py`
+- untracked `MUJOCO_LOG.TXT`
+- Remote runtime patch summary:
+- dataset normalizer stores `dataset_path` and adds image normalizers by inspecting HDF5 image keys, supporting cached-embedding training that omits image tensors while rollout still uses images
+- RoboMimic env runners construct `AsyncVectorEnv(..., shared_memory=False)`
+- vector env utilities were patched for newer Gym-style reset signatures, seed handling, and corrected `concatenate` argument order
+- Local branch versus `origin/main` contains committed source/config changes as well:
+- same six runtime patch files are present in the branch diff
+- many experiment YAMLs have context/action/epoch changes, including representative emb configs moving toward `global_obs=16`, `global_action=8`, and `num_epochs=500`
+- The Session 89/110 launch scripts overrode key YAML values at command line, especially `global_action in {8,1}` and `training.num_epochs=2000`, so the stopped batch should be interpreted by its launch-command overrides rather than YAML defaults alone.
 
 ## Session 111
 - User asked to check the requirement before proceeding: rerun four tasks using the PTP-recommended environment, with the same 4x2x2 training and rollout structure, and wait for confirmation before launch.

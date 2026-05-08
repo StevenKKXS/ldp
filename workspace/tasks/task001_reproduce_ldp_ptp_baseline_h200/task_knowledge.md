@@ -1,6 +1,18 @@
 # Task Knowledge
 
-<!-- METADATA:SESSION=111 -->
+<!-- METADATA:SESSION=112 -->
+
+## Session 112 Knowledge
+- Distinguish local task branch from remote training checkout:
+- local branch: `intern_ldp_explorer/task001_reproduce_ldp_ptp_baseline_h200` at `68d2a11`
+- remote training checkout for stopped 4x2x2 batch: `/mnt/3fs2/data/tingwen.du/workspace/ldp`, branch `main`, HEAD `5113f46`, dirty runtime patches
+- stopped 4x2x2 environment: `/root/venv`, Python `3.12.3`, Torch `2.5.1`, RoboMimic `0.3.0`, RoboSuite `1.4.1`, MuJoCo `3.8.0`, Diffusers `0.30.0`, Gym `0.25.2`
+- stopped 4x2x2 did not use `/root/ptp_ldp_py39`
+- remote runtime patches relevant to reproduction:
+- cached-embedding/image normalizer compatibility in `robomimic_replay_image_dataset.py`
+- `shared_memory=False` in RoboMimic env runners
+- Gym/vector-env reset, seed, and `concatenate` compatibility in `async_vector_env.py` and `sync_vector_env.py`
+- local branch contains committed config changes relative to `origin/main`, but Session 89/110 launch scripts overrode the main training settings from the command line.
 
 ## Session 111 Knowledge
 - Requirement-check document for the PTP-version environment rerun: `/work-agents/intern_ldp_explorer/ldp/workspace/tasks/task001_reproduce_ldp_ptp_baseline_h200/session111_ptp_env_4x2x2_requirement_check.md`.
