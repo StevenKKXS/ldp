@@ -1,6 +1,6 @@
 # History Log
 
-<!-- METADATA:SESSION=13 -->
+<!-- METADATA:SESSION=14 -->
 
 ## Session 0
 - Created task for no-training evaluation of the official robomimic v0.1 Square(PH) low-dimensional BC-RNN checkpoint.
@@ -87,3 +87,9 @@
 - Host `10.100.16.46:16139` is reachable and exposes two NVIDIA H200 GPUs with 143,771 MiB each.
 - Current usage: GPU0 uses 26,924 MiB and GPU1 uses 27,060 MiB. Four DP no-hist main processes are alive: `172304`, `172310`, `176077`, and `176083`.
 - Current experiment progress: UNet LDP-MH epoch 40, DiT LDP-MH epoch 43, UNet official-PH epoch 83, DiT official-PH epoch 99.
+
+## Session 14
+- Assessed whether two GPUs are enough to retrain SmolVLA on original/LDP-MH data and official-PH v1.4.1 data for a controlled comparison.
+- Historical evidence: on 2026-05-07/08, two H200 GPUs completed three SmolVLA 1000-epoch runs (`ldp_mh_abs10_seed42`, `official_ph_v141_abs10_seed43`, and `ldp_mh_abs10_big384_seed44`), with named checkpoints at `10,20,...,100,200,...,1000`.
+- Conclusion: two H200 GPUs are sufficient for the two-run comparison if assigned one SmolVLA run per GPU. They are also sufficient for rollout evaluation, but full 50-rollout evaluation over all 38 named checkpoints would be the longer part and would generate many videos.
+- Current caveat: the same two GPUs are actively occupied by four DP no-hist processes, so launching SmolVLA immediately on top of them would share compute even though there is substantial memory headroom.
