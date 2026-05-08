@@ -39,6 +39,12 @@ The remote training checkout has `origin=https://github.com/long-context-dp/ldp.
 
 An attempted push of `intern_ldp_explorer/task001_ptp_py39_rerun` from the training host did not return promptly, consistent with SSH/GitHub authentication waiting on the training machine. I terminated that local push process. The branch and commit are saved in the shared training checkout; the task branch in the main work-agent repo contains this record and has been pushed.
 
+Session 114 correction: the branch was fetched from the GPU training checkout into the CPU work-agent repo via SSH, then pushed from the CPU server to GitHub successfully:
+
+- GitHub branch: `origin/intern_ldp_explorer/task001_ptp_py39_rerun`
+- Commit: `529857fa8bab663510d88c5c7b72b973f4c37104`
+- CPU-side command pattern: `git fetch ssh://root@10.100.0.29:36645/mnt/3fs2/data/tingwen.du/workspace/ldp intern_ldp_explorer/task001_ptp_py39_rerun:refs/heads/intern_ldp_explorer/task001_ptp_py39_rerun`, then `git push -u origin intern_ldp_explorer/task001_ptp_py39_rerun`
+
 ## PTP Environment Smoke On New Branch
 
 Checked under `/root/ptp_ldp_py39` on the new remote branch:

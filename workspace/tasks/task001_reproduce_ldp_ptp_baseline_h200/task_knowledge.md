@@ -1,6 +1,14 @@
 # Task Knowledge
 
-<!-- METADATA:SESSION=113 -->
+<!-- METADATA:SESSION=114 -->
+
+## Session 114 Knowledge
+- GPU training hosts should be treated as offline for GitHub push.
+- To publish a branch created on the GPU checkout, fetch it into the CPU work-agent repo over SSH, then push from CPU to GitHub.
+- Published CPU-side branch:
+- `origin/intern_ldp_explorer/task001_ptp_py39_rerun`
+- commit `529857fa8bab663510d88c5c7b72b973f4c37104`
+- The active task branch remains `intern_ldp_explorer/task001_reproduce_ldp_ptp_baseline_h200`; the pushed training-code branch is separate and tracks only the six runtime patches for the PTP py39 rerun.
 
 ## Session 113 Knowledge
 - Remote training checkout is now on non-main branch `intern_ldp_explorer/task001_ptp_py39_rerun` at commit `529857f`.

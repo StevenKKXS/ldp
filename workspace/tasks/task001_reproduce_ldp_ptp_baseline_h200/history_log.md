@@ -1,6 +1,21 @@
 # History Log
 
-<!-- METADATA:SESSION=113 -->
+<!-- METADATA:SESSION=114 -->
+
+## Session 114
+- User clarified that pushing should happen from the CPU server because the GPU training machine is offline.
+- Re-ran the remote branch publication from the CPU work-agent repo.
+- CPU-side steps completed:
+- fetched the GPU training checkout branch via SSH:
+- `git fetch ssh://root@10.100.0.29:36645/mnt/3fs2/data/tingwen.du/workspace/ldp intern_ldp_explorer/task001_ptp_py39_rerun:refs/heads/intern_ldp_explorer/task001_ptp_py39_rerun`
+- verified local branch `intern_ldp_explorer/task001_ptp_py39_rerun` points to `529857f`
+- pushed from CPU repo to GitHub:
+- `git push -u origin intern_ldp_explorer/task001_ptp_py39_rerun`
+- Result:
+- GitHub branch exists: `origin/intern_ldp_explorer/task001_ptp_py39_rerun`
+- Full pushed commit: `529857fa8bab663510d88c5c7b72b973f4c37104`
+- Current active work-agent branch remains `intern_ldp_explorer/task001_reproduce_ldp_ptp_baseline_h200`.
+- Updated `session113_remote_branch_setup.md` to include the Session 114 CPU-side push correction.
 
 ## Session 113
 - User asked to follow branch/task hygiene, avoid touching master, migrate the previous runtime environment modifications to a new non-master environment, save the modifications, and continue testing with the PTP venv.
