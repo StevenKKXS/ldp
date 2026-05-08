@@ -1,6 +1,17 @@
 # Task Knowledge
 
-<!-- METADATA:SESSION=114 -->
+<!-- METADATA:SESSION=115 -->
+
+## Session 115 Knowledge
+- Shared PTP py39 H200 environment document branch:
+- `origin/intern_ldp_explorer/share_ptp_py39_env_docs`
+- commit `968f3ca62bf571eb75fced7feda8745c03f11c5b`
+- document path after merge:
+- `workspace/shared/ldp_ptp_py39_h200_environment.md`
+- manual PR URL:
+- `https://github.com/StevenKKXS/ldp/pull/new/intern_ldp_explorer/share_ptp_py39_env_docs`
+- Direct master/main push was intentionally avoided; merge the branch to make the document visible from master/main.
+- `/work-agents/ldp` was switched back to `main` after publishing the shared-doc branch.
 
 ## Session 114 Knowledge
 - GPU training hosts should be treated as offline for GitHub push.

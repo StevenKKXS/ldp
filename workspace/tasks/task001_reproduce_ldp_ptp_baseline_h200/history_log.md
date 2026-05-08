@@ -1,6 +1,30 @@
 # History Log
 
-<!-- METADATA:SESSION=114 -->
+<!-- METADATA:SESSION=115 -->
+
+## Session 115
+- User asked to store the configured environment and environment setup record into master so other interns can reuse it.
+- Followed project branch hygiene instead of directly pushing to master/main.
+- Used CPU shared repo `/work-agents/ldp`.
+- Pulled latest `origin/main`, then created branch `intern_ldp_explorer/share_ptp_py39_env_docs`.
+- Added shared document:
+- `/work-agents/ldp/workspace/shared/ldp_ptp_py39_h200_environment.md`
+- Document contents:
+- ready-to-use host and venv path for `/root/ptp_ldp_py39`
+- training checkout path and branch
+- package version table
+- H200-specific differences from upstream conda pins
+- recreate procedure with apt, venv, MuJoCo, pip packages, pinned RoboSuite source, editable install, and pytorch3d stub notes
+- smoke-test commands and known passed smoke checks
+- caveats around `pip check`, `free-mujoco-py`, `numba`, GPU host network, and CPU-side push flow
+- related branch `intern_ldp_explorer/task001_ptp_py39_rerun`
+- Committed and pushed shared-doc branch:
+- branch `origin/intern_ldp_explorer/share_ptp_py39_env_docs`
+- commit `968f3ca62bf571eb75fced7feda8745c03f11c5b`
+- PR creation command could not run because `gh` is not installed on this CPU environment.
+- Manual PR URL:
+- `https://github.com/StevenKKXS/ldp/pull/new/intern_ldp_explorer/share_ptp_py39_env_docs`
+- Switched `/work-agents/ldp` back to `main` after pushing the branch.
 
 ## Session 114
 - User clarified that pushing should happen from the CPU server because the GPU training machine is offline.
