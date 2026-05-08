@@ -1,6 +1,12 @@
 # Task Knowledge
 
-<!-- METADATA:SESSION=109 -->
+<!-- METADATA:SESSION=110 -->
+
+## Session 110 Knowledge
+- Presentation-ready summary report path: `/work-agents/intern_ldp_explorer/ldp/workspace/tasks/task001_reproduce_ldp_ptp_baseline_h200/session110_experiment_report.md`.
+- The `session89_4x2x2_2000ep` batch has been stopped on `30103` and `36645`; no matching `train.py` process remained after verification.
+- For reporting, frame the results as single-seed training-time rollout metrics with `n_test=100`, not as 3-seed final evaluation.
+- Main quantitative takeaway from the stopped batch: Square PTP is the only strong signal, with best `0.45` for `a=8`; Tool-Hang and LongSquare are all-zero; Transport only reached `0.01` for PTP `a=8`.
 
 ## Session 109 Knowledge
 - For current `session89_4x2x2_2000ep` success-rate checks, use `test/mean_score` from each run's `logs.json.txt`.

@@ -1,6 +1,32 @@
 # History Log
 
-<!-- METADATA:SESSION=109 -->
+<!-- METADATA:SESSION=110 -->
+
+## Session 110
+- User asked to form a report for this run and stop the task, including each task's settings and results summary for later presentation.
+- Took a final `test/mean_score` snapshot from all 16 `session89_4x2x2_2000ep` logs before stopping jobs.
+- Created report: `/work-agents/intern_ldp_explorer/ldp/workspace/tasks/task001_reproduce_ldp_ptp_baseline_h200/session110_experiment_report.md`.
+- Report contents:
+- scope of the 4 tasks x 2 methods x 2 action-horizon batch
+- artifact paths and launch/resume scripts
+- active environment used by the batch
+- common training recipe
+- task-specific dataset and encoder paths
+- final per-run success-rate table
+- aggregate best-success readout
+- reporting caveats
+- stop confirmation
+- Stopped active training processes matching `session89_4x2x2_2000ep_1778075154` on both endpoints:
+- `10.100.0.29:30103`
+- `10.100.0.29:36645`
+- Verified post-stop status: all 8 visible H200 GPUs were about `1 MiB` memory used and `0%` utilization, with no matching `train.py` process.
+- Final high-level result summary:
+- Square PTP `a=8`: latest `0.38`, best `0.45`
+- Square PTP `a=1`: latest `0.27`, best `0.28`
+- Square DP `a=8`: latest `0.02`, best `0.08`
+- Square DP `a=1`: latest `0.00`, best `0.02`
+- Transport PTP `a=8`: latest `0.00`, best `0.01`
+- Tool-Hang and LongSquare remained `0.00` for all observed variants
 
 ## Session 109
 - User asked for the current task success-rate report.
