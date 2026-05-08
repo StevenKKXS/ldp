@@ -64,6 +64,7 @@ class RobomimicReplayImageDataset(BaseImageDataset):
         self.use_embed_if_present = use_embed_if_present
         self.subsample_frames = subsample_frames
         self.subsampling_method = subsampling_method
+        self.dataset_path = dataset_path
         self.image_transforms = transform = T.Compose([
             T.ColorJitter(brightness=0.2, contrast=[0.8,1.2], saturation=[0.8,1.2], hue=0.05),  # Adjust brightness, contrast, saturation, hue
         ])
@@ -217,6 +218,19 @@ class RobomimicReplayImageDataset(BaseImageDataset):
         # image
         for key in self.rgb_keys:
             normalizer[key] = get_image_range_normalizer()
+        # Cached-embedding training can omit image tensors from the replay buffer,
+        # while online rollout still feeds raw image observations to the policy.
+        # Image normalization is stat-free, so add these entries without loading
+        # the HDF5 image arrays into memory.
+        try:
+            with h5py.File(self.dataset_path, "r") as f:
+                first_demo_key = next(iter(f["data"].keys()))
+                obs_group = f["data"][first_demo_key]["obs"]
+                for key in obs_group.keys():
+                    if key.endswith("image") and key not in normalizer.params_dict:
+                        normalizer[key] = get_image_range_normalizer()
+        except Exception:
+            pass
         return normalizer
 
     def get_all_actions(self) -> torch.Tensor:

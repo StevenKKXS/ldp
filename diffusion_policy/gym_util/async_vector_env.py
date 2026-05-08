@@ -186,7 +186,7 @@ class AsyncVectorEnv(VectorEnv):
         _, successes = zip(*[pipe.recv() for pipe in self.parent_pipes])
         self._raise_if_errors(successes)
 
-    def reset_async(self):
+    def reset_async(self, seed=None, return_info=False, options=None):
         self._assert_is_running()
         if self._state != AsyncState.DEFAULT:
             raise AlreadyPendingCallError(
@@ -195,11 +195,28 @@ class AsyncVectorEnv(VectorEnv):
                 self._state.value,
             )
 
-        for pipe in self.parent_pipes:
-            pipe.send(("reset", None))
+        if seed is None:
+            seeds = [None for _ in range(self.num_envs)]
+        elif isinstance(seed, int):
+            seeds = [seed + i for i in range(self.num_envs)]
+        else:
+            seeds = list(seed)
+        assert len(seeds) == self.num_envs
+
+        for pipe, env_seed in zip(self.parent_pipes, seeds):
+            pipe.send(
+                (
+                    "reset",
+                    {
+                        "seed": env_seed,
+                        "return_info": return_info,
+                        "options": options,
+                    },
+                )
+            )
         self._state = AsyncState.WAITING_RESET
 
-    def reset_wait(self, timeout=None):
+    def reset_wait(self, timeout=None, seed=None, return_info=False, options=None):
         """
         Parameters
         ----------
@@ -231,10 +248,13 @@ class AsyncVectorEnv(VectorEnv):
 
         if not self.shared_memory:
             self.observations = concatenate(
-                results, self.observations, self.single_observation_space
+                self.single_observation_space, results, self.observations
             )
 
-        return deepcopy(self.observations) if self.copy else self.observations
+        observations = deepcopy(self.observations) if self.copy else self.observations
+        if return_info:
+            return observations, [{} for _ in range(self.num_envs)]
+        return observations
 
     def step_async(self, actions):
         """
@@ -294,7 +314,7 @@ class AsyncVectorEnv(VectorEnv):
 
         if not self.shared_memory:
             self.observations = concatenate(
-                observations_list, self.observations, self.single_observation_space
+                self.single_observation_space, observations_list, self.observations
             )
 
         return (
@@ -567,6 +587,8 @@ def _worker(index, env_fn, pipe, parent_pipe, shared_memory, error_queue):
         while True:
             command, data = pipe.recv()
             if command == "reset":
+                if isinstance(data, dict) and data.get("seed") is not None:
+                    env.seed(data["seed"])
                 observation = env.reset()
                 pipe.send((observation, True))
             elif command == "step":
@@ -621,6 +643,8 @@ def _worker_shared_memory(index, env_fn, pipe, parent_pipe, shared_memory, error
         while True:
             command, data = pipe.recv()
             if command == "reset":
+                if isinstance(data, dict) and data.get("seed") is not None:
+                    env.seed(data["seed"])
                 observation = env.reset()
                 write_to_shared_memory(
                     index, observation, shared_memory, observation_space
