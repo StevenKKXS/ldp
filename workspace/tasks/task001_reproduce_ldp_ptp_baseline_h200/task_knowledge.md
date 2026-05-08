@@ -1,6 +1,15 @@
 # Task Knowledge
 
-<!-- METADATA:SESSION=112 -->
+<!-- METADATA:SESSION=113 -->
+
+## Session 113 Knowledge
+- Remote training checkout is now on non-main branch `intern_ldp_explorer/task001_ptp_py39_rerun` at commit `529857f`.
+- Remote training checkout path remains `/mnt/3fs2/data/tingwen.du/workspace/ldp`.
+- The six runtime patches are now committed on that remote branch; untracked `MUJOCO_LOG.TXT` remains intentionally uncommitted.
+- Push from the training host to `git@github.com:StevenKKXS/ldp.git` hung during auth, so the remote training branch is saved on the shared training checkout but not confirmed on GitHub.
+- `/root/ptp_ldp_py3` does not exist; the configured PTP-version venv is `/root/ptp_ldp_py39`.
+- PTP venv import smoke passed on branch `intern_ldp_explorer/task001_ptp_py39_rerun`, including ToolHang and TwoArmTransport registration under RoboSuite `1.2.0`.
+- Session 113 setup record: `/work-agents/intern_ldp_explorer/ldp/workspace/tasks/task001_reproduce_ldp_ptp_baseline_h200/session113_remote_branch_setup.md`.
 
 ## Session 112 Knowledge
 - Distinguish local task branch from remote training checkout:

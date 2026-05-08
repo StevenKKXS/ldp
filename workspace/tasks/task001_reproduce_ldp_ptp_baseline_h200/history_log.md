@@ -1,6 +1,42 @@
 # History Log
 
-<!-- METADATA:SESSION=112 -->
+<!-- METADATA:SESSION=113 -->
+
+## Session 113
+- User asked to follow branch/task hygiene, avoid touching master, migrate the previous runtime environment modifications to a new non-master environment, save the modifications, and continue testing with the PTP venv.
+- Remote training checkout action:
+- path `/mnt/3fs2/data/tingwen.du/workspace/ldp`
+- switched from `main` to new branch `intern_ldp_explorer/task001_ptp_py39_rerun`
+- committed six runtime patch files as `529857f`
+- commit message: `Save H200 runtime patches for PTP py39 rerun`
+- committed files:
+- `diffusion_policy/dataset/robomimic_replay_image_dataset.py`
+- `diffusion_policy/env_runner/robomimic_image_runner.py`
+- `diffusion_policy/env_runner/robomimic_longhist_image_runner.py`
+- `diffusion_policy/env_runner/robomimic_square_long_image_runner.py`
+- `diffusion_policy/gym_util/async_vector_env.py`
+- `diffusion_policy/gym_util/sync_vector_env.py`
+- left `MUJOCO_LOG.TXT` uncommitted because it is a runtime log
+- Attempted to push the remote training branch to `git@github.com:StevenKKXS/ldp.git`, but the process did not return promptly on the training host, consistent with SSH/GitHub auth waiting. Terminated that push process. The branch and commit are saved on the shared training checkout.
+- Confirmed new remote branch state:
+- branch `intern_ldp_explorer/task001_ptp_py39_rerun`
+- HEAD `529857f`
+- only untracked `MUJOCO_LOG.TXT` remains
+- Verified PTP venv on the new branch:
+- `/root/ptp_ldp_py3` does not exist
+- using `/root/ptp_ldp_py39`
+- Python `3.9.25`
+- Torch `2.5.1`
+- RoboMimic `0.2.0`
+- RoboSuite `1.2.0`
+- MuJoCo `2.3.7`
+- `mujoco-py 2.1.2.14`
+- Diffusers `0.11.1`
+- Gym `0.21.0`
+- Import smoke passed for RoboMimic image runner, longhist runner, replay image dataset, and transformer image policy.
+- RoboSuite registration smoke passed for `ToolHang` and `TwoArmTransport`.
+- `36645` GPU check showed 4 visible H200 GPUs idle.
+- Wrote record file: `/work-agents/intern_ldp_explorer/ldp/workspace/tasks/task001_reproduce_ldp_ptp_baseline_h200/session113_remote_branch_setup.md`.
 
 ## Session 112
 - User asked which branch we are on, what environment the previous 4x2x2 training used, and whether there were code changes.

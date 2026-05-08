@@ -8,5 +8,5 @@
 | Status | Working |
 | Current Task | task001_reproduce_ldp_ptp_baseline_h200 |
 | PR | https://github.com/StevenKKXS/ldp/pull/new/intern_ldp_explorer/task001_reproduce_ldp_ptp_baseline_h200 |
-| Session | 112 |
-| Recent Progress | Clarified branch, environment, and code-state questions. The local workspace is on `intern_ldp_explorer/task001_reproduce_ldp_ptp_baseline_h200` at `68d2a11`; actual stopped 4x2x2 training ran from remote `/mnt/3fs2/data/tingwen.du/workspace/ldp` on `main@5113f46` with local runtime patches. That batch used `/root/venv` with Python `3.12.3`, Torch `2.5.1`, RoboMimic `0.3.0`, RoboSuite `1.4.1`, MuJoCo `3.8.0`, Diffusers `0.30.0`, and Gym `0.25.2`; it did not use `/root/ptp_ldp_py39`. |
+| Session | 113 |
+| Recent Progress | Moved the remote training checkout `/mnt/3fs2/data/tingwen.du/workspace/ldp` off `main` onto `intern_ldp_explorer/task001_ptp_py39_rerun` and committed the six runtime patches as `529857f`. Verified `/root/ptp_ldp_py39` on that branch imports key LDP modules and has RoboMimic `0.2.0`, RoboSuite `1.2.0`, `mujoco-py 2.1.2.14`; `/root/ptp_ldp_py3` does not exist. Wrote `session113_remote_branch_setup.md`. |
