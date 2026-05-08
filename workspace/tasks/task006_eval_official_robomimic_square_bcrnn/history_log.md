@@ -1,6 +1,6 @@
 # History Log
 
-<!-- METADATA:SESSION=9 -->
+<!-- METADATA:SESSION=10 -->
 
 ## Session 0
 - Created task for no-training evaluation of the official robomimic v0.1 Square(PH) low-dimensional BC-RNN checkpoint.
@@ -62,3 +62,9 @@
 - Clarified the meaning of DP `horizon=16` in the LDP code path.
 - Verified in `DiffusionUnetImagePolicy` that `horizon` controls the length of the action trajectory tensor denoised by the diffusion model, while `n_action_steps` controls how many predicted actions are returned for execution during rollout.
 - Verified in `RobomimicReplayImageDataset` that the training batch provides a 16-step action sequence when `horizon=16`, with observations truncated to `n_obs_steps`.
+
+## Session 10
+- Confirmed GPU host `10.100.16.46:16139` is reachable on 2026-05-08 09:14 UTC, with two idle NVIDIA H200 GPUs.
+- Added task-local scheduled DP workspaces for UNet and DiT-style transformer image policies, avoiding edits to the shared LDP source tree.
+- Added a task-local launcher for four Square no-history runs: UNet/DiT crossed with LDP-MH and official-PH v1.4.1 datasets.
+- Launched the four runs under `/mnt/3fs2/data/tingwen.du/intern_method_developer/task006_eval_official_robomimic_square_bcrnn/runs/dp_nohist_unet_dit_20260508_0915`; the processes are alive and currently building or waiting on zarr dataset caches.

@@ -1,6 +1,6 @@
 # Task Knowledge
 
-<!-- METADATA:SESSION=9 -->
+<!-- METADATA:SESSION=10 -->
 
 ## Working Rules
 - The task expanded from no-training BC-RNN evaluation to include issue #157 retraining checks and SmolVLA resource-utilization training runs.
@@ -39,3 +39,5 @@
 - DP no-hist candidate for discussion: use `train_diffusion_unet_image_workspace.yaml` with `task=square_image_abs`, `n_obs_steps=2`, `dataset_obs_steps=2`, `n_action_steps=1`, `horizon=16`, no past-action prediction, and no object observation. This matches the README's short-history DP note (`obs=2, act=1, horizon=16`) more closely than the Square `unet_hybrid_square.yaml` default (`obs=16`, `horizon=32`, past action prediction enabled).
 - DP no-hist candidate datasets: LDP-MH absolute-action image data at `/mnt/3fs2/data/tingwen.du/intern_method_developer/task003_formal_smolvla_square_train_eval/data/square_mh_image_abs.hdf5` and official-PH v1.4.1 absolute-action image data at `/mnt/3fs2/data/tingwen.du/intern_method_developer/task006_eval_official_robomimic_square_bcrnn/data/square/ph/image_abs_v141.hdf5`.
 - DP `horizon=16` means the UNet diffusion policy denoises a 16-step action trajectory per sample. It is not the environment rollout horizon; the rollout limit remains PH 400 or MH 500 by task config. In inference, `DiffusionUnetImagePolicy.predict_action` samples `action_pred` with length `horizon`, then returns only the slice from `n_obs_steps - 1` through `n_obs_steps - 1 + n_action_steps`; therefore `n_action_steps=1` executes one action then replans, while `n_action_steps=8` executes an 8-action chunk from the same 16-step prediction.
+- DP no-hist implementation: task-local wrappers in `workspace/tasks/task006_eval_official_robomimic_square_bcrnn/scripts/dp_nohist_scheduled_workspaces.py` add scheduled checkpoint/rollout epochs while preserving native UNet and transformer policy behavior. The DiT-style run uses `DiffusionTransformerHybridImagePolicy` / `TransformerForDiffusion` with `past_action_pred=false` and `use_embed_if_present=false`.
+- DP no-hist launch script: `workspace/tasks/task006_eval_official_robomimic_square_bcrnn/scripts/launch_dp_nohist_unet_dit_square.sh` starts four runs with `horizon=16`, `n_obs_steps=2`, `n_action_steps=1`, 1000 epochs, and 50-video test rollout evals on scheduled epochs.

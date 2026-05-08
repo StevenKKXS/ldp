@@ -8,7 +8,7 @@
 | Status | Working |
 | Current Task | task006_eval_official_robomimic_square_bcrnn |
 | PR | https://github.com/StevenKKXS/ldp/pull/new/intern_method_developer/task006_eval_official_robomimic_square_bcrnn |
-| Session | 9 |
+| Session | 10 |
 
 ## 最近进展
-- 已解释 DP 配置中 `horizon=16` 的含义：它是 diffusion policy 一次去噪建模的动作序列长度，不是 rollout 最大步数；rollout 每次实际执行动作数由 `n_action_steps` 控制。
+- 已确认 GPU 主机可达且两张 H200 空闲；已实现 task-local DP no-hist scheduled workspace，启动 UNet/DiT × LDP-MH/official-PH 四个 1000-epoch run，当前在构建 zarr cache。
