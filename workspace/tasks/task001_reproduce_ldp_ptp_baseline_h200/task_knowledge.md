@@ -11,6 +11,7 @@
 - Tool-Hang PTP `a1/a8`: about epoch `16`.
 - Square PTP `a1/a8`: about epoch `19`.
 - LongSquare PTP `a1/a8`: about epoch `35-36`.
+- Later in the same session the log tail had advanced to: Transport about `9`, Tool-Hang about `19-20`, Square about `23`, and LongSquare about `41-42`.
 - No active-stamp `test/mean_score`, checkpoint, or mp4 existed at the Session 118 sample.
 
 ## Session 117 Knowledge

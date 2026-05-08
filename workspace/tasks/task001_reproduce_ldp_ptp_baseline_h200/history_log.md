@@ -28,6 +28,11 @@
 - No `test/mean_score` has appeared yet because the active runs have not reached the first epoch-100 rollout.
 - No active-stamp checkpoint or mp4 file was present at this sample.
 - Grep for `Traceback`, `Error executing job`, `RuntimeError`, `CUDA out of memory`, and `Killed` in active PTP logs returned no sampled error markers.
+- A later log-tail check in the same session showed continued progress:
+- LongSquare PTP `a1/a8`: about epoch `42/41`.
+- Square PTP `a1/a8`: about epoch `23/23`.
+- Tool-Hang PTP `a1/a8`: about epoch `19/20`.
+- Transport PTP `a1/a8`: about epoch `9/9`.
 
 ## Session 117
 - User asked to continue on the task branch with four-task smoke and experiment preparation, using all assigned GPUs.
