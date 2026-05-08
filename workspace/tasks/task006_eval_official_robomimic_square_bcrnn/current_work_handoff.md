@@ -1,6 +1,6 @@
 # Current Work Handoff
 
-<!-- METADATA:SESSION=21 -->
+<!-- METADATA:SESSION=23 -->
 
 ## Purpose
 
@@ -194,3 +194,13 @@ The comparison report should explicitly separate:
 - Check whether `16139` DP no-hist runs reached epoch 1000 and gather their scheduled rollout metrics/videos.
 - If the future py39 / robomimic 0.2.0 H200 environment is available, start with the smoke tests above before launching long retraining jobs.
 - Keep all new outputs under the task-owned `/mnt/3fs2/data/tingwen.du/intern_method_developer/task006_eval_official_robomimic_square_bcrnn` tree.
+
+## Latest Live Check: Session 23
+
+Checked at 2026-05-08 14:40 UTC.
+
+- DP on `10.100.16.46:16139`: four main PIDs `172304/172310/176077/176083` alive. GPU0 was `26926/143771 MiB` at `94%`; GPU1 was `27060/143771 MiB` at `50%`.
+- DP status: UNet LDP-MH current epoch 70 with best rollout `0.06`; DiT LDP-MH current epoch 75 with best rollout `0.04`; UNet official-PH current epoch 178 with best rollout `0.68`; DiT official-PH current epoch 201 with best rollout `0.60`.
+- SmolVLA on `10.100.16.46:23989`: main PIDs `27745/27774/27801/27816` and monitor PID `62177` alive. GPU0 was `3431/143771 MiB` at `85%`; GPU1 was `3435/143771 MiB` at `87%`.
+- SmolVLA status: official-PH big384 train epoch 852, eval epoch 800 MSE `0.1650568545`; official-PH small train epoch 875, eval epoch 800 MSE `0.1664465666`; PTP/LDP-MH big384 train epoch 330, eval epoch 300 MSE `0.1338918209`; PTP/LDP-MH small train epoch 330, eval epoch 300 MSE `0.1217582300`.
+- SmolVLA rollout monitor remains in the waiting phase because `epoch_1000.pt` count is `0/4`; the post-training rollout report has not been generated.

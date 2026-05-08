@@ -1,6 +1,6 @@
 # History Log
 
-<!-- METADATA:SESSION=22 -->
+<!-- METADATA:SESSION=23 -->
 
 ## Session 0
 - Created task for no-training evaluation of the official robomimic v0.1 Square(PH) low-dimensional BC-RNN checkpoint.
@@ -143,3 +143,11 @@
 - Fetched `origin/main` and searched for the newly added Python 3.9 H200 virtual-environment documentation without switching away from the task branch.
 - Found the document at `workspace/shared/ldp_ptp_py39_h200_environment.md` in `origin/main` commit `968f3ca` (`[intern_ldp_explorer] Add shared PTP py39 H200 env doc`).
 - Key recorded details: ready environment `root@10.100.0.29 -p 36645`, venv `/root/ptp_ldp_py39`, Python `3.9.25`, robomimic `0.2.0`, robosuite source version `1.2.0`, torch `2.5.1`, and training branch `intern_ldp_explorer/task001_ptp_py39_rerun`.
+
+## Session 23
+- Checked active DP and SmolVLA services on 2026-05-08 14:40 UTC. Both SSH entries were reachable.
+- `10.100.16.46:16139` DP GPUs were active: GPU0 `26926/143771 MiB` at `94%`, GPU1 `27060/143771 MiB` at `50%`; the four main DP PIDs `172304/172310/176077/176083` remained alive.
+- Latest DP parsed status: UNet LDP-MH current epoch 70, last/best rollout `0.06/0.06`; DiT LDP-MH current epoch 75, last/best rollout `0.04/0.04`; UNet official-PH current epoch 178, last rollout `0.62`, best `0.68` at epoch 90; DiT official-PH current epoch 201, last rollout `0.56` at epoch 200, best `0.60` at epoch 70.
+- `10.100.16.46:23989` SmolVLA GPUs were active: GPU0 `3431/143771 MiB` at `85%`, GPU1 `3435/143771 MiB` at `87%`; main PIDs `27745/27774/27801/27816` and monitor PID `62177` remained alive.
+- Latest SmolVLA parsed status: official-PH big384 train epoch 852 and eval epoch 800 MSE `0.1650568545`; official-PH small train epoch 875 and eval epoch 800 MSE `0.1664465666`; PTP/LDP-MH big384 train epoch 330 and eval epoch 300 MSE `0.1338918209`; PTP/LDP-MH small train epoch 330 and eval epoch 300 MSE `0.1217582300`.
+- SmolVLA post-training rollout has not started: all four `epoch_1000.pt` files are still absent, monitor `62177` is waiting, and the final report file has not been generated.
