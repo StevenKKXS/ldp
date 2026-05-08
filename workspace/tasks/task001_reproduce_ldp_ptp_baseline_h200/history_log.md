@@ -1,6 +1,48 @@
 # History Log
 
-<!-- METADATA:SESSION=101 -->
+<!-- METADATA:SESSION=102 -->
+
+## Session 102
+- User asked to return to the main line and report current progress.
+- Checked effective stamp `1778075154`.
+- Sample time: `2026-05-08T07:33:45Z`.
+- PTP queue on `10.100.0.29:30103`:
+- GPU0: `2842 / 143771 MiB`, utilization `32%`
+- GPU1: `7291 / 143771 MiB`, utilization `41%`
+- GPU2: `10815 / 143771 MiB`, utilization `97%`
+- GPU3: `2840 / 143771 MiB`, utilization `38%`
+- PTP status:
+- Square PTP `a8`: complete, last epoch `1999`, latest score `0.38`, best score `0.45` at epoch `599`, no traceback
+- Square PTP `a1`: running, last epoch `799`, latest score `0.27`, best score `0.28` at epoch `599`, no traceback
+- Tool-Hang PTP `a8`: running, last epoch `1591`, latest/best score `0.0`, no traceback
+- Tool-Hang PTP `a1`: running, last epoch `599`, latest/best score `0.0`, no traceback
+- Transport PTP `a8`: running, last epoch `690`, latest/best score `0.01` at epoch `599`, no traceback
+- Transport PTP `a1`: running, last epoch `299`, latest/best score `0.0`, no traceback
+- LongSquare PTP `a8`: complete, last epoch `1999`, latest/best score `0.0`, no traceback
+- LongSquare PTP `a1`: running, last epoch `1082`, latest/best score `0.0`, no traceback
+- DP queue on `10.100.0.29:36645`:
+- GPU0: `16623 / 143771 MiB`, utilization `100%`
+- GPU1: `10122 / 143771 MiB`, utilization `98%`
+- GPU2: `1 / 143771 MiB`, utilization `0%`
+- GPU3: `1 / 143771 MiB`, utilization `0%`
+- DP status:
+- Square DP `a8`: running, last epoch `2499`, latest score `0.01`, best score `0.08` at epoch `1299`, no traceback
+- Square DP `a1`: running, last epoch `857`, latest score `0.0`, best score `0.02` at epoch `699`, no traceback
+- Tool-Hang DP `a8`: running, last epoch `2246`, latest/best score `0.0`, no traceback
+- Tool-Hang DP `a1`: running, last epoch `699`, latest/best score `0.0`, no traceback
+- Transport DP `a8`: running, last epoch `858`, latest/best score `0.0`, no traceback
+- Transport DP `a1`: running, last epoch `299`, latest/best score `0.0`, no traceback
+- LongSquare DP `a8`: complete, last epoch `1999`, latest/best score `0.0`, no traceback
+- LongSquare DP `a1`: running, last epoch `1299`, latest/best score `0.0`, no traceback
+- Important changes since Session 100:
+- Transport PTP `a8` now has the first nonzero checkpoint rollout signal: `0.01` at epoch `599`.
+- Square PTP `a8` has completed the 2000-epoch target cleanly with best `0.45`.
+- LongSquare PTP `a8` has completed the 2000-epoch target but remains `0.0`.
+- Square DP `a8` and Tool-Hang DP `a8` are running beyond the intended 2000-epoch target; these should be stopped or excluded from clean 2000-epoch reporting unless the user explicitly wants continued over-target training.
+- Current interpretation:
+- Main queues are alive and producing checkpoints / scores without tracebacks.
+- The useful nonzero signals remain concentrated in Square, with a small new Transport PTP `a8` signal.
+- Tool-Hang and LongSquare are still failing at the rollout-success level under the current environment/data/eval stack.
 
 ## Session 101
 - User asked how plugin hooks are triggered, and whether directly opening Codex in the same workspace without the plugin would carry the default hooks.

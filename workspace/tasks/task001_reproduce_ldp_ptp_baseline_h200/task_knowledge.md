@@ -1,6 +1,27 @@
 # Task Knowledge
 
-<!-- METADATA:SESSION=101 -->
+<!-- METADATA:SESSION=102 -->
+
+## Session 102 Knowledge
+- Main experiment stamp remains `1778075154`.
+- Current PTP queue lives on `10.100.0.29:30103`; current DP resume queue lives on `10.100.0.29:36645`.
+- Current nonzero best training-rollout checkpoint scores:
+- Square PTP `a8`: `0.45` at epoch `599`
+- Square PTP `a1`: `0.28` at epoch `599`
+- Square DP `a8`: `0.08` at epoch `1299`
+- Square DP `a1`: `0.02` at epoch `699`
+- Transport PTP `a8`: `0.01` at epoch `599`
+- All Tool-Hang runs remain `0.0`.
+- All LongSquare runs remain `0.0`.
+- Transport DP `a8/a1` and Transport PTP `a1` remain `0.0`.
+- Completed 2000-epoch runs observed:
+- Square PTP `a8`
+- LongSquare PTP `a8`
+- LongSquare DP `a8`
+- Over-target anomaly to control:
+- Square DP `a8` was observed still running at epoch `2499`.
+- Tool-Hang DP `a8` was observed still running at epoch `2246`.
+- These over-target processes should not be used as clean 2000-epoch results without explicit labeling.
 
 ## Session 101 Knowledge
 - Codex hooks in this workspace are configured by `/work-agents/intern_ldp_explorer/.codex/config.toml`, which symlinks to `/work-agents/.github/codex_settings.toml`.
