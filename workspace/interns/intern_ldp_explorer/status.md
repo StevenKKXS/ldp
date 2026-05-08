@@ -8,5 +8,5 @@
 | Status | Working |
 | Current Task | task001_reproduce_ldp_ptp_baseline_h200 |
 | PR | https://github.com/StevenKKXS/ldp/pull/new/intern_ldp_explorer/task001_reproduce_ldp_ptp_baseline_h200 |
-| Session | 100 |
-| Recent Progress | Summarized current best training-rollout checkpoint scores for all 16 active 4x2x2 runs under stamp `1778075154` at `2026-05-08T03:01:26Z`. Nonzero bests are only Square: PTP `a8` best `0.45` at epoch `599`, PTP `a1` best `0.28` at epoch `599`, DP `a8` best `0.08` at epoch `1299`, DP `a1` best `0.02` at epoch `699`. Tool-Hang, Transport, and LongSquare remain `0.0` across DP/PTP and action horizons in training rollout checkpoint scores. |
+| Session | 101 |
+| Recent Progress | Answered how Codex hooks are triggered in this workspace. Confirmed `/work-agents/intern_ldp_explorer/.codex/config.toml` is a symlink to `/work-agents/.github/codex_settings.toml`, which enables `codex_hooks=true`; hooks run on Codex events only when that config is loaded. The intern-specific behavior still needs intern binding through `INTERN_DIR` or session mapping / pending intern state, so directly opening Codex in the same working tree may load hook definitions but does not necessarily inject intern instructions or enforce checklist validation. |

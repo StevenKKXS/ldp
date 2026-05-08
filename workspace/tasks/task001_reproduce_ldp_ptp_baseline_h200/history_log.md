@@ -1,6 +1,34 @@
 # History Log
 
-<!-- METADATA:SESSION=100 -->
+<!-- METADATA:SESSION=101 -->
+
+## Session 101
+- User asked how plugin hooks are triggered, and whether directly opening Codex in the same workspace without the plugin would carry the default hooks.
+- Checked local hook configuration:
+- `/work-agents/intern_ldp_explorer/.codex/config.toml` is a symlink to `/work-agents/.github/codex_settings.toml`.
+- The config enables `[features] codex_hooks = true`.
+- Hook events configured for Codex:
+- `SessionStart`
+- `UserPromptSubmit`
+- `PreToolUse`
+- `PostToolUse`
+- `Stop`
+- `PreToolUse` with matcher `spawn_agent` is used as a Codex-compatible SubagentStart equivalent.
+- `PostToolUse` with matcher `wait` is used as a Codex-compatible SubagentStop equivalent.
+- The config comments note that Codex's hook system supports six event names and that project config only loads after the project is trusted in `~/.codex/config.toml`.
+- Checked local trust config:
+- `~/.codex/config.toml` marks `/work-agents` and `/work-agents/intern_ldp_explorer` as trusted.
+- Checked hook binding logic:
+- `get_intern_dir()` first uses `INTERN_DIR` if set.
+- if `INTERN_DIR` is absent, it falls back to a `session_id` mapping in `/work-agents/.intern_sessions.json`.
+- `SessionStart` can create the session mapping from `/work-agents/.pending_intern`, which is written by the plugin / start helper path.
+- Without `INTERN_DIR`, a session mapping, or pending intern state, hooks can load but intern-specific modules silently pass because no intern is bound.
+- Practical answer:
+- opening Codex directly inside `/work-agents/intern_ldp_explorer` can load hook definitions if Codex sees the trusted project config
+- it will not necessarily get full intern behavior unless the session is bound to this intern
+- launching through plugin / intern start helper is the reliable path because it prepares trust, pending/session binding, and the per-turn injected intern context
+- directly opening Codex can behave like an intern session if the shell provides `INTERN_DIR=/work-agents/intern_ldp_explorer` and the project repo/state are valid
+- same code workspace alone is not enough to guarantee default intern hooks, injected rules, or stop-hook checklist validation
 
 ## Session 100
 - User asked for the current best result of each model.

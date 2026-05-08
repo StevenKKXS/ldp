@@ -1,6 +1,16 @@
 # Task Knowledge
 
-<!-- METADATA:SESSION=100 -->
+<!-- METADATA:SESSION=101 -->
+
+## Session 101 Knowledge
+- Codex hooks in this workspace are configured by `/work-agents/intern_ldp_explorer/.codex/config.toml`, which symlinks to `/work-agents/.github/codex_settings.toml`.
+- Hook definitions load only if Codex loads that project config; local `~/.codex/config.toml` currently trusts `/work-agents` and `/work-agents/intern_ldp_explorer`.
+- Intern-specific hook behavior requires binding:
+- preferred: `INTERN_DIR=/work-agents/intern_ldp_explorer`
+- fallback: `session_id` mapped in `/work-agents/.intern_sessions.json`
+- first-launch path: `/work-agents/.pending_intern` consumed by `SessionStart`
+- Same workspace path alone does not guarantee intern prompt injection or stop-hook checklist validation.
+- Direct Codex launch can use hooks if config is loaded and the intern is bound; plugin / intern start helper is the reliable launch path because it prepares both.
 
 ## Session 100 Knowledge
 - Current best training-rollout checkpoint scores under stamp `1778075154` as of `2026-05-08T03:01:26Z`:
