@@ -1,6 +1,6 @@
 # History Log
 
-<!-- METADATA:SESSION=28 -->
+<!-- METADATA:SESSION=29 -->
 
 ## Session 0
 - Created task for no-training evaluation of the official robomimic v0.1 Square(PH) low-dimensional BC-RNN checkpoint.
@@ -187,3 +187,10 @@
 - Current four-way SmolVLA retraining has not produced rollout success yet: official-PH small/big384 have `epoch_1000.pt`, PTP/LDP-MH small/big384 are still training, and the monitor still has `epoch_1000.pt` count `2/4`.
 - Existing completed SmolVLA 50-rollout results remain: big384 LDP-MH `13/50 = 0.26`, small LDP-MH `9/50 = 0.18`, official-PH v1.4.1 `7/50 = 0.14`.
 - BC-RNN references remain strongest: issue #157 image BC-RNN best `40/50 = 0.80`, final epoch 600 `27/50 = 0.54`, and official low-dimensional BC-RNN current-stack eval `33/50 = 0.66`.
+
+## Session 29
+- Checked new GPU entries `10.100.2.35:26482` and `10.100.2.35:17821` at 2026-05-08 15:15 UTC.
+- Both entries report hostname `lg-cmc-b7r201-e02u16-h200-000098`, `/mnt/3fs2` mounted as `hf3fs.stage` with about `95T` available, and Python `3.12.3` as the default `python3`.
+- `26482` exposes two idle NVIDIA H200 GPUs with UUIDs `GPU-0f93a8e1-85e6-0aa7-ba90-722f065f400d` and `GPU-647764ca-6cce-f874-0d24-8084f34f737d`.
+- `17821` exposes two different idle NVIDIA H200 GPUs with UUIDs `GPU-2ffe5642-ef96-225a-e82a-761c8f14d70b` and `GPU-e2fd77e4-ed9f-e2f3-4293-a623ed9af6bf`, so the two SSH ports appear to provide four distinct H200 GPUs total.
+- Neither new entry currently has `/root/ptp_ldp_py39` or `/root/.mujoco/mujoco210`; the py39 + robomimic 0.2.0 setup should follow the shared document `workspace/shared/ldp_ptp_py39_h200_environment.md` from `origin/main` commit `968f3ca`.
