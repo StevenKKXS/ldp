@@ -1,6 +1,6 @@
 # Task Knowledge
 
-<!-- METADATA:SESSION=21 -->
+<!-- METADATA:SESSION=22 -->
 
 ## Working Rules
 - The task expanded from no-training BC-RNN evaluation to include issue #157 retraining checks and SmolVLA resource-utilization training runs.
@@ -63,3 +63,4 @@
 - Session 20 DP parsed status: UNet LDP-MH epoch 63 best rollout `0.06`; UNet official-PH v1.4.1 epoch 153 best rollout `0.68`; DiT LDP-MH epoch 69 best rollout `0.04`; DiT official-PH v1.4.1 epoch 183 best rollout `0.60`.
 - Durable handoff record: `workspace/tasks/task006_eval_official_robomimic_square_bcrnn/current_work_handoff.md`. It records active GPU entries, live process IDs, run/log/video/report paths, datasets, completed reference results, and the py39 + robomimic 0.2.0 H200 migration plan.
 - Future H200 py39 + robomimic 0.2.0 migration procedure: first verify Python, robomimic, robosuite, torch/CUDA, MuJoCo rendering, and `/mnt/3fs2` write scope; then run dataset/env/video smoke tests; then test loading one checkpoint from BC-RNN, SmolVLA, and DP; then reproduce the current SmolVLA four-way, DP no-hist four-way, and BC-RNN reference evaluations with the same checkpoint/eval schedule.
+- Shared py39 H200 environment doc on `origin/main`: `workspace/shared/ldp_ptp_py39_h200_environment.md`, added by commit `968f3ca`. It documents ready host `10.100.0.29:36645`, venv `/root/ptp_ldp_py39`, Python `3.9.25`, robomimic `0.2.0`, robosuite `cheng-chi/robosuite@277ab9588ad7a4f4b55cf75508b44aa67ec171f0` source version `1.2.0`, torch `2.5.1`, MuJoCo 2.1.0 for `mujoco-py`, and training branch `intern_ldp_explorer/task001_ptp_py39_rerun`.

@@ -1,6 +1,6 @@
 # History Log
 
-<!-- METADATA:SESSION=21 -->
+<!-- METADATA:SESSION=22 -->
 
 ## Session 0
 - Created task for no-training evaluation of the official robomimic v0.1 Square(PH) low-dimensional BC-RNN checkpoint.
@@ -138,3 +138,8 @@
 - Added `current_work_handoff.md` as a durable task handoff for the active Square work.
 - Recorded the two active H200 GPU entries, live process IDs, SmolVLA and DP run roots, log roots, planned rollout output roots, data versions, and completed reference results.
 - Documented the migration plan for the future H200 Python 3.9 + robomimic 0.2.0 environment: environment checks, dataset/rendering smoke tests, checkpoint load tests, full SmolVLA/DP/BC-RNN reproduction matrix, and final comparison dimensions.
+
+## Session 22
+- Fetched `origin/main` and searched for the newly added Python 3.9 H200 virtual-environment documentation without switching away from the task branch.
+- Found the document at `workspace/shared/ldp_ptp_py39_h200_environment.md` in `origin/main` commit `968f3ca` (`[intern_ldp_explorer] Add shared PTP py39 H200 env doc`).
+- Key recorded details: ready environment `root@10.100.0.29 -p 36645`, venv `/root/ptp_ldp_py39`, Python `3.9.25`, robomimic `0.2.0`, robosuite source version `1.2.0`, torch `2.5.1`, and training branch `intern_ldp_explorer/task001_ptp_py39_rerun`.
