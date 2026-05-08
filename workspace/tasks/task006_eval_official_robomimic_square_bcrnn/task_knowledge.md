@@ -1,6 +1,6 @@
 # Task Knowledge
 
-<!-- METADATA:SESSION=27 -->
+<!-- METADATA:SESSION=28 -->
 
 ## Working Rules
 - The task expanded from no-training BC-RNN evaluation to include issue #157 retraining checks and SmolVLA resource-utilization training runs.
@@ -70,3 +70,4 @@
 - DP 20-rollout speed estimate: reducing scheduled eval from 50 rollout / 50 video to 20 rollout / 20 video mostly helps before epoch 100, when eval happens every 10 epochs. Estimated early-stage speedup is about `40-45%` for official-PH and `20-30%` for LDP-MH. After epoch 100, eval happens every 100 epochs, so the overall speedup is small, about `2-6%`.
 - DP completion ETA as of 2026-05-08 15:03 UTC: official-PH runs are expected to finish around 2026-05-09 05:40-06:20 UTC based on the measured `100->200` interval. LDP-MH runs are the bottleneck; expected completion is 2026-05-10 night to 2026-05-11 morning UTC, with a conservative current-average extrapolation near 2026-05-11 13:00 UTC.
 - SmolVLA completion ETA as of 2026-05-08 15:07 UTC: official-PH small/big384 are complete at epoch 1000; PTP/LDP-MH small/big384 are around epoch 421 and run at about `30 min / 100 epoch`, so training should finish around 2026-05-08 18:00 UTC. The post-train rollout/report phase is estimated at `50-60 min`, making the full report ETA about 2026-05-08 19:00 UTC.
+- Current rollout ranking as of Session 28: issue #157 image BC-RNN best `0.80` > official low-dimensional BC-RNN current-stack eval `0.66` / DP UNet official-PH best `0.68` > DP DiT official-PH best `0.60` > completed SmolVLA big384 LDP-MH best-50 `0.26` > completed SmolVLA small LDP-MH `0.18` > completed SmolVLA official-PH `0.14` > current DP LDP-MH runs `0.04-0.06`. Current four-way SmolVLA retraining has no rollout success yet because the monitor is waiting for all four `epoch_1000.pt` files.

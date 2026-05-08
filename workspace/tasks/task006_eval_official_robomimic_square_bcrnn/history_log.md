@@ -1,6 +1,6 @@
 # History Log
 
-<!-- METADATA:SESSION=27 -->
+<!-- METADATA:SESSION=28 -->
 
 ## Session 0
 - Created task for no-training evaluation of the official robomimic v0.1 Square(PH) low-dimensional BC-RNN checkpoint.
@@ -180,3 +180,10 @@
 - Recent PTP/LDP-MH SmolVLA rate is about `30 min / 100 epoch`; with about 579 epochs remaining, training should finish around 2026-05-08 18:00 UTC if the current rate holds.
 - Historical SmolVLA rollout timing from this task: 1140 rollout videos took about `31.7 min`, and selected best 150 rollout videos took about `4.5 min`. The four-way post-train plan is about 1520 all-checkpoint rollouts plus 200 best-checkpoint rollouts, so rollout/report after training is estimated at `50-60 min`.
 - Overall SmolVLA report ETA is approximately 2026-05-08 19:00 UTC, with a practical range around 18:50-19:20 UTC if the monitor starts promptly after training.
+
+## Session 28
+- Summarized current closed-loop rollout success rates across the active and completed Square settings.
+- DP no-hist current scheduled rollout results: UNet official-PH best `0.68` at epoch 90, latest logged `0.62` at epoch 100; DiT official-PH best `0.60` at epoch 70, latest `0.56` at epoch 200; UNet LDP-MH best `0.06` at epoch 60, latest `0.00` at epoch 70; DiT LDP-MH best `0.04` at epoch 20, latest `0.00` at epoch 80.
+- Current four-way SmolVLA retraining has not produced rollout success yet: official-PH small/big384 have `epoch_1000.pt`, PTP/LDP-MH small/big384 are still training, and the monitor still has `epoch_1000.pt` count `2/4`.
+- Existing completed SmolVLA 50-rollout results remain: big384 LDP-MH `13/50 = 0.26`, small LDP-MH `9/50 = 0.18`, official-PH v1.4.1 `7/50 = 0.14`.
+- BC-RNN references remain strongest: issue #157 image BC-RNN best `40/50 = 0.80`, final epoch 600 `27/50 = 0.54`, and official low-dimensional BC-RNN current-stack eval `33/50 = 0.66`.

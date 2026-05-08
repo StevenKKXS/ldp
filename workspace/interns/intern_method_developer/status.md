@@ -8,7 +8,7 @@
 | Status | Working |
 | Current Task | task006_eval_official_robomimic_square_bcrnn |
 | PR | https://github.com/StevenKKXS/ldp/pull/new/intern_method_developer/task006_eval_official_robomimic_square_bcrnn |
-| Session | 27 |
+| Session | 28 |
 
 ## 最近进展
 - 当前可访问两个 GPU 入口：`10.100.16.46:16139` 和 `10.100.16.46:23989`，两边各自可见 2 张 NVIDIA H200。
@@ -21,3 +21,4 @@
 - Session 25 估算 DP 运行时长与 20-rollout 提速：当前四路已跑约 `5.6h`；20 rollout 主要提升前 100 epoch 的 eval-every-10 阶段，official-PH 约提速 `40-45%`，LDP-MH 约提速 `20-30%`，100 epoch 后因 eval 每 100 epoch 一次整体收益约 `2-6%`。
 - Session 26 估算 DP 完成时间：official-PH 两路预计 2026-05-09 05:40-06:20 UTC 完成；总完成时间由 LDP-MH 决定，预计 2026-05-10 夜间到 2026-05-11 上午 UTC，保守按当前均速可到 2026-05-11 13:00 UTC 左右。
 - Session 27 估算 SmolVLA 剩余时间：official-PH 两路已完成 epoch 1000，PTP/LDP-MH 两路约 epoch 421；训练预计 2026-05-08 18:00 UTC 左右完成，自动 rollout/report 预计再需约 `50-60min`。
+- Session 28 汇总当前 rollout 成功率：DP official-PH 最好为 UNet `0.68`、DiT `0.60`，DP LDP-MH 仍低于 `0.06`；当前四路 SmolVLA 尚无 rollout，既有 SmolVLA 50-rollout 最好为 big384 LDP-MH `0.26`，BC-RNN issue157 最好 `0.80`。
