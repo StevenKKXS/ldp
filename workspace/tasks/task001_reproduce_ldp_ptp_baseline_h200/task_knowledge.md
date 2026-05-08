@@ -1,6 +1,24 @@
 # Task Knowledge
 
-<!-- METADATA:SESSION=105 -->
+<!-- METADATA:SESSION=106 -->
+
+## Session 106 Knowledge
+- Reason the active setup used `robomimic 0.3.0` / `robosuite 1.4.1` / `mujoco 3.8.0`:
+- it came from `setup_gpu_machine.sh`, a helper aimed at H200 NGC containers with Python 3.12 and the internal pip mirror
+- the helper comments state `robomimic 0.3` was the internal mirror upper-bound version
+- the helper comments pair `robosuite 1.4.1` with `robomimic 0.3`, and avoid `robosuite 1.5` because controller API behavior changed and `OSC_POSE` was not recognized
+- the helper comments use `mujoco 3.8` as the robosuite 1.4 upper bound
+- the helper applies compatibility patches for old `mujoco_py` hard imports, `CropRandomizer` import movement, and Python 3.12 `gym` behavior
+- Important limitation:
+- no history entry was found showing that the upstream pinned stack was attempted and failed before choosing this active stack
+- the best interpretation is operational convenience / compatibility for current H200 containers, not evidence that the repository-suggested stack is invalid
+- Upstream faithful stack remains:
+- `robomimic==0.2.0`
+- `cheng-chi/robosuite@277ab9588ad7a4f4b55cf75508b44aa67ec171f0`, source version `1.2.0`
+- `mujoco==2.3.7`
+- `mujoco-py==2.1.2.14`
+- Reproduction risk:
+- the active stack mismatch is a plausible confound for low or zero Tool-Hang / Transport success and should be isolated as a separate environment/version experiment.
 
 ## Session 105 Knowledge
 - Robosuite version inference for upstream PTP/LDP:

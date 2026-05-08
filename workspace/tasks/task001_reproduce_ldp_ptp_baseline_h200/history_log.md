@@ -1,6 +1,27 @@
 # History Log
 
-<!-- METADATA:SESSION=105 -->
+<!-- METADATA:SESSION=106 -->
+
+## Session 106
+- User asked why the active setup had been configured with `robomimic 0.3.0` and `robosuite 1.4.1`, whether the reason could be found in history, and why the repository-suggested versions were not used.
+- Checked the earlier setup sessions and setup-script rationale already recorded in project history.
+- Historical findings:
+- Session 47 recorded read-only inspection of `setup_gpu_machine.sh`; it configured `/root/venv` on Python 3.12 with internal pip mirror, GL/EGL/OSMesa system packages, `torch 2.5.1`, `mujoco 3.8.0`, `robosuite 1.4.1`, `robomimic 0.3.0`, `diffusers 0.30.0`, `zarr 2.18.7`, and `gym 0.25.2`
+- Session 48 and Session 59 recorded executing that setup on H200 GPU containers and validating imports / smoke coverage for RoboMimic and LongSquare runners
+- Session 38 recorded an ALOHA-related incompatibility when trying repo-declared `dm-control==1.0.14` with current `mujoco==3.8.0`, so the guidance then was not to downgrade or mix MuJoCo stacks in the active RoboMimic venv
+- The setup helper rationale recorded:
+- it targets new H200 NGC containers with Python 3.12 and an internal pip mirror
+- `robomimic 0.3` was selected as the internal mirror upper-bound version
+- `robosuite 1.4.1` was selected as the matching stack for `robomimic 0.3`; the note says `robosuite 1.5` changed controller API behavior and did not recognize `OSC_POSE`
+- `mujoco 3.8` was selected as the upper bound supported by robosuite 1.4 in that setup
+- patches were applied for `robomimic 0.3` hard-importing `mujoco_py`, moved `CropRandomizer`, and Python 3.12 `gym` deepcopy behavior
+- Compared with later version-provenance sessions:
+- Session 104/105 confirmed the upstream LDP environment pins are `robomimic==0.2.0`, `cheng-chi/robosuite@277ab9588ad7a4f4b55cf75508b44aa67ec171f0`, `mujoco==2.3.7`, and `mujoco-py==2.1.2.14`
+- The pinned robosuite commit declares package version `1.2.0` and is an offline-study-era commit, not `robosuite 1.4.1`
+- Interpretation:
+- history does not show a documented attempt where the upstream pinned stack was built, failed, and was deliberately replaced
+- instead, the active stack came from a pragmatic helper for H200/Python 3.12/internal-mirror constraints and was accepted because it passed RoboMimic import / smoke checks
+- in hindsight this is a real reproduction confound for Tool-Hang / Transport and should be treated separately from a faithful upstream-version isolation run
 
 ## Session 105
 - User asked about the robosuite version inference.

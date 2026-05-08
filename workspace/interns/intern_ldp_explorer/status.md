@@ -8,5 +8,5 @@
 | Status | Working |
 | Current Task | task001_reproduce_ldp_ptp_baseline_h200 |
 | PR | https://github.com/StevenKKXS/ldp/pull/new/intern_ldp_explorer/task001_reproduce_ldp_ptp_baseline_h200 |
-| Session | 105 |
-| Recent Progress | Checked the robosuite side of the version inference. The upstream LDP / Diffusion Policy environment pins `cheng-chi/robosuite@277ab9588ad7a4f4b55cf75508b44aa67ec171f0`, not a PyPI `robosuite==...` release. That pinned source declares `__version__ = "1.2.0"` and `setup.py` version `1.2.0`; GitHub compare shows the pinned commit is on the `offline_study` lineage and the `offline_study` branch is two commits ahead of it. Therefore the prior robosuite inference is best stated as `cheng-chi/robosuite` offline-study-era commit with source version `1.2.0`, not current `robosuite 1.4.1`. |
+| Session | 106 |
+| Recent Progress | Checked why the active setup used `robomimic 0.3.0`, `robosuite 1.4.1`, and `mujoco 3.8.0` instead of the upstream LDP pins. History shows this was an operational H200/Python 3.12/internal-mirror setup choice: the helper script records `robomimic 0.3` as the internal mirror upper bound, `robosuite 1.4.1` as the matching stack for robomimic 0.3, `mujoco 3.8` as the robosuite 1.4 upper bound, and patches away old `mujoco_py` import issues. I did not find a record proving the upstream `robomimic==0.2.0` + pinned `cheng-chi/robosuite@277ab9588...` stack was attempted and failed. |
