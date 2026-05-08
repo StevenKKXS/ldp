@@ -1,6 +1,30 @@
 # History Log
 
-<!-- METADATA:SESSION=118 -->
+<!-- METADATA:SESSION=119 -->
+
+## Session 119
+- User asked whether the previous scheduling strategy was to run multiple tasks per GPU because a single task did not fill GPU utility.
+- Reviewed prior task records and launch scripts.
+- Confirmed the user's memory is correct for the earlier `session89_4x2x2_2000ep` strategy:
+- Session 89 launcher created 8 lanes on one 4-GPU node.
+- Each task used one GPU, with both `a8` and `a1` lanes on the same GPU:
+- GPU0: Square `a8` + Square `a1`.
+- GPU1: Tool-Hang `a8` + Tool-Hang `a1`.
+- GPU2: Transport `a8` + Transport `a1`.
+- GPU3: LongSquare `a8` + LongSquare `a1`.
+- Session 91 sampled this arrangement with both lanes live per GPU and utilization around `63%` to `99%`.
+- Session 97 also packed resumed DP jobs more aggressively:
+- GPU0 had Square DP `a8/a1` plus Transport DP `a8/a1`.
+- GPU1 had Tool-Hang DP `a8/a1` plus LongSquare DP `a1`.
+- GPU2/GPU3 were left free after that resume launch.
+- Compared this with the current Session 117 PTP py39 rerun:
+- `36645` runs only the `a8` lanes, one top-level PTP run per GPU.
+- `30103` runs only the `a1` lanes, one top-level PTP run per GPU.
+- Current sampled H200 memory use is low for most tasks, roughly `1.6GB` for Square/Tool-Hang/LongSquare and `3.9GB` for Transport, so the current placement is not maximizing per-card memory or utilization.
+- Interpretation:
+- The current Session 117 placement uses all 8 assigned cards but is conservative relative to the earlier per-GPU over-subscription strategy.
+- To match the earlier strategy on the PTP py39 rerun, the natural adjustment would be to run paired `a8+a1` lanes on the same GPU, or to launch DP concurrently on the same GPUs instead of waiting for the PTP lane to exit.
+- That adjustment would change scheduling and wall-clock behavior, so it should be treated as an explicit scheduling decision rather than silently modifying the active clean run.
 
 ## Session 118
 - User asked for current task progress.

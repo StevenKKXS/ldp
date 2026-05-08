@@ -8,5 +8,5 @@
 | Status | Working |
 | Current Task | task001_reproduce_ldp_ptp_baseline_h200 |
 | PR | https://github.com/StevenKKXS/ldp/pull/new/intern_ldp_explorer/task001_reproduce_ldp_ptp_baseline_h200 |
-| Session | 118 |
-| Recent Progress | Sampled active stamp `20260508_144657`: all 8 assigned H200 GPUs are occupied by the first PTP wave, runs are healthy with no sampled traceback, current epochs range from Transport around 9 to LongSquare around 42, and no epoch-100 rollout/checkpoint/mp4 has been produced yet. |
+| Session | 119 |
+| Recent Progress | Reviewed prior scheduling records: Session 89/91 used concurrent `a8+a1` lanes per task/GPU because one run did not fill the H200, while the current Session 117 PTP py39 rerun uses a more conservative one top-level lane per GPU across two 4-card hosts. |

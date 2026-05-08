@@ -1,6 +1,17 @@
 # Task Knowledge
 
-<!-- METADATA:SESSION=118 -->
+<!-- METADATA:SESSION=119 -->
+
+## Session 119 Knowledge
+- Earlier 4x2x2 scheduling was more aggressive than the current PTP py39 rerun:
+- Session 89/91 ran paired `a8+a1` lanes concurrently on the same GPU for each task.
+- Session 97 packed several resumed DP jobs onto two GPUs when other cards were free.
+- Current Session 117 PTP py39 rerun uses all 8 assigned H200s but only one top-level PTP run per GPU:
+- `36645`: `a8` lanes.
+- `30103`: `a1` lanes.
+- Current sampled memory use is low enough that one top-level run does not fill an H200 for most tasks.
+- Scheduling implication:
+- A faster throughput plan would explicitly over-subscribe each GPU with paired lanes or concurrent DP/PTP jobs, but that should be labeled as a scheduling change from the current conservative active run.
 
 ## Session 118 Knowledge
 - Current active experiment remains stamp `20260508_144657`.
