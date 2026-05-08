@@ -1,6 +1,6 @@
 # Task Knowledge
 
-<!-- METADATA:SESSION=12 -->
+<!-- METADATA:SESSION=13 -->
 
 ## Working Rules
 - The task expanded from no-training BC-RNN evaluation to include issue #157 retraining checks and SmolVLA resource-utilization training runs.
@@ -43,3 +43,4 @@
 - DP no-hist launch script: `workspace/tasks/task006_eval_official_robomimic_square_bcrnn/scripts/launch_dp_nohist_unet_dit_square.sh` starts four runs with `horizon=16`, `n_obs_steps=2`, `n_action_steps=1`, 1000 epochs, and 50-video test rollout evals on scheduled epochs.
 - DP no-hist early trend as of 2026-05-08 12:08 UTC: official-PH v1.4.1 is learning substantially faster than LDP-MH under the same `obs=2, act=1, horizon=16` protocol. UNet official-PH reached `0.66` at epoch 70 and DiT official-PH reached `0.60` at epoch 70; both LDP-MH runs are still at or below `0.04` through epoch 30.
 - SmolVLA data-source clarification: two SmolVLA runs used the intern_ldp_explorer / LDP-MH Square data (`ldp_mh_abs10_seed42`, `ldp_mh_abs10_big384_seed44`), while the official-PH SmolVLA run used the task-generated robosuite v1.4.1 file (`official_ph_v141_abs10_seed43`). The LDP-MH HDF5 has 300 demos / 80,731 steps and no explicit `env_version`; the official-PH v141 HDF5 has 200 demos / 30,154 steps and `env_version=1.4.1`.
+- Current GPU resource note as of 2026-05-08 12:35 UTC: the reachable execution resource is the 2x H200 host `10.100.16.46:16139`; both cards are actively used by DP no-hist experiments, but each has substantial memory headroom because the visible usage is about 27GB out of 143GB per card.

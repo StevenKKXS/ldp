@@ -8,7 +8,7 @@
 | Status | Working |
 | Current Task | task006_eval_official_robomimic_square_bcrnn |
 | PR | https://github.com/StevenKKXS/ldp/pull/new/intern_method_developer/task006_eval_official_robomimic_square_bcrnn |
-| Session | 12 |
+| Session | 13 |
 
 ## 最近进展
-- 已澄清 SmolVLA 数据来源：`ldp_mh_abs10_seed42` 和 `ldp_mh_abs10_big384_seed44` 用 intern_ldp_explorer/LDP-MH 数据；`official_ph_v141_abs10_seed43` 用本任务生成的 official-PH v1.4.1 数据。
+- 当前可访问 GPU 资源为 `10.100.16.46:16139` 上 2 张 NVIDIA H200 143GB；四个 DP no-hist 训练进程仍在占用两卡，每卡约 27GB 显存。

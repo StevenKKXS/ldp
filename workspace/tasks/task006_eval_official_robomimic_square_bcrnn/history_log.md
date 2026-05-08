@@ -1,6 +1,6 @@
 # History Log
 
-<!-- METADATA:SESSION=12 -->
+<!-- METADATA:SESSION=13 -->
 
 ## Session 0
 - Created task for no-training evaluation of the official robomimic v0.1 Square(PH) low-dimensional BC-RNN checkpoint.
@@ -81,3 +81,9 @@
 - `ldp_mh_abs10_seed42` and `ldp_mh_abs10_big384_seed44` used `/mnt/3fs2/data/tingwen.du/intern_method_developer/task003_formal_smolvla_square_train_eval/data/square_mh_image_abs.hdf5`, a 300-demo, 80,731-step LDP-MH copy from `intern_ldp_explorer`.
 - `official_ph_v141_abs10_seed43` used `/mnt/3fs2/data/tingwen.du/intern_method_developer/task006_eval_official_robomimic_square_bcrnn/data/square/ph/image_abs_v141.hdf5`, a 200-demo, 30,154-step official-PH v1.4.1 dataset generated in this task.
 - Metadata check: the official-PH file has `env_version=1.4.1`; the LDP-MH / intern_ldp_explorer files do not include an explicit `env_version` field in `env_args`.
+
+## Session 13
+- Checked accessible GPU resources on 2026-05-08 12:35 UTC.
+- Host `10.100.16.46:16139` is reachable and exposes two NVIDIA H200 GPUs with 143,771 MiB each.
+- Current usage: GPU0 uses 26,924 MiB and GPU1 uses 27,060 MiB. Four DP no-hist main processes are alive: `172304`, `172310`, `176077`, and `176083`.
+- Current experiment progress: UNet LDP-MH epoch 40, DiT LDP-MH epoch 43, UNet official-PH epoch 83, DiT official-PH epoch 99.
