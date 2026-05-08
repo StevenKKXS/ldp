@@ -1,6 +1,6 @@
 # History Log
 
-<!-- METADATA:SESSION=4 -->
+<!-- METADATA:SESSION=5 -->
 
 ## Session 0
 - Created task for no-training evaluation of the official robomimic v0.1 Square(PH) low-dimensional BC-RNN checkpoint.
@@ -33,3 +33,10 @@
 - Checked SmolVLA checkpoint frequency in `train_eval_smolvla_square_scheduled.py` and in the actual run directories.
 - Named SmolVLA epoch checkpoints are saved only on offline-eval epochs: `10,20,...,100,200,...,1000`.
 - `latest.pt` is overwritten on every checkpoint trigger, where the trigger is any offline-eval epoch or any epoch divisible by `checkpoint_every_epochs=25`; non-eval 25-epoch triggers are not retained as named `epoch_XXXX.pt` files.
+
+## Session 5
+- Added and pushed `rollout_smolvla_square_all_ckpts.py`, a batch Robosuite rollout runner that discovers all SmolVLA epoch checkpoints and splits work across multiple GPU workers.
+- Ran all 57 SmolVLA named checkpoints with 20 rollouts each, seeds `10000-10019`, horizon 400, action horizon 8, and video saving.
+- Completed 1140 SmolVLA rollout episodes and saved 1140 mp4 videos under `/mnt/3fs2/data/tingwen.du/intern_method_developer/task006_eval_official_robomimic_square_bcrnn/rollouts/smolvla_all_ckpts_20rollouts_20260508_0255`.
+- SmolVLA rollout bests: `ldp_mh_abs10_big384_seed44` epoch 1000 `6/20 = 0.30`; `ldp_mh_abs10_seed42` epoch 200 `5/20 = 0.25`; `official_ph_v141_abs10_seed43` epoch 600 `4/20 = 0.20`.
+- Video decode spot checks passed on sample videos from all three SmolVLA runs; the GPU host was idle again after the batch finished.

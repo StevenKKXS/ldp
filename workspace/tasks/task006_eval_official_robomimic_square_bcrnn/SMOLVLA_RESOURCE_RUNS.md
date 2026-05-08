@@ -48,4 +48,18 @@ Checked on 2026-05-08 02:28 UTC. Both H200 GPUs were idle and no training proces
 | `official_ph_v141_abs10_seed43` | 1000 | 0.1680839658 | 1000 | 0.1680839658 | present |
 | `ldp_mh_abs10_big384_seed44` | 1000 | 0.1530992389 | 1000 | 0.1530992389 | present |
 
-These are offline action metrics only; robosuite rollout success still needs to be run from selected checkpoints.
+## All-Checkpoint Rollout
+
+Completed on 2026-05-08 under:
+
+`/mnt/3fs2/data/tingwen.du/intern_method_developer/task006_eval_official_robomimic_square_bcrnn/rollouts/smolvla_all_ckpts_20rollouts_20260508_0255`
+
+Each named checkpoint was evaluated with 20 Robosuite Square rollouts, seeds `10000-10019`, horizon 400, action horizon 8, and saved per-episode videos.
+
+| Run | Checkpoints | Rollouts | Best epoch | Best success | Final epoch success | Videos |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| `ldp_mh_abs10_seed42` | 19 | 380 | 200 | 5/20 = 0.25 | 3/20 = 0.15 | 380 |
+| `official_ph_v141_abs10_seed43` | 19 | 380 | 600 | 4/20 = 0.20 | 1/20 = 0.05 | 380 |
+| `ldp_mh_abs10_big384_seed44` | 19 | 380 | 1000 | 6/20 = 0.30 | 6/20 = 0.30 | 380 |
+
+Detailed per-epoch results are recorded in `SMOLVLA_ALL_CKPT_ROLLOUT_RESULTS.md` and in the output root's `SUMMARY.md`, `summary.csv`, `summary.json`, and `summary.jsonl`.
