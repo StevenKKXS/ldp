@@ -8,7 +8,7 @@
 | Status | Working |
 | Current Task | task006_eval_official_robomimic_square_bcrnn |
 | PR | https://github.com/StevenKKXS/ldp/pull/new/intern_method_developer/task006_eval_official_robomimic_square_bcrnn |
-| Session | 26 |
+| Session | 27 |
 
 ## 最近进展
 - 当前可访问两个 GPU 入口：`10.100.16.46:16139` 和 `10.100.16.46:23989`，两边各自可见 2 张 NVIDIA H200。
@@ -20,3 +20,4 @@
 - Session 24 分析 DP 比 SmolVLA 慢的主因：DP 将 50-rollout、50-video、`num_inference_steps=100`、`n_action_steps=1` 的闭环评估嵌入训练，且 batch size 64 导致每 epoch optimizer steps 约为 SmolVLA 的两倍；SmolVLA 当前只做离线 eval。
 - Session 25 估算 DP 运行时长与 20-rollout 提速：当前四路已跑约 `5.6h`；20 rollout 主要提升前 100 epoch 的 eval-every-10 阶段，official-PH 约提速 `40-45%`，LDP-MH 约提速 `20-30%`，100 epoch 后因 eval 每 100 epoch 一次整体收益约 `2-6%`。
 - Session 26 估算 DP 完成时间：official-PH 两路预计 2026-05-09 05:40-06:20 UTC 完成；总完成时间由 LDP-MH 决定，预计 2026-05-10 夜间到 2026-05-11 上午 UTC，保守按当前均速可到 2026-05-11 13:00 UTC 左右。
+- Session 27 估算 SmolVLA 剩余时间：official-PH 两路已完成 epoch 1000，PTP/LDP-MH 两路约 epoch 421；训练预计 2026-05-08 18:00 UTC 左右完成，自动 rollout/report 预计再需约 `50-60min`。

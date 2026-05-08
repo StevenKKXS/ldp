@@ -1,6 +1,6 @@
 # History Log
 
-<!-- METADATA:SESSION=26 -->
+<!-- METADATA:SESSION=27 -->
 
 ## Session 0
 - Created task for no-training evaluation of the official robomimic v0.1 Square(PH) low-dimensional BC-RNN checkpoint.
@@ -172,3 +172,11 @@
 - The official-PH late interval measured from DiT official-PH epoch 100 to 200 was `113 min / 100 epoch`; using that rate, DiT official-PH should finish around 2026-05-09 05:40 UTC, and UNet official-PH around 2026-05-09 06:10 UTC.
 - LDP-MH has not crossed epoch 100 yet, so its late-stage rate is estimated from current early-stage checkpoint intervals plus the reduced eval frequency after epoch 100. Expected finish range for LDP-MH is 2026-05-10 night to 2026-05-11 morning UTC; a conservative current-average extrapolation puts UNet LDP-MH near 2026-05-11 13:00 UTC.
 - Overall DP matrix completion is bottlenecked by the LDP-MH runs, not the official-PH runs.
+
+## Session 27
+- Rechecked SmolVLA at 2026-05-08 15:07 UTC on `10.100.16.46:23989`.
+- Official-PH SmolVLA runs are finished: big384 and small both have `epoch_1000.pt` and epoch-1000 offline eval. `epoch_1000.pt` count is currently `2/4`.
+- PTP/LDP-MH SmolVLA runs are still training: small and big384 are both around train epoch 421, latest named checkpoint/eval is epoch 400.
+- Recent PTP/LDP-MH SmolVLA rate is about `30 min / 100 epoch`; with about 579 epochs remaining, training should finish around 2026-05-08 18:00 UTC if the current rate holds.
+- Historical SmolVLA rollout timing from this task: 1140 rollout videos took about `31.7 min`, and selected best 150 rollout videos took about `4.5 min`. The four-way post-train plan is about 1520 all-checkpoint rollouts plus 200 best-checkpoint rollouts, so rollout/report after training is estimated at `50-60 min`.
+- Overall SmolVLA report ETA is approximately 2026-05-08 19:00 UTC, with a practical range around 18:50-19:20 UTC if the monitor starts promptly after training.
