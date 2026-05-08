@@ -1,6 +1,6 @@
 # Task Knowledge
 
-<!-- METADATA:SESSION=14 -->
+<!-- METADATA:SESSION=15 -->
 
 ## Working Rules
 - The task expanded from no-training BC-RNN evaluation to include issue #157 retraining checks and SmolVLA resource-utilization training runs.
@@ -45,3 +45,9 @@
 - SmolVLA data-source clarification: two SmolVLA runs used the intern_ldp_explorer / LDP-MH Square data (`ldp_mh_abs10_seed42`, `ldp_mh_abs10_big384_seed44`), while the official-PH SmolVLA run used the task-generated robosuite v1.4.1 file (`official_ph_v141_abs10_seed43`). The LDP-MH HDF5 has 300 demos / 80,731 steps and no explicit `env_version`; the official-PH v141 HDF5 has 200 demos / 30,154 steps and `env_version=1.4.1`.
 - Current GPU resource note as of 2026-05-08 12:35 UTC: the reachable execution resource is the 2x H200 host `10.100.16.46:16139`; both cards are actively used by DP no-hist experiments, but each has substantial memory headroom because the visible usage is about 27GB out of 143GB per card.
 - SmolVLA retraining resource estimate: two H200 GPUs are enough for a controlled two-dataset comparison, one run on original/LDP-MH data and one run on official-PH v1.4.1 data. Prior evidence is the completed three-run SmolVLA batch on two H200s. Training is not memory-bound at this scale; rollout/video evaluation is the main time and IO cost.
+- New GPU entry used for the four-way SmolVLA comparison: `10.100.16.46:23989`, host `lg-cmc-b7r202-h08u16-h200-000548`, 2x NVIDIA H200. Environment setup followed `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/setup_gpu_machine.sh`; resulting stack is torch 2.5.1+cu124, robosuite 1.4.1, robomimic 0.3.0, mujoco 3.8.0, diffusers 0.30.0.
+- Four-way SmolVLA launcher: `workspace/tasks/task006_eval_official_robomimic_square_bcrnn/scripts/launch_smolvla_fourway_square.sh`; shared copy at `/mnt/3fs2/data/tingwen.du/intern_method_developer/task006_eval_official_robomimic_square_bcrnn/scripts/launch_smolvla_fourway_square.sh`.
+- Four-way SmolVLA run root: `/mnt/3fs2/data/tingwen.du/intern_method_developer/task006_eval_official_robomimic_square_bcrnn/runs/smolvla_fourway_1000ep_20260508_130111`; log root: `/mnt/3fs2/data/tingwen.du/intern_method_developer/task006_eval_official_robomimic_square_bcrnn/logs/smolvla_fourway_1000ep_20260508_130111`.
+- Four-way SmolVLA run matrix: PTP/LDP-MH small `smolvla_small_ptp_ldp_mh_abs10_seed52`, PTP/LDP-MH big384 `smolvla_big384_ptp_ldp_mh_abs10_seed53`, official-PH v1.4.1 small `smolvla_small_official_ph_v141_abs10_seed55`, official-PH v1.4.1 big384 `smolvla_big384_official_ph_v141_abs10_seed54`.
+- Four-way SmolVLA parameters: `chunk_size=16`, `batch_size=128`, `lr=1e-4`, `weight_decay=1e-4`, `heads=8`, `dropout=0.1`, `num_workers=4`, `val_ratio=0.05`, `sample_steps=10`, `action_repr=ldp_abs10`, AMP enabled. Small is `emb_dim=256`, `expert_layers=6`; big384 is `emb_dim=384`, `expert_layers=8`.
+- Four-way SmolVLA schedule: train 1000 epochs; eval and named checkpoint at epochs `10,20,...,100,200,...,1000`; `latest.pt` refreshes on those eval epochs and on every 25th epoch. Initial PIDs on the new host were `27745`, `27774`, `27801`, and `27816`.

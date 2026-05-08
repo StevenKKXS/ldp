@@ -8,7 +8,9 @@
 | Status | Working |
 | Current Task | task006_eval_official_robomimic_square_bcrnn |
 | PR | https://github.com/StevenKKXS/ldp/pull/new/intern_method_developer/task006_eval_official_robomimic_square_bcrnn |
-| Session | 14 |
+| Session | 15 |
 
 ## 最近进展
-- 已评估 SmolVLA 双数据源重训资源需求：两张 H200 足够并行训练 original/LDP-MH 与 official-PH v1.4.1 两个 SmolVLA 对比 run；当前同一两卡正在跑 DP no-hist，叠加会抢算力但显存充足。
+- 已在新 GPU 入口 `10.100.16.46:23989` 上完成环境配置，`/root/venv` 验证通过：torch 2.5.1+cu124、robosuite 1.4.1、robomimic 0.3.0、mujoco 3.8.0，能看到 2 张 H200。
+- 已新增并同步 task006 四路 SmolVLA launcher，完成 1 epoch smoke 训练验证。
+- 已正式启动 4 个 1000-epoch SmolVLA run：small/big384 分别覆盖 PTP/LDP-MH 数据和 official-PH v1.4.1 数据，run root 为 `/mnt/3fs2/data/tingwen.du/intern_method_developer/task006_eval_official_robomimic_square_bcrnn/runs/smolvla_fourway_1000ep_20260508_130111`。
