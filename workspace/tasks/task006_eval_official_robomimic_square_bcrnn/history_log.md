@@ -1,6 +1,6 @@
 # History Log
 
-<!-- METADATA:SESSION=7 -->
+<!-- METADATA:SESSION=8 -->
 
 ## Session 0
 - Created task for no-training evaluation of the official robomimic v0.1 Square(PH) low-dimensional BC-RNN checkpoint.
@@ -52,3 +52,8 @@
 - Confirmed issue #157 image BC-RNN uses `agentview_image`, `robot0_eye_in_hand_image`, `robot0_eef_pos`, `robot0_eef_quat`, and `robot0_gripper_qpos`; it does not use `object`, goals, joint states, velocities, depth, or scans.
 - Confirmed SmolVLA uses the same two image keys and the same three low-dimensional robot state keys, plus a learned constant language token internal to the model.
 - Confirmed the official model-zoo low-dimensional BC-RNN uses `robot0_eef_pos`, `robot0_eef_quat`, `robot0_gripper_qpos`, and `object`, but no images.
+
+## Session 8
+- Paused DP no-hist execution after the user requested key parameters first.
+- Inspected the LDP Diffusion Policy configs and identified the intended short-history/common DP setting from the project README: `obs=2`, `act=1`, `horizon=16`.
+- Proposed the first experiment matrix as two one-GPU runs: Square LDP-MH absolute-action image data and Square official-PH v1.4.1 absolute-action image data, both with scheduled checkpoint/rollout at epochs `10,20,...,100,200,...,1000`.

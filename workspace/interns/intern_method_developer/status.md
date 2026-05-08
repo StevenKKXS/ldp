@@ -8,7 +8,7 @@
 | Status | Working |
 | Current Task | task006_eval_official_robomimic_square_bcrnn |
 | PR | https://github.com/StevenKKXS/ldp/pull/new/intern_method_developer/task006_eval_official_robomimic_square_bcrnn |
-| Session | 7 |
+| Session | 8 |
 
 ## 最近进展
-- 已核对 BC-RNN 与 SmolVLA 输入信息：issue157 图像 BC-RNN 和 SmolVLA 都使用两路图像加 `robot0_eef_pos/quat/gripper_qpos`，没有使用 `object`；官方 model-zoo low-dim BC-RNN 使用额外 `object` 低维状态但不使用图像。
+- 已暂停 DP no-hist 训练启动，先整理实验关键参数供确认：拟用 Square image absolute-action 数据、Diffusion Policy UNet image policy、`n_obs_steps=2`、`n_action_steps=1`、`horizon=16`、1000 epoch，按 10/100 epoch 节奏保存并 rollout。
