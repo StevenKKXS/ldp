@@ -1,6 +1,6 @@
 # History Log
 
-<!-- METADATA:SESSION=19 -->
+<!-- METADATA:SESSION=20 -->
 
 ## Session 0
 - Created task for no-training evaluation of the official robomimic v0.1 Square(PH) low-dimensional BC-RNN checkpoint.
@@ -126,3 +126,10 @@
 - Answered the user's question about currently visible GPT/model access in this Codex session.
 - Current visible model override options are `gpt-5.5`, `gpt-5.4`, `gpt-5.4-mini`, `gpt-5.3-codex`, `gpt-5.3-codex-spark`, and `gpt-5.2`.
 - Clarified that these are model override options for Codex/sub-agent use in this environment, not access to a separate custom-GPT store.
+
+## Session 20
+- Checked all currently controlled GPU entries. Both `10.100.16.46:16139` and `10.100.16.46:23989` are reachable and each exposes 2 NVIDIA H200 GPUs to its SSH session.
+- On `16139`, the active task is DP no-hist Square with four live main PIDs: UNet LDP-MH `172304`, UNet official-PH v1.4.1 `172310`, DiT LDP-MH `176077`, and DiT official-PH v1.4.1 `176083`.
+- Latest parsed DP status: UNet LDP-MH epoch 63, last/best rollout `0.06/0.06`; UNet official-PH epoch 153, last rollout `0.62`, best `0.68`; DiT LDP-MH epoch 69, last rollout `0.00`, best `0.04`; DiT official-PH epoch 183, last rollout `0.58`, best `0.60`.
+- On `23989`, the active task is four-way SmolVLA training with live main PIDs `27745`, `27774`, `27801`, `27816`, plus post-train rollout monitor PID `62177`.
+- Latest SmolVLA status: official-PH small and big384 reached epoch 600; PTP/LDP-MH small and big384 reached epoch 200; `epoch_1000.pt` count remains `0/4`, so the post-train rollout monitor is still waiting.

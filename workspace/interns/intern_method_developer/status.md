@@ -8,8 +8,9 @@
 | Status | Working |
 | Current Task | task006_eval_official_robomimic_square_bcrnn |
 | PR | https://github.com/StevenKKXS/ldp/pull/new/intern_method_developer/task006_eval_official_robomimic_square_bcrnn |
-| Session | 19 |
+| Session | 20 |
 
 ## 最近进展
-- 回答了当前 Codex 会话可见的 GPT/model override 范围：`gpt-5.5`、`gpt-5.4`、`gpt-5.4-mini`、`gpt-5.3-codex`、`gpt-5.3-codex-spark`、`gpt-5.2`。
-- 该问题未改变正在运行的 SmolVLA/rollout 实验；上一次实验状态仍是四路 SmolVLA 训练未完成，post-train monitor PID `62177` 等待 `epoch_1000.pt` 达到 4/4。
+- 当前可访问两个 GPU 入口：`10.100.16.46:16139` 和 `10.100.16.46:23989`，两边各自可见 2 张 NVIDIA H200。
+- `16139` 正在跑 DP no-hist 四路实验：UNet/DiT × LDP-MH/official-PH v1.4.1，四个主 PID `172304/172310/176077/176083` 均存活。
+- `23989` 正在跑 SmolVLA 四路实验：small/big384 × PTP/LDP-MH/official-PH v1.4.1，四个主 PID `27745/27774/27801/27816` 和 post-train monitor `62177` 均存活。

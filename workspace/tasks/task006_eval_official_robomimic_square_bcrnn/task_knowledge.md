@@ -1,6 +1,6 @@
 # Task Knowledge
 
-<!-- METADATA:SESSION=19 -->
+<!-- METADATA:SESSION=20 -->
 
 ## Working Rules
 - The task expanded from no-training BC-RNN evaluation to include issue #157 retraining checks and SmolVLA resource-utilization training runs.
@@ -58,3 +58,6 @@
 - Planned post-train rollout outputs: all-checkpoint sweep under `/mnt/3fs2/data/tingwen.du/intern_method_developer/task006_eval_official_robomimic_square_bcrnn/rollouts/smolvla_fourway_all_ckpts_20rollouts_20260508_132807`; best-50 results under `/mnt/3fs2/data/tingwen.du/intern_method_developer/task006_eval_official_robomimic_square_bcrnn/rollouts/smolvla_fourway_best_ckpts_50rollouts_20260508_132807`; final report at `/mnt/3fs2/data/tingwen.du/intern_method_developer/task006_eval_official_robomimic_square_bcrnn/reports/smolvla_fourway_rollout_after_train_20260508_132807.md`.
 - Session 18 progress check at 2026-05-08 14:02 UTC: four-way SmolVLA training had not finished. PTP/LDP-MH small and big384 were at epoch 200; official-PH v1.4.1 small and big384 were at epoch 500; `epoch_1000.pt` count was `0/4`. Monitor PID `62177` was still waiting and had not started rollout workers.
 - Codex model override options visible in this session: `gpt-5.5`, `gpt-5.4`, `gpt-5.4-mini`, `gpt-5.3-codex`, `gpt-5.3-codex-spark`, and `gpt-5.2`.
+- GPU/task inventory as of Session 20: `10.100.16.46:16139` and `10.100.16.46:23989` are both reachable and each SSH session sees 2x NVIDIA H200. `16139` owns the DP no-hist four-run matrix; `23989` owns the SmolVLA four-run matrix and the post-training SmolVLA rollout monitor.
+- DP no-hist active run root: `/mnt/3fs2/data/tingwen.du/intern_method_developer/task006_eval_official_robomimic_square_bcrnn/runs/dp_nohist_unet_dit_20260508_0915`; active main PIDs are `172304`, `172310`, `176077`, and `176083`.
+- Session 20 DP parsed status: UNet LDP-MH epoch 63 best rollout `0.06`; UNet official-PH v1.4.1 epoch 153 best rollout `0.68`; DiT LDP-MH epoch 69 best rollout `0.04`; DiT official-PH v1.4.1 epoch 183 best rollout `0.60`.
