@@ -1,6 +1,6 @@
 # Task Knowledge
 
-<!-- METADATA:SESSION=3 -->
+<!-- METADATA:SESSION=4 -->
 
 ## Working Rules
 - The task expanded from no-training BC-RNN evaluation to include issue #157 retraining checks and SmolVLA resource-utilization training runs.
@@ -26,5 +26,6 @@
 - SmolVLA resource run base: `/mnt/3fs2/data/tingwen.du/intern_method_developer/task006_eval_official_robomimic_square_bcrnn/runs/smolvla_resource_1000ep_early10_20260507_122849`.
 - Required SmolVLA runs: `ldp_mh_abs10_seed42` on the LDP-MH own copy `/mnt/3fs2/data/tingwen.du/intern_method_developer/task003_formal_smolvla_square_train_eval/data/square_mh_image_abs.hdf5`, and `official_ph_v141_abs10_seed43` on `/mnt/3fs2/data/tingwen.du/intern_method_developer/task006_eval_official_robomimic_square_bcrnn/data/square/ph/image_abs_v141.hdf5`.
 - Exploratory SmolVLA run: `ldp_mh_abs10_big384_seed44`, using emb_dim 384 and 8 expert layers on the same LDP-MH dataset.
-- Completed SmolVLA checkpoints: each run has `latest.pt` and `epoch_1000.pt` under the run base. Offline metrics are from action reconstruction / flow validation, not robosuite rollout success.
+- Completed SmolVLA checkpoints: each run has `latest.pt` plus named eval checkpoints `epoch_0010.pt`, `epoch_0020.pt`, ..., `epoch_0100.pt`, then `epoch_0200.pt`, ..., `epoch_1000.pt` under the run base. Offline metrics are from action reconstruction / flow validation, not robosuite rollout success.
+- SmolVLA checkpoint logic: `latest.pt` is overwritten whenever `should_eval` is true or `epoch % checkpoint_every_epochs == 0`; with the run args this means eval epochs plus every 25 epochs. Named `epoch_XXXX.pt` files are written only when `should_eval` is true, so the retained named checkpoints follow the eval schedule.
 - Completed issue #157 BC-RNN checkpoint/video highlight: best checkpoint `model_epoch_540_NutAssemblySquare_success_0.8.pth` and video `NutAssemblySquare_epoch_540.mp4` under `/mnt/3fs2/data/tingwen.du/intern_method_developer/task006_eval_official_robomimic_square_bcrnn/runs/issue157_v141/issue157_square_ph_image_v141_bc_rnn_600ep_s1/20260507120353`.

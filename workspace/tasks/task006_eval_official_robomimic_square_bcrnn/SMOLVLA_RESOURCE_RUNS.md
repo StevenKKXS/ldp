@@ -12,6 +12,8 @@ Date: 2026-05-07
 
 All runs target 1000 epochs with offline action evaluation at epochs `10,20,...,100,200,...,1000`.
 
+Checkpoint retention follows the eval schedule for named files: each run has `epoch_0010.pt`, `epoch_0020.pt`, ..., `epoch_0100.pt`, then `epoch_0200.pt`, ..., `epoch_1000.pt`. The rolling `latest.pt` file is also overwritten on each eval epoch and each non-eval epoch divisible by `checkpoint_every_epochs=25`.
+
 Run base:
 
 `/mnt/3fs2/data/tingwen.du/intern_method_developer/task006_eval_official_robomimic_square_bcrnn/runs/smolvla_resource_1000ep_early10_20260507_122849`

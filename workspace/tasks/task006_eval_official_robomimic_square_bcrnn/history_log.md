@@ -1,6 +1,6 @@
 # History Log
 
-<!-- METADATA:SESSION=3 -->
+<!-- METADATA:SESSION=4 -->
 
 ## Session 0
 - Created task for no-training evaluation of the official robomimic v0.1 Square(PH) low-dimensional BC-RNN checkpoint.
@@ -28,3 +28,8 @@
 - SmolVLA final offline action MSEs: LDP-MH baseline `0.1309051514`, official PH v141 baseline `0.1680839658`, LDP-MH big384 exploratory run `0.1530992389`.
 - SmolVLA best offline action MSEs: LDP-MH baseline epoch 600 `0.1279252321`, official PH v141 baseline epoch 1000 `0.1680839658`, LDP-MH big384 epoch 1000 `0.1530992389`.
 - Confirmed issue #157 BC-RNN image training completed epoch 600 with 30 rollout evals; best 50-rollout success was epoch 540 at `0.80`, final epoch 600 was `0.54`.
+
+## Session 4
+- Checked SmolVLA checkpoint frequency in `train_eval_smolvla_square_scheduled.py` and in the actual run directories.
+- Named SmolVLA epoch checkpoints are saved only on offline-eval epochs: `10,20,...,100,200,...,1000`.
+- `latest.pt` is overwritten on every checkpoint trigger, where the trigger is any offline-eval epoch or any epoch divisible by `checkpoint_every_epochs=25`; non-eval 25-epoch triggers are not retained as named `epoch_XXXX.pt` files.

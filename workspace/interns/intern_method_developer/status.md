@@ -8,7 +8,7 @@
 | Status | Working |
 | Current Task | task006_eval_official_robomimic_square_bcrnn |
 | PR | https://github.com/StevenKKXS/ldp/pull/new/intern_method_developer/task006_eval_official_robomimic_square_bcrnn |
-| Session | 3 |
+| Session | 4 |
 
 ## 最近进展
-- 远端 GPU 当前空闲；3 个 SmolVLA Square 1000-epoch 训练均已完成，BC-RNN issue #157 600-epoch 训练也已完成，最佳 BC-RNN rollout 为 epoch 540 的 50-rollout 成功率 0.80。
+- 已核对 SmolVLA checkpoint 保存逻辑和实际输出：命名 checkpoint 按 offline eval 频率保存，即 epoch 10-100 每 10 个 epoch 一次，之后每 100 个 epoch 一次到 1000；`latest.pt` 还会在每个 eval epoch 和每 25 个 epoch 的 checkpoint 触发点覆盖保存。
