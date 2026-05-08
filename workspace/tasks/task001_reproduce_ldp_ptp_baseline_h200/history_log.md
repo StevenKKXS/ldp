@@ -1,6 +1,40 @@
 # History Log
 
-<!-- METADATA:SESSION=110 -->
+<!-- METADATA:SESSION=111 -->
+
+## Session 111
+- User asked to check the requirement before proceeding: rerun four tasks using the PTP-recommended environment, with the same 4x2x2 training and rollout structure, and wait for confirmation before launch.
+- Interpreted matrix:
+- 4 tasks: Square, Tool-Hang, Transport, LongSquare
+- 2 methods: DP / no-PTP and PTP
+- 2 action horizons: `global_action=8` and `global_action=1`
+- total 16 runs
+- Checked PTP-version venv status on `10.100.0.29:36645`:
+- `/root/ptp_ldp_py39` exists and imports core packages
+- Python `3.9.25`
+- Torch `2.5.1`
+- RoboMimic `0.2.0`
+- RoboSuite source version `1.2.0`
+- `mujoco 2.3.7`
+- `mujoco-py 2.1.2.14`
+- `diffusers 0.11.1`
+- `gym 0.21.0`
+- `36645` has 4 visible H200 GPUs idle
+- Checked `10.100.0.29:30103`:
+- 4 visible H200 GPUs idle
+- `/root/ptp_ldp_py39` does not exist there
+- Checked remote training repo state on `36645`:
+- repo path `/mnt/3fs2/data/tingwen.du/workspace/ldp`
+- branch `main`
+- short hash `5113f46`
+- local modifications exist in runtime files, so launch should record `git status` and diff metadata before training
+- Wrote requirement-check document: `/work-agents/intern_ldp_explorer/ldp/workspace/tasks/task001_reproduce_ldp_ptp_baseline_h200/session111_ptp_env_4x2x2_requirement_check.md`.
+- Main recommendation:
+- run all 16 jobs on `36645` unless user wants to install/sync the venv to `30103`
+- create a new output root named like `session111_ptp_env_4x2x2_2000ep_<stamp>`
+- perform four-task smoke under `/root/ptp_ldp_py39` before launching training
+- keep `num_epochs=2000`, `n_test=100`, and the same cached-embedding data paths for controlled comparison to Session 110
+- Asked user to confirm before starting implementation or training.
 
 ## Session 110
 - User asked to form a report for this run and stop the task, including each task's settings and results summary for later presentation.

@@ -1,6 +1,13 @@
 # Task Knowledge
 
-<!-- METADATA:SESSION=110 -->
+<!-- METADATA:SESSION=111 -->
+
+## Session 111 Knowledge
+- Requirement-check document for the PTP-version environment rerun: `/work-agents/intern_ldp_explorer/ldp/workspace/tasks/task001_reproduce_ldp_ptp_baseline_h200/session111_ptp_env_4x2x2_requirement_check.md`.
+- `36645` currently has the usable PTP-version venv at `/root/ptp_ldp_py39`; `30103` does not.
+- Both `36645` and `30103` were idle at check time, but using `30103` for this rerun requires installing or syncing the PTP-version venv first.
+- Remote code path associated with the venv is `/mnt/3fs2/data/tingwen.du/workspace/ldp`; it is on `main` at `5113f46` with local runtime-file modifications.
+- Before launching a PTP-version 4x2x2 batch, record the remote repo state and run a four-task smoke under `/root/ptp_ldp_py39`, especially for LongSquare because Session 107 only recorded detailed reset smoke for Square, Tool-Hang, and Transport.
 
 ## Session 110 Knowledge
 - Presentation-ready summary report path: `/work-agents/intern_ldp_explorer/ldp/workspace/tasks/task001_reproduce_ldp_ptp_baseline_h200/session110_experiment_report.md`.
