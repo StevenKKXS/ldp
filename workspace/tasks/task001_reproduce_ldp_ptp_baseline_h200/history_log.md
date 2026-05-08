@@ -1,6 +1,30 @@
 # History Log
 
-<!-- METADATA:SESSION=103 -->
+<!-- METADATA:SESSION=104 -->
+
+## Session 104
+- User asked whether there had previously been a PTP RoboMimic version inference, remembering `0.2`.
+- Reviewed `task_knowledge.md`, `history_log.md`, `conda_environment.yaml`, and `requirements.txt`.
+- Confirmed the earlier inference was recorded in Session 99:
+- released RoboMimic HDF5 files checked in this task do not contain explicit robomimic / robosuite / MuJoCo version metadata
+- LDP / Diffusion Policy environment pinning points to `robomimic==0.2.0`
+- LDP / Diffusion Policy environment pinning points to `cheng-chi/robosuite` commit `277ab9588ad7a4f4b55cf75508b44aa67ec171f0`
+- upstream requirements include `mujoco==2.3.7` and `mujoco-py==2.1.2.14`
+- `conda_environment.yaml` lines `59-60` contain the robosuite commit and `robomimic==0.2.0`
+- `requirements.txt` lines `174-175` contain `robomimic==0.2.0` and the same robosuite commit
+- `requirements.txt` lines `103-104` contain `mujoco==2.3.7` and `mujoco-py==2.1.2.14`
+- The earlier interpretation was:
+- `0.2.0` is an upstream environment pin / best available provenance signal for the PTP/LDP stack
+- it is not proven by metadata inside the downloaded HDF5 data files
+- robomimic docs and issue `#178` make `offline_study + robomimic v0.2.0` a relevant isolation path for Tool-Hang success-rate debugging
+- Current active training venv remains different from that inferred upstream stack:
+- `robomimic 0.3.0`
+- `robosuite 1.4.1`
+- `mujoco 3.8.0`
+- no `mujoco-py` / `free-mujoco-py` metadata package was reported in Session 99
+- Answer to user:
+- yes, the previous version inference was effectively `robomimic==0.2.0` for the upstream PTP/LDP environment
+- the careful phrasing is that this is repo/environment provenance, not direct HDF5 data provenance
 
 ## Session 103
 - User asked for the current progress.

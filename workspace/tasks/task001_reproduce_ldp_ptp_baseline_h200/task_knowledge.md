@@ -1,6 +1,19 @@
 # Task Knowledge
 
-<!-- METADATA:SESSION=103 -->
+<!-- METADATA:SESSION=104 -->
+
+## Session 104 Knowledge
+- Prior PTP/RoboMimic version inference:
+- yes, the best recorded inference points to `robomimic==0.2.0`.
+- Evidence:
+- LDP / Diffusion Policy `conda_environment.yaml` pins `robomimic==0.2.0` and `cheng-chi/robosuite@277ab9588ad7a4f4b55cf75508b44aa67ec171f0`.
+- LDP / Diffusion Policy `requirements.txt` repeats `robomimic==0.2.0` and the same robosuite commit, plus `mujoco==2.3.7` and `mujoco-py==2.1.2.14`.
+- Limitation:
+- downloaded HDF5 data files do not explicitly encode the robomimic / robosuite / MuJoCo package versions.
+- Therefore `robomimic==0.2.0` should be described as upstream environment provenance / inferred matching stack, not as direct data-file metadata.
+- Current active venv remains different: `robomimic 0.3.0`, `robosuite 1.4.1`, `mujoco 3.8.0`.
+- Tool-Hang debugging relevance:
+- robomimic issue `#178` and docs make `offline_study + robomimic v0.2.0` a reasonable isolation test path for version-sensitive success-rate reproduction.
 
 ## Session 103 Knowledge
 - Effective stamp remains `1778075154`.

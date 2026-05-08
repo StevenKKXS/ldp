@@ -8,5 +8,5 @@
 | Status | Working |
 | Current Task | task001_reproduce_ldp_ptp_baseline_h200 |
 | PR | https://github.com/StevenKKXS/ldp/pull/new/intern_ldp_explorer/task001_reproduce_ldp_ptp_baseline_h200 |
-| Session | 103 |
-| Recent Progress | Checked main experiment progress under stamp `1778075154` at `2026-05-08T12:10:06Z`. PTP queue on `30103` remains healthy: Square `a8` and LongSquare `a8` are complete at epoch `1999`; Square `a1`, Tool-Hang `a8/a1`, Transport `a8/a1`, and LongSquare `a1` are still running with no traceback. Best nonzero training-rollout scores remain Square PTP `a8=0.45`, Square PTP `a1=0.28`, Transport PTP `a8=0.01`. DP queue on `36645` is also running without traceback, but Square DP `a8` reached epoch `2699` and Tool-Hang DP `a8` reached epoch `2499`, both clearly beyond the intended 2000-epoch target. |
+| Session | 104 |
+| Recent Progress | Reviewed prior history for the PTP / RoboMimic version inference. Confirmed Session 99 recorded that the released HDF5 files themselves do not contain explicit robomimic / robosuite / MuJoCo version metadata, but the LDP / Diffusion Policy repo environment pins `robomimic==0.2.0`, `cheng-chi/robosuite@277ab9588ad7a4f4b55cf75508b44aa67ec171f0`, `mujoco==2.3.7`, and `mujoco-py==2.1.2.14`; our active venv remains `robomimic 0.3.0`, `robosuite 1.4.1`, `mujoco 3.8.0`. |
