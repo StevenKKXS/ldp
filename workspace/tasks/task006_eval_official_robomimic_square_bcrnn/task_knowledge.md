@@ -1,6 +1,6 @@
 # Task Knowledge
 
-<!-- METADATA:SESSION=15 -->
+<!-- METADATA:SESSION=16 -->
 
 ## Working Rules
 - The task expanded from no-training BC-RNN evaluation to include issue #157 retraining checks and SmolVLA resource-utilization training runs.
@@ -51,3 +51,4 @@
 - Four-way SmolVLA run matrix: PTP/LDP-MH small `smolvla_small_ptp_ldp_mh_abs10_seed52`, PTP/LDP-MH big384 `smolvla_big384_ptp_ldp_mh_abs10_seed53`, official-PH v1.4.1 small `smolvla_small_official_ph_v141_abs10_seed55`, official-PH v1.4.1 big384 `smolvla_big384_official_ph_v141_abs10_seed54`.
 - Four-way SmolVLA parameters: `chunk_size=16`, `batch_size=128`, `lr=1e-4`, `weight_decay=1e-4`, `heads=8`, `dropout=0.1`, `num_workers=4`, `val_ratio=0.05`, `sample_steps=10`, `action_repr=ldp_abs10`, AMP enabled. Small is `emb_dim=256`, `expert_layers=6`; big384 is `emb_dim=384`, `expert_layers=8`.
 - Four-way SmolVLA schedule: train 1000 epochs; eval and named checkpoint at epochs `10,20,...,100,200,...,1000`; `latest.pt` refreshes on those eval epochs and on every 25th epoch. Initial PIDs on the new host were `27745`, `27774`, `27801`, and `27816`.
+- Session 16 utilization check: the intended two-task-per-GPU layout is active on `10.100.16.46:23989`; GPU0 has PIDs `27745` and `27801`, GPU1 has PIDs `27774` and `27816`. A 5-sample `nvidia-smi dmon` check showed high SM utilization, roughly `89%-95%` on GPU0 and `94%-99%` on GPU1.

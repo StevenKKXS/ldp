@@ -1,6 +1,6 @@
 # History Log
 
-<!-- METADATA:SESSION=15 -->
+<!-- METADATA:SESSION=16 -->
 
 ## Session 0
 - Created task for no-training evaluation of the official robomimic v0.1 Square(PH) low-dimensional BC-RNN checkpoint.
@@ -101,3 +101,10 @@
 - Launched four detached SmolVLA 1000-epoch runs under `/mnt/3fs2/data/tingwen.du/intern_method_developer/task006_eval_official_robomimic_square_bcrnn/runs/smolvla_fourway_1000ep_20260508_130111`, with logs under the matching `logs/smolvla_fourway_1000ep_20260508_130111` directory.
 - Four launched runs: `smolvla_small_ptp_ldp_mh_abs10_seed52` PID `27745` on GPU0, `smolvla_big384_ptp_ldp_mh_abs10_seed53` PID `27774` on GPU1, `smolvla_big384_official_ph_v141_abs10_seed54` PID `27801` on GPU0, and `smolvla_small_official_ph_v141_abs10_seed55` PID `27816` on GPU1.
 - Shared training schedule for the four runs: 1000 epochs, chunk size 16, batch size 128, `ldp_abs10` action representation, AMP, eval/named checkpoint epochs `10,20,...,100,200,...,1000`, and `latest.pt` refresh at eval epochs plus every 25 epochs.
+
+## Session 16
+- Checked the four active SmolVLA runs on `10.100.16.46:23989` and confirmed the requested two-task-per-GPU layout is active.
+- GPU0 hosts PID `27745` (`smolvla_small_ptp_ldp_mh_abs10_seed52`) and PID `27801` (`smolvla_big384_official_ph_v141_abs10_seed54`); GPU1 hosts PID `27774` (`smolvla_big384_ptp_ldp_mh_abs10_seed53`) and PID `27816` (`smolvla_small_official_ph_v141_abs10_seed55`).
+- `nvidia-smi dmon` sampled both H200s at high SM utilization: GPU0 ranged roughly `89%-95%`, GPU1 ranged roughly `94%-99%`, with four compute-app PIDs visible.
+- Training is progressing normally: official-PH v1.4.1 runs have crossed epoch 100 and continue training; PTP/LDP-MH runs are around epoch 57 because that dataset has about 599 steps per epoch versus about 223 for official-PH v1.4.1.
+- No additional third-per-GPU process was launched because the target was exactly two tasks per card and current SM utilization is already high.
