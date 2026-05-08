@@ -35,3 +35,15 @@ Run base:
 - `ldp_mh_abs10_big384_seed44`, epoch 10: `val_loss=0.1848952621`, `val_sample_action_mse=0.1609523296`
 
 Latest sampled GPU utilization after all three SmolVLA jobs were running: GPU0 91%, GPU1 59%.
+
+## Completion Metrics
+
+Checked on 2026-05-08 02:28 UTC. Both H200 GPUs were idle and no training processes remained.
+
+| Run | Final epoch | Final `val_sample_action_mse` | Best epoch | Best `val_sample_action_mse` | `latest.pt` |
+| --- | ---: | ---: | ---: | ---: | --- |
+| `ldp_mh_abs10_seed42` | 1000 | 0.1309051514 | 600 | 0.1279252321 | present |
+| `official_ph_v141_abs10_seed43` | 1000 | 0.1680839658 | 1000 | 0.1680839658 | present |
+| `ldp_mh_abs10_big384_seed44` | 1000 | 0.1530992389 | 1000 | 0.1530992389 | present |
+
+These are offline action metrics only; robosuite rollout success still needs to be run from selected checkpoints.

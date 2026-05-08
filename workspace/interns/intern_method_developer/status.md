@@ -8,7 +8,7 @@
 | Status | Working |
 | Current Task | task006_eval_official_robomimic_square_bcrnn |
 | PR | https://github.com/StevenKKXS/ldp/pull/new/intern_method_developer/task006_eval_official_robomimic_square_bcrnn |
-| Session | 2 |
+| Session | 3 |
 
 ## 最近进展
-- 已按资源利用目标挂起 3 个 SmolVLA Square 1000-epoch 训练：LDP-MH baseline、official PH v141 baseline、LDP-MH big384；eval 调度为 10/20/.../100 后每 100 epoch，首批 epoch-10 offline eval 已写入日志。
+- 远端 GPU 当前空闲；3 个 SmolVLA Square 1000-epoch 训练均已完成，BC-RNN issue #157 600-epoch 训练也已完成，最佳 BC-RNN rollout 为 epoch 540 的 50-rollout 成功率 0.80。

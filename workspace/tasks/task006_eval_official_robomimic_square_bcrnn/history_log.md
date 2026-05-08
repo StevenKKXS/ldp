@@ -1,6 +1,6 @@
 # History Log
 
-<!-- METADATA:SESSION=2 -->
+<!-- METADATA:SESSION=3 -->
 
 ## Session 0
 - Created task for no-training evaluation of the official robomimic v0.1 Square(PH) low-dimensional BC-RNN checkpoint.
@@ -21,3 +21,10 @@
 - Added scheduled SmolVLA training code that evaluates every 10 epochs through epoch 100 and every 100 epochs after that.
 - Launched three detached SmolVLA Square 1000-epoch runs under the task directory: LDP-MH baseline, official PH v141 baseline, and a larger LDP-MH big384 exploratory run.
 - First SmolVLA offline eval results: LDP-MH baseline epoch 10 `val_sample_action_mse=0.1463506222`; official PH v141 baseline epoch 10/20/30 `val_sample_action_mse=0.1962940693/0.1815359592/0.1762230098`.
+
+## Session 3
+- Checked the remote GPU host on 2026-05-08 02:28 UTC; both H200 GPUs were idle and no SmolVLA or robomimic training processes were running.
+- Confirmed all three SmolVLA resource runs reached epoch 1000 and saved `latest.pt` plus scheduled checkpoints.
+- SmolVLA final offline action MSEs: LDP-MH baseline `0.1309051514`, official PH v141 baseline `0.1680839658`, LDP-MH big384 exploratory run `0.1530992389`.
+- SmolVLA best offline action MSEs: LDP-MH baseline epoch 600 `0.1279252321`, official PH v141 baseline epoch 1000 `0.1680839658`, LDP-MH big384 epoch 1000 `0.1530992389`.
+- Confirmed issue #157 BC-RNN image training completed epoch 600 with 30 rollout evals; best 50-rollout success was epoch 540 at `0.80`, final epoch 600 was `0.54`.
