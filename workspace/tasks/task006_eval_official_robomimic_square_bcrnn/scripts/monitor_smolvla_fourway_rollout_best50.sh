@@ -14,7 +14,7 @@ ALL_OUT="${TASK_ROOT}/rollouts/smolvla_fourway_all_ckpts_20rollouts_${STAMP}"
 BEST_LINK_BASE="${TASK_ROOT}/rollouts/smolvla_fourway_best_ckpt_links_${STAMP}"
 BEST_OUT="${TASK_ROOT}/rollouts/smolvla_fourway_best_ckpts_50rollouts_${STAMP}"
 REPORT="${TASK_ROOT}/reports/smolvla_fourway_rollout_after_train_${STAMP}.md"
-LOCK_FILE="${TASK_ROOT}/logs/smolvla_fourway_rollout_after_train.lock"
+LOCK_FILE=${LOCK_FILE:-"${TASK_ROOT}/logs/smolvla_fourway_rollout_after_train.lock"}
 
 EXPECTED_RUNS=${EXPECTED_RUNS:-4}
 POLL_SEC=${POLL_SEC:-300}

@@ -1,6 +1,6 @@
 # Current Work Handoff
 
-<!-- METADATA:SESSION=23 -->
+<!-- METADATA:SESSION=30 -->
 
 ## Purpose
 
@@ -192,7 +192,7 @@ The comparison report should explicitly separate:
 
 - Check whether `23989` SmolVLA has all four `epoch_1000.pt` files and whether monitor PID `62177` has generated the rollout report.
 - Check whether `16139` DP no-hist runs reached epoch 1000 and gather their scheduled rollout metrics/videos.
-- If the future py39 / robomimic 0.2.0 H200 environment is available, start with the smoke tests above before launching long retraining jobs.
+- Check the py39 comparison runs on `10.100.2.35:26482` and `10.100.2.35:17821`; the py39 environment and smoke tests are complete, and long retraining jobs are already running.
 - Keep all new outputs under the task-owned `/mnt/3fs2/data/tingwen.du/intern_method_developer/task006_eval_official_robomimic_square_bcrnn` tree.
 
 ## Latest Live Check: Session 23
@@ -204,3 +204,14 @@ Checked at 2026-05-08 14:40 UTC.
 - SmolVLA on `10.100.16.46:23989`: main PIDs `27745/27774/27801/27816` and monitor PID `62177` alive. GPU0 was `3431/143771 MiB` at `85%`; GPU1 was `3435/143771 MiB` at `87%`.
 - SmolVLA status: official-PH big384 train epoch 852, eval epoch 800 MSE `0.1650568545`; official-PH small train epoch 875, eval epoch 800 MSE `0.1664465666`; PTP/LDP-MH big384 train epoch 330, eval epoch 300 MSE `0.1338918209`; PTP/LDP-MH small train epoch 330, eval epoch 300 MSE `0.1217582300`.
 - SmolVLA rollout monitor remains in the waiting phase because `epoch_1000.pt` count is `0/4`; the post-training rollout report has not been generated.
+
+## Latest Live Check: Session 30
+
+Checked at 2026-05-08 15:47 UTC.
+
+- New py39 environment is configured on `10.100.2.35:26482` and `10.100.2.35:17821`; both use `/root/ptp_ldp_py39` with Python `3.9.25`, robomimic `0.2.0`, robosuite `1.2.0`, torch `2.5.1+cu124`, MuJoCo 2.1.0 via mujoco-py, and task-owned runtime `/mnt/3fs2/data/tingwen.du/intern_method_developer/task006_eval_official_robomimic_square_bcrnn/runtimes/ldp_ptp_py39_compare`.
+- Smoke tests completed: HDF5/env/render/video smoke for official-PH v1.4.1 and PTP/LDP-MH; SmolVLA one-epoch train plus one rollout; DP UNet and DP DiT one-epoch train plus rollout/video after the task-local gym `0.21.0` concatenate compatibility patch.
+- Py39 DP comparison is active on `10.100.2.35:26482`: run root `/mnt/3fs2/data/tingwen.du/intern_method_developer/task006_eval_official_robomimic_square_bcrnn/runs/dp_nohist_unet_dit_py39_compare_20260508_154301`, log root `/mnt/3fs2/data/tingwen.du/intern_method_developer/task006_eval_official_robomimic_square_bcrnn/logs/dp_nohist_unet_dit_py39_compare_20260508_154301`. Four main processes for UNet/DiT x PTP-LDP-MH/official-PH were alive and training.
+- Py39 DP schedule differs from the earlier DP run only in early rollout frequency: through epoch 100 it rolls out every 20 epochs instead of every 10, with 50 rollout/video evals retained; after epoch 100 it remains every 100 epochs.
+- Py39 SmolVLA comparison is active on `10.100.2.35:17821`: run root `/mnt/3fs2/data/tingwen.du/intern_method_developer/task006_eval_official_robomimic_square_bcrnn/runs/smolvla_fourway_1000ep_py39_compare_20260508_154301`, log root `/mnt/3fs2/data/tingwen.du/intern_method_developer/task006_eval_official_robomimic_square_bcrnn/logs/smolvla_fourway_1000ep_py39_compare_20260508_154301`. Four main processes and the post-training monitor were alive.
+- Py39 SmolVLA latest sampled progress: official-PH runs were around epochs 26-29, PTP/LDP-MH runs around epochs 11-12, and the monitor was waiting for all four `epoch_1000.pt` files.

@@ -8,7 +8,7 @@
 | Status | Working |
 | Current Task | task006_eval_official_robomimic_square_bcrnn |
 | PR | https://github.com/StevenKKXS/ldp/pull/new/intern_method_developer/task006_eval_official_robomimic_square_bcrnn |
-| Session | 29 |
+| Session | 30 |
 
 ## 最近进展
 - 当前可访问两个 GPU 入口：`10.100.16.46:16139` 和 `10.100.16.46:23989`，两边各自可见 2 张 NVIDIA H200。
@@ -23,3 +23,5 @@
 - Session 27 估算 SmolVLA 剩余时间：official-PH 两路已完成 epoch 1000，PTP/LDP-MH 两路约 epoch 421；训练预计 2026-05-08 18:00 UTC 左右完成，自动 rollout/report 预计再需约 `50-60min`。
 - Session 28 汇总当前 rollout 成功率：DP official-PH 最好为 UNet `0.68`、DiT `0.60`，DP LDP-MH 仍低于 `0.06`；当前四路 SmolVLA 尚无 rollout，既有 SmolVLA 50-rollout 最好为 big384 LDP-MH `0.26`，BC-RNN issue157 最好 `0.80`。
 - Session 29 查验新 GPU 入口 `10.100.2.35:26482` 和 `10.100.2.35:17821`：两边各 2 张空闲 H200，UUID 不同；当前仅有 Python 3.12.3，未发现 `/root/ptp_ldp_py39` 或 MuJoCo 2.1.0。
+- Session 30 已在 `10.100.2.35:26482` 和 `10.100.2.35:17821` 配好 py39 + robomimic 0.2.0 + robosuite 1.2.0 环境，完成数据/env/video、SmolVLA 1-epoch、DP UNet/DiT train+rollout smoke test，并挂起 py39 对比实验。
+- 新 py39 对比实验：`26482` 跑 DP no-hist UNet/DiT × PTP-LDP-MH/official-PH v1.4.1，前 100 epoch 每 20 epoch rollout；`17821` 跑 SmolVLA small/big384 × 两套数据，monitor 将训练后做全 checkpoint 20-rollout 和 best 50-rollout。

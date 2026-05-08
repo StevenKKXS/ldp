@@ -1,15 +1,23 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-TASK_ROOT=/mnt/3fs2/data/tingwen.du/intern_method_developer/task006_eval_official_robomimic_square_bcrnn
-PYTHON=/root/venv/bin/python
+TASK_ROOT=${TASK_ROOT:-/mnt/3fs2/data/tingwen.du/intern_method_developer/task006_eval_official_robomimic_square_bcrnn}
+PYTHON=${PYTHON:-/root/venv/bin/python}
 STAMP="${1:-$(date -u +%Y%m%d_%H%M%S)}"
 OUT_ROOT="${TASK_ROOT}/runs/smolvla_fourway_1000ep_${STAMP}"
 LOG_ROOT="${TASK_ROOT}/logs/smolvla_fourway_1000ep_${STAMP}"
 
-TRAIN_SCRIPT="${TASK_ROOT}/scripts/train_eval_smolvla_square_scheduled.py"
-PTP_DATA=/mnt/3fs2/data/tingwen.du/intern_method_developer/task003_formal_smolvla_square_train_eval/data/square_mh_image_abs.hdf5
-V141_DATA="${TASK_ROOT}/data/square/ph/image_abs_v141.hdf5"
+TRAIN_SCRIPT="${TRAIN_SCRIPT:-${TASK_ROOT}/scripts/train_eval_smolvla_square_scheduled.py}"
+PTP_DATA=${PTP_DATA:-/mnt/3fs2/data/tingwen.du/intern_method_developer/task003_formal_smolvla_square_train_eval/data/square_mh_image_abs.hdf5}
+V141_DATA=${V141_DATA:-${TASK_ROOT}/data/square/ph/image_abs_v141.hdf5}
+
+SMOL_NUM_EPOCHS=${SMOL_NUM_EPOCHS:-1000}
+SMOL_EVAL_EARLY_EVERY=${SMOL_EVAL_EARLY_EVERY:-10}
+SMOL_EVAL_EARLY_UNTIL=${SMOL_EVAL_EARLY_UNTIL:-100}
+SMOL_EVAL_LATE_EVERY=${SMOL_EVAL_LATE_EVERY:-100}
+SMOL_CHECKPOINT_EVERY=${SMOL_CHECKPOINT_EVERY:-25}
+SMOL_BATCH_SIZE=${SMOL_BATCH_SIZE:-128}
+SMOL_NUM_WORKERS=${SMOL_NUM_WORKERS:-4}
 
 mkdir -p "${OUT_ROOT}" "${LOG_ROOT}"
 
@@ -56,20 +64,20 @@ exec "${PYTHON}" "${TRAIN_SCRIPT}" \\
       --dataset "${dataset_path}" \
       --output "${run_dir}" \
       --chunk-size 16 \
-      --batch-size 128 \
-      --epochs 1000 \
+      --batch-size "${SMOL_BATCH_SIZE}" \
+      --epochs "${SMOL_NUM_EPOCHS}" \
       --lr 1e-4 \
       --weight-decay 1e-4 \
       --emb-dim "${emb_dim}" \
       --expert-layers "${expert_layers}" \
       --heads 8 \
       --dropout 0.1 \
-      --num-workers 4 \
+      --num-workers "${SMOL_NUM_WORKERS}" \
       --val-ratio 0.05 \
-      --eval-early-every-epochs 10 \
-      --eval-early-until-epochs 100 \
-      --eval-late-every-epochs 100 \
-      --checkpoint-every-epochs 25 \
+      --eval-early-every-epochs "${SMOL_EVAL_EARLY_EVERY}" \
+      --eval-early-until-epochs "${SMOL_EVAL_EARLY_UNTIL}" \
+      --eval-late-every-epochs "${SMOL_EVAL_LATE_EVERY}" \
+      --checkpoint-every-epochs "${SMOL_CHECKPOINT_EVERY}" \
       --log-every-steps 100 \
       --max-val-batches 0 \
       --sample-steps 10 \

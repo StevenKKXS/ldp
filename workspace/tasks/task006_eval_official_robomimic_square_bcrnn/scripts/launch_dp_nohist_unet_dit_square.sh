@@ -1,15 +1,28 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-TASK_ROOT=/mnt/3fs2/data/tingwen.du/intern_method_developer/task006_eval_official_robomimic_square_bcrnn
-REPO_ROOT=/mnt/3fs2/data/tingwen.du/workspace/ldp
-PYTHON=/root/venv/bin/python
+TASK_ROOT=${TASK_ROOT:-/mnt/3fs2/data/tingwen.du/intern_method_developer/task006_eval_official_robomimic_square_bcrnn}
+REPO_ROOT=${REPO_ROOT:-/mnt/3fs2/data/tingwen.du/workspace/ldp}
+PYTHON=${PYTHON:-/root/venv/bin/python}
 STAMP="${1:-$(date -u +%Y%m%d_%H%M%S)}"
 OUT_ROOT="${TASK_ROOT}/runs/dp_nohist_unet_dit_${STAMP}"
 LOG_ROOT="${TASK_ROOT}/logs/dp_nohist_unet_dit_${STAMP}"
 
-LDP_MH_DATA=/mnt/3fs2/data/tingwen.du/intern_method_developer/task003_formal_smolvla_square_train_eval/data/square_mh_image_abs.hdf5
-OFFICIAL_PH_DATA=/mnt/3fs2/data/tingwen.du/intern_method_developer/task006_eval_official_robomimic_square_bcrnn/data/square/ph/image_abs_v141.hdf5
+LDP_MH_DATA=${LDP_MH_DATA:-/mnt/3fs2/data/tingwen.du/intern_method_developer/task003_formal_smolvla_square_train_eval/data/square_mh_image_abs.hdf5}
+OFFICIAL_PH_DATA=${OFFICIAL_PH_DATA:-${TASK_ROOT}/data/square/ph/image_abs_v141.hdf5}
+
+DP_NUM_EPOCHS=${DP_NUM_EPOCHS:-1000}
+DP_VAL_EVERY=${DP_VAL_EVERY:-10}
+DP_SAMPLE_EVERY=${DP_SAMPLE_EVERY:-10}
+DP_SCHEDULE_EARLY_UNTIL=${DP_SCHEDULE_EARLY_UNTIL:-100}
+DP_SCHEDULE_EARLY_EVERY=${DP_SCHEDULE_EARLY_EVERY:-10}
+DP_SCHEDULE_LATE_EVERY=${DP_SCHEDULE_LATE_EVERY:-100}
+DP_N_TEST=${DP_N_TEST:-50}
+DP_N_TEST_VIS=${DP_N_TEST_VIS:-50}
+DP_N_ENVS=${DP_N_ENVS:-28}
+DP_BATCH_SIZE=${DP_BATCH_SIZE:-64}
+DP_NUM_WORKERS=${DP_NUM_WORKERS:-4}
+DP_CHECKPOINT_TOPK=${DP_CHECKPOINT_TOPK:-50}
 
 mkdir -p "${OUT_ROOT}" "${LOG_ROOT}"
 
@@ -80,27 +93,27 @@ run_exp() {
       "task.dataset.seed=${seed}" \
       "task.env_runner.n_train=0" \
       "task.env_runner.n_train_vis=0" \
-      "task.env_runner.n_test=50" \
-      "task.env_runner.n_test_vis=50" \
-      "task.env_runner.n_envs=28" \
+      "task.env_runner.n_test=${DP_N_TEST}" \
+      "task.env_runner.n_test_vis=${DP_N_TEST_VIS}" \
+      "task.env_runner.n_envs=${DP_N_ENVS}" \
       "task.env_runner.test_start_seed=100000" \
       "training.device=cuda:0" \
       "training.seed=${seed}" \
       "training.debug=false" \
       "training.resume=true" \
-      "training.num_epochs=1000" \
-      "training.val_every=10" \
-      "training.sample_every=10" \
-      "+training.schedule_early_until=100" \
-      "+training.schedule_early_every=10" \
-      "+training.schedule_late_every=100" \
+      "training.num_epochs=${DP_NUM_EPOCHS}" \
+      "training.val_every=${DP_VAL_EVERY}" \
+      "training.sample_every=${DP_SAMPLE_EVERY}" \
+      "+training.schedule_early_until=${DP_SCHEDULE_EARLY_UNTIL}" \
+      "+training.schedule_early_every=${DP_SCHEDULE_EARLY_EVERY}" \
+      "+training.schedule_late_every=${DP_SCHEDULE_LATE_EVERY}" \
       "+training.rollout_final=true" \
       "+training.checkpoint_final=true" \
-      "dataloader.batch_size=64" \
-      "val_dataloader.batch_size=64" \
-      "dataloader.num_workers=4" \
-      "val_dataloader.num_workers=4" \
-      "checkpoint.topk.k=50" \
+      "dataloader.batch_size=${DP_BATCH_SIZE}" \
+      "val_dataloader.batch_size=${DP_BATCH_SIZE}" \
+      "dataloader.num_workers=${DP_NUM_WORKERS}" \
+      "val_dataloader.num_workers=${DP_NUM_WORKERS}" \
+      "checkpoint.topk.k=${DP_CHECKPOINT_TOPK}" \
       "+checkpoint.save_epoch_ckpt=true" \
       "logging.mode=offline" \
       "logging.project=dp_nohist_square" \
