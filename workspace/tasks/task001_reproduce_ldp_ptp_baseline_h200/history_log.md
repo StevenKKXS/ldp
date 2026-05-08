@@ -1,6 +1,59 @@
 # History Log
 
-<!-- METADATA:SESSION=119 -->
+<!-- METADATA:SESSION=120 -->
+
+## Session 120
+- User requested stopping the just-started run, cleaning its outputs, and rerunning with the earlier high-throughput layout.
+- Stopped matching Session 117 training and launcher processes on both assigned SSH entries:
+- `10.100.0.29:36645`
+- `10.100.0.29:30103`
+- Removed the short-lived conservative output/log roots:
+- `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/outputs/session117_ptp_py39_4x2x2_2000ep_20260508_144657`
+- `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/logs/session117_ptp_py39_4x2x2_2000ep_20260508_144657`
+- `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/outputs/session117_ptp_py39_4x2x2_2000ep_20260508_144310`
+- `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/logs/session117_ptp_py39_4x2x2_2000ep_20260508_144310`
+- Added high-throughput launch script:
+- source: `/work-agents/intern_ldp_explorer/ldp/workspace/tasks/task001_reproduce_ldp_ptp_baseline_h200/session120_launch_ptp_py39_high_throughput_4x2x2_2000ep.sh`
+- deployed copy: `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/scripts/session120_launch_ptp_py39_high_throughput_4x2x2_2000ep.sh`
+- `bash -n` passed before launch.
+- Launched active stamp `20260508_151035`.
+- Active output root:
+- `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/outputs/session120_ptp_py39_ht_4x2x2_2000ep_20260508_151035`
+- Active log root:
+- `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/logs/session120_ptp_py39_ht_4x2x2_2000ep_20260508_151035`
+- High-throughput placement:
+- `10.100.0.29:36645`, `METHOD_SET=ptp`: each task runs paired PTP `a8+a1` lanes on one GPU.
+- `10.100.0.29:30103`, `METHOD_SET=dp`: each task runs paired DP `a8+a1` lanes on one GPU.
+- Per-entry GPU mapping:
+- GPU0: Square `a8+a1`.
+- GPU1: Tool-Hang `a8+a1`.
+- GPU2: Transport `a8+a1`.
+- GPU3: LongSquare `a8+a1`.
+- Total active experiment cells: `4 tasks x 2 methods x 2 action horizons = 16`.
+- Shared training settings:
+- `/root/ptp_ldp_py39/bin/python`
+- `global_obs=16`
+- `global_horizon=32`
+- `global_action in {8,1}`
+- `training.num_epochs=2000`
+- `training.rollout_every=100`
+- `training.checkpoint_every=100`
+- `task.env_runner.n_test=100`
+- `task.env_runner.n_test_vis=4`
+- `task.env_runner.n_train_vis=2`
+- `dataloader.batch_size=64`
+- `policy.past_steps_reg=-1`
+- PTP uses `policy.past_action_pred=true`; DP uses `policy.past_action_pred=false`.
+- Uses `MUJOCO_PY_MUJOCO_PATH=/root/.mujoco/mujoco210` and appends `/root/.mujoco/mujoco210/bin` to `LD_LIBRARY_PATH`.
+- Early verification at about `2026-05-08T15:16Z`:
+- all 16 status files existed with `START` entries.
+- all 16 output directories had `logs.json.txt` entries with training epochs started.
+- sampled latest epochs ranged from Transport epoch `0` to LongSquare epoch `5`, which is expected because datasets differ in epoch length.
+- grep for `Traceback`, `Error executing job`, `RuntimeError`, `CUDA out of memory`, `Killed`, `Missing path`, and `ModuleNotFoundError` returned no sampled error markers.
+- Follow-up sample at `2026-05-08T15:18Z` showed all 16 `logs.json.txt` files still advancing: Transport around epoch `1`, Tool-Hang around epoch `4`, Square around epoch `5`, and LongSquare around epoch `9-10`; the same error-marker grep remained empty.
+- `36645` `pmon` showed PTP train pids active across GPUs 0-3.
+- `30103` `pmon` showed DP train pids active across GPUs 0-3.
+- Both SSH entries report hostname `lg-cmc-b7r201-b04u06-h200-000040`; for tracking, records distinguish the two job groups by SSH port and method set.
 
 ## Session 119
 - User asked whether the previous scheduling strategy was to run multiple tasks per GPU because a single task did not fill GPU utility.

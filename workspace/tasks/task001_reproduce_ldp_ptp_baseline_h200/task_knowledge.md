@@ -1,6 +1,34 @@
 # Task Knowledge
 
-<!-- METADATA:SESSION=119 -->
+<!-- METADATA:SESSION=120 -->
+
+## Session 120 Knowledge
+- Current active high-throughput py39 rerun stamp:
+- `20260508_151035`
+- Active output root:
+- `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/outputs/session120_ptp_py39_ht_4x2x2_2000ep_20260508_151035`
+- Active log root:
+- `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/logs/session120_ptp_py39_ht_4x2x2_2000ep_20260508_151035`
+- Runtime launch script:
+- `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/scripts/session120_launch_ptp_py39_high_throughput_4x2x2_2000ep.sh`
+- Source launch script:
+- `/work-agents/intern_ldp_explorer/ldp/workspace/tasks/task001_reproduce_ldp_ptp_baseline_h200/session120_launch_ptp_py39_high_throughput_4x2x2_2000ep.sh`
+- Session 117 conservative output/log roots for stamps `20260508_144657` and `20260508_144310` were removed after stopping their processes.
+- Active layout:
+- `10.100.0.29:36645`: `METHOD_SET=ptp`, four GPUs, paired `a8+a1` lanes per task.
+- `10.100.0.29:30103`: `METHOD_SET=dp`, four GPUs, paired `a8+a1` lanes per task.
+- Per-entry GPU mapping is Square on GPU0, Tool-Hang on GPU1, Transport on GPU2, LongSquare on GPU3.
+- This is the high-throughput variant of the 4-task `4x2x2` plan: all 16 cells are active rather than waiting for PTP to finish before DP.
+- Core settings remain:
+- `global_obs=16`, `global_horizon=32`, `global_action in {8,1}`
+- `num_epochs=2000`, `rollout_every=100`, `checkpoint_every=100`, `n_test=100`
+- `batch_size=64`, `past_steps_reg=-1`
+- PTP `past_action_pred=true`; DP `past_action_pred=false`
+- Early health check:
+- 16 `logs.json.txt` files were present.
+- No sampled Traceback/OOM/missing-path markers were found.
+- Follow-up sample at `2026-05-08T15:18Z`: Transport around epoch `1`, Tool-Hang around epoch `4`, Square around epoch `5`, LongSquare around epoch `9-10`, with all 16 lanes still writing logs.
+- Rollout mp4 and score artifacts are expected after the first epoch-100 rollout for each run.
 
 ## Session 119 Knowledge
 - Earlier 4x2x2 scheduling was more aggressive than the current PTP py39 rerun:
