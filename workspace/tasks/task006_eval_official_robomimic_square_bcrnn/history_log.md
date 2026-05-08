@@ -1,6 +1,6 @@
 # History Log
 
-<!-- METADATA:SESSION=6 -->
+<!-- METADATA:SESSION=7 -->
 
 ## Session 0
 - Created task for no-training evaluation of the official robomimic v0.1 Square(PH) low-dimensional BC-RNN checkpoint.
@@ -46,3 +46,9 @@
 - Saved 150 additional SmolVLA episode videos under `/mnt/3fs2/data/tingwen.du/intern_method_developer/task006_eval_official_robomimic_square_bcrnn/rollouts/smolvla_best_ckpts_50rollouts_20260508_0343`.
 - 50-rollout results: big384 LDP-MH epoch 1000 `13/50 = 0.26`, small LDP-MH epoch 200 `9/50 = 0.18`, official PH v141 epoch 600 `7/50 = 0.14`.
 - Video decode spot checks passed on samples from all three 50-rollout video directories; the GPU host was idle again after completion.
+
+## Session 7
+- Compared the observation inputs for the issue #157 image BC-RNN, the official model-zoo low-dimensional BC-RNN, and the SmolVLA-style policies.
+- Confirmed issue #157 image BC-RNN uses `agentview_image`, `robot0_eye_in_hand_image`, `robot0_eef_pos`, `robot0_eef_quat`, and `robot0_gripper_qpos`; it does not use `object`, goals, joint states, velocities, depth, or scans.
+- Confirmed SmolVLA uses the same two image keys and the same three low-dimensional robot state keys, plus a learned constant language token internal to the model.
+- Confirmed the official model-zoo low-dimensional BC-RNN uses `robot0_eef_pos`, `robot0_eef_quat`, `robot0_gripper_qpos`, and `object`, but no images.

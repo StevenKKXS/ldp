@@ -8,7 +8,7 @@
 | Status | Working |
 | Current Task | task006_eval_official_robomimic_square_bcrnn |
 | PR | https://github.com/StevenKKXS/ldp/pull/new/intern_method_developer/task006_eval_official_robomimic_square_bcrnn |
-| Session | 6 |
+| Session | 7 |
 
 ## 最近进展
-- 已完成 SmolVLA 三个最佳 checkpoint 的 50-rollout 复测并保存 150 个新视频；big384 epoch 1000 为 13/50 = 26%，LDP-MH small epoch 200 为 9/50 = 18%，official PH epoch 600 为 7/50 = 14%。
+- 已核对 BC-RNN 与 SmolVLA 输入信息：issue157 图像 BC-RNN 和 SmolVLA 都使用两路图像加 `robot0_eef_pos/quat/gripper_qpos`，没有使用 `object`；官方 model-zoo low-dim BC-RNN 使用额外 `object` 低维状态但不使用图像。

@@ -1,6 +1,6 @@
 # Task Knowledge
 
-<!-- METADATA:SESSION=6 -->
+<!-- METADATA:SESSION=7 -->
 
 ## Working Rules
 - The task expanded from no-training BC-RNN evaluation to include issue #157 retraining checks and SmolVLA resource-utilization training runs.
@@ -32,4 +32,7 @@
 - SmolVLA rollout bests under the 20-rollout protocol: big384 LDP-MH epoch 1000 `0.30`, small LDP-MH epoch 200 `0.25`, official PH v141 epoch 600 `0.20`. This shows offline action MSE is not a reliable ranker for closed-loop success.
 - SmolVLA selected best-checkpoint 50-rollout output root: `/mnt/3fs2/data/tingwen.du/intern_method_developer/task006_eval_official_robomimic_square_bcrnn/rollouts/smolvla_best_ckpts_50rollouts_20260508_0343`; completed 150 rollouts and 150 saved videos.
 - SmolVLA selected best-checkpoint 50-rollout results: big384 LDP-MH epoch 1000 `13/50 = 0.26`, small LDP-MH epoch 200 `9/50 = 0.18`, official PH v141 epoch 600 `7/50 = 0.14`.
+- Input comparison: issue #157 image BC-RNN and SmolVLA both use `agentview_image`, `robot0_eye_in_hand_image`, `robot0_eef_pos`, `robot0_eef_quat`, and `robot0_gripper_qpos`; neither uses the dataset's `object`, joint state, velocity, depth, scan, or goal observations.
+- Input comparison caveat: official model-zoo low-dimensional BC-RNN is different from the issue #157 image BC-RNN. It uses low-dimensional `object` in addition to `robot0_eef_pos`, `robot0_eef_quat`, and `robot0_gripper_qpos`, and uses no image observations.
+- Temporal comparison: issue #157 image BC-RNN has LSTM recurrence with training `seq_length=10` and RNN horizon 10, while the SmolVLA-style policy conditions on the current two images and current 9D robot state, then predicts a 16-step action chunk. This is temporal memory/architecture difference, not an extra privileged observation key.
 - Completed issue #157 BC-RNN checkpoint/video highlight: best checkpoint `model_epoch_540_NutAssemblySquare_success_0.8.pth` and video `NutAssemblySquare_epoch_540.mp4` under `/mnt/3fs2/data/tingwen.du/intern_method_developer/task006_eval_official_robomimic_square_bcrnn/runs/issue157_v141/issue157_square_ph_image_v141_bc_rnn_600ep_s1/20260507120353`.
