@@ -1,6 +1,6 @@
 # History Log
 
-<!-- METADATA:SESSION=5 -->
+<!-- METADATA:SESSION=6 -->
 
 ## Session 0
 - Created task for no-training evaluation of the official robomimic v0.1 Square(PH) low-dimensional BC-RNN checkpoint.
@@ -40,3 +40,9 @@
 - Completed 1140 SmolVLA rollout episodes and saved 1140 mp4 videos under `/mnt/3fs2/data/tingwen.du/intern_method_developer/task006_eval_official_robomimic_square_bcrnn/rollouts/smolvla_all_ckpts_20rollouts_20260508_0255`.
 - SmolVLA rollout bests: `ldp_mh_abs10_big384_seed44` epoch 1000 `6/20 = 0.30`; `ldp_mh_abs10_seed42` epoch 200 `5/20 = 0.25`; `official_ph_v141_abs10_seed43` epoch 600 `4/20 = 0.20`.
 - Video decode spot checks passed on sample videos from all three SmolVLA runs; the GPU host was idle again after the batch finished.
+
+## Session 6
+- Continued with the selected best SmolVLA checkpoints from the all-checkpoint sweep and ran 50-rollout evaluations with video saving for each selected checkpoint.
+- Saved 150 additional SmolVLA episode videos under `/mnt/3fs2/data/tingwen.du/intern_method_developer/task006_eval_official_robomimic_square_bcrnn/rollouts/smolvla_best_ckpts_50rollouts_20260508_0343`.
+- 50-rollout results: big384 LDP-MH epoch 1000 `13/50 = 0.26`, small LDP-MH epoch 200 `9/50 = 0.18`, official PH v141 epoch 600 `7/50 = 0.14`.
+- Video decode spot checks passed on samples from all three 50-rollout video directories; the GPU host was idle again after completion.

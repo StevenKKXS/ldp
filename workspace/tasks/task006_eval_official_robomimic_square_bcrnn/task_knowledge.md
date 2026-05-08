@@ -1,6 +1,6 @@
 # Task Knowledge
 
-<!-- METADATA:SESSION=5 -->
+<!-- METADATA:SESSION=6 -->
 
 ## Working Rules
 - The task expanded from no-training BC-RNN evaluation to include issue #157 retraining checks and SmolVLA resource-utilization training runs.
@@ -30,4 +30,6 @@
 - SmolVLA checkpoint logic: `latest.pt` is overwritten whenever `should_eval` is true or `epoch % checkpoint_every_epochs == 0`; with the run args this means eval epochs plus every 25 epochs. Named `epoch_XXXX.pt` files are written only when `should_eval` is true, so the retained named checkpoints follow the eval schedule.
 - SmolVLA all-checkpoint rollout output root: `/mnt/3fs2/data/tingwen.du/intern_method_developer/task006_eval_official_robomimic_square_bcrnn/rollouts/smolvla_all_ckpts_20rollouts_20260508_0255`; completed 57 checkpoints, 20 rollouts each, and 1140 saved episode videos.
 - SmolVLA rollout bests under the 20-rollout protocol: big384 LDP-MH epoch 1000 `0.30`, small LDP-MH epoch 200 `0.25`, official PH v141 epoch 600 `0.20`. This shows offline action MSE is not a reliable ranker for closed-loop success.
+- SmolVLA selected best-checkpoint 50-rollout output root: `/mnt/3fs2/data/tingwen.du/intern_method_developer/task006_eval_official_robomimic_square_bcrnn/rollouts/smolvla_best_ckpts_50rollouts_20260508_0343`; completed 150 rollouts and 150 saved videos.
+- SmolVLA selected best-checkpoint 50-rollout results: big384 LDP-MH epoch 1000 `13/50 = 0.26`, small LDP-MH epoch 200 `9/50 = 0.18`, official PH v141 epoch 600 `7/50 = 0.14`.
 - Completed issue #157 BC-RNN checkpoint/video highlight: best checkpoint `model_epoch_540_NutAssemblySquare_success_0.8.pth` and video `NutAssemblySquare_epoch_540.mp4` under `/mnt/3fs2/data/tingwen.du/intern_method_developer/task006_eval_official_robomimic_square_bcrnn/runs/issue157_v141/issue157_square_ph_image_v141_bc_rnn_600ep_s1/20260507120353`.

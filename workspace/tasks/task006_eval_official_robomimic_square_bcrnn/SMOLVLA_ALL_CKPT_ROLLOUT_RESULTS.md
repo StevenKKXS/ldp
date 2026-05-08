@@ -100,3 +100,15 @@ BC-RNN issue #157 reference remains much stronger on the same task family: the e
 - The larger LDP-MH model is the best SmolVLA run in rollout success, even though its offline action MSE is worse than the smaller LDP-MH baseline.
 - The smallest offline action MSE checkpoint is not the best rollout checkpoint: LDP-MH small model has offline best at epoch 600, while rollout best is epoch 200.
 - The official PH v1.4.1 SmolVLA run reaches only 20% best success on this 20-rollout protocol, despite improving offline action MSE through epoch 1000.
+
+## 50-Rollout Follow-Up
+
+The best checkpoint from each SmolVLA training run was rerun with 50 rollouts and per-episode video saving under:
+
+`/mnt/3fs2/data/tingwen.du/intern_method_developer/task006_eval_official_robomimic_square_bcrnn/rollouts/smolvla_best_ckpts_50rollouts_20260508_0343`
+
+| Run | Selected epoch | 20-rollout result | 50-rollout result | Videos |
+| --- | ---: | ---: | ---: | ---: |
+| `ldp_mh_abs10_big384_seed44` | 1000 | 6/20 = 0.30 | 13/50 = 0.26 | 50 |
+| `ldp_mh_abs10_seed42` | 200 | 5/20 = 0.25 | 9/50 = 0.18 | 50 |
+| `official_ph_v141_abs10_seed43` | 600 | 4/20 = 0.20 | 7/50 = 0.14 | 50 |
