@@ -1,6 +1,47 @@
 # History Log
 
-<!-- METADATA:SESSION=106 -->
+<!-- METADATA:SESSION=107 -->
+
+## Session 107
+- User asked to configure a new venv adapted to the PTP-recommended environment and run smoke tests before further planning.
+- Target machine: `10.100.0.29:36645`.
+- New isolated venv path: `/root/ptp_ldp_py39`.
+- Did not modify the existing `/root/venv` used by active training jobs.
+- Installed system prerequisites through the internal apt mirror:
+- Python `3.9.25`, `python3.9-venv`, `python3.9-dev`, `python3.9-distutils`
+- MuJoCo / robosuite render and build libraries including OSMesa, GLFW, GLEW, GL/EGL/GLES headers
+- FFmpeg development packages for video support
+- Installed MuJoCo `2.1.0` binary at `/root/.mujoco/mujoco210` for `mujoco-py`.
+- Venv package stack:
+- `robomimic 0.2.0`
+- `cheng-chi/robosuite@277ab9588ad7a4f4b55cf75508b44aa67ec171f0`; installed from a locally downloaded tarball because the remote container timed out against GitHub
+- installed robosuite source reports `__version__ = 1.2.0`; `ToolHang` and `TwoArmTransport` are registered
+- `mujoco-py 2.1.2.14`
+- `mujoco 2.3.7`
+- `dm-control 1.0.9`
+- `diffusers 0.11.1`
+- `huggingface-hub 0.10.1`; pinned down from the mirror default because `diffusers 0.11.1` cannot import `cached_download` from newer hub versions
+- `gym 0.21.0`
+- `imagecodecs 2022.9.26`
+- `av 15.1.0`; adapted from repo `av 10.0.0` because Ubuntu 24.04 provides FFmpeg 6 headers and `av 10.0.0` does not build cleanly against them
+- `torch 2.5.1`, `torchvision 0.20.1`, CUDA `12.4`; adapted from repo PyTorch `1.12.1/cu116` because H200 needs a current CUDA-capable torch stack
+- Copied the existing lightweight `pytorch3d` transforms/common stub into the venv because the internal pip mirror has no `pytorch3d` wheel.
+- Installed the local LDP repository as editable in the venv.
+- Important failed intermediate check:
+- installing PyPI `robosuite==1.2.0` was not sufficient; that package did not register `ToolHang` or `TwoArmTransport`
+- after installing the pinned `cheng-chi/robosuite` tarball, both environments registered correctly
+- Smoke tests passed:
+- import smoke OK for `diffusion_policy.env_runner.robomimic_image_runner`
+- import smoke OK for `diffusion_policy.env_runner.robomimic_longhist_image_runner`
+- import smoke OK for `diffusion_policy.dataset.robomimic_replay_image_dataset`
+- import smoke OK for `diffusion_policy.policy.diffusion_transformer_hybrid_image_policy`
+- Square env smoke OK: reset, `reset_to({'states': state})`, and `reset_to({'model': model_file, 'states': state})`
+- Tool-Hang env smoke OK: reset, `reset_to({'states': state})`, and `reset_to({'model': model_file, 'states': state})`
+- Transport env smoke OK: reset, `reset_to({'states': state})`, and `reset_to({'model': model_file, 'states': state})`
+- Video smoke OK: wrote and read `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/debug/session107_ptp_py39_smoke_video.mp4`
+- Residual caveat:
+- `pip check` reports robosuite metadata wants `free-mujoco-py` and `numba<=0.53.1`; `free-mujoco-py` was unavailable from the configured mirrors, so this venv uses repository-pinned `mujoco-py 2.1.2.14`
+- `numba 0.56.4` matches the repository conda environment and import / env smoke passed
 
 ## Session 106
 - User asked why the active setup had been configured with `robomimic 0.3.0` and `robosuite 1.4.1`, whether the reason could be found in history, and why the repository-suggested versions were not used.

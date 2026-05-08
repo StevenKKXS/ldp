@@ -1,6 +1,40 @@
 # Task Knowledge
 
-<!-- METADATA:SESSION=106 -->
+<!-- METADATA:SESSION=107 -->
+
+## Session 107 Knowledge
+- PTP-compatible isolation venv:
+- host: `10.100.0.29:36645`
+- path: `/root/ptp_ldp_py39`
+- activation: `source /root/ptp_ldp_py39/bin/activate`
+- activation exports:
+- `MUJOCO_PY_MUJOCO_PATH=/root/.mujoco/mujoco210`
+- `LD_LIBRARY_PATH=/root/.mujoco/mujoco210/bin:${LD_LIBRARY_PATH:-}`
+- `MUJOCO_GL=${MUJOCO_GL:-egl}`
+- Core installed stack:
+- Python `3.9.25`
+- `robomimic 0.2.0`
+- pinned `cheng-chi/robosuite@277ab9588ad7a4f4b55cf75508b44aa67ec171f0`, source version `1.2.0`
+- `mujoco-py 2.1.2.14`
+- MuJoCo binary `2.1.0` at `/root/.mujoco/mujoco210`
+- `mujoco 2.3.7`
+- `dm-control 1.0.9`
+- `diffusers 0.11.1`
+- `huggingface-hub 0.10.1`
+- `gym 0.21.0`
+- `torch 2.5.1`, `torchvision 0.20.1`, CUDA `12.4`
+- `av 15.1.0`, `imagecodecs 2022.9.26`
+- This is an H200-adapted PTP-version environment, not a byte-for-byte recreation of `conda_environment.yaml`:
+- torch was adapted from `1.12.1/cu116` to `2.5.1/cu124` for H200 compatibility
+- `av` was adapted from `10.0.0` to `15.1.0` because Ubuntu 24.04 FFmpeg 6 headers do not build `av 10.0.0`
+- PyPI `robosuite==1.2.0` is insufficient for this task because it does not register `ToolHang` or `TwoArmTransport`; use the pinned `cheng-chi` tarball install.
+- Smoke result:
+- LDP import smoke passed for RoboMimic image runner, longhist runner, replay image dataset, and transformer image policy.
+- Pinned robosuite registers `ToolHang` and `TwoArmTransport`.
+- Square, Tool-Hang, and Transport each passed env reset, state reset, and model-plus-state reset using released HDF5 `model_file`.
+- Video write/read smoke passed at `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/debug/session107_ptp_py39_smoke_video.mp4`.
+- Residual caveat:
+- `pip check` reports robosuite metadata wants `free-mujoco-py` and `numba<=0.53.1`; functional smoke uses `mujoco-py 2.1.2.14` because `free-mujoco-py` was unavailable from configured mirrors, while `numba 0.56.4` follows the repository conda environment.
 
 ## Session 106 Knowledge
 - Reason the active setup used `robomimic 0.3.0` / `robosuite 1.4.1` / `mujoco 3.8.0`:
