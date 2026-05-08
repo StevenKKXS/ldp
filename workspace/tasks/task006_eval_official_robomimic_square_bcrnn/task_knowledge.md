@@ -1,6 +1,6 @@
 # Task Knowledge
 
-<!-- METADATA:SESSION=23 -->
+<!-- METADATA:SESSION=24 -->
 
 ## Working Rules
 - The task expanded from no-training BC-RNN evaluation to include issue #157 retraining checks and SmolVLA resource-utilization training runs.
@@ -65,3 +65,5 @@
 - Future H200 py39 + robomimic 0.2.0 migration procedure: first verify Python, robomimic, robosuite, torch/CUDA, MuJoCo rendering, and `/mnt/3fs2` write scope; then run dataset/env/video smoke tests; then test loading one checkpoint from BC-RNN, SmolVLA, and DP; then reproduce the current SmolVLA four-way, DP no-hist four-way, and BC-RNN reference evaluations with the same checkpoint/eval schedule.
 - Shared py39 H200 environment doc on `origin/main`: `workspace/shared/ldp_ptp_py39_h200_environment.md`, added by commit `968f3ca`. It documents ready host `10.100.0.29:36645`, venv `/root/ptp_ldp_py39`, Python `3.9.25`, robomimic `0.2.0`, robosuite `cheng-chi/robosuite@277ab9588ad7a4f4b55cf75508b44aa67ec171f0` source version `1.2.0`, torch `2.5.1`, MuJoCo 2.1.0 for `mujoco-py`, and training branch `intern_ldp_explorer/task001_ptp_py39_rerun`.
 - Session 23 live status pattern: DP official-PH is producing substantially higher closed-loop rollout scores than DP LDP-MH under the same no-hist setting. As of 2026-05-08 14:40 UTC, best DP scores were UNet official-PH `0.68`, DiT official-PH `0.60`, UNet LDP-MH `0.06`, and DiT LDP-MH `0.04`. SmolVLA four-way training was still pre-rollout with `epoch_1000.pt` count `0/4`; official-PH runs were near epoch 850, PTP/LDP-MH runs near epoch 330.
+- DP speed caveat: current DP wall-clock speed should not be compared directly to current SmolVLA epoch speed. DP performs online robosuite rollout eval inside training with `n_test=50`, `n_test_vis=50`, `num_inference_steps=100`, and `n_action_steps=1`, so each scheduled eval can require roughly 2.0M diffusion denoising forward passes for PH (`50*400*100`) or 2.5M for MH (`50*500*100`), plus video encoding. SmolVLA defers closed-loop rollout until after training and currently logs offline action-MSE eval only.
+- DP optimizer-step caveat: DP uses batch size 64 while SmolVLA uses batch size 128, so one DP epoch is about twice as many optimizer steps for the same sequence dataset. Current logs show official-PH DP about 417 steps/epoch vs SmolVLA about 224, and LDP-MH DP about 1150 vs SmolVLA about 598.

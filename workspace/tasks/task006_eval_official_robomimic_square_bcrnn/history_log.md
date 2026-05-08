@@ -1,6 +1,6 @@
 # History Log
 
-<!-- METADATA:SESSION=23 -->
+<!-- METADATA:SESSION=24 -->
 
 ## Session 0
 - Created task for no-training evaluation of the official robomimic v0.1 Square(PH) low-dimensional BC-RNN checkpoint.
@@ -151,3 +151,10 @@
 - `10.100.16.46:23989` SmolVLA GPUs were active: GPU0 `3431/143771 MiB` at `85%`, GPU1 `3435/143771 MiB` at `87%`; main PIDs `27745/27774/27801/27816` and monitor PID `62177` remained alive.
 - Latest SmolVLA parsed status: official-PH big384 train epoch 852 and eval epoch 800 MSE `0.1650568545`; official-PH small train epoch 875 and eval epoch 800 MSE `0.1664465666`; PTP/LDP-MH big384 train epoch 330 and eval epoch 300 MSE `0.1338918209`; PTP/LDP-MH small train epoch 330 and eval epoch 300 MSE `0.1217582300`.
 - SmolVLA post-training rollout has not started: all four `epoch_1000.pt` files are still absent, monitor `62177` is waiting, and the final report file has not been generated.
+
+## Session 24
+- Analyzed why DP appears much slower than SmolVLA in the current Square runs.
+- Confirmed DP config uses `num_inference_steps=100`, `n_action_steps=1`, `n_test=50`, `n_test_vis=50`, and `n_envs=28`; scheduled eval therefore performs 50 closed-loop robosuite rollouts with video saving during training.
+- Confirmed SmolVLA current training performs only offline action reconstruction eval, while closed-loop all-checkpoint rollout is deferred until all four `epoch_1000.pt` files exist.
+- Confirmed epoch counts are not comparable: DP uses batch size 64, while SmolVLA uses batch size 128. From current logs, official-PH DP has about 417 optimizer steps per epoch versus about 224 for SmolVLA, and LDP-MH DP has about 1150 steps per epoch versus about 598 for SmolVLA.
+- Conclusion: the main slowdown is expected from embedded rollout/video evaluation and heavier DP inference during eval; secondary causes are smaller DP batch size, 100-step diffusion sampling with one-action replanning, robosuite CPU/rendering overhead, and likely fp32 DP training versus AMP-enabled SmolVLA.
