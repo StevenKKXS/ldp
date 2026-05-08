@@ -1,6 +1,6 @@
 # History Log
 
-<!-- METADATA:SESSION=20 -->
+<!-- METADATA:SESSION=21 -->
 
 ## Session 0
 - Created task for no-training evaluation of the official robomimic v0.1 Square(PH) low-dimensional BC-RNN checkpoint.
@@ -133,3 +133,8 @@
 - Latest parsed DP status: UNet LDP-MH epoch 63, last/best rollout `0.06/0.06`; UNet official-PH epoch 153, last rollout `0.62`, best `0.68`; DiT LDP-MH epoch 69, last rollout `0.00`, best `0.04`; DiT official-PH epoch 183, last rollout `0.58`, best `0.60`.
 - On `23989`, the active task is four-way SmolVLA training with live main PIDs `27745`, `27774`, `27801`, `27816`, plus post-train rollout monitor PID `62177`.
 - Latest SmolVLA status: official-PH small and big384 reached epoch 600; PTP/LDP-MH small and big384 reached epoch 200; `epoch_1000.pt` count remains `0/4`, so the post-train rollout monitor is still waiting.
+
+## Session 21
+- Added `current_work_handoff.md` as a durable task handoff for the active Square work.
+- Recorded the two active H200 GPU entries, live process IDs, SmolVLA and DP run roots, log roots, planned rollout output roots, data versions, and completed reference results.
+- Documented the migration plan for the future H200 Python 3.9 + robomimic 0.2.0 environment: environment checks, dataset/rendering smoke tests, checkpoint load tests, full SmolVLA/DP/BC-RNN reproduction matrix, and final comparison dimensions.
