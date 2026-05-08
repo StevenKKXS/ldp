@@ -1,6 +1,33 @@
 # Task Knowledge
 
-<!-- METADATA:SESSION=98 -->
+<!-- METADATA:SESSION=99 -->
+
+## Session 99 Knowledge
+- Released RoboMimic HDF5 files checked in this task do not contain explicit robomimic / robosuite / MuJoCo version metadata.
+- HDF5 env metadata observed:
+- Square: `NutAssemblySquare`, `control_delta=true`, cameras `agentview` / `robot0_eye_in_hand`, `84x84`
+- Tool-Hang: `ToolHang`, `control_delta=true`, cameras `sideview` / `robot0_eye_in_hand`, `240x240`
+- Transport: `TwoArmTransport`, `control_delta=true`, cameras `shouldercamera0` / `shouldercamera1` / `robot0_eye_in_hand` / `robot1_eye_in_hand`, `84x84`
+- LongSquare: `NutAssemblySquare`, `control_delta=false`, cameras `agentview` / `robot0_eye_in_hand`, `84x84`
+- Compact embedding HDF5 files for Tool-Hang and Transport do not retain `data/env_args`; use raw `image_abs.hdf5` for env metadata.
+- Upstream LDP / Diffusion Policy environment pinning is older than the current active venv:
+- upstream pins include `robomimic==0.2.0`
+- upstream robosuite source is `cheng-chi/robosuite` commit `277ab9588ad7a4f4b55cf75508b44aa67ec171f0`
+- upstream requirements include `mujoco==2.3.7` and `mujoco-py==2.1.2.14`
+- current active venv reports `robomimic 0.3.0`, `robosuite 1.4.1`, `mujoco 3.8.0`, `gym 0.25.2`, `torch 2.5.1`, `diffusers 0.30.0`, with no `mujoco-py` or `free-mujoco-py` metadata package.
+- Robomimic version notes relevant to success-rate debugging:
+- v0.2 docs: CoRL 2021 datasets should use robosuite `offline_study`.
+- v0.3 docs: datasets based on robosuite `v1.4.1`; original CoRL 2021 used `offline_study`.
+- v0.4 docs: hosted datasets based on robosuite `v1.5.1`, with a warning that learning results may not exactly match original `offline_study`.
+- Robomimic issue `#178` is directly relevant to Tool-Hang:
+- issue reports Tool-Hang image reproduction `24%` versus paper `67.3 +/- 4.1`
+- maintainer focused on robosuite version and data generation path
+- maintainer recommended either regenerating from raw or using robosuite `offline_study` plus robomimic `v0.2.0`
+- maintainer confirmed that v0.3 / v1.4.1 generated image data should be replaced when testing the `offline_study` path.
+- Interpretation for this task:
+- Tool-Hang zero success has strong evidence for a possible version / data-generation mismatch.
+- Transport zero success has plausible version-mismatch risk, but less direct public issue evidence.
+- A clean isolation experiment should use a separate compatibility env rather than modifying the active training venv.
 
 ## Session 98 Knowledge
 - Effective stamp remains `1778075154`.

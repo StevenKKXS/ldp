@@ -1,6 +1,43 @@
 # History Log
 
-<!-- METADATA:SESSION=98 -->
+<!-- METADATA:SESSION=99 -->
+
+## Session 99
+- User asked whether the released training data, upstream GitHub repo, or related materials specify the matching robomimic / robosuite versions, and asked to check the robomimic issue discussion about success-rate sensitivity to versions.
+- Checked upstream LDP / Diffusion Policy materials:
+- LDP README points RoboMimic image data to Diffusion Policy's `robomimic_image.zip` download, but does not itself state the data-generation robomimic / robosuite version.
+- LDP `conda_environment.yaml` pins `robomimic==0.2.0` and `robosuite @ https://github.com/cheng-chi/robosuite/archive/277ab9588ad7a4f4b55cf75508b44aa67ec171f0.tar.gz`.
+- LDP `requirements.txt` also contains `robomimic==0.2.0`, the same `cheng-chi/robosuite` commit, `mujoco==2.3.7`, and `mujoco-py==2.1.2.14`.
+- Diffusion Policy's public data index lists `robomimic_image.zip` as a released training archive, but the index does not state robomimic / robosuite versions.
+- Checked robomimic official docs:
+- robomimic v0.2 docs say the v0.1 CoRL 2021 datasets should be used with robosuite's `offline_study` branch.
+- robomimic v0.3 docs say the CoRL 2021 datasets originally relied on `offline_study`, but v0.3 provides datasets based on robosuite `v1.4.1` and reports similar results; users wanting `offline_study` should use robomimic `v0.2.0`.
+- robomimic v0.4 docs say the current hosted datasets are based on robosuite `v1.5.1`, and explicitly warn that learning results may not match the original `offline_study` datasets exactly.
+- Checked robomimic issue `ARISE-Initiative/robomimic#178`:
+- The issue reports Tool-Hang image BC-RNN maxing at `24%` success versus the robomimic study paper's `67.3 +/- 4.1`.
+- Maintainer asked for robosuite branch / commit / version and dataset postprocessing details.
+- Reporter used robomimic `0.3.0` and robosuite `1.4.1`, then clarified that Tool-Hang image data had been generated from raw `demo_v141.hdf5`.
+- Maintainer stated v1.4.1 Tool-Hang image should not be directly downloadable and recommended either regenerating from raw or downgrading to robosuite `offline_study` plus robomimic `v0.2.0`.
+- Maintainer also confirmed that a previously generated v0.3 / v1.4.1 image file should be deleted before using the offline_study / v0.2.0 data path.
+- Checked current local training HDF5 metadata on `10.100.0.29:36645`:
+- Square `image_abs.hdf5`: `env_name=NutAssemblySquare`, cameras `agentview` and `robot0_eye_in_hand`, `84x84`, `control_delta=true`, no version-like keys.
+- Tool-Hang `image_abs.hdf5`: `env_name=ToolHang`, cameras `sideview` and `robot0_eye_in_hand`, `240x240`, `control_delta=true`, no version-like keys.
+- Transport `image_abs.hdf5`: `env_name=TwoArmTransport`, cameras `shouldercamera0`, `shouldercamera1`, `robot0_eye_in_hand`, `robot1_eye_in_hand`, `84x84`, `control_delta=true`, no version-like keys.
+- LongSquare `image.hdf5` and `demos.hdf5`: `env_name=NutAssemblySquare`, cameras `agentview` and `robot0_eye_in_hand`, `84x84`, `control_delta=false`, no version-like keys.
+- The compact embedding HDF5 files for Tool-Hang and Transport keep only `source_raw_path` at the root and do not retain `data/env_args`; rollout uses the raw `image_abs.hdf5` files for environment metadata.
+- Checked current remote venv on `10.100.0.29:36645`:
+- `robomimic 0.3.0`
+- `robosuite 1.4.1`
+- `mujoco 3.8.0`
+- `gym 0.25.2`
+- `torch 2.5.1`
+- `diffusers 0.30.0`
+- no installed `mujoco-py` or `free-mujoco-py` package was reported by import metadata.
+- Current conclusion:
+- The data files themselves do not resolve the exact simulator package version.
+- Upstream code pinning points to an older LDP / Diffusion Policy stack than our active venv.
+- Robomimic docs and issue discussion make Tool-Hang image success a credible version / data-generation mismatch variable.
+- This should be treated as a high-priority explanation for Tool-Hang and a plausible explanation for Transport, although Transport has weaker direct issue evidence than Tool-Hang.
 
 ## Session 98
 - User asked for the current DP and PTP experiment status.
