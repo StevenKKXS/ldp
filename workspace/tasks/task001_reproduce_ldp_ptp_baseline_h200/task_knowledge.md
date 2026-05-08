@@ -1,6 +1,27 @@
 # Task Knowledge
 
-<!-- METADATA:SESSION=97 -->
+<!-- METADATA:SESSION=98 -->
+
+## Session 98 Knowledge
+- Effective stamp remains `1778075154`.
+- Current output root:
+- `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/outputs/session89_4x2x2_2000ep_1778075154`
+- Current log root:
+- `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/logs/session89_4x2x2_2000ep_1778075154`
+- PTP runs are on `10.100.0.29:30103`; DP resume runs are on `10.100.0.29:36645`.
+- `logs.json.txt` exists in each run directory and is useful for train/val loss and epoch; checkpoint filenames are useful for rollout `test_mean_score`.
+- Current high-level status at `2026-05-08T02:35:39Z`:
+- PTP: 7 active, LongSquare `a8` complete at epoch `1999`
+- DP: 7 active, LongSquare `a8` complete at epoch `1999`
+- no sampled traceback markers in either queue
+- checkpoint and MP4 production is healthy
+- nonzero checkpoint scores so far:
+- Square PTP `a8`: best `0.45`, latest `0.40`
+- Square PTP `a1`: best/latest `0.28`
+- Square DP `a8`: best `0.08`, latest `0.04`
+- Square DP `a1`: best/latest `0.02`
+- all sampled Tool-Hang, Transport, and LongSquare checkpoint scores remain `0.0`
+- Square DP `a8` is running beyond the intended `2000` epoch target, observed at epoch `2259`; handle this as an over-target resume anomaly when selecting or reporting the clean 2000-epoch result.
 
 ## Session 97 Knowledge
 - Paused DP experiments can run on `10.100.0.29:36645` while PTP priority runs continue on `10.100.0.29:30103`.

@@ -1,6 +1,46 @@
 # History Log
 
-<!-- METADATA:SESSION=97 -->
+<!-- METADATA:SESSION=98 -->
+
+## Session 98
+- User asked for the current DP and PTP experiment status.
+- Checked effective stamp `1778075154`.
+- PTP queue on `10.100.0.29:30103`, sample time `2026-05-08T02:35:39Z`:
+- GPU sample from the closer process check at `2026-05-08T02:33:28Z`:
+- GPU0: `5679 / 143771 MiB`, utilization `95%`
+- GPU1: `7291 / 143771 MiB`, utilization `94%`
+- GPU2: `10815 / 143771 MiB`, utilization `98%`
+- GPU3: `2840 / 143771 MiB`, utilization `26%`
+- PTP status:
+- Square PTP `a8`: running, epoch `1599`, train loss `0.0037736743688583374`, val loss `0.077782541513443`, latest checkpoint score `0.40` at epoch `1499`, best checkpoint score `0.45` at epoch `0599`, checkpoints `16`, MP4s `306`, no traceback
+- Square PTP `a1`: running, epoch `685`, train loss `0.008604338392615318`, val loss `0.0694713369011879`, latest/best checkpoint score `0.28` at epoch `0599`, checkpoints `7`, MP4s `120`, no traceback
+- Tool-Hang PTP `a8`: running, epoch `1246`, train loss `0.003336786525323987`, val loss `0.028955822810530663`, latest/best checkpoint score `0.0`, checkpoints `11`, MP4s `240`, no traceback
+- Tool-Hang PTP `a1`: running, epoch `463`, train loss `0.0064461189322173595`, val loss `0.017637258395552635`, latest/best checkpoint score `0.0`, checkpoints `5`, MP4s `80`, no traceback
+- Transport PTP `a8`: running, epoch `528`, train loss `0.008498132228851318`, val loss `0.031120680272579193`, latest/best checkpoint score `0.0`, checkpoints `6`, MP4s `100`, no traceback
+- Transport PTP `a1`: running, epoch `263`, train loss `0.0025126603431999683`, val loss `0.024229833856225014`, latest/best checkpoint score `0.0`, checkpoints `3`, MP4s `40`, no traceback
+- LongSquare PTP `a8`: completed, epoch `1999`, train loss `0.0007657178546734184`, val loss `0.0006794886430725455`, latest/best checkpoint score `0.0`, checkpoints `11`, MP4s `400`, no traceback
+- LongSquare PTP `a1`: running, epoch `799`, train loss `0.001087939366698265`, val loss `0.0015913865063339472`, latest/best checkpoint score `0.0`, checkpoints `8`, MP4s `146`, no traceback
+- DP queue on `10.100.0.29:36645`, sample time `2026-05-08T02:35:39Z`:
+- GPU sample from the closer process check at `2026-05-08T02:33:28Z`:
+- GPU0: `16623 / 143771 MiB`, utilization `100%`
+- GPU1: `10122 / 143771 MiB`, utilization `99%`
+- GPU2: `1 / 143771 MiB`, utilization `0%`
+- GPU3: `1 / 143771 MiB`, utilization `0%`
+- DP status:
+- Square DP `a8`: running, epoch `2259`, train loss `0.0029799474868923426`, val loss `0.15596885979175568`, latest checkpoint score `0.04` at epoch `2199`, best checkpoint score `0.08` at epoch `1299`, checkpoints `24`, MP4s `364`, no traceback
+- Square DP `a1`: running, epoch `799`, train loss `0.0035717522259801626`, val loss `0.09639456123113632`, latest/best checkpoint score `0.02` at epoch `0699`, checkpoints `9`, MP4s `134`, no traceback
+- Tool-Hang DP `a8`: running, epoch `1978`, train loss `0.004603751935064793`, val loss `0.04779990389943123`, latest/best checkpoint score `0.0`, checkpoints `19`, MP4s `334`, no traceback
+- Tool-Hang DP `a1`: running, epoch `599`, train loss `0.013065701350569725`, val loss `0.026184486225247383`, latest/best checkpoint score `0.0`, checkpoints `6`, MP4s `102`, no traceback
+- Transport DP `a8`: running, epoch `759`, train loss `0.003875549416989088`, val loss `0.06167551875114441`, latest/best checkpoint score `0.0`, checkpoints `8`, MP4s `130`, no traceback
+- Transport DP `a1`: running, epoch `299`, train loss `0.012952807359397411`, val loss `0.04278545454144478`, latest/best checkpoint score `0.0`, checkpoints `3`, MP4s `54`, no traceback
+- LongSquare DP `a8`: completed, epoch `1999`, train loss `0.0007172443539272673`, val loss `0.0006463319296017289`, latest/best checkpoint score `0.0`, checkpoints `11`, MP4s `400`, no traceback
+- LongSquare DP `a1`: running, epoch `1099`, train loss `0.0011471062898635864`, val loss `0.0009850936476141214`, latest/best checkpoint score `0.0`, checkpoints `11`, MP4s `190`, no traceback
+- Important interpretation:
+- No current sampled run has a traceback marker.
+- MP4 and checkpoint generation are healthy.
+- Reported scores are training rollout checkpoint scores, not final selected-checkpoint evaluation.
+- Square PTP is the only clearly nonzero PTP task so far.
+- Square DP `a8` is still running past the intended `2000` epoch target; this is an over-target resume anomaly that should be controlled before treating that run as a clean 2000-epoch result.
 
 ## Session 97
 - User requested resuming the previously paused DP experiments on `10.100.0.29:36645`, using two GPUs so they are not idle.
