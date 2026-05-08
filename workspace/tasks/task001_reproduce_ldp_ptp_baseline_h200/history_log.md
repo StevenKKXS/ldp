@@ -1,6 +1,52 @@
 # History Log
 
-<!-- METADATA:SESSION=99 -->
+<!-- METADATA:SESSION=100 -->
+
+## Session 100
+- User asked for the current best result of each model.
+- Checked current output root:
+- `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/outputs/session89_4x2x2_2000ep_1778075154`
+- Sample time: `2026-05-08T03:01:26Z`.
+- Definition used:
+- best result means the best training-time rollout checkpoint `test_mean_score` currently present in checkpoint filenames and `logs.json.txt`
+- this is not a fresh fixed 100-episode final eval
+- Current best checkpoint scores:
+- Square DP `a8`: best `0.08` at epoch `1299`, checkpoint `epoch=1299-test_mean_score=0.080.ckpt`
+- Square DP `a1`: best `0.02` at epoch `699`, checkpoint `epoch=0699-test_mean_score=0.020.ckpt`
+- Square PTP `a8`: best `0.45` at epoch `599`, checkpoint `epoch=0599-test_mean_score=0.450.ckpt`
+- Square PTP `a1`: best `0.28` at epoch `599`, checkpoint `epoch=0599-test_mean_score=0.280.ckpt`
+- Tool-Hang DP `a8`: best `0.0`, all sampled checkpoint rollouts remain zero
+- Tool-Hang DP `a1`: best `0.0`, all sampled checkpoint rollouts remain zero
+- Tool-Hang PTP `a8`: best `0.0`, all sampled checkpoint rollouts remain zero
+- Tool-Hang PTP `a1`: best `0.0`, all sampled checkpoint rollouts remain zero
+- Transport DP `a8`: best `0.0`, all sampled checkpoint rollouts remain zero
+- Transport DP `a1`: best `0.0`, all sampled checkpoint rollouts remain zero
+- Transport PTP `a8`: best `0.0`, all sampled checkpoint rollouts remain zero
+- Transport PTP `a1`: best `0.0`, all sampled checkpoint rollouts remain zero
+- LongSquare DP `a8`: best `0.0`, all sampled checkpoint rollouts remain zero
+- LongSquare DP `a1`: best `0.0`, all sampled checkpoint rollouts remain zero
+- LongSquare PTP `a8`: best `0.0`, all sampled checkpoint rollouts remain zero
+- LongSquare PTP `a1`: best `0.0`, all sampled checkpoint rollouts remain zero
+- Current latest sampled progress from `logs.json.txt`:
+- Square DP `a8`: last epoch around `2292`, best remains epoch `1299`; this run is beyond the intended 2000-epoch target and should be treated as an over-target anomaly for clean reporting
+- Square DP `a1`: last epoch `799`
+- Square PTP `a8`: last epoch around `1645`
+- Square PTP `a1`: last epoch `699`
+- Tool-Hang DP `a8`: last epoch `1999`
+- Tool-Hang DP `a1`: last epoch `599`
+- Tool-Hang PTP `a8`: last epoch around `1288`
+- Tool-Hang PTP `a1`: last epoch `499`
+- Transport DP `a8`: last epoch around `771`
+- Transport DP `a1`: last epoch `299`
+- Transport PTP `a8`: last epoch around `542`
+- Transport PTP `a1`: last epoch around `277`
+- LongSquare DP `a8`: last epoch `1999`
+- LongSquare DP `a1`: last epoch `1099`
+- LongSquare PTP `a8`: last epoch `1999`
+- LongSquare PTP `a1`: last epoch around `807`
+- Interpretation:
+- Square shows a clear PTP advantage in current training rollout scores: `0.45` for PTP `a8` versus `0.08` for DP `a8`; `0.28` for PTP `a1` versus `0.02` for DP `a1`.
+- Tool-Hang, Transport, and LongSquare still provide no nonzero checkpoint rollout signal under the current environment / data / eval stack.
 
 ## Session 99
 - User asked whether the released training data, upstream GitHub repo, or related materials specify the matching robomimic / robosuite versions, and asked to check the robomimic issue discussion about success-rate sensitivity to versions.

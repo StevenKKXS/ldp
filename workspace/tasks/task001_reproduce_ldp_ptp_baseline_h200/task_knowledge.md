@@ -1,6 +1,18 @@
 # Task Knowledge
 
-<!-- METADATA:SESSION=99 -->
+<!-- METADATA:SESSION=100 -->
+
+## Session 100 Knowledge
+- Current best training-rollout checkpoint scores under stamp `1778075154` as of `2026-05-08T03:01:26Z`:
+- Square DP `a8`: `0.08` at epoch `1299`
+- Square DP `a1`: `0.02` at epoch `699`
+- Square PTP `a8`: `0.45` at epoch `599`
+- Square PTP `a1`: `0.28` at epoch `599`
+- Tool-Hang DP/PTP `a8/a1`: all best `0.0`
+- Transport DP/PTP `a8/a1`: all best `0.0`
+- LongSquare DP/PTP `a8/a1`: all best `0.0`
+- These are training-time rollout checkpoint scores, not fresh 100-episode final eval scores.
+- For clean reporting, remember that Square DP `a8` has run beyond the intended 2000-epoch target; its current best is still at epoch `1299`, but any latest-state selection from that run needs explicit handling.
 
 ## Session 99 Knowledge
 - Released RoboMimic HDF5 files checked in this task do not contain explicit robomimic / robosuite / MuJoCo version metadata.
