@@ -1,6 +1,6 @@
 # History Log
 
-<!-- METADATA:SESSION=11 -->
+<!-- METADATA:SESSION=12 -->
 
 ## Session 0
 - Created task for no-training evaluation of the official robomimic v0.1 Square(PH) low-dimensional BC-RNN checkpoint.
@@ -75,3 +75,9 @@
 - Current epoch progress: DiT LDP-MH epoch 38, UNet LDP-MH epoch 35, DiT official-PH epoch 83, UNet official-PH epoch 71.
 - Current 50-rollout best scores: DiT LDP-MH epoch 20 `0.04`, UNet LDP-MH epoch 10 `0.04`, DiT official-PH epoch 70 `0.60`, UNet official-PH epoch 70 `0.66`.
 - Video saving is working; current mp4 counts are 168, 168, 448, and 392 respectively across the four runs.
+
+## Session 12
+- Clarified the data used by the earlier SmolVLA runs.
+- `ldp_mh_abs10_seed42` and `ldp_mh_abs10_big384_seed44` used `/mnt/3fs2/data/tingwen.du/intern_method_developer/task003_formal_smolvla_square_train_eval/data/square_mh_image_abs.hdf5`, a 300-demo, 80,731-step LDP-MH copy from `intern_ldp_explorer`.
+- `official_ph_v141_abs10_seed43` used `/mnt/3fs2/data/tingwen.du/intern_method_developer/task006_eval_official_robomimic_square_bcrnn/data/square/ph/image_abs_v141.hdf5`, a 200-demo, 30,154-step official-PH v1.4.1 dataset generated in this task.
+- Metadata check: the official-PH file has `env_version=1.4.1`; the LDP-MH / intern_ldp_explorer files do not include an explicit `env_version` field in `env_args`.

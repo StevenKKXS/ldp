@@ -8,7 +8,7 @@
 | Status | Working |
 | Current Task | task006_eval_official_robomimic_square_bcrnn |
 | PR | https://github.com/StevenKKXS/ldp/pull/new/intern_method_developer/task006_eval_official_robomimic_square_bcrnn |
-| Session | 11 |
+| Session | 12 |
 
 ## 最近进展
-- DP no-hist 四个 run 均存活并进入训练/rollout；截至 2026-05-08 12:08 UTC，两张 H200 共约 27GB/卡显存占用。official-PH 当前最好：UNet epoch70 `0.66`，DiT epoch70 `0.60`；LDP-MH 当前最好均为 `0.04`。
+- 已澄清 SmolVLA 数据来源：`ldp_mh_abs10_seed42` 和 `ldp_mh_abs10_big384_seed44` 用 intern_ldp_explorer/LDP-MH 数据；`official_ph_v141_abs10_seed43` 用本任务生成的 official-PH v1.4.1 数据。
