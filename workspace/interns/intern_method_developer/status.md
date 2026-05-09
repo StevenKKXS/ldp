@@ -27,3 +27,4 @@
 - 新 py39 对比实验：`26482` 跑 DP no-hist UNet/DiT × PTP-LDP-MH/official-PH v1.4.1，前 100 epoch 每 20 epoch rollout；`17821` 跑 SmolVLA small/big384 × 两套数据，monitor 将训练后做全 checkpoint 20-rollout 和 best 50-rollout。
 - 2026-05-09 进度：py39 SmolVLA 已完成并生成报告，最好为 big384 PTP/LDP-MH epoch 400，`16/50 = 0.32`；py39 DP 四路仍在训练，当前 best 为 UNet LDP-MH `0.36`、DiT official-PH `0.48`、DiT LDP-MH `0.10`、UNet official-PH `0.10`。
 - Session 30 已新增 `ROLLOUT_BEST_SUMMARY_20260509.md`，按运行版本、模型设定、数据版本汇总当前最好的 closed-loop rollout；旧环境四路 SmolVLA 补跑仍标记为 pending。
+- Session 30 已新增 `DP_ROLLOUT_EVAL_CURVES_20260509.md`，展开旧环境 DP official-PH 的 scheduled rollout 曲线：UNet 最好 epoch 90 `34/50 = 0.68`，DiT 最好 epoch 70 `30/50 = 0.60`。
