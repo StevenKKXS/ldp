@@ -12,8 +12,8 @@
 
 ## 最近进展
 - 当前可访问四个 GPU 入口：`10.100.16.46:16139`、`10.100.16.46:23989`、`10.100.2.35:26482`、`10.100.2.35:17821`，每个入口各可见 2 张 NVIDIA H200。
-- `16139` 旧环境 DP no-hist 四路仍在训练：UNet official-PH epoch 762 best `0.68`，DiT official-PH epoch 812 best `0.60`，UNet LDP-MH epoch 282 best `0.06`，DiT LDP-MH epoch 296 best `0.04`。
-- `23989` 旧环境 SmolVLA 四路训练已完成 epoch 1000；原 post-train monitor 在 2026-05-08 17:58 UTC 未生成报告，Session 30 已用 stamp `20260509_old_smolvla_resume` 重新启动 all-checkpoint rollout。
+- `16139` 旧环境 DP no-hist：official-PH 两路已到 epoch 1000 并退出，best 仍为 UNet `0.68`、DiT `0.60`；LDP-MH 两路仍在训练，UNet epoch 404 best `0.06`，DiT epoch 421 best `0.04`。
+- `23989` 旧环境 SmolVLA 四路训练和补 rollout 已完成，report 为 `smolvla_fourway_rollout_after_train_20260509_old_smolvla_resume.md`，最好是 big384 official-PH epoch 600 `12/50 = 0.24`。
 - Session 21 已新增 `current_work_handoff.md`，记录当前全部实验、路径、数据版本、脚本入口，以及迁移到 H200 py39 + robomimic 0.2.0 环境后的复测步骤。
 - Session 22 已在 `origin/main` 找到 py39 H200 环境文档：`workspace/shared/ldp_ptp_py39_h200_environment.md`，提交 `968f3ca`。
 - Session 23 于 2026-05-08 14:40 UTC 检查：DP 四路仍在跑，official-PH 最好 rollout 为 UNet epoch 90 `0.68`、DiT epoch 70 `0.60`；SmolVLA 四路仍在训练，official-PH 到约 epoch 850/875，PTP/LDP-MH 到约 epoch 330，`epoch_1000.pt` 仍为 `0/4`。
@@ -28,3 +28,4 @@
 - 2026-05-09 进度：py39 SmolVLA 已完成并生成报告，最好为 big384 PTP/LDP-MH epoch 400，`16/50 = 0.32`；py39 DP 四路仍在训练，当前 best 为 UNet LDP-MH `0.36`、DiT official-PH `0.48`、DiT LDP-MH `0.10`、UNet official-PH `0.10`。
 - Session 30 已新增 `ROLLOUT_BEST_SUMMARY_20260509.md`，按运行版本、模型设定、数据版本汇总当前最好的 closed-loop rollout；旧环境四路 SmolVLA 补跑仍标记为 pending。
 - Session 30 已新增 `DP_ROLLOUT_EVAL_CURVES_20260509.md`，展开旧环境 DP official-PH 的 scheduled rollout 曲线：UNet 最好 epoch 90 `34/50 = 0.68`，DiT 最好 epoch 70 `30/50 = 0.60`。
+- 当前未完成项：旧环境 DP 的 LDP-MH UNet/DiT 继续跑到 1000 epoch；py39 DP 四路仍在训练，当前 best 为 LDP-MH UNet `0.46`、LDP-MH DiT `0.18`、official-PH UNet `0.20`、official-PH DiT `0.48`。
