@@ -29,3 +29,4 @@
 - Session 30 已新增 `ROLLOUT_BEST_SUMMARY_20260509.md`，按运行版本、模型设定、数据版本汇总当前最好的 closed-loop rollout；旧环境四路 SmolVLA 补跑仍标记为 pending。
 - Session 30 已新增 `DP_ROLLOUT_EVAL_CURVES_20260509.md`，展开旧环境 DP official-PH 的 scheduled rollout 曲线：UNet 最好 epoch 90 `34/50 = 0.68`，DiT 最好 epoch 70 `30/50 = 0.60`。
 - 当前未完成项：旧环境 DP 的 LDP-MH UNet/DiT 继续跑到 1000 epoch；py39 DP 四路仍在训练，当前 best 为 LDP-MH UNet `0.46`、LDP-MH DiT `0.18`、official-PH UNet `0.20`、official-PH DiT `0.48`。
+- SmolVLA 正式 rollout 已全部覆盖：早期三路、旧环境四路、py39 四路均完成 all-checkpoint 20-rollout sweep 和 best-checkpoint 50-rollout，且均保存 episode videos；当前剩余活跃实验只有 DP。
