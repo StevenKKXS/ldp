@@ -26,3 +26,4 @@
 - Session 30 已在 `10.100.2.35:26482` 和 `10.100.2.35:17821` 配好 py39 + robomimic 0.2.0 + robosuite 1.2.0 环境，完成数据/env/video、SmolVLA 1-epoch、DP UNet/DiT train+rollout smoke test，并挂起 py39 对比实验。
 - 新 py39 对比实验：`26482` 跑 DP no-hist UNet/DiT × PTP-LDP-MH/official-PH v1.4.1，前 100 epoch 每 20 epoch rollout；`17821` 跑 SmolVLA small/big384 × 两套数据，monitor 将训练后做全 checkpoint 20-rollout 和 best 50-rollout。
 - 2026-05-09 进度：py39 SmolVLA 已完成并生成报告，最好为 big384 PTP/LDP-MH epoch 400，`16/50 = 0.32`；py39 DP 四路仍在训练，当前 best 为 UNet LDP-MH `0.36`、DiT official-PH `0.48`、DiT LDP-MH `0.10`、UNet official-PH `0.10`。
+- Session 30 已新增 `ROLLOUT_BEST_SUMMARY_20260509.md`，按运行版本、模型设定、数据版本汇总当前最好的 closed-loop rollout；旧环境四路 SmolVLA 补跑仍标记为 pending。
