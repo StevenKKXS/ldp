@@ -1,6 +1,19 @@
 # Task Knowledge
 
-<!-- METADATA:SESSION=123 -->
+<!-- METADATA:SESSION=124 -->
+
+## Session 124 Knowledge
+- Active full rerun stamp `20260509_014611` is healthy and still running.
+- The previous epoch-99 vector-env failure is no longer occurring: Square, Tool-Hang, and LongSquare have completed rollout logging, checkpoints, and videos.
+- Artifact counts at the Session 124 sample:
+- `36` checkpoints.
+- `386` mp4 files.
+- Latest early scores:
+- Square PTP: `0.76` for a1 and `0.72` for a8; Square DP: `0.02` for a1/a8.
+- Tool-Hang PTP: `0.86` for a1 and `0.85` for a8; Tool-Hang DP: `0.0` for a1/a8.
+- LongSquare PTP: `0.13` for a1 and `0.11` for a8; LongSquare DP: `0.0` for a1/a8.
+- Transport is still in its first 100-episode rollout at epoch `99`, so it has no completed score/checkpoint for this stamp at the sample time.
+- Transport rollout is slow: log tails showed `Eval TwoArmTransportImage` chunks around `14/27` for a1 and `26-27/27` for a8.
 
 ## Session 123 Knowledge
 - Session 120 rollout crash was caused by a Gym API mismatch, not by task-specific Robomimic data.

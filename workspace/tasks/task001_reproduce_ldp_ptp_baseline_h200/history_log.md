@@ -1,6 +1,47 @@
 # History Log
 
-<!-- METADATA:SESSION=123 -->
+<!-- METADATA:SESSION=124 -->
+
+## Session 124
+- User asked for current progress.
+- Active stamp sampled:
+- `20260509_014611`
+- Output root:
+- `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/outputs/session120_ptp_py39_ht_4x2x2_2000ep_20260509_014611`
+- Log root:
+- `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/logs/session120_ptp_py39_ht_4x2x2_2000ep_20260509_014611`
+- Sample time:
+- `2026-05-09T07:45:15+00:00`
+- GPU state:
+- `10.100.0.29:36645`: all four H200s occupied, pmon showed two Python compute processes per GPU.
+- `10.100.0.29:30103`: all four H200s occupied, pmon showed two Python compute processes per GPU.
+- `train.py` process count sampled as `56` on each SSH entry, which includes top-level jobs plus child workers.
+- Artifact counts at the sample:
+- `16` `logs.json.txt` files present.
+- `36` checkpoint files found.
+- `386` mp4 files found.
+- Error grep over the active log root returned no sampled `Traceback`, Hydra execution error, OOM, killed-process, missing-path, module-import, or `AssertionError` markers.
+- This confirms the Gym `concatenate` fix moved the runs past the prior epoch-99 rollout crash and into score/checkpoint/video generation.
+- Latest parsed progress and last available rollout scores:
+- LongSquare DP a1: epoch `199`, last score `0.0`, score count `1`, ckpt `2`, mp4 `20`.
+- LongSquare DP a8: epoch `464`, last score `0.0`, score count `4`, ckpt `5`, mp4 `56`.
+- LongSquare PTP a1: epoch `199`, last score `0.13`, score count `1`, ckpt `2`, mp4 `20`.
+- LongSquare PTP a8: epoch `461`, last score `0.11`, score count `4`, ckpt `5`, mp4 `56`.
+- Square DP a1: epoch `199`, last score `0.02`, score count `1`, ckpt `2`, mp4 `20`.
+- Square DP a8: epoch `332`, last score `0.02`, score count `3`, ckpt `4`, mp4 `42`.
+- Square PTP a1: epoch `199`, last score `0.76`, score count `1`, ckpt `2`, mp4 `20`.
+- Square PTP a8: epoch `337`, last score `0.72`, score count `3`, ckpt `4`, mp4 `42`.
+- Tool-Hang DP a1: epoch `119`, last score `0.0`, score count `1`, ckpt `2`, mp4 `14`.
+- Tool-Hang DP a8: epoch `293`, last score `0.0`, score count `2`, ckpt `3`, mp4 `28`.
+- Tool-Hang PTP a1: epoch `128`, last score `0.86`, score count `1`, ckpt `2`, mp4 `14`.
+- Tool-Hang PTP a8: epoch `297`, last score `0.85`, score count `2`, ckpt `3`, mp4 `28`.
+- Transport DP a1/a8 and PTP a1/a8 were at epoch `99` with no completed score yet and no ckpt yet.
+- Transport log tails showed those four lanes actively inside `Eval TwoArmTransportImage` chunks, e.g. a8 lanes at chunks `26/27` or `27/27`, and a1 lanes at chunk `14/27`.
+- Interpretation:
+- the prior vector-env crash is fixed for real rollout paths.
+- Square and Tool-Hang PTP are already giving strong early scores.
+- LongSquare PTP is above DP in early rollout but still far below final target at this stage.
+- Transport evaluation is much slower and is still completing the first epoch-100 rollout, so its score should be read after the current rollout finishes.
 
 ## Session 123
 - User asked to continue fixing the Session 120 rollout failure.
