@@ -1,6 +1,42 @@
 # History Log
 
-<!-- METADATA:SESSION=121 -->
+<!-- METADATA:SESSION=122 -->
+
+## Session 122
+- User asked for current GPU occupancy.
+- Sampled both assigned SSH entries on `2026-05-09T01:37:23+00:00`.
+- `10.100.0.29:36645` GPU summary:
+- GPU0 H200: `1 / 143771 MiB`, `0%` util.
+- GPU1 H200: `1 / 143771 MiB`, `0%` util.
+- GPU2 H200: `1 / 143771 MiB`, `0%` util.
+- GPU3 H200: `1 / 143771 MiB`, `0%` util.
+- `36645` pmon showed no compute processes and `train.py` process count was `0`.
+- `10.100.0.29:30103` GPU summary:
+- GPU0 H200: `1 / 143771 MiB`, `0%` util.
+- GPU1 H200: `1 / 143771 MiB`, `0%` util.
+- GPU2 H200: `1 / 143771 MiB`, `0%` util.
+- GPU3 H200: `1 / 143771 MiB`, `0%` util.
+- `30103` pmon showed no compute processes and `train.py` process count was `0`.
+- Active stamp checked:
+- `20260508_151035`
+- Active output root:
+- `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/outputs/session120_ptp_py39_ht_4x2x2_2000ep_20260508_151035`
+- Active log root:
+- `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/logs/session120_ptp_py39_ht_4x2x2_2000ep_20260508_151035`
+- All `16` `logs.json.txt` files stopped at `epoch=99`.
+- No `test/mean_score` was written.
+- Checkpoint count sampled with `find ... -path "*/checkpoints/*.ckpt"` was `0`.
+- MP4 count sampled with `find ... -name "*.mp4"` was `0`.
+- All 16 status files contained only `START` lines and no successful `END` line.
+- Root failure pattern:
+- all lanes reached the first rollout/reset stage after epoch 99, then failed inside Gym vector concatenation.
+- Square, Tool-Hang, and Transport stack:
+- `train.py -> train_diffusion_transformer_hybrid_workspace.py:221 -> robomimic_image_runner.py:277 -> async_vector_env.py:250 -> gym/vector/utils/numpy_utils.py:39 -> AssertionError`
+- LongSquare stack:
+- `train.py -> train_diffusion_transformer_hybrid_workspace.py:221 -> robomimic_longhist_image_runner.py:367 -> async_vector_env.py:250 -> gym/vector/utils/numpy_utils.py:39 -> AssertionError`
+- Interpretation:
+- Current GPU occupancy is idle because the Session 120 high-throughput run exited at the first rollout stage, not because the jobs are still queued or waiting.
+- Training itself did run to the epoch-99 boundary for all 16 lanes, but the first configured rollout/checkpoint point did not complete, so there is no score, checkpoint, or video artifact from this run.
 
 ## Session 121
 - User asked for current GPU occupancy.

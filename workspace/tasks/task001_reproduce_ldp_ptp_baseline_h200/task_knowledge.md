@@ -1,6 +1,18 @@
 # Task Knowledge
 
-<!-- METADATA:SESSION=121 -->
+<!-- METADATA:SESSION=122 -->
+
+## Session 122 Knowledge
+- Session 120 high-throughput stamp `20260508_151035` is no longer occupying GPUs.
+- As of `2026-05-09T01:37:23+00:00`, both assigned SSH entries have all four H200 GPUs idle at about `1 MiB` used and `0%` utilization.
+- `36645` and `30103` both have `0` matching `train.py` processes.
+- All 16 lanes stopped at `epoch=99` with no `test/mean_score`.
+- No sampled `.ckpt` checkpoint or `.mp4` rollout video exists under the Session 120 output root.
+- Failure signature is shared across tasks and methods:
+- rollout env reset calls `AsyncVectorEnv.reset_wait`, then Gym `numpy_utils.concatenate`, which raises `AssertionError`.
+- This affects Square, Tool-Hang, Transport, and LongSquare at the first rollout stage after 99 logged training epochs.
+- Practical implication:
+- these runs are usable as training-up-to-rollout failure evidence only; they do not provide evaluation results or saved model checkpoints from the configured checkpoint interval.
 
 ## Session 121 Knowledge
 - Current Session 120 high-throughput run remains active under stamp `20260508_151035`.
