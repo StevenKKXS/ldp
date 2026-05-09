@@ -9,6 +9,7 @@ import numpy as np
 import multiprocessing as mp
 import time
 import sys
+import inspect
 from enum import Enum
 from copy import deepcopy
 
@@ -31,6 +32,14 @@ from gym.vector.utils import (
 )
 
 __all__ = ["AsyncVectorEnv"]
+
+
+def _concatenate_observations(space, items, out):
+    """Call Gym's vector concatenate across Gym API versions."""
+    params = tuple(inspect.signature(concatenate).parameters)
+    if params[:3] == ("items", "out", "space"):
+        return concatenate(items, out, space)
+    return concatenate(space, items, out)
 
 
 class AsyncState(Enum):
@@ -247,7 +256,7 @@ class AsyncVectorEnv(VectorEnv):
         self._state = AsyncState.DEFAULT
 
         if not self.shared_memory:
-            self.observations = concatenate(
+            self.observations = _concatenate_observations(
                 self.single_observation_space, results, self.observations
             )
 
@@ -313,7 +322,7 @@ class AsyncVectorEnv(VectorEnv):
         observations_list, rewards, dones, infos = zip(*results)
 
         if not self.shared_memory:
-            self.observations = concatenate(
+            self.observations = _concatenate_observations(
                 self.single_observation_space, observations_list, self.observations
             )
 

@@ -1,4 +1,5 @@
 import numpy as np
+import inspect
 from copy import deepcopy
 
 from gym import logger
@@ -6,6 +7,14 @@ from gym.vector.vector_env import VectorEnv
 from gym.vector.utils import concatenate, create_empty_array
 
 __all__ = ["SyncVectorEnv"]
+
+
+def _concatenate_observations(space, items, out):
+    """Call Gym's vector concatenate across Gym API versions."""
+    params = tuple(inspect.signature(concatenate).parameters)
+    if params[:3] == ("items", "out", "space"):
+        return concatenate(items, out, space)
+    return concatenate(space, items, out)
 
 
 class SyncVectorEnv(VectorEnv):
@@ -66,7 +75,7 @@ class SyncVectorEnv(VectorEnv):
         for env in self.envs:
             observation = env.reset()
             observations.append(observation)
-        self.observations = concatenate(
+        self.observations = _concatenate_observations(
             self.single_observation_space, observations, self.observations
         )
 
@@ -83,7 +92,7 @@ class SyncVectorEnv(VectorEnv):
             #     observation = env.reset()
             observations.append(observation)
             infos.append(info)
-        self.observations = concatenate(
+        self.observations = _concatenate_observations(
             self.single_observation_space, observations, self.observations
         )
 

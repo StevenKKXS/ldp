@@ -1,6 +1,43 @@
 # History Log
 
-<!-- METADATA:SESSION=122 -->
+<!-- METADATA:SESSION=123 -->
+
+## Session 123
+- User asked to continue fixing the Session 120 rollout failure.
+- Root cause found:
+- local `AsyncVectorEnv` and `SyncVectorEnv` called Gym vector `concatenate` with the newer argument order `(space, items, out)`.
+- `/root/ptp_ldp_py39` uses Gym `0.21.0`, where `concatenate` has signature `(items, out, space)`.
+- This made all 16 Session 120 lanes fail at the first rollout reset with `AssertionError` before score, checkpoint, or mp4 creation.
+- Code fix:
+- changed `diffusion_policy/gym_util/async_vector_env.py`.
+- changed `diffusion_policy/gym_util/sync_vector_env.py`.
+- added `_concatenate_observations(space, items, out)` that detects the installed Gym signature and calls `concatenate` with the compatible argument order.
+- Updated both reset and step observation batching paths to use the compatibility wrapper.
+- Local verification:
+- `python -m py_compile diffusion_policy/gym_util/async_vector_env.py diffusion_policy/gym_util/sync_vector_env.py` passed.
+- GPU-side synthetic vector-env verification under `/root/ptp_ldp_py39` passed for both `SyncVectorEnv` and `AsyncVectorEnv` with Dict observations.
+- Deployed the two patched files to GPU runtime checkout:
+- `/mnt/3fs2/data/tingwen.du/workspace/ldp/diffusion_policy/gym_util/async_vector_env.py`
+- `/mnt/3fs2/data/tingwen.du/workspace/ldp/diffusion_policy/gym_util/sync_vector_env.py`
+- Real rollout smoke checks:
+- Square DP smoke completed with `STATUS=0`, wrote `test/mean_score=0.0`, and wrote mp4 output under `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/debug/session123_square_rollout_concat_smoke_20260509_014701`.
+- LongSquare DP smoke completed with `STATUS=0`, wrote `test/mean_score=0.0`, and wrote mp4 output under `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/debug/session123_longsquare_rollout_concat_smoke_20260509_014800`.
+- Restarted the full high-throughput 4-task run with active stamp:
+- `20260509_014611`
+- Active output root:
+- `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/outputs/session120_ptp_py39_ht_4x2x2_2000ep_20260509_014611`
+- Active log root:
+- `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/logs/session120_ptp_py39_ht_4x2x2_2000ep_20260509_014611`
+- Placement:
+- `10.100.0.29:36645`, `METHOD_SET=ptp`: Square GPU0, Tool-Hang GPU1, Transport GPU2, LongSquare GPU3, paired `a8+a1` per task.
+- `10.100.0.29:30103`, `METHOD_SET=dp`: Square GPU0, Tool-Hang GPU1, Transport GPU2, LongSquare GPU3, paired `a8+a1` per task.
+- Early active-run sample at `2026-05-09T01:51:19+00:00`:
+- 16 status files existed.
+- 16 `logs.json.txt` files existed and had entered training.
+- `36645` GPUs were active, with memory roughly `3283`, `3275`, `7811`, `3279` MiB and pmon showing two Python compute processes per GPU.
+- `30103` GPUs were active, with memory roughly `3283`, `3277`, `7811`, `3279` MiB and pmon showing two Python compute processes per GPU.
+- Sampled epoch progress ranged from Transport epoch `0` to LongSquare epoch `3`.
+- Grep over the new active log root found no sampled `Traceback`, Hydra execution error, OOM, killed-process, missing-path, module-import, or `AssertionError` markers.
 
 ## Session 122
 - User asked for current GPU occupancy.

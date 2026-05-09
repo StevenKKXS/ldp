@@ -1,6 +1,26 @@
 # Task Knowledge
 
-<!-- METADATA:SESSION=122 -->
+<!-- METADATA:SESSION=123 -->
+
+## Session 123 Knowledge
+- Session 120 rollout crash was caused by a Gym API mismatch, not by task-specific Robomimic data.
+- `/root/ptp_ldp_py39` uses Gym `0.21.0`, where `gym.vector.utils.concatenate` expects `(items, out, space)`.
+- The local vector env code used the newer call order `(space, items, out)`, causing `AssertionError` during rollout reset and step observation batching.
+- Compatibility fix is in:
+- `diffusion_policy/gym_util/async_vector_env.py`
+- `diffusion_policy/gym_util/sync_vector_env.py`
+- The fix is deployed to the GPU runtime checkout `/mnt/3fs2/data/tingwen.du/workspace/ldp`.
+- Validation evidence:
+- synthetic Dict-observation vector env reset/step passed for both Sync and Async vector envs.
+- Square real rollout smoke passed and produced score plus mp4.
+- LongSquare real rollout smoke passed and produced score plus mp4.
+- New active full rerun stamp:
+- `20260509_014611`
+- Output root:
+- `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/outputs/session120_ptp_py39_ht_4x2x2_2000ep_20260509_014611`
+- Log root:
+- `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/logs/session120_ptp_py39_ht_4x2x2_2000ep_20260509_014611`
+- At the first post-launch sample, all 16 lanes had logs and no sampled error markers.
 
 ## Session 122 Knowledge
 - Session 120 high-throughput stamp `20260508_151035` is no longer occupying GPUs.
