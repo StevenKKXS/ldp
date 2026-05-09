@@ -215,3 +215,13 @@ Checked at 2026-05-08 15:47 UTC.
 - Py39 DP schedule differs from the earlier DP run only in early rollout frequency: through epoch 100 it rolls out every 20 epochs instead of every 10, with 50 rollout/video evals retained; after epoch 100 it remains every 100 epochs.
 - Py39 SmolVLA comparison is active on `10.100.2.35:17821`: run root `/mnt/3fs2/data/tingwen.du/intern_method_developer/task006_eval_official_robomimic_square_bcrnn/runs/smolvla_fourway_1000ep_py39_compare_20260508_154301`, log root `/mnt/3fs2/data/tingwen.du/intern_method_developer/task006_eval_official_robomimic_square_bcrnn/logs/smolvla_fourway_1000ep_py39_compare_20260508_154301`. Four main processes and the post-training monitor were alive.
 - Py39 SmolVLA latest sampled progress: official-PH runs were around epochs 26-29, PTP/LDP-MH runs around epochs 11-12, and the monitor was waiting for all four `epoch_1000.pt` files.
+
+## Latest Live Check: Session 30, 2026-05-09
+
+Checked at about 2026-05-09 01:40 UTC.
+
+- Old-stack DP on `10.100.16.46:16139` is still active. Current rollout means: UNet official-PH epoch 762 last/best `0.52/0.68`, DiT official-PH epoch 812 last/best `0.42/0.60`, UNet LDP-MH epoch 282 last/best `0.06/0.06`, DiT LDP-MH epoch 296 last/best `0.04/0.04`.
+- Old-stack SmolVLA on `10.100.16.46:23989` finished all four `epoch_1000.pt` checkpoints. The original monitor stamp `20260508_132807` exited without a report, so a replacement monitor was launched with stamp `20260509_old_smolvla_resume`.
+- Replacement old-stack SmolVLA outputs: all-checkpoint rollout root `/mnt/3fs2/data/tingwen.du/intern_method_developer/task006_eval_official_robomimic_square_bcrnn/rollouts/smolvla_fourway_all_ckpts_20rollouts_20260509_old_smolvla_resume`; best-50 root `/mnt/3fs2/data/tingwen.du/intern_method_developer/task006_eval_official_robomimic_square_bcrnn/rollouts/smolvla_fourway_best_ckpts_50rollouts_20260509_old_smolvla_resume`; report `/mnt/3fs2/data/tingwen.du/intern_method_developer/task006_eval_official_robomimic_square_bcrnn/reports/smolvla_fourway_rollout_after_train_20260509_old_smolvla_resume.md`.
+- Py39 SmolVLA on `10.100.2.35:17821` completed training and rollout. Report: `/mnt/3fs2/data/tingwen.du/intern_method_developer/task006_eval_official_robomimic_square_bcrnn/reports/smolvla_fourway_rollout_after_train_py39_compare_20260508_154301.md`. Best result: big384 PTP/LDP-MH epoch 400, `16/50 = 0.320`.
+- Py39 DP on `10.100.2.35:26482` is still active. Current rollout means: DiT LDP-MH epoch 141 last/best `0.08/0.10`, DiT official-PH epoch 389 last/best `0.26/0.48`, UNet LDP-MH epoch 136 last/best `0.36/0.36`, UNet official-PH epoch 370 last/best `0.08/0.10`.
