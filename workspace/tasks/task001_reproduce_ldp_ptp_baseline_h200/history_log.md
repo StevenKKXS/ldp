@@ -1,6 +1,33 @@
 # History Log
 
-<!-- METADATA:SESSION=124 -->
+<!-- METADATA:SESSION=125 -->
+
+## Session 125
+- User asked for the rollout history of Tool-Hang a8 and Square a8 in table form.
+- Parsed `logs.json.txt` from active stamp:
+- `20260509_014611`
+- Output root:
+- `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/outputs/session120_ptp_py39_ht_4x2x2_2000ep_20260509_014611`
+- Parsed runs:
+- `session120_square_dp_a8_2000ep_s42_20260509_014611`
+- `session120_square_ptp_a8_2000ep_s42_20260509_014611`
+- `session120_toolhang_dp_a8_2000ep_s42_20260509_014611`
+- `session120_toolhang_ptp_a8_2000ep_s42_20260509_014611`
+- Sample time:
+- `2026-05-09T08:17:22+00:00`
+- GPU state at this sample:
+- `36645` and `30103` both still had all four H200s occupied.
+- Active error grep over the log root returned no sampled error markers.
+- Parsed Square a8 rollout history:
+- DP a8: epoch `99` score `0.0`, epoch `199` score `0.01`, epoch `299` score `0.02`; latest parsed epoch `382`.
+- PTP a8: epoch `99` score `0.85`, epoch `199` score `0.79`, epoch `299` score `0.72`; latest parsed epoch `386`.
+- Parsed Tool-Hang a8 rollout history:
+- DP a8: epoch `99` score `0.0`, epoch `199` score `0.0`; latest parsed epoch `299`.
+- PTP a8: epoch `99` score `0.84`, epoch `199` score `0.85`; latest parsed epoch `299`.
+- Interpretation:
+- Square a8 and Tool-Hang a8 both show a large early PTP advantage over DP in this active run.
+- Square PTP a8 score has decreased across the first three rollouts, so the best observed checkpoint so far is epoch `99` for Square PTP a8.
+- Tool-Hang PTP a8 is stable or slightly increasing from epoch `99` to `199`.
 
 ## Session 124
 - User asked for current progress.

@@ -1,6 +1,17 @@
 # Task Knowledge
 
-<!-- METADATA:SESSION=124 -->
+<!-- METADATA:SESSION=125 -->
+
+## Session 125 Knowledge
+- Active stamp `20260509_014611` Square a8 rollout history:
+- DP a8: `0.0` at epoch `99`, `0.01` at epoch `199`, `0.02` at epoch `299`.
+- PTP a8: `0.85` at epoch `99`, `0.79` at epoch `199`, `0.72` at epoch `299`.
+- Active stamp `20260509_014611` Tool-Hang a8 rollout history:
+- DP a8: `0.0` at epoch `99`, `0.0` at epoch `199`.
+- PTP a8: `0.84` at epoch `99`, `0.85` at epoch `199`.
+- Current early-selection note:
+- Square PTP a8 best observed score so far is epoch `99`.
+- Tool-Hang PTP a8 best observed score so far is epoch `199`.
 
 ## Session 124 Knowledge
 - Active full rerun stamp `20260509_014611` is healthy and still running.
