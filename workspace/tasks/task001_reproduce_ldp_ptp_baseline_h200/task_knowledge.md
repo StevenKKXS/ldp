@@ -1,6 +1,20 @@
 # Task Knowledge
 
-<!-- METADATA:SESSION=130 -->
+<!-- METADATA:SESSION=131 -->
+
+## Session 131 Knowledge
+- Phase 1 closeout note:
+- `workspace/tasks/task001_reproduce_ldp_ptp_baseline_h200/session131_phase1_closeout_notes.md`
+- Phase 1 can be closed as a first-pass reproduction / diagnosis stage.
+- Important Phase 2 startup requirements:
+- use `/root/ptp_ldp_py39`
+- use robomimic `0.2.0`
+- use pinned `cheng-chi/robosuite@277ab9588ad7a4f4b55cf75508b44aa67ec171f0`, source version `1.2.0`
+- use Gym `0.21.0` with the vector-env concatenate compatibility patch
+- use the runtime-patched branch `intern_ldp_explorer/task001_ptp_py39_rerun`, recorded commit `529857fa8bab663510d88c5c7b72b973f4c37104`
+- avoid `/root/venv` for the main reproduction line because it is the modern stack associated with the near-zero Phase 1 results
+- keep training HDF5 and rollout HDF5 separate for compact embedding tasks
+- Phase 2 should prioritize `global_action=8`; do not spend new mainline GPU cycles on `global_action=1`
 
 ## Session 130 Knowledge
 - Current strategy change:

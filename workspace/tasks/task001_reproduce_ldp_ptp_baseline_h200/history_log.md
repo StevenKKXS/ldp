@@ -1,6 +1,23 @@
 # History Log
 
-<!-- METADATA:SESSION=130 -->
+<!-- METADATA:SESSION=131 -->
+
+## Session 131
+- User accepted the Session 126 summary as the Phase 1 reproduction closeout and asked whether environment notes still need supplementation before opening Phase 2.
+- Added closeout notes:
+- `workspace/tasks/task001_reproduce_ldp_ptp_baseline_h200/session131_phase1_closeout_notes.md`
+- The closeout note records:
+- Phase 1 status and interpretation
+- required PTP-compatible py39 environment for Phase 2
+- modern `/root/venv` stack to avoid for the main reproduction line
+- runtime-patched branch / commit to use on GPU machines
+- required runtime patch file list
+- dataset / encoder path requirements
+- `a8-only` Phase 2 default strategy
+- operational notes about unreachable old SSH entries and CPU-side push flow
+- Recommendation:
+- no further Phase 1 experiment is needed before opening the next task
+- Phase 2 should start from the py39 environment and a8-only plan
 
 ## Session 130
 - User decided not to prioritize `a1` experiments going forward.
