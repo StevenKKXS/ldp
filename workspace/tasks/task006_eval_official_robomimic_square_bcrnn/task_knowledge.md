@@ -1,6 +1,6 @@
 # Task Knowledge
 
-<!-- METADATA:SESSION=30 -->
+<!-- METADATA:SESSION=31 -->
 
 ## Working Rules
 - The task expanded from no-training BC-RNN evaluation to include issue #157 retraining checks and SmolVLA resource-utilization training runs.
@@ -96,3 +96,4 @@
 - Hook compliance note: `history_log.md` contains an explicit trailing `## Session 30` section for the 2026-05-10 progress report.
 - Report-ready Square exploration summary: `workspace/tasks/task006_eval_official_robomimic_square_bcrnn/EXPLORATION_SUMMARY_FOR_REPORT_20260510.md`. It consolidates the motivation, data table, experiment settings, SmolVLA / BC-RNN / DP results, conclusions, and uncertainty notes for upstream reporting.
 - GPU inventory on 2026-05-10 09:23 UTC: only four DP LDP-MH main training processes remain active. Old-stack `16139` uses GPU0 for UNet PID `172304` at epoch 941 and DiT PID `176077` at epoch 962; latest scheduled checkpoints are epoch 900 with scores `0.06` and `0.00`, and best scores remain UNet `0.10` and DiT `0.04`. Py39 `26482` uses GPU0 for UNet PID `88946` at epoch 639 and DiT PID `88958` at epoch 653; latest scheduled checkpoints are epoch 600 with scores `0.32` and `0.24`, and best scores are UNet `0.46` and DiT `0.24`. `23989` and `17821` are idle; the second GPU on `16139` and `26482` is also idle.
+- Session 31 decision: finish the active DP LDP-MH runs to 1000 epochs. Rationale: old-stack LDP-MH is near completion and provides a clean negative result; py39 LDP-MH is the main version-alignment evidence, with UNet best `0.46` and DiT best `0.24` so far. If a high-priority experiment needs GPU0 on `26482`, the lowest-risk compromise is to at least keep py39 until the next scheduled rollout checkpoint before reassigning resources.
