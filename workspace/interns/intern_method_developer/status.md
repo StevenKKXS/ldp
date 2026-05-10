@@ -8,7 +8,7 @@
 | Status | Working |
 | Current Task | task006_eval_official_robomimic_square_bcrnn |
 | PR | https://github.com/StevenKKXS/ldp/pull/new/intern_method_developer/task006_eval_official_robomimic_square_bcrnn |
-| Session | 34 |
+| Session | 35 |
 
 ## 最近进展
 - 当前可访问四个 GPU 入口：`10.100.16.46:16139`、`10.100.16.46:23989`、`10.100.2.35:26482`、`10.100.2.35:17821`，每个入口各可见 2 张 NVIDIA H200。
@@ -37,3 +37,4 @@
 - Session 32 进度：2026-05-10 11:18 UTC 仍只有 DP LDP-MH 在跑；old-stack UNet epoch 982 best `0.10`，old-stack DiT 到 epoch 1000 best `0.04` 但进程仍在收尾；py39 UNet epoch 670 best `0.46`，py39 DiT epoch 685 best `0.24`。
 - Session 33 ETA：2026-05-10 11:24 UTC 检查，old-stack DiT 已完成 epoch1000 final eval `0.02`，old-stack UNet 到 epoch985，预计约 `30-60min` 收尾；py39 UNet/DiT 到 epoch672/687，按当前速度和 700/800/900/1000 eval 成本估计还需约 `20-24h`。
 - Session 34 进度：2026-05-10 11:39 UTC old-stack DiT 已退出，old-stack UNet 到 epoch 990、best `0.10`，预计很快进入 epoch1000 final rollout；py39 UNet/DiT 到 epoch 676/691，best 仍为 `0.46/0.24`，接近 epoch700 scheduled rollout。
+- Session 35 进度：2026-05-10 12:51 UTC old-stack DP LDP-MH 两路均完成并释放 GPU，UNet final `0.08` best `0.10`、DiT final `0.02` best `0.04`；当前只剩 py39 DP LDP-MH 在 `26482` GPU0 运行，UNet epoch 696 best `0.46`，DiT epoch 708 且 epoch700 `0.24`、best `0.24`。
