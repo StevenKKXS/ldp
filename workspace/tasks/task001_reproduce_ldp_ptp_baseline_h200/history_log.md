@@ -1,6 +1,24 @@
 # History Log
 
-<!-- METADATA:SESSION=126 -->
+<!-- METADATA:SESSION=127 -->
+
+## Session 127
+- User asked to supplement the report with the earlier modern-stack 4x2 and 4x2x2 results and clarify why the current older PTP environment was reproduced.
+- Confirmed the earlier direct 4x2 result from Session 63 / 65 selected-checkpoint evals:
+- environment: `/root/venv`, Python `3.12.3`, robomimic `0.3.0`, robosuite `1.4.1`, MuJoCo `3.8.0`, gym `0.25.2`
+- setting: `global_obs=16`, `global_horizon=32`, `global_action=8`, 500 epochs, selected-checkpoint eval with `n_test=100`, `n_samples=1`
+- result: Square PTP `0.36`, Square DP `0.00`, and Tool-Hang / Transport / Long Square all `0.00` for both DP and PTP.
+- Confirmed the later modern-stack 4x2x2 action-horizon ablation from `session89_4x2x2_2000ep_1778075154` checkpoint scores:
+- setting: `global_action in {1,8}`, `num_epochs=2000`, `batch_size=64`, `rollout_every=100`, `checkpoint_every=100`, training-time rollout `n_test=100`
+- Square best scores: DP a1 `0.02`, DP a8 `0.08`, PTP a1 `0.28`, PTP a8 `0.45`
+- Tool-Hang best scores: all `0.00`
+- Transport best scores: DP a1 `0.00`, DP a8 `0.00`, PTP a1 `0.00`, PTP a8 `0.01`
+- Long Square best scores: all `0.00`
+- Interpretation recorded:
+- direct 4x2 failure was not enough to blame versioning because action horizon remained a plausible confound
+- 4x2x2 ruled out action horizon as the main explanation for Tool-Hang / Transport / Long Square failures
+- the stack mismatch plus robomimic issue evidence justified isolating the older PTP-compatible py39 environment
+- Updated `workspace/tasks/task001_reproduce_ldp_ptp_baseline_h200/session126_4x2x2_report.md` with the evidence-chain tables.
 
 ## Session 126
 - User asked for a manager-facing summary of the current 4x2x2 exploration.

@@ -8,5 +8,5 @@
 | Status | Working |
 | Current Task | task001_reproduce_ldp_ptp_baseline_h200 |
 | PR | https://github.com/StevenKKXS/ldp/pull/new/intern_ldp_explorer/task001_reproduce_ldp_ptp_baseline_h200 |
-| Session | 126 |
-| Recent Progress | Summarized the current 4x2x2 run settings, artifacts, intermediate score tables, and reporting conclusions for stamp `20260509_014611`. |
+| Session | 127 |
+| Recent Progress | Added the modern-stack 4x2 and 4x2x2 evidence chain explaining why the py39 PTP-version rerun was necessary. |

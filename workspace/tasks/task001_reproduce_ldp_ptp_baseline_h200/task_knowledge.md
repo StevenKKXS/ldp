@@ -1,6 +1,28 @@
 # Task Knowledge
 
-<!-- METADATA:SESSION=126 -->
+<!-- METADATA:SESSION=127 -->
+
+## Session 127 Knowledge
+- Modern-stack direct 4x2 result:
+- output family: `fig9_diffusion_subset_*`
+- selected eval outputs: `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/evals/session63_1778032161` and video-enabled rerun `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/evals/session65_video_1778035802`
+- environment: `/root/venv`, Python `3.12.3`, robomimic `0.3.0`, robosuite `1.4.1`, MuJoCo `3.8.0`, gym `0.25.2`
+- setting: `global_obs=16`, `global_horizon=32`, `global_action=8`, 500 epochs, selected-checkpoint eval `n_test=100`, `n_samples=1`
+- final selected eval table: Square DP `0.00`, Square PTP `0.36`, Tool-Hang DP/PTP `0.00`, Transport DP/PTP `0.00`, Long Square DP/PTP `0.00`
+- Modern-stack action-horizon ablation result:
+- output root: `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/outputs/session89_4x2x2_2000ep_1778075154`
+- setting: 4 tasks x DP/PTP x `global_action in {1,8}`, 2000 epoch target, rollout/checkpoint every 100 epochs, training-time rollout `n_test=100`
+- best checkpoint filename scores:
+- Square: DP a1 `0.02`, DP a8 `0.08`, PTP a1 `0.28`, PTP a8 `0.45`
+- Tool-Hang: all cells `0.00`
+- Transport: DP a1 `0.00`, DP a8 `0.00`, PTP a1 `0.00`, PTP a8 `0.01`
+- Long Square: all cells `0.00`
+- Evidence-chain interpretation:
+- the direct 4x2 run showed the general pipeline could produce nonzero Square PTP, so the evaluator was not globally broken
+- the 4x2x2 ablation made action horizon an insufficient explanation for the near-zero failures
+- this justified the current `/root/ptp_ldp_py39` isolation run with robomimic `0.2.0` and robosuite source version `1.2.0`
+- Report file updated with these tables:
+- `workspace/tasks/task001_reproduce_ldp_ptp_baseline_h200/session126_4x2x2_report.md`
 
 ## Session 126 Knowledge
 - Current 4x2x2 report artifact:

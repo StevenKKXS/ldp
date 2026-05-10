@@ -12,6 +12,46 @@ This report summarizes the current 4x2x2 reproduction batch for the diffusion-on
 - Seed: `42`.
 - Evaluation metric: `test/mean_score` from rollout, configured with `n_test=100` where rollout completed.
 
+## Why We Re-Ran The Older PTP Environment
+
+Before the current `/root/ptp_ldp_py39` run, we tested the same four-task diffusion subset on the modern H200 setup created from `setup_gpu_machine.sh`:
+
+- Environment: `/root/venv`, Python `3.12.3`, torch `2.5.1`, robomimic `0.3.0`, robosuite `1.4.1`, MuJoCo `3.8.0`, diffusers `0.30.0`, gym `0.25.2`.
+- This stack was operationally convenient for the H200 container, but it did not match the LDP / Diffusion Policy pinned provenance: robomimic `0.2.0`, pinned `cheng-chi/robosuite@277ab9588...` with source version `1.2.0`, MuJoCo `2.3.7`, and `mujoco-py 2.1.2.14`.
+- The trigger for the current py39 rerun was that the modern-stack experiments stayed near zero, and the public robomimic version discussion made Tool-Hang success rates plausibly version-sensitive.
+
+### Evidence Chain
+
+| Step | Hypothesis | Test | Evidence | Decision |
+|---|---|---|---|---|
+| 1. Direct 4x2 modern-stack reproduction | The Fig. 9 diffusion subset should work with `global_action=8` on the modern H200 stack. | 4 tasks x DP/PTP, `global_obs=16`, `global_horizon=32`, `global_action=8`, 500 epochs, selected-checkpoint eval with `n_test=100`, `n_samples=1`. | Only Square PTP had nonzero final eval: `0.36`. DP/no-PTP was `0.00` on all four tasks; Tool-Hang, Transport, and Long Square PTP were also `0.00`. | The implementation path was not completely broken because Square PTP worked, but the result was far below the paper and failed on the other three tasks. |
+| 2. Action-horizon ablation on modern stack | Low score might be caused by using chunk size 8 when the task needs action horizon 1. | 4 tasks x DP/PTP x `global_action in {1,8}`, 2000 epoch target, training-time rollout with `n_test=100`. | Square improved only modestly: PTP a8 best `0.45`, PTP a1 best `0.28`. Tool-Hang and Long Square stayed `0.00` for all cells. Transport only reached `0.01` for PTP a8. | Action horizon alone did not explain the failures. This moved the investigation toward environment / data-generation version mismatch. |
+| 3. Version-sensitivity check | robomimic / robosuite version mismatch may affect success rates. | Compare active stack against repository pins and robomimic issue guidance; then build `/root/ptp_ldp_py39` with robomimic `0.2.0` and robosuite source version `1.2.0`. | Upstream pins and robomimic issue notes point to older offline-study-era robosuite lineage. Current py39 run already recovers high PTP on Square and Tool-Hang. | Continue current py39 4x2x2 as the main isolation run; treat old modern-stack results as evidence that the stack mismatch is a real confound. |
+
+### Prior Modern-Stack 4x2 Result
+
+Source: `fig9_diffusion_subset_*` training outputs and Session 63 / 65 selected-checkpoint evals.
+
+| Task | DP selected ckpt | DP eval | PTP selected ckpt | PTP eval | Interpretation |
+|---|---|---:|---|---:|---|
+| Square | `epoch=0499-test_mean_score=0.025.ckpt` | `0.00` | `epoch=0099-test_mean_score=0.475.ckpt` | `0.36` | Only meaningful nonzero result. |
+| Tool-Hang | `epoch=0499-test_mean_score=0.000.ckpt` | `0.00` | `epoch=0499-test_mean_score=0.000.ckpt` | `0.00` | Both methods failed. |
+| Transport | `epoch=0499-test_mean_score=0.000.ckpt` | `0.00` | `epoch=0499-test_mean_score=0.000.ckpt` | `0.00` | Both methods failed. |
+| Long Square | `epoch=0499-test_mean_score=0.000.ckpt` | `0.00` | `epoch=0499-test_mean_score=0.000.ckpt` | `0.00` | Both methods failed. |
+
+### Prior Modern-Stack 4x2x2 Action-Horizon Result
+
+Source: `session89_4x2x2_2000ep_1778075154` checkpoint filename scores, single-seed training-time rollout with `n_test=100`.
+
+| Task | DP a1 best | DP a8 best | PTP a1 best | PTP a8 best | Interpretation |
+|---|---:|---:|---:|---:|---|
+| Square | `0.02` | `0.08` | `0.28` | `0.45` | Horizon 8 was better, but still well below paper. |
+| Tool-Hang | `0.00` | `0.00` | `0.00` | `0.00` | Horizon change did not help. |
+| Transport | `0.00` | `0.00` | `0.00` | `0.01` | Only a negligible nonzero point. |
+| Long Square | `0.00` | `0.00` | `0.00` | `0.00` | Horizon change did not help. |
+
+The key logic is that the first failure was not enough to blame versioning, because action chunking was still a plausible parameter mismatch. After the `a1/a8` ablation remained near zero, the environment mismatch became the cleaner explanation to isolate.
+
 ## Current Run
 
 | Item | Value |
