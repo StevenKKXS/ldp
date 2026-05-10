@@ -1,6 +1,28 @@
 # History Log
 
-<!-- METADATA:SESSION=133 -->
+<!-- METADATA:SESSION=134 -->
+
+## Session 134
+- User declared task001 finished and requested a new task 2.
+- Task001 status:
+- marked `workspace/tasks/task001_reproduce_ldp_ptp_baseline_h200/README.md` metadata as `Completed`.
+- Task002 created in the shared repo worktree on branch:
+- `intern_ldp_explorer/task002_remaining_baselines`
+- Task002 directory:
+- `/work-agents/ldp/workspace/tasks/task002_remaining_baselines_push_t_aloha_longsquare_transport`
+- Task002 PR entry:
+- `https://github.com/StevenKKXS/ldp/pull/new/intern_ldp_explorer/task002_remaining_baselines`
+- Task002 objective:
+- run the remaining baselines and improve them into usable comparison baselines where possible.
+- Initial target tasks:
+- Push-T
+- LH-ALOHA
+- Long Square
+- Transport
+- Initial task002 operating assumptions:
+- start Robomimic-style tasks from the PTP-compatible Python 3.9 environment unless a task requires a separate stack.
+- prioritize `global_action=8` for rapid iteration.
+- keep exact environment, dataset, config, checkpoint, rollout, and video records for each baseline.
 
 ## Session 133
 - User selected cleanup targets from the Session 132 candidate list.

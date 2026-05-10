@@ -1,6 +1,6 @@
 ## Task: Reproduce LDP Baseline and PTP on H200
 
-<!-- METADATA:STATUS=InProgress,ASSIGNEE=intern_ldp_explorer -->
+<!-- METADATA:STATUS=Completed,ASSIGNEE=intern_ldp_explorer -->
 
 ### Background
 - Reproduce the official `long-context-dp/ldp` results as closely as practical on available H200 infrastructure.

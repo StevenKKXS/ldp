@@ -1,6 +1,13 @@
 # Task Knowledge
 
-<!-- METADATA:SESSION=133 -->
+<!-- METADATA:SESSION=134 -->
+
+## Session 134 Knowledge
+- Task001 is now marked completed in its README metadata because the user explicitly ended the first-stage reproduction task.
+- Task002 was created on branch `intern_ldp_explorer/task002_remaining_baselines` with directory `/work-agents/ldp/workspace/tasks/task002_remaining_baselines_push_t_aloha_longsquare_transport`.
+- Task002 focuses on remaining baselines for Push-T, LH-ALOHA, Long Square, and Transport.
+- Task002 should start Robomimic-style work from the PTP-compatible Python 3.9 stack identified in task001 unless task-specific constraints require another environment.
+- Task002 should treat `global_action=8` as the first-priority iteration setting and use `global_action=1` only for targeted diagnostics.
 
 ## Session 133 Knowledge
 - User-approved cleanup was executed for the old Session 89 modern-stack diagnostic output, old Transport Fig. 9 subset outputs, early Square cached outputs, early LongSquare cached outputs, no-hist Square output, and full-train pilot output.
