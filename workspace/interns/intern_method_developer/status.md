@@ -8,7 +8,7 @@
 | Status | Working |
 | Current Task | task006_eval_official_robomimic_square_bcrnn |
 | PR | https://github.com/StevenKKXS/ldp/pull/new/intern_method_developer/task006_eval_official_robomimic_square_bcrnn |
-| Session | 31 |
+| Session | 32 |
 
 ## 最近进展
 - 当前可访问四个 GPU 入口：`10.100.16.46:16139`、`10.100.16.46:23989`、`10.100.2.35:26482`、`10.100.2.35:17821`，每个入口各可见 2 张 NVIDIA H200。
@@ -34,3 +34,4 @@
 - Session 30 新增汇报用总结 `EXPLORATION_SUMMARY_FOR_REPORT_20260510.md`，按实验动机、设置、数据表、结果表和结论整理 SmolVLA、BC-RNN、DP 的 Square 探索结论。
 - 2026-05-10 09:23 UTC GPU 盘点：仍在跑的只有 DP LDP-MH 四个主训练进程；`16139` GPU0 跑 old-stack UNet/DiT 到 epoch 941/962，`26482` GPU0 跑 py39 UNet/DiT 到 epoch 639/653，`16139` GPU1、`23989` 两卡、`26482` GPU1、`17821` 两卡空闲。
 - Session 31 判断：建议把剩余 DP LDP-MH 跑到 1000 epoch；old-stack 已到 epoch 944/965，低成本收尾，py39 已到 epoch 641/656 且 DiT epoch600 提升到 `0.24`，完成后能闭合 DP 双数据双环境对比矩阵。
+- Session 32 进度：2026-05-10 11:18 UTC 仍只有 DP LDP-MH 在跑；old-stack UNet epoch 982 best `0.10`，old-stack DiT 到 epoch 1000 best `0.04` 但进程仍在收尾；py39 UNet epoch 670 best `0.46`，py39 DiT epoch 685 best `0.24`。

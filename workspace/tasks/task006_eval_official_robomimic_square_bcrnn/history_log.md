@@ -1,6 +1,6 @@
 # History Log
 
-<!-- METADATA:SESSION=31 -->
+<!-- METADATA:SESSION=32 -->
 
 ## Session 0
 - Created task for no-training evaluation of the official robomimic v0.1 Square(PH) low-dimensional BC-RNN checkpoint.
@@ -234,3 +234,8 @@
 - Rechecked the remaining DP LDP-MH jobs on 2026-05-10 09:31 UTC. Old-stack `16139` is at UNet epoch 944 and DiT epoch 965; py39 `26482` is at UNet epoch 641 and DiT epoch 656.
 - Recommendation: keep the remaining DP LDP-MH jobs running to epoch 1000 unless a higher-priority job needs those exact GPUs. Old-stack is close enough that stopping would save little, and py39 LDP-MH is the informative case because UNet already reached `0.46` and DiT improved to `0.24` at epoch 600.
 - No additional SmolVLA or official-PH DP reruns are needed for the current Square report; those branches already have complete 50-rollout results and videos.
+
+## Session 32
+- Progress check at 2026-05-10 11:18 UTC: active experiments are still only DP LDP-MH on two GPU0 devices. `10.100.16.46:16139` GPU0 has old-stack UNet PID `172304` and old-stack DiT PID `176077`; GPU1 is idle. `10.100.2.35:26482` GPU0 has py39 UNet PID `88946` and py39 DiT PID `88958`; GPU1 is idle. `23989` and `17821` are idle.
+- Old-stack DP LDP-MH status: UNet is at epoch 982 with best scheduled rollout still epoch 500 `0.10`; DiT reached epoch 1000 with best scheduled rollout still `0.04`, and the process is still alive for final cleanup/eval work.
+- Py39 DP LDP-MH status: UNet is at epoch 670 with best scheduled rollout epoch 200 `0.46`; DiT is at epoch 685 with best scheduled rollout epoch 600 `0.24`.
