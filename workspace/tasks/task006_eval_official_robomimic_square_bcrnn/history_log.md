@@ -227,3 +227,4 @@
 ## Session 30
 - Hook compliance confirmation for the 2026-05-10 progress report: the latest active experiments are DP LDP-MH only. Old-stack DP LDP-MH UNet/DiT remain active around epochs 821/842, and py39 DP LDP-MH UNet/DiT remain active around epochs 548/561.
 - Completed items confirmed in this Session 30 record: all SmolVLA rollout batches are complete, old-stack DP official-PH is complete at epoch 1000, and py39 DP official-PH is complete at epoch 1000.
+- Added `EXPLORATION_SUMMARY_FOR_REPORT_20260510.md`, a Chinese-report-ready Square exploration summary covering experiment motivation, data inventory, model settings, rollout result tables, conclusions, and uncertain points to mark before upstream reporting.
