@@ -8,5 +8,5 @@
 | Status | Working |
 | Current Task | task001_reproduce_ldp_ptp_baseline_h200 |
 | PR | https://github.com/StevenKKXS/ldp/pull/new/intern_ldp_explorer/task001_reproduce_ldp_ptp_baseline_h200 |
-| Session | 132 |
-| Recent Progress | Listed rollout/video and large output cleanup candidates without deleting files; confirmed videos are small and checkpoint output roots dominate storage. |
+| Session | 133 |
+| Recent Progress | Deleted the user-selected old output directories and reduced intern output storage from about 315G to 85G. |

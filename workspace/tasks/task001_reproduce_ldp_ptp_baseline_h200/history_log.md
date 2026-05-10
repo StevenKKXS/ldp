@@ -1,6 +1,26 @@
 # History Log
 
-<!-- METADATA:SESSION=132 -->
+<!-- METADATA:SESSION=133 -->
+
+## Session 133
+- User selected cleanup targets from the Session 132 candidate list.
+- Deleted these output directories:
+- `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/outputs/session89_4x2x2_2000ep_1778075154`
+- `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/outputs/fig9_diffusion_subset_transport_ptp_s42_1777981819`
+- `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/outputs/fig9_diffusion_subset_transport_dp_s42_1777981819`
+- `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/outputs/fig9_longsquare_cached_dp_1777884905`
+- `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/outputs/fig9_longsquare_cached_ptp_1777884905`
+- `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/outputs/node96_nohist_square_short_1777613676`
+- `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/outputs/full_train_3500ep_1777457545`
+- `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/outputs/fig9_square_cached_dp_1777901875`
+- `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/outputs/fig9_square_cached_dp_seed43_1777902377`
+- `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/outputs/fig9_square_cached_ptp_1777901875`
+- `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/outputs/fig9_square_cached_ptp_seed43_1777902377`
+- Verification:
+- all 11 selected directories were absent after deletion.
+- `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/outputs` total usage dropped from about `315G` to `85G`, reclaiming roughly `230G`.
+- Preserved current recommended-environment evidence under:
+- `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/outputs/session120_ptp_py39_ht_4x2x2_2000ep_20260509_014611`
 
 ## Session 132
 - User asked not to clean rollout artifacts yet and to summarize a candidate list for manual selection.

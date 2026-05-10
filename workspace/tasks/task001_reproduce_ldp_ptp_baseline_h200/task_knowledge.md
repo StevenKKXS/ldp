@@ -1,6 +1,15 @@
 # Task Knowledge
 
-<!-- METADATA:SESSION=132 -->
+<!-- METADATA:SESSION=133 -->
+
+## Session 133 Knowledge
+- User-approved cleanup was executed for the old Session 89 modern-stack diagnostic output, old Transport Fig. 9 subset outputs, early Square cached outputs, early LongSquare cached outputs, no-hist Square output, and full-train pilot output.
+- All 11 selected directories were removed successfully.
+- Output storage after cleanup:
+- `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/outputs` is now about `85G`.
+- Approximate reclaimed space: `230G`.
+- Current recommended-environment evidence was not removed:
+- `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/outputs/session120_ptp_py39_ht_4x2x2_2000ep_20260509_014611`
 
 ## Session 132 Knowledge
 - User requested a cleanup candidate summary only; no artifact deletion was performed.
