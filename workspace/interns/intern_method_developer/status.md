@@ -32,3 +32,4 @@
 - SmolVLA 正式 rollout 已全部覆盖：早期三路、旧环境四路、py39 四路均完成 all-checkpoint 20-rollout sweep 和 best-checkpoint 50-rollout，且均保存 episode videos；当前剩余活跃实验只有 DP。
 - Hook 确认：`history_log.md` 末尾已追加独立 `## Session 30` 进度记录，明确剩余活跃项为 DP LDP-MH。
 - Session 30 新增汇报用总结 `EXPLORATION_SUMMARY_FOR_REPORT_20260510.md`，按实验动机、设置、数据表、结果表和结论整理 SmolVLA、BC-RNN、DP 的 Square 探索结论。
+- 2026-05-10 09:23 UTC GPU 盘点：仍在跑的只有 DP LDP-MH 四个主训练进程；`16139` GPU0 跑 old-stack UNet/DiT 到 epoch 941/962，`26482` GPU0 跑 py39 UNet/DiT 到 epoch 639/653，`16139` GPU1、`23989` 两卡、`26482` GPU1、`17821` 两卡空闲。

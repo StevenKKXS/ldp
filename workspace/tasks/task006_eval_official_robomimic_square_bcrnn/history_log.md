@@ -1,6 +1,6 @@
 # History Log
 
-<!-- METADATA:SESSION=29 -->
+<!-- METADATA:SESSION=30 -->
 
 ## Session 0
 - Created task for no-training evaluation of the official robomimic v0.1 Square(PH) low-dimensional BC-RNN checkpoint.
@@ -228,3 +228,4 @@
 - Hook compliance confirmation for the 2026-05-10 progress report: the latest active experiments are DP LDP-MH only. Old-stack DP LDP-MH UNet/DiT remain active around epochs 821/842, and py39 DP LDP-MH UNet/DiT remain active around epochs 548/561.
 - Completed items confirmed in this Session 30 record: all SmolVLA rollout batches are complete, old-stack DP official-PH is complete at epoch 1000, and py39 DP official-PH is complete at epoch 1000.
 - Added `EXPLORATION_SUMMARY_FOR_REPORT_20260510.md`, a Chinese-report-ready Square exploration summary covering experiment motivation, data inventory, model settings, rollout result tables, conclusions, and uncertain points to mark before upstream reporting.
+- GPU check on 2026-05-10 09:23 UTC: active experiments are still DP LDP-MH only. `10.100.16.46:16139` GPU0 runs old-stack DP UNet PID `172304` at epoch 941 and old-stack DP DiT PID `176077` at epoch 962; GPU1 is idle. `10.100.2.35:26482` GPU0 runs py39 DP UNet PID `88946` at epoch 639 and py39 DP DiT PID `88958` at epoch 653; GPU1 is idle. `10.100.16.46:23989` and `10.100.2.35:17821` are idle.
