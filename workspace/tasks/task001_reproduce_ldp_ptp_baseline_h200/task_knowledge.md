@@ -1,6 +1,21 @@
 # Task Knowledge
 
-<!-- METADATA:SESSION=134 -->
+<!-- METADATA:SESSION=135 -->
+
+## Session 135 Knowledge
+- New Push-T / LH-ALOHA setup servers:
+- `10.100.2.35:33486`, hostname `lg-cmc-b7r201-e02u16-h200-000098`, `2 x NVIDIA H200`, `/root/ptp_ldp_py39` configured and smoke-tested.
+- `10.100.16.46:36566`, hostname `lg-cmc-b7r202-h08u16-h200-000548`, `2 x NVIDIA H200`, `/root/ptp_ldp_py39` configured and smoke-tested.
+- Both servers use repo `/mnt/3fs2/data/tingwen.du/workspace/ldp` on branch `intern_ldp_explorer/task001_ptp_py39_rerun` at commit `529857fa8bab663510d88c5c7b72b973f4c37104`.
+- Both servers require runtime exports `MUJOCO_PY_MUJOCO_PATH=/root/.mujoco/mujoco210`, `LD_LIBRARY_PATH=/root/.mujoco/mujoco210/bin:$LD_LIBRARY_PATH`, `MUJOCO_GL=egl`, and `PYTHONPATH=/mnt/3fs2/data/tingwen.du/workspace/ldp:$PYTHONPATH`.
+- Critical package pins for these servers are Python `3.9.25`, torch `2.5.1`, robomimic `0.2.0`, robosuite `1.2.0`, mujoco-py `2.1.2.14`, mujoco `2.3.7`, dm-control `1.0.9`, gym `0.21.0`, diffusers `0.11.1`, huggingface-hub `0.10.1`, numpy `1.23.3`, Cython `0.29.32`, and setuptools `65.5.0`.
+- For Push-T, the configured extras include `pygame==2.1.2`, `pymunk==6.2.1`, and `shapely==1.8.4`.
+- For LH-ALOHA, `AlohaImageRunner` needs `pytorch3d.transforms`; the working solution is the local pure-Python stub copied from `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/pytorch3d_src` into `/root/ptp_ldp_py39/lib/python3.9/site-packages/pytorch3d`, with `transforms/__init__.py` containing `from .rotation_conversions import *`.
+- Do not let pip resolve `robosuite==1.2.0` dependencies on these nodes because its metadata asks for `mujoco-py==2.0.2.9`; install robosuite with `--no-deps` and keep `mujoco-py==2.1.2.14`.
+- Do not upgrade Cython or setuptools on these nodes without rechecking smoke tests; Cython 3 breaks `mujoco-py` compilation and setuptools 82 removes the `pkg_resources` interface needed by `wandb==0.13.3`.
+- Push-T smoke passed on both servers using `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/datasets/pusht/pusht_cchi_v7_replay.zarr`, with `img=(25650,96,96,3)`, `action=(25650,2)`, and sampled horizon-32 tensors.
+- LH-ALOHA smoke passed on both servers using `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/datasets/aloha_twomodes_single/demos.hdf5`, with `50` demos, actions `(500,7)`, `obs/embedding=(500,135)`, and successful reset of `sim_singlearm_pickandplace_twomodes_scripted`.
+- Reusable task2 setup note was written in the task002 branch at `/work-agents/ldp/workspace/tasks/task002_remaining_baselines_push_t_aloha_longsquare_transport/session001_push_t_lh_aloha_env_setup.md`.
 
 ## Session 134 Knowledge
 - Task001 is now marked completed in its README metadata because the user explicitly ended the first-stage reproduction task.

@@ -1,6 +1,61 @@
 # History Log
 
-<!-- METADATA:SESSION=134 -->
+<!-- METADATA:SESSION=135 -->
+
+## Session 135
+- User provided two new servers dedicated to Push-T and LH-ALOHA environment setup:
+- `10.100.2.35:33486`, HTTP port `33055`
+- `10.100.16.46:36566`
+- Hardware / storage check:
+- `10.100.2.35` hostname `lg-cmc-b7r201-e02u16-h200-000098`, `2 x NVIDIA H200`, each `143771 MiB`, idle at `1 MiB / 0%`, `/` has about `212T` free and `/mnt/3fs2` has about `53T` free.
+- `10.100.16.46` hostname `lg-cmc-b7r202-h08u16-h200-000548`, `2 x NVIDIA H200`, each `143771 MiB`, idle at `1 MiB / 0%`, `/` has about `13T` free and `/mnt/3fs2` has about `53T` free.
+- Configured `/root/ptp_ldp_py39` on both servers with the PTP-style Python 3.9 stack:
+- Python `3.9.25`
+- Torch `2.5.1`, torchvision `0.20.1`
+- robomimic `0.2.0`
+- robosuite `1.2.0`
+- MuJoCo binary `/root/.mujoco/mujoco210`
+- `mujoco-py==2.1.2.14`
+- `mujoco==2.3.7`
+- `dm-control==1.0.9`
+- `gym==0.21.0`
+- `diffusers==0.11.1`
+- `huggingface-hub==0.10.1`
+- Push-T extras `pygame==2.1.2`, `pymunk==6.2.1`, `shapely==1.8.4`
+- Installed the shared runtime branch checkout:
+- repo `/mnt/3fs2/data/tingwen.du/workspace/ldp`
+- branch `intern_ldp_explorer/task001_ptp_py39_rerun`
+- commit `529857fa8bab663510d88c5c7b72b973f4c37104`
+- Setup used the internal mirrors:
+- apt from `10.100.197.13`
+- pip index `http://10.100.197.13/simple/`
+- Required runtime exports:
+- `MUJOCO_PY_MUJOCO_PATH=/root/.mujoco/mujoco210`
+- `LD_LIBRARY_PATH=/root/.mujoco/mujoco210/bin:$LD_LIBRARY_PATH`
+- `MUJOCO_GL=egl`
+- `PYTHONPATH=/mnt/3fs2/data/tingwen.du/workspace/ldp:$PYTHONPATH`
+- Issues fixed during setup:
+- `robosuite==1.2.0` metadata tries to pull `mujoco-py==2.0.2.9`, which expects MuJoCo 2.0; fixed by installing `robosuite==1.2.0 --no-deps` and keeping `mujoco-py==2.1.2.14`.
+- `mujoco-py` fails with Cython 3; fixed by pinning `Cython==0.29.32` and `numpy==1.23.3`, then reinstalling `mujoco-py==2.1.2.14 --no-deps`.
+- `wandb==0.13.3` needs `pkg_resources`; fixed by pinning `setuptools==65.5.0`.
+- `AlohaImageRunner` imports `pytorch3d.transforms`; fixed by copying the shared pure-Python stub from `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/pytorch3d_src` into each venv and simplifying `transforms/__init__.py` to `from .rotation_conversions import *`.
+- Smoke tests passed on both servers:
+- `torch.cuda.is_available=True`, `torch.cuda.device_count=2`.
+- `mujoco_py` import passed.
+- Push-T imports passed: `diffusion_policy.env_runner.pusht_image_runner`, `diffusion_policy.env.pusht.pusht_image_env`.
+- Push-T dataset passed: `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/datasets/pusht/pusht_cchi_v7_replay.zarr`, `img=(25650,96,96,3)`, `action=(25650,2)`, `episode_ends=(206,)`, sampled dataset item has image `(32,3,96,96)`, agent position `(32,2)`, action `(32,2)`.
+- LH-ALOHA imports passed: `diffusion_policy.env_runner.aloha_image_runner`, `diffusion_policy.env.aloha.sim_env`.
+- LH-ALOHA dataset passed: `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/datasets/aloha_twomodes_single/demos.hdf5`, `50` demos, first demo actions `(500,7)`, `obs/embedding=(500,135)`, obs keys include `top`, `right_wrist`, `qpos`, `qvel`, `env_state`, `embedding`.
+- LH-ALOHA env reset passed for `sim_singlearm_pickandplace_twomodes_scripted`; reset observation has `qpos=(7,)` and `top=(84,84,3) uint8`.
+- Logs saved:
+- `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/logs/session135_setup_ptp_py39_push_t_aloha_10.100.2.35.log`
+- `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/logs/session135_setup_ptp_py39_push_t_aloha_10.100.16.46.log`
+- `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/logs/session135_repair2_ptp_py39_push_t_aloha_10.100.2.35.log`
+- `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/logs/session135_repair2_ptp_py39_push_t_aloha_10.100.16.46.log`
+- `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/logs/session135_repair3_setuptools_smoke_10.100.2.35.log`
+- `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/logs/session135_repair3_setuptools_smoke_10.100.16.46.log`
+- `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/logs/session135_repair4_pytorch3d_task_smoke_10.100.2.35.log`
+- `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/logs/session135_repair4_pytorch3d_task_smoke_10.100.16.46.log`
 
 ## Session 134
 - User declared task001 finished and requested a new task 2.
