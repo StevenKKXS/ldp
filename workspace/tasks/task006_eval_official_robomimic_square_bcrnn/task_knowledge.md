@@ -1,6 +1,6 @@
 # Task Knowledge
 
-<!-- METADATA:SESSION=33 -->
+<!-- METADATA:SESSION=34 -->
 
 ## Working Rules
 - The task expanded from no-training BC-RNN evaluation to include issue #157 retraining checks and SmolVLA resource-utilization training runs.
@@ -99,3 +99,4 @@
 - Session 31 decision: finish the active DP LDP-MH runs to 1000 epochs. Rationale: old-stack LDP-MH is near completion and provides a clean negative result; py39 LDP-MH is the main version-alignment evidence, with UNet best `0.46` and DiT best `0.24` so far. If a high-priority experiment needs GPU0 on `26482`, the lowest-risk compromise is to at least keep py39 until the next scheduled rollout checkpoint before reassigning resources.
 - Session 32 progress snapshot, 2026-05-10 11:18 UTC: old-stack LDP-MH UNet is epoch 982, best `0.10`; old-stack LDP-MH DiT reached epoch 1000, best `0.04`, with final process still alive. Py39 LDP-MH UNet is epoch 670, best `0.46`; py39 LDP-MH DiT is epoch 685, best `0.24`. All SmolVLA and official-PH DP jobs remain complete; only these LDP-MH DP runs still need final accounting.
 - Session 33 ETA snapshot, 2026-05-10 11:24 UTC: old-stack DiT LDP-MH has final epoch1000 rollout `0.02` and best `0.04`; old-stack UNet is epoch985 and should finish in about `30-60min`. Py39 LDP-MH UNet/DiT are epoch672/687 with best `0.46/0.24`; expected remaining wall-clock is about `20-24h`, ETA 2026-05-11 07:30-11:30 UTC.
+- Session 34 progress snapshot, 2026-05-10 11:39 UTC: old-stack DiT LDP-MH has exited after final epoch1000 score `0.02`; old-stack UNet LDP-MH remains active at epoch990 with best `0.10`. Py39 LDP-MH UNet/DiT remain active at epoch676/691 with best `0.46/0.24`; epoch700 scheduled rollout is the next useful update point.

@@ -1,6 +1,6 @@
 # History Log
 
-<!-- METADATA:SESSION=33 -->
+<!-- METADATA:SESSION=34 -->
 
 ## Session 0
 - Created task for no-training evaluation of the official robomimic v0.1 Square(PH) low-dimensional BC-RNN checkpoint.
@@ -244,3 +244,8 @@
 - ETA check at 2026-05-10 11:24 UTC. Old-stack DiT LDP-MH wrote the epoch 1000 scheduled rollout checkpoint with final `test_mean_score=0.02`; its best remains `0.04`. Old-stack UNet LDP-MH is at epoch 985, with best still epoch 500 `0.10`.
 - Based on the observed old-stack rate between 11:18 and 11:24 UTC, old-stack UNet should finish training plus final rollout/checkpoint accounting in about `30-60min`.
 - Py39 LDP-MH is at UNet epoch 672 and DiT epoch 687. Based on the 09:31 to 11:24 UTC epoch rate and the remaining scheduled rollout points at 700, 800, 900, and 1000, the py39 pair should need roughly `20-24h`, with expected completion around 2026-05-11 07:30-11:30 UTC if throughput stays similar.
+
+## Session 34
+- Progress check at 2026-05-10 11:39 UTC: active work remains DP LDP-MH only. `10.100.16.46:16139` GPU0 now only has old-stack UNet PID `172304`; old-stack DiT has exited after epoch 1000 final rollout `0.02`.
+- Old-stack UNet LDP-MH is at epoch 990; latest scheduled checkpoint remains epoch 900 `0.06`, and best remains epoch 500 `0.10`. It should soon enter epoch 1000 final rollout/checkpoint accounting.
+- Py39 DP LDP-MH on `10.100.2.35:26482` remains active on GPU0: UNet epoch 676, DiT epoch 691. Best scores are unchanged at UNet epoch 200 `0.46` and DiT epoch 600 `0.24`; the next scheduled rollout is epoch 700.
