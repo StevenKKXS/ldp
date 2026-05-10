@@ -15,25 +15,25 @@ This table summarizes the best available closed-loop Square rollout result by se
 | Final 50 | py312 / robomimic 0.3 / robosuite 1.4.1 / mujoco 3.8 | Four-way SmolVLA big384, ldp_abs10 | PTP / LDP-MH original image_abs | epoch 700 | 9/50 = 0.18 |
 | Final 50 | py312 / robomimic 0.3 / robosuite 1.4.1 / mujoco 3.8 | Four-way SmolVLA small, ldp_abs10 | Official-PH image_abs v1.4.1 | epoch 600 | 7/50 = 0.14 |
 | Final 50 | py312 / robomimic 0.3 / robosuite 1.4.1 / mujoco 3.8 | Four-way SmolVLA big384, ldp_abs10 | Official-PH image_abs v1.4.1 | epoch 600 | 12/50 = 0.24 |
-| Scheduled 50, training | py312 / robomimic 0.3 / robosuite 1.4.1 / mujoco 3.8 | DP no-hist UNet | PTP / LDP-MH image_abs | epoch 60 | 3/50 = 0.06 |
+| Scheduled 50, training | py312 / robomimic 0.3 / robosuite 1.4.1 / mujoco 3.8 | DP no-hist UNet | PTP / LDP-MH image_abs | epoch 500 | 5/50 = 0.10 |
 | Scheduled 50, training | py312 / robomimic 0.3 / robosuite 1.4.1 / mujoco 3.8 | DP no-hist DiT | PTP / LDP-MH image_abs | epoch 20 | 2/50 = 0.04 |
-| Scheduled 50, training | py312 / robomimic 0.3 / robosuite 1.4.1 / mujoco 3.8 | DP no-hist UNet | Official-PH image_abs v1.4.1 | epoch 90 | 34/50 = 0.68 |
-| Scheduled 50, training | py312 / robomimic 0.3 / robosuite 1.4.1 / mujoco 3.8 | DP no-hist DiT | Official-PH image_abs v1.4.1 | epoch 70 | 30/50 = 0.60 |
+| Scheduled 50, complete | py312 / robomimic 0.3 / robosuite 1.4.1 / mujoco 3.8 | DP no-hist UNet | Official-PH image_abs v1.4.1 | epoch 90 | 34/50 = 0.68 |
+| Scheduled 50, complete | py312 / robomimic 0.3 / robosuite 1.4.1 / mujoco 3.8 | DP no-hist DiT | Official-PH image_abs v1.4.1 | epoch 70 | 30/50 = 0.60 |
 | Final 50 | py39 / robomimic 0.2 / robosuite 1.2.0 / mujoco-py 2.1 | SmolVLA small, ldp_abs10 | PTP / LDP-MH original image_abs | epoch 700 | 12/50 = 0.24 |
 | Final 50 | py39 / robomimic 0.2 / robosuite 1.2.0 / mujoco-py 2.1 | SmolVLA big384, ldp_abs10 | PTP / LDP-MH original image_abs | epoch 400 | 16/50 = 0.32 |
 | Final 50 | py39 / robomimic 0.2 / robosuite 1.2.0 / mujoco-py 2.1 | SmolVLA small, ldp_abs10 | Official-PH image_abs v1.4.1 | epoch 90 | 2/50 = 0.04 |
 | Final 50 | py39 / robomimic 0.2 / robosuite 1.2.0 / mujoco-py 2.1 | SmolVLA big384, ldp_abs10 | Official-PH image_abs v1.4.1 | epoch 800 | 5/50 = 0.10 |
-| Scheduled 50, training | py39 / robomimic 0.2 / robosuite 1.2.0 / mujoco-py 2.1 | DP no-hist UNet | PTP / LDP-MH image_abs | epoch 80 | 18/50 = 0.36 |
-| Scheduled 50, training | py39 / robomimic 0.2 / robosuite 1.2.0 / mujoco-py 2.1 | DP no-hist DiT | PTP / LDP-MH image_abs | epoch 40 | 5/50 = 0.10 |
-| Scheduled 50, training | py39 / robomimic 0.2 / robosuite 1.2.0 / mujoco-py 2.1 | DP no-hist UNet | Official-PH image_abs v1.4.1 | epoch 200 | 5/50 = 0.10 |
-| Scheduled 50, training | py39 / robomimic 0.2 / robosuite 1.2.0 / mujoco-py 2.1 | DP no-hist DiT | Official-PH image_abs v1.4.1 | epoch 60 | 24/50 = 0.48 |
+| Scheduled 50, training | py39 / robomimic 0.2 / robosuite 1.2.0 / mujoco-py 2.1 | DP no-hist UNet | PTP / LDP-MH image_abs | epoch 200 | 23/50 = 0.46 |
+| Scheduled 50, training | py39 / robomimic 0.2 / robosuite 1.2.0 / mujoco-py 2.1 | DP no-hist DiT | PTP / LDP-MH image_abs | epoch 200 | 9/50 = 0.18 |
+| Scheduled 50, complete | py39 / robomimic 0.2 / robosuite 1.2.0 / mujoco-py 2.1 | DP no-hist UNet | Official-PH image_abs v1.4.1 | epoch 400 | 10/50 = 0.20 |
+| Scheduled 50, complete | py39 / robomimic 0.2 / robosuite 1.2.0 / mujoco-py 2.1 | DP no-hist DiT | Official-PH image_abs v1.4.1 | epoch 60 | 24/50 = 0.48 |
 
 ## Pending / Active
 
 | Runtime version | Setting / model | Data version | Current status |
 | --- | --- | --- | --- |
-| py312 / robomimic 0.3 / robosuite 1.4.1 / mujoco 3.8 | DP no-hist UNet / DiT | PTP / LDP-MH image_abs | Training is still active; latest parsed epochs are about 404 / 421. |
-| py39 / robomimic 0.2 / robosuite 1.2.0 / mujoco-py 2.1 | DP no-hist UNet / DiT | PTP-LDP-MH and Official-PH image_abs | All four py39 DP runs are still active. |
+| py312 / robomimic 0.3 / robosuite 1.4.1 / mujoco 3.8 | DP no-hist UNet / DiT | PTP / LDP-MH image_abs | Training is still active; latest parsed epochs are about 821 / 842. |
+| py39 / robomimic 0.2 / robosuite 1.2.0 / mujoco-py 2.1 | DP no-hist UNet / DiT | PTP / LDP-MH image_abs | Training is still active; latest parsed epochs are about 548 / 561. |
 
 ## Notes
 
