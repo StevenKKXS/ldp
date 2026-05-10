@@ -1,6 +1,26 @@
 # History Log
 
-<!-- METADATA:SESSION=125 -->
+<!-- METADATA:SESSION=126 -->
+
+## Session 126
+- User asked for a manager-facing summary of the current 4x2x2 exploration.
+- Re-parsed active stamp `20260509_014611` from shared output and log roots:
+- output root: `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/outputs/session120_ptp_py39_ht_4x2x2_2000ep_20260509_014611`
+- log root: `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/logs/session120_ptp_py39_ht_4x2x2_2000ep_20260509_014611`
+- Current artifact counts: `52` checkpoints, `586` mp4 files, output root about `36G`.
+- Current environment snapshot: `/root/ptp_ldp_py39`, Python `3.9.25`, torch `2.5.1`, robomimic `0.2.0`, robosuite `1.2.0`, gym `0.21.0`.
+- Current 4x2x2 setting: 4 tasks, DP/PTP, `global_action` in `{1,8}`, `global_obs=16`, `global_horizon=32`, `num_epochs=2000`, `batch_size=64`, `n_test=100`, seed `42`, cached embeddings, frozen released visual encoders.
+- Parsed best scores:
+- Square DP a1 `0.02`, DP a8 `0.02`, PTP a1 `0.76`, PTP a8 `0.85`.
+- Tool-Hang DP a1 `0.00`, DP a8 `0.00`, PTP a1 `0.86`, PTP a8 `0.85`.
+- Transport DP a1 no completed score, DP a8 `0.00`, PTP a1 `0.01`, PTP a8 `0.30`.
+- Long Square DP a1 `0.00`, DP a8 `0.00`, PTP a1 `0.17`, PTP a8 `0.24`.
+- Failure notes:
+- `longsquare_ptp_a1` failed during rollout with `ValueError: Internal algorithm failed to converge`.
+- `toolhang_dp_a8` failed during rollout with MuJoCo QACC instability.
+- Most other lanes did not reach 2000 epochs in the readable logs, so current numbers are intermediate best-observed scores.
+- Added manager-facing report:
+- `workspace/tasks/task001_reproduce_ldp_ptp_baseline_h200/session126_4x2x2_report.md`
 
 ## Session 125
 - User asked for the rollout history of Tool-Hang a8 and Square a8 in table form.

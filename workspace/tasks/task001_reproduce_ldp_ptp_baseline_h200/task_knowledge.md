@@ -1,6 +1,38 @@
 # Task Knowledge
 
-<!-- METADATA:SESSION=125 -->
+<!-- METADATA:SESSION=126 -->
+
+## Session 126 Knowledge
+- Current 4x2x2 report artifact:
+- `workspace/tasks/task001_reproduce_ldp_ptp_baseline_h200/session126_4x2x2_report.md`
+- Current active result stamp:
+- `20260509_014611`
+- Shared output root:
+- `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/outputs/session120_ptp_py39_ht_4x2x2_2000ep_20260509_014611`
+- Shared log root:
+- `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/logs/session120_ptp_py39_ht_4x2x2_2000ep_20260509_014611`
+- Environment used by the run:
+- `/root/ptp_ldp_py39`, Python `3.9.25`, torch `2.5.1`, robomimic `0.2.0`, robosuite `1.2.0`, gym `0.21.0`.
+- Shared setting for the 4x2x2 batch:
+- tasks: Square, Tool-Hang, Transport, Long Square
+- methods: DP / no-PTP and PTP
+- actions: `global_action=1` and `global_action=8`
+- `global_obs=16`, `global_horizon=32`, `num_epochs=2000`, `batch_size=64`, `rollout_every=100`, `checkpoint_every=100`, `n_test=100`, seed `42`
+- objective switches: DP uses `policy.past_action_pred=false`, PTP uses `policy.past_action_pred=true`, both use `policy.past_steps_reg=-1`
+- Current best intermediate scores:
+- Square: DP a1 `0.02`, DP a8 `0.02`, PTP a1 `0.76`, PTP a8 `0.85`.
+- Tool-Hang: DP a1 `0.00`, DP a8 `0.00`, PTP a1 `0.86`, PTP a8 `0.85`.
+- Transport: DP a1 no completed score, DP a8 `0.00`, PTP a1 `0.01`, PTP a8 `0.30`.
+- Long Square: DP a1 `0.00`, DP a8 `0.00`, PTP a1 `0.17`, PTP a8 `0.24`.
+- Interpretation for reporting:
+- PTP is clearly effective on Square and Tool-Hang in the recommended-version environment.
+- Transport and Long Square remain below paper-level performance and need clean continuation / focused eval before final claims.
+- Current scores are intermediate single-seed best-observed values because the readable logs do not show full 2000-epoch completion.
+- Failure records:
+- `longsquare_ptp_a1` rollout failed with internal algorithm convergence failure.
+- `toolhang_dp_a8` rollout failed with MuJoCo QACC instability.
+- Current artifact counts:
+- `52` checkpoints and `586` mp4 files under the active output root.
 
 ## Session 125 Knowledge
 - Active stamp `20260509_014611` Square a8 rollout history:
