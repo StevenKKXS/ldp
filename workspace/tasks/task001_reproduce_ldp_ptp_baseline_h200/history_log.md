@@ -1,6 +1,35 @@
 # History Log
 
-<!-- METADATA:SESSION=131 -->
+<!-- METADATA:SESSION=132 -->
+
+## Session 132
+- User asked not to clean rollout artifacts yet and to summarize a candidate list for manual selection.
+- No files were deleted.
+- Storage scan roots:
+- `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/outputs`
+- `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/evals`
+- Main finding:
+- total `outputs` usage is about `315G`, while `evals` is only about `5.3M`.
+- `.mp4` rollout videos are not the main storage driver; the largest individual video group found was about `187 MiB`.
+- checkpoint and full training output directories dominate storage usage.
+- Largest output roots observed:
+- `147G` `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/outputs/session89_4x2x2_2000ep_1778075154`
+- `36G` `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/outputs/session120_ptp_py39_ht_4x2x2_2000ep_20260509_014611`
+- `13G` each for the old Transport Fig. 9 subset roots:
+- `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/outputs/fig9_diffusion_subset_transport_ptp_s42_1777981819`
+- `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/outputs/fig9_diffusion_subset_transport_dp_s42_1777981819`
+- `11G` `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/outputs/node96_nohist_square_short_1777613676`
+- Highest-count / largest video groups observed:
+- `187.12 MiB`, `372` mp4: `session89_toolhang_dp_a8_2000ep_s42_1778075154`
+- `91.74 MiB`, `268` mp4: `session89_toolhang_ptp_a8_2000ep_s42_1778075154`
+- `63.09 MiB`, `118` mp4: `session89_toolhang_dp_a1_2000ep_s42_1778075154`
+- `54.96 MiB`, `810` mp4: `fig9_longsquare_cached_dp_1777884905`
+- `47.48 MiB`, `100` mp4: `fig9_diffusion_subset_toolhang_dp_s42_1777979501`
+- Suggested decision split for the user:
+- high-impact storage candidates are full old output roots, especially Session 89 modern-stack 4x2x2 and old Fig. 9 subset roots, if their checkpoint artifacts are no longer needed.
+- low-impact video-only cleanup is possible but will not recover meaningful space compared with checkpoint cleanup.
+- keep the tiny `evals/session65_video_1778035802` evidence directory unless the user specifically selects it, because it costs only about `5.3M`.
+- keep current recommended-environment Phase 2 evidence under `session120_ptp_py39_ht_4x2x2_2000ep_20260509_014611` unless the user selects exact cells, because it contains the strongest Square/Tool-Hang PTP evidence and py39 comparison artifacts.
 
 ## Session 131
 - User accepted the Session 126 summary as the Phase 1 reproduction closeout and asked whether environment notes still need supplementation before opening Phase 2.

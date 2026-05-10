@@ -1,6 +1,21 @@
 # Task Knowledge
 
-<!-- METADATA:SESSION=131 -->
+<!-- METADATA:SESSION=132 -->
+
+## Session 132 Knowledge
+- User requested a cleanup candidate summary only; no artifact deletion was performed.
+- Artifact storage summary:
+- `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/outputs` uses about `315G`.
+- `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/evals` uses about `5.3M`.
+- Video-only cleanup has low storage impact:
+- largest discovered mp4 group is `187.12 MiB` with `372` files in `session89_toolhang_dp_a8_2000ep_s42_1778075154`.
+- Most `.mp4` groups are far below `100 MiB`.
+- High-impact cleanup requires selecting old output roots or checkpoint-heavy subruns.
+- Highest-priority candidate for user review:
+- `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/outputs/session89_4x2x2_2000ep_1778075154` at about `147G`; this is the older modern-stack 4x2x2 diagnostic run and is much larger than video-only artifacts.
+- Caution:
+- `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/outputs/session120_ptp_py39_ht_4x2x2_2000ep_20260509_014611` is about `36G` but contains current recommended-environment evidence and should be preserved unless the user selects exact cells to remove.
+- `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/evals/session65_video_1778035802` is small and useful as selected video evidence.
 
 ## Session 131 Knowledge
 - Phase 1 closeout note:
