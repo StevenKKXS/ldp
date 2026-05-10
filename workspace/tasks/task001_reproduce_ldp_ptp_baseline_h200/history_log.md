@@ -1,6 +1,21 @@
 # History Log
 
-<!-- METADATA:SESSION=129 -->
+<!-- METADATA:SESSION=130 -->
+
+## Session 130
+- User decided not to prioritize `a1` experiments going forward.
+- Rationale from user:
+- `a1` and `a8` do not show a meaningful enough performance difference for the current decision needs.
+- `a1` is much slower, so it is inefficient for rapid iteration.
+- Updated working strategy:
+- current fast loop is now `a8-only`.
+- Do not spend new GPU cycles on `a1` unless a specific reviewer asks for action-horizon ablation evidence.
+- Use existing `a1` results only as supporting evidence that action horizon is not the main failure cause.
+- Prioritize:
+- selected-checkpoint evaluation for Square PTP a8 and Tool-Hang PTP a8.
+- continuation / focused rerun for Transport a8 and Long Square a8.
+- if a DP baseline is needed, use a8 DP cells only.
+- For the interrupted `transport_dp_a1`, no restart is needed under this a8-only strategy.
 
 ## Session 129
 - User asked for the current experiment status, which experiments broke off, and whether to rerun.

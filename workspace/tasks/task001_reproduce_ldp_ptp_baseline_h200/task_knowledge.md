@@ -1,6 +1,20 @@
 # Task Knowledge
 
-<!-- METADATA:SESSION=129 -->
+<!-- METADATA:SESSION=130 -->
+
+## Session 130 Knowledge
+- Current strategy change:
+- do not prioritize `global_action=1` experiments in the active iteration loop.
+- focus rapid iteration on `global_action=8`.
+- Reason:
+- existing a1/a8 evidence did not show a fundamental performance difference for the current decisions, while a1 is slower.
+- Reporting implication:
+- treat prior a1 results as diagnostic / ablation evidence only.
+- do not restart `transport_dp_a1` under the current a8-only plan.
+- Active a8 priorities:
+- Square PTP a8 and Tool-Hang PTP a8: use best checkpoints for fixed `n_test=100` selected-checkpoint evaluation.
+- Transport a8 and Long Square a8: continue or rerun focused a8 jobs because current scores are incomplete and below target.
+- DP baseline work should use a8-only cells unless a separate ablation question requires a1.
 
 ## Session 129 Knowledge
 - Current `20260509_014611` run status:

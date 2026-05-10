@@ -8,5 +8,5 @@
 | Status | Working |
 | Current Task | task001_reproduce_ldp_ptp_baseline_h200 |
 | PR | https://github.com/StevenKKXS/ldp/pull/new/intern_ldp_explorer/task001_reproduce_ldp_ptp_baseline_h200 |
-| Session | 129 |
-| Recent Progress | Summarized the stopped `20260509_014611` 4x2x2 run: both GPU SSH entries remain unreachable, two lanes have explicit rollout errors, and most remaining lanes can resume from checkpoints. |
+| Session | 130 |
+| Recent Progress | Recorded the strategy change to stop prioritizing a1 and focus future fast iteration on action horizon a8 only. |
