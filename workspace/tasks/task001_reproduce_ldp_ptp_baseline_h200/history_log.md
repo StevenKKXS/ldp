@@ -1,6 +1,30 @@
 # History Log
 
-<!-- METADATA:SESSION=128 -->
+<!-- METADATA:SESSION=129 -->
+
+## Session 129
+- User asked for the current experiment status, which experiments broke off, and whether to rerun.
+- Rechecked GPU SSH entries:
+- `10.100.0.29:36645`: connection refused
+- `10.100.0.29:30103`: connection refused
+- Conclusion: no live GPU status or process list can be sampled; the `20260509_014611` 4x2x2 run is not currently active from this workspace.
+- Parsed shared output root:
+- `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/outputs/session120_ptp_py39_ht_4x2x2_2000ep_20260509_014611`
+- Parsed score-checkpoint / mp4 status:
+- Square: DP a1 best `0.02@99`, DP a8 best `0.02@299`, PTP a1 best `0.76@99`, PTP a8 best `0.85@99`.
+- Tool-Hang: DP a1 best `0.00@99`, DP a8 best `0.00@99/199`, PTP a1 best `0.86@99`, PTP a8 best `0.85@199/399`.
+- Transport: DP a1 has no completed score checkpoint, DP a8 best `0.00@99`, PTP a1 best `0.01@99`, PTP a8 best `0.30@99`.
+- Long Square: DP a1/a8 best `0.00`, PTP a1 best `0.17@199`, PTP a8 best `0.24@599`.
+- Explicit broken lanes:
+- `longsquare_ptp_a1`: rollout failed with `IK/Internal algorithm failed to converge` after last logged epoch `299`.
+- `toolhang_dp_a8`: rollout failed with MuJoCo QACC instability after last logged epoch `299`.
+- Special incomplete lane:
+- `transport_dp_a1`: stopped at logged epoch `99` with no score checkpoint and no `latest.ckpt`; this one needs a fresh start if the DP a1 cell is required.
+- Rerun recommendation:
+- do not rerun all 16 from scratch
+- resume or evaluate from existing checkpoints for most lanes
+- prioritize continuation / fresh run for Transport and Long Square cells
+- keep Square and Tool-Hang PTP best checkpoints for selected-checkpoint evaluation because they already show strong positive results
 
 ## Session 128
 - User asked whether the server is currently online.

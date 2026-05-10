@@ -1,6 +1,25 @@
 # Task Knowledge
 
-<!-- METADATA:SESSION=128 -->
+<!-- METADATA:SESSION=129 -->
+
+## Session 129 Knowledge
+- Current `20260509_014611` run status:
+- GPU SSH entries `10.100.0.29:36645` and `10.100.0.29:30103` are unreachable with connection refused, so the run is not live from this workspace.
+- Shared output root remains readable:
+- `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/outputs/session120_ptp_py39_ht_4x2x2_2000ep_20260509_014611`
+- Best score summary from score checkpoint filenames:
+- Square DP a1 `0.02@99`, DP a8 `0.02@299`, PTP a1 `0.76@99`, PTP a8 `0.85@99`.
+- Tool-Hang DP a1 `0.00@99`, DP a8 `0.00@99/199`, PTP a1 `0.86@99`, PTP a8 `0.85@199/399`.
+- Transport DP a1 no completed score checkpoint, DP a8 `0.00@99`, PTP a1 `0.01@99`, PTP a8 `0.30@99`.
+- Long Square DP a1/a8 `0.00`, PTP a1 `0.17@199`, PTP a8 `0.24@599`.
+- Explicit broken lanes:
+- `longsquare_ptp_a1`: IK/internal algorithm convergence failure during rollout.
+- `toolhang_dp_a8`: MuJoCo QACC instability during rollout.
+- Resume / rerun policy:
+- most lanes have `latest.ckpt`, so rerun from scratch is not required for those cells
+- `transport_dp_a1` lacks a scored checkpoint and lacks `latest.ckpt`, so restart this cell if the a1 DP ablation is required
+- prioritize Transport and Long Square continuation because current scores are incomplete and below target
+- Square and Tool-Hang PTP should be selected-checkpoint evaluated first rather than retrained immediately
 
 ## Session 128 Knowledge
 - Current GPU server reachability check:
