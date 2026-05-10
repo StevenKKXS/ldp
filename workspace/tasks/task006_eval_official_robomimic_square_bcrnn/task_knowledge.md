@@ -93,3 +93,4 @@
 - Remaining active experiments are DP-only: old-stack LDP-MH UNet/DiT are still running toward epoch 1000, and py39 DP UNet/DiT x PTP-LDP-MH/official-PH are still running toward epoch 1000.
 - SmolVLA rollout coverage is complete across all requested batches: early three-run all-checkpoint 20-rollout plus best-50, old-stack four-way all-checkpoint 20-rollout plus best-50, and py39 four-way all-checkpoint 20-rollout plus best-50. All three batches have videos and summary artifacts.
 - DP status on 2026-05-10 03:41 UTC: all official-PH DP runs have reached epoch 1000. Old-stack official-PH bests remain UNet `34/50 = 0.68` and DiT `30/50 = 0.60`; py39 official-PH bests are UNet `10/50 = 0.20` and DiT `24/50 = 0.48`. Active runs are now LDP-MH only: old-stack UNet/DiT around epochs 821/842 and py39 UNet/DiT around epochs 548/561.
+- Hook compliance note: `history_log.md` contains an explicit trailing `## Session 30` section for the 2026-05-10 progress report.

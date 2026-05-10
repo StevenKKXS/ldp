@@ -223,3 +223,7 @@
 - Old-stack DP LDP-MH runs remain active on `10.100.16.46:16139`: UNet is at epoch 821 with latest epoch-800 `3/50 = 0.06` and best epoch 500 `5/50 = 0.10`; DiT is at epoch 842 with latest epoch-800 `1/50 = 0.02` and best epoch 20 `2/50 = 0.04`.
 - Py39 DP official-PH runs on `10.100.2.35:26482` are complete at epoch 1000 and no longer alive. Best scheduled rollout scores are UNet epoch 400 `10/50 = 0.20` and DiT epoch 60 `24/50 = 0.48`.
 - Py39 DP LDP-MH runs remain active: UNet is at epoch 548 with latest epoch-500 `19/50 = 0.38` and best epoch 200 `23/50 = 0.46`; DiT is at epoch 561 with latest epoch-500 `9/50 = 0.18` and best epoch 200 `9/50 = 0.18`.
+
+## Session 30
+- Hook compliance confirmation for the 2026-05-10 progress report: the latest active experiments are DP LDP-MH only. Old-stack DP LDP-MH UNet/DiT remain active around epochs 821/842, and py39 DP LDP-MH UNet/DiT remain active around epochs 548/561.
+- Completed items confirmed in this Session 30 record: all SmolVLA rollout batches are complete, old-stack DP official-PH is complete at epoch 1000, and py39 DP official-PH is complete at epoch 1000.
