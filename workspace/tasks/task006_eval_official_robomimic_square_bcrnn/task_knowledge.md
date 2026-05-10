@@ -1,6 +1,6 @@
 # Task Knowledge
 
-<!-- METADATA:SESSION=32 -->
+<!-- METADATA:SESSION=33 -->
 
 ## Working Rules
 - The task expanded from no-training BC-RNN evaluation to include issue #157 retraining checks and SmolVLA resource-utilization training runs.
@@ -98,3 +98,4 @@
 - GPU inventory on 2026-05-10 09:23 UTC: only four DP LDP-MH main training processes remain active. Old-stack `16139` uses GPU0 for UNet PID `172304` at epoch 941 and DiT PID `176077` at epoch 962; latest scheduled checkpoints are epoch 900 with scores `0.06` and `0.00`, and best scores remain UNet `0.10` and DiT `0.04`. Py39 `26482` uses GPU0 for UNet PID `88946` at epoch 639 and DiT PID `88958` at epoch 653; latest scheduled checkpoints are epoch 600 with scores `0.32` and `0.24`, and best scores are UNet `0.46` and DiT `0.24`. `23989` and `17821` are idle; the second GPU on `16139` and `26482` is also idle.
 - Session 31 decision: finish the active DP LDP-MH runs to 1000 epochs. Rationale: old-stack LDP-MH is near completion and provides a clean negative result; py39 LDP-MH is the main version-alignment evidence, with UNet best `0.46` and DiT best `0.24` so far. If a high-priority experiment needs GPU0 on `26482`, the lowest-risk compromise is to at least keep py39 until the next scheduled rollout checkpoint before reassigning resources.
 - Session 32 progress snapshot, 2026-05-10 11:18 UTC: old-stack LDP-MH UNet is epoch 982, best `0.10`; old-stack LDP-MH DiT reached epoch 1000, best `0.04`, with final process still alive. Py39 LDP-MH UNet is epoch 670, best `0.46`; py39 LDP-MH DiT is epoch 685, best `0.24`. All SmolVLA and official-PH DP jobs remain complete; only these LDP-MH DP runs still need final accounting.
+- Session 33 ETA snapshot, 2026-05-10 11:24 UTC: old-stack DiT LDP-MH has final epoch1000 rollout `0.02` and best `0.04`; old-stack UNet is epoch985 and should finish in about `30-60min`. Py39 LDP-MH UNet/DiT are epoch672/687 with best `0.46/0.24`; expected remaining wall-clock is about `20-24h`, ETA 2026-05-11 07:30-11:30 UTC.
