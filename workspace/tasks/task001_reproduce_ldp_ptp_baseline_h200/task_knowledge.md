@@ -1,6 +1,16 @@
 # Task Knowledge
 
-<!-- METADATA:SESSION=127 -->
+<!-- METADATA:SESSION=128 -->
+
+## Session 128 Knowledge
+- Current GPU server reachability check:
+- `10.100.0.29:36645` refused SSH connection.
+- `10.100.0.29:30103` refused SSH connection.
+- As of `2026-05-10 08:13:59 UTC`, the known GPU SSH entries are not online from this workspace.
+- Shared storage remains reachable:
+- `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer`
+- The active result output root remains readable:
+- `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/outputs/session120_ptp_py39_ht_4x2x2_2000ep_20260509_014611`
 
 ## Session 127 Knowledge
 - Modern-stack direct 4x2 result:

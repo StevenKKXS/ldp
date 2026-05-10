@@ -1,6 +1,19 @@
 # History Log
 
-<!-- METADATA:SESSION=127 -->
+<!-- METADATA:SESSION=128 -->
+
+## Session 128
+- User asked whether the server is currently online.
+- Checked the two known GPU SSH entries on `2026-05-10 08:13:59 UTC`:
+- `ssh -p 36645 root@10.100.0.29`: `Connection refused`
+- `ssh -p 30103 root@10.100.0.29`: `Connection refused`
+- Interpretation:
+- the previous GPU allocation / SSH forwarding for both known entries is not reachable from this workspace at the check time
+- no live GPU process or `nvidia-smi` sample could be collected because SSH did not connect
+- Shared storage is still reachable locally:
+- `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer`
+- previous active output root remains readable:
+- `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/outputs/session120_ptp_py39_ht_4x2x2_2000ep_20260509_014611`
 
 ## Session 127
 - User asked to supplement the report with the earlier modern-stack 4x2 and 4x2x2 results and clarify why the current older PTP environment was reproduced.

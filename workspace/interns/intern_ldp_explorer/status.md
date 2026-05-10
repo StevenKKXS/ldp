@@ -8,5 +8,5 @@
 | Status | Working |
 | Current Task | task001_reproduce_ldp_ptp_baseline_h200 |
 | PR | https://github.com/StevenKKXS/ldp/pull/new/intern_ldp_explorer/task001_reproduce_ldp_ptp_baseline_h200 |
-| Session | 127 |
-| Recent Progress | Added the modern-stack 4x2 and 4x2x2 evidence chain explaining why the py39 PTP-version rerun was necessary. |
+| Session | 128 |
+| Recent Progress | Checked current GPU server reachability: both known SSH ports on `10.100.0.29` refused connections, while shared storage remains readable. |
