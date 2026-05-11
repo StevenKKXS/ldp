@@ -1,6 +1,6 @@
 # History Log
 
-<!-- METADATA:SESSION=36 -->
+<!-- METADATA:SESSION=37 -->
 
 ## Session 0
 - Created task for no-training evaluation of the official robomimic v0.1 Square(PH) low-dimensional BC-RNN checkpoint.
@@ -259,3 +259,8 @@
 - Final progress check at 2026-05-11 08:28 UTC: all reachable GPUs are idle with no active training compute jobs. `10.100.16.46:16139` refuses SSH, but its old-stack DP LDP-MH outputs had already completed; `10.100.16.46:23989`, `10.100.2.35:26482`, and `10.100.2.35:17821` show no active compute-app processes.
 - Py39 DP LDP-MH completed epoch 1000. UNet final epoch 1000 rollout is `0.42`, with best epoch 900 `25/50 = 0.50`. DiT final epoch 1000 rollout is `0.20`, with best epoch 600 / 700 `12/50 = 0.24`.
 - Updated `ROLLOUT_BEST_SUMMARY_20260509.md`, `DP_ROLLOUT_EVAL_CURVES_20260509.md`, and `EXPLORATION_SUMMARY_FOR_REPORT_20260510.md` so the final DP LDP-MH results no longer appear as active / partial.
+
+## Session 37
+- Added `PTP_IMPROVEMENT_RECOMMENDATIONS_20260511.md` with engineering recommendations for improving the PTP/LDP Square result above the current py39 DP UNet best `25/50 = 0.50`.
+- Main recommendation: keep the first improvement round on py39 / robomimic 0.2 / robosuite 1.2 + PTP/LDP-MH + DP UNet, then tune `n_action_steps`, `n_obs_steps`, `horizon`, batch size, checkpoint selection, and phase-balanced sampling before trying larger architectures.
+- Noted that 50-rollout evaluation has high statistical noise, so candidates that beat the baseline should be confirmed with 100 or 200 rollout seeds.

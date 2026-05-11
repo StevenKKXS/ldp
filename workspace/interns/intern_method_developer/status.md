@@ -8,7 +8,7 @@
 | Status | Working |
 | Current Task | task006_eval_official_robomimic_square_bcrnn |
 | PR | https://github.com/StevenKKXS/ldp/pull/new/intern_method_developer/task006_eval_official_robomimic_square_bcrnn |
-| Session | 36 |
+| Session | 37 |
 
 ## 最近进展
 - 当前可访问四个 GPU 入口：`10.100.16.46:16139`、`10.100.16.46:23989`、`10.100.2.35:26482`、`10.100.2.35:17821`，每个入口各可见 2 张 NVIDIA H200。
@@ -39,3 +39,4 @@
 - Session 34 进度：2026-05-10 11:39 UTC old-stack DiT 已退出，old-stack UNet 到 epoch 990、best `0.10`，预计很快进入 epoch1000 final rollout；py39 UNet/DiT 到 epoch 676/691，best 仍为 `0.46/0.24`，接近 epoch700 scheduled rollout。
 - Session 35 进度：2026-05-10 12:51 UTC old-stack DP LDP-MH 两路均完成并释放 GPU，UNet final `0.08` best `0.10`、DiT final `0.02` best `0.04`；当前只剩 py39 DP LDP-MH 在 `26482` GPU0 运行，UNet epoch 696 best `0.46`，DiT epoch 708 且 epoch700 `0.24`、best `0.24`。
 - Session 36 结论：2026-05-11 08:28 UTC 检查，全部 Square DP/SmolVLA/BC-RNN 实验已完成，GPU 均无训练进程，可以 release；py39 DP LDP-MH 最终为 UNet final `0.42` best `0.50`、DiT final `0.20` best `0.24`。
+- Session 37 新增 `PTP_IMPROVEMENT_RECOMMENDATIONS_20260511.md`，建议以 py39 + PTP/LDP-MH + DP UNet 为主线，通过固定评估协议、调 `n_action_steps/n_obs_steps/horizon/batch`、阶段加权和失败视频分类来冲高成功率。

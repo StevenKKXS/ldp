@@ -1,6 +1,6 @@
 # Task Knowledge
 
-<!-- METADATA:SESSION=36 -->
+<!-- METADATA:SESSION=37 -->
 
 ## Working Rules
 - The task expanded from no-training BC-RNN evaluation to include issue #157 retraining checks and SmolVLA resource-utilization training runs.
@@ -102,3 +102,4 @@
 - Session 34 progress snapshot, 2026-05-10 11:39 UTC: old-stack DiT LDP-MH has exited after final epoch1000 score `0.02`; old-stack UNet LDP-MH remains active at epoch990 with best `0.10`. Py39 LDP-MH UNet/DiT remain active at epoch676/691 with best `0.46/0.24`; epoch700 scheduled rollout is the next useful update point.
 - Session 35 progress snapshot, 2026-05-10 12:51 UTC: old-stack DP LDP-MH is fully complete and idle. Final/best scores are UNet final epoch1000 `0.08`, best `0.10`; DiT final epoch1000 `0.02`, best `0.04`. Py39 DP LDP-MH remains active on `26482` GPU0: UNet epoch696, best `0.46`; DiT epoch708, epoch700 `0.24`, best `0.24`. Only py39 DP LDP-MH still needs final accounting.
 - Session 36 final GPU/release status, 2026-05-11 08:28 UTC: all Square experiments are complete and reachable GPUs have no active training compute processes, so GPU resources can be released. Final DP LDP-MH results: current py312 UNet final `0.08`, best `0.10`; current py312 DiT final `0.02`, best `0.04`; py39 UNet final `0.42`, best epoch900 `0.50`; py39 DiT final `0.20`, best epoch600/700 `0.24`.
+- Session 37 PTP improvement guidance: use `workspace/tasks/task006_eval_official_robomimic_square_bcrnn/PTP_IMPROVEMENT_RECOMMENDATIONS_20260511.md`. Short version: optimize around py39 PTP/LDP-MH DP UNet, not SmolVLA; first tune `n_action_steps=2/4`, `n_obs_steps=4/8`, `horizon=32`, batch size 128, and denser late checkpoint eval; then inspect failure videos and add phase-balanced loss / sampling.
