@@ -1,6 +1,6 @@
 # task002_remaining_baselines_push_t_aloha_longsquare_transport - Task Knowledge
 
-<!-- METADATA:SESSION=1 -->
+<!-- METADATA:SESSION=2 -->
 
 > Rule: each item is one sentence in the format `N. Category: content`.
 >
@@ -25,5 +25,12 @@
 13. Technical fact: Push-T smoke passed using `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/datasets/pusht/pusht_cchi_v7_replay.zarr`, with `img=(25650,96,96,3)`, `action=(25650,2)`, and horizon-32 samples.
 14. Technical fact: LH-ALOHA smoke passed using `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/datasets/aloha_twomodes_single/demos.hdf5`, with `50` demos, actions `(500,7)`, embeddings `(500,135)`, and a successful reset of `sim_singlearm_pickandplace_twomodes_scripted`.
 15. File change: Detailed reusable setup requirements were recorded in `workspace/tasks/task002_remaining_baselines_push_t_aloha_longsquare_transport/session001_push_t_lh_aloha_env_setup.md`.
+16. User requirement: Session 136 should mimic the previous p39 4x2x2 training style but keep only `global_action=8` and only Push-T plus LH-ALOHA DP/PTP.
+17. Technical fact: Session 136 formal output root is `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/outputs/session136_ptp_py39_pusht_aloha_2x2_a8_2000ep_20260511_084500`.
+18. Technical fact: Session 136 formal log root is `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/logs/session136_ptp_py39_pusht_aloha_2x2_a8_2000ep_20260511_084500`.
+19. Technical fact: Push-T Session 136 uses raw zarr data with frozen `pusht_encoder.ckpt` and `+policy.use_embed_if_present=false` because there is no cached zarr embedding path in the current setup.
+20. Technical fact: LH-ALOHA Session 136 uses cached `obs/embedding` from `aloha_twomodes_single/demos.hdf5` with frozen `aloha_encoder.ckpt`.
+21. Technical fact: `threadpoolctl==3.1.0` is required for the LH-ALOHA dataset import path in `/root/ptp_ldp_py39`.
+22. Technical fact: At the current Session 136 progress sample, LH-ALOHA is in the first epoch-100 rollout and Push-T is still pre-rollout around epoch 67.
 
 ---
