@@ -25,9 +25,11 @@
 - Preflight issues fixed:
 - Push-T needed `+policy.use_embed_if_present=false`.
 - LH-ALOHA needed `threadpoolctl==3.1.0` installed into `/root/ptp_ldp_py39`.
-- Current progress sample:
-- LH-ALOHA DP/PTP reached epoch `99` and are in their first `n_test=100` rollout; each has generated `4` mp4 files but has not written `test_mean_score` yet.
-- Push-T DP/PTP reached epoch `67`; no rollout score yet.
+- First 100-episode rollout results:
+- LH-ALOHA DP: epoch `99`, `test/mean_score=0.47`, `4` mp4 files generated.
+- LH-ALOHA PTP: epoch `99`, `test/mean_score=0.06`, `4` mp4 files generated.
+- Push-T DP: epoch `99/100` rollout, `test/mean_score=0.5759698960210787`, `8` mp4 files generated.
+- Push-T PTP: epoch `99/100` rollout, `test/mean_score=0.570208492839418`, `8` mp4 files generated.
 
 ## Session 1 - 2026-05-10 - Push-T / LH-ALOHA Environment Setup
 

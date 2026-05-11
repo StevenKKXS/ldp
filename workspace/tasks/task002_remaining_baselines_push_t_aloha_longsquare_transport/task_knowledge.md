@@ -31,6 +31,6 @@
 19. Technical fact: Push-T Session 136 uses raw zarr data with frozen `pusht_encoder.ckpt` and `+policy.use_embed_if_present=false` because there is no cached zarr embedding path in the current setup.
 20. Technical fact: LH-ALOHA Session 136 uses cached `obs/embedding` from `aloha_twomodes_single/demos.hdf5` with frozen `aloha_encoder.ckpt`.
 21. Technical fact: `threadpoolctl==3.1.0` is required for the LH-ALOHA dataset import path in `/root/ptp_ldp_py39`.
-22. Technical fact: At the current Session 136 progress sample, LH-ALOHA is in the first epoch-100 rollout and Push-T is still pre-rollout around epoch 67.
+22. Technical fact: Session 136 first 100-episode rollout scores are Push-T DP `0.5759698960210787`, Push-T PTP `0.570208492839418`, LH-ALOHA DP `0.47`, and LH-ALOHA PTP `0.06`.
 
 ---
