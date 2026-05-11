@@ -1,6 +1,6 @@
 # History Log
 
-<!-- METADATA:SESSION=35 -->
+<!-- METADATA:SESSION=36 -->
 
 ## Session 0
 - Created task for no-training evaluation of the official robomimic v0.1 Square(PH) low-dimensional BC-RNN checkpoint.
@@ -254,3 +254,8 @@
 - Progress check at 2026-05-10 12:51 UTC: old-stack DP LDP-MH on `10.100.16.46:16139` is complete and the host is idle. UNet final epoch 1000 rollout is `0.08` with best epoch 500 `0.10`; DiT final epoch 1000 rollout is `0.02` with best `0.04`.
 - Py39 DP LDP-MH on `10.100.2.35:26482` remains active on GPU0. UNet is at epoch 696 with best epoch 200 `0.46`; DiT is at epoch 708, has written epoch 700 `0.24`, and best remains `0.24`.
 - The other GPU entries are idle: `10.100.16.46:16139`, `10.100.16.46:23989`, `10.100.2.35:17821`, and GPU1 on `10.100.2.35:26482` show no active compute jobs.
+
+## Session 36
+- Final progress check at 2026-05-11 08:28 UTC: all reachable GPUs are idle with no active training compute jobs. `10.100.16.46:16139` refuses SSH, but its old-stack DP LDP-MH outputs had already completed; `10.100.16.46:23989`, `10.100.2.35:26482`, and `10.100.2.35:17821` show no active compute-app processes.
+- Py39 DP LDP-MH completed epoch 1000. UNet final epoch 1000 rollout is `0.42`, with best epoch 900 `25/50 = 0.50`. DiT final epoch 1000 rollout is `0.20`, with best epoch 600 / 700 `12/50 = 0.24`.
+- Updated `ROLLOUT_BEST_SUMMARY_20260509.md`, `DP_ROLLOUT_EVAL_CURVES_20260509.md`, and `EXPLORATION_SUMMARY_FOR_REPORT_20260510.md` so the final DP LDP-MH results no longer appear as active / partial.

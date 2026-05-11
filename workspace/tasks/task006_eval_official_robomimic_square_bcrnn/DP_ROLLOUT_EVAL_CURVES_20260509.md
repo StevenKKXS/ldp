@@ -52,27 +52,36 @@ Runtime: py312 / robomimic 0.3 / robosuite 1.4.1 / mujoco 3.8.
 | 90 | 3/50 | 0.06 | 1/50 | 0.02 |
 | 100 | 1/50 | 0.02 | 0/50 | 0.00 |
 | 200 | 3/50 | 0.06 | 2/50 | 0.04 |
+| 300 | 2/50 | 0.04 | 0/50 | 0.00 |
+| 400 | 2/50 | 0.04 | 0/50 | 0.00 |
+| 500 | 5/50 | 0.10 | 0/50 | 0.00 |
+| 600 | 2/50 | 0.04 | 1/50 | 0.02 |
+| 700 | 4/50 | 0.08 | 1/50 | 0.02 |
+| 800 | 3/50 | 0.06 | 1/50 | 0.02 |
+| 900 | 3/50 | 0.06 | 0/50 | 0.00 |
+| 1000 | 4/50 | 0.08 | 1/50 | 0.02 |
 
 Best observed PTP / LDP-MH results:
 
 | Model | Best eval epoch | Best rollout |
 | --- | ---: | ---: |
-| DP no-hist UNet | 60 / 90 / 200 | 3/50 = 0.06 |
+| DP no-hist UNet | 500 | 5/50 = 0.10 |
 | DP no-hist DiT | 20 / 40 / 70 / 200 | 2/50 = 0.04 |
 
 ## Py39 Comparison Snapshot
 
-Runtime: py39 / robomimic 0.2 / robosuite 1.2.0 / mujoco-py 2.1. These runs are still training, and the schedule uses every 20 epochs through epoch 100, then every 100 epochs.
+Runtime: py39 / robomimic 0.2 / robosuite 1.2.0 / mujoco-py 2.1. These runs completed epoch 1000; the schedule used every 20 epochs through epoch 100, then every 100 epochs.
 
 | Data version | Model | Best eval epoch | Best rollout |
 | --- | --- | ---: | ---: |
 | Official-PH image_abs v1.4.1 | DP no-hist UNet | 200 | 5/50 = 0.10 |
 | Official-PH image_abs v1.4.1 | DP no-hist DiT | 60 | 24/50 = 0.48 |
-| PTP / LDP-MH image_abs | DP no-hist UNet | 80 / 100 | 18/50 = 0.36 |
-| PTP / LDP-MH image_abs | DP no-hist DiT | 40 / 80 | 5/50 = 0.10 |
+| PTP / LDP-MH image_abs | DP no-hist UNet | 900 | 25/50 = 0.50 |
+| PTP / LDP-MH image_abs | DP no-hist DiT | 600 / 700 | 12/50 = 0.24 |
 
 ## Notes
 
 - The strong `0.68` / `0.60` values are from current-stack official-PH v1.4.1 DP, not from the py39 robomimic 0.2 comparison.
 - Official-PH learns quickly in the first 70-90 epochs, then fluctuates downward. This is why selecting by rollout checkpoint matters.
 - PTP / LDP-MH remains much lower on the current stack under the same no-history DP setting.
+- The py39 PTP / LDP-MH UNet run improved after the earlier snapshot and finished with best epoch 900 `25/50 = 0.50`.

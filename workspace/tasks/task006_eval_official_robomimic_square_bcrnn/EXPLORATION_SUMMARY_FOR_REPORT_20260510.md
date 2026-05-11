@@ -16,7 +16,7 @@
 
 SmolVLA 能正常训练和 rollout，也保存了视频，但当前实现和参数下成功率偏低。所有已完成 SmolVLA 中最好的是 py39 / robomimic 0.2 / robosuite 1.2 环境下 big384 + PTP/LDP-MH 数据，`16/50 = 0.32`。当前 py312 环境下最好是早期三路实验的 big384 + PTP/LDP-MH，`13/50 = 0.26`；四路正式对比中最好是 big384 + official-PH，`12/50 = 0.24`。
 
-DP no-hist 明显强于当前 SmolVLA。当前 py312 环境下，official-PH v1.4.1 数据上 DP UNet 达到 `34/50 = 0.68`，DP DiT 达到 `30/50 = 0.60`。但 DP 同样对数据和环境组合很敏感：PTP/LDP-MH 在当前 py312 环境很低，而在 py39 / robomimic 0.2 / robosuite 1.2 环境中 UNet 目前达到 `23/50 = 0.46`。
+DP no-hist 明显强于当前 SmolVLA。当前 py312 环境下，official-PH v1.4.1 数据上 DP UNet 达到 `34/50 = 0.68`，DP DiT 达到 `30/50 = 0.60`。但 DP 同样对数据和环境组合很敏感：PTP/LDP-MH 在当前 py312 环境很低，而在 py39 / robomimic 0.2 / robosuite 1.2 环境中 UNet 达到 `25/50 = 0.50`。
 
 当前结论：Square 成功率主要受数据版本、运行环境版本、以及 specialist/generalist 架构差异共同影响。现有证据不能证明 SmolVLA 一定不适合 Square，但能说明我们测试的 SmolVLA recipe 还没有竞争力，明显落后于对齐后的 BC-RNN specialist 和 DP。
 
@@ -63,7 +63,7 @@ DP no-hist 明显强于当前 SmolVLA。当前 py312 环境下，official-PH v1.
 
 ## 结果表
 
-说明：`最终 50` 表示已从 checkpoint sweep 中选出 best checkpoint，并重新做 50 次 closed-loop rollout 且保存视频。`训练中 scheduled 50` 表示训练过程中已经出现的最好 50-rollout eval。DP 的 PTP/LDP-MH 行截至 2026-05-10 03:41 UTC 仍在训练，因此是 best-so-far。
+说明：`最终 50` 表示已从 checkpoint sweep 中选出 best checkpoint，并重新做 50 次 closed-loop rollout 且保存视频。`scheduled 50` 表示训练过程中按计划触发的 50-rollout eval；截至 2026-05-11 08:28 UTC，表内 DP 均已跑到 epoch 1000。
 
 | 状态 | 环境 | 模型/设定 | 数据 | 最好 checkpoint | 成功率 |
 | --- | --- | --- | --- | --- | ---: |
@@ -82,12 +82,12 @@ DP no-hist 明显强于当前 SmolVLA。当前 py312 环境下，official-PH v1.
 | 最终 50 | py39 对比环境 | SmolVLA big384 | Official-PH image_abs v1.4.1 | epoch 800 | 5/50 = 0.10 |
 | scheduled 50，已到 epoch 1000 | 当前 py312 | DP no-hist UNet | Official-PH image_abs v1.4.1 | epoch 90 | 34/50 = 0.68 |
 | scheduled 50，已到 epoch 1000 | 当前 py312 | DP no-hist DiT | Official-PH image_abs v1.4.1 | epoch 70 | 30/50 = 0.60 |
-| scheduled 50，训练中 | 当前 py312 | DP no-hist UNet | PTP/LDP-MH image_abs | epoch 500 | 5/50 = 0.10 |
-| scheduled 50，训练中 | 当前 py312 | DP no-hist DiT | PTP/LDP-MH image_abs | epoch 20 | 2/50 = 0.04 |
+| scheduled 50，已到 epoch 1000 | 当前 py312 | DP no-hist UNet | PTP/LDP-MH image_abs | epoch 500 | 5/50 = 0.10 |
+| scheduled 50，已到 epoch 1000 | 当前 py312 | DP no-hist DiT | PTP/LDP-MH image_abs | epoch 20 / 40 / 70 / 200 | 2/50 = 0.04 |
 | scheduled 50，已到 epoch 1000 | py39 对比环境 | DP no-hist UNet | Official-PH image_abs v1.4.1 | epoch 400 | 10/50 = 0.20 |
 | scheduled 50，已到 epoch 1000 | py39 对比环境 | DP no-hist DiT | Official-PH image_abs v1.4.1 | epoch 60 | 24/50 = 0.48 |
-| scheduled 50，训练中 | py39 对比环境 | DP no-hist UNet | PTP/LDP-MH image_abs | epoch 200 | 23/50 = 0.46 |
-| scheduled 50，训练中 | py39 对比环境 | DP no-hist DiT | PTP/LDP-MH image_abs | epoch 200 | 9/50 = 0.18 |
+| scheduled 50，已到 epoch 1000 | py39 对比环境 | DP no-hist UNet | PTP/LDP-MH image_abs | epoch 900 | 25/50 = 0.50 |
+| scheduled 50，已到 epoch 1000 | py39 对比环境 | DP no-hist DiT | PTP/LDP-MH image_abs | epoch 600 / 700 | 12/50 = 0.24 |
 
 ## DP 曲线重点
 
@@ -109,7 +109,7 @@ DP no-hist 明显强于当前 SmolVLA。当前 py312 环境下，official-PH v1.
 
 1. 版本和数据对齐是第一优先问题。
 
-同一个模型家族在不同数据/环境组合下差异很大。当前 py312 环境中，DP 在 official-PH v1.4.1 上达到 `0.68 / 0.60`，但 PTP/LDP-MH 很低。py39 环境中，PTP/LDP-MH 的 DP UNet 反而升到 `0.46`，而 official-PH 的 DP UNet 降到 `0.20`。SmolVLA 也类似：py39 环境让 PTP/LDP-MH 的 SmolVLA 提升到 `0.32`，但 official-PH 降到 `0.10`。这支持“数据生成版本、视觉栈、robosuite 运行环境、action conversion 必须成套对齐”的判断。
+同一个模型家族在不同数据/环境组合下差异很大。当前 py312 环境中，DP 在 official-PH v1.4.1 上达到 `0.68 / 0.60`，但 PTP/LDP-MH 很低。py39 环境中，PTP/LDP-MH 的 DP UNet 反而升到 `0.50`，而 official-PH 的 DP UNet 只有 `0.20`。SmolVLA 也类似：py39 环境让 PTP/LDP-MH 的 SmolVLA 提升到 `0.32`，但 official-PH 降到 `0.10`。这支持“数据生成版本、视觉栈、robosuite 运行环境、action conversion 必须成套对齐”的判断。
 
 2. Specialist BC-RNN 仍是目前最强参考。
 
@@ -136,8 +136,8 @@ DP official-PH UNet 最好在 epoch 90，成功率 `0.68`，但 epoch 1000 只�
 | SmolVLA py39 四路对比 | 已完成：全 checkpoint 20-rollout sweep、best checkpoint 50-rollout、视频保存。 |
 | DP 当前 py312 official-PH | 已到 epoch 1000，best checkpoint 已明确。 |
 | DP py39 official-PH | 已到 epoch 1000，best checkpoint 已明确。 |
-| DP 当前 py312 PTP/LDP-MH | 截至最后记录仍在训练，约 epoch 821 / 842。 |
-| DP py39 PTP/LDP-MH | 截至最后记录仍在训练，约 epoch 548 / 561。 |
+| DP 当前 py312 PTP/LDP-MH | 已到 epoch 1000，best checkpoint 已明确。 |
+| DP py39 PTP/LDP-MH | 已到 epoch 1000，best checkpoint 已明确。 |
 
 ## 需要在汇报中标注“不确定”的点
 
@@ -147,7 +147,7 @@ DP official-PH UNet 最好在 epoch 90，成功率 `0.68`，但 epoch 1000 只�
 | 是否主要是 specialist vs generalist 问题？ | 有证据支持，但没有完全 isolate。BC-RNN 有 recurrence 和 robomimic specialist 实现；SmolVLA 是 chunked flow-style prediction。 |
 | 官方 84% 是否能本地严格复现？ | 目前不能。当前环境测到 66%；严格 old-stack 被 mujoco-py / offline-study-era 依赖阻塞。 |
 | PTP/LDP-MH 的“正确版本”是什么？ | 本地 PTP/LDP-MH 文件是 300 demos / 80,731 steps，且无显式 `env_version`。它在 py39 / robosuite 1.2 上部分模型更好，但这只是实验证据，不是 provenance 证明。 |
-| DP LDP-MH 最终成绩是否固定？ | 还没固定。LDP-MH DP 训练仍在跑，表中是当前 best-so-far scheduled eval。 |
+| DP LDP-MH 最终成绩是否固定？ | 已固定到 scheduled rollout 粒度：当前 py312 UNet/DiT best 为 `0.10/0.04`，py39 UNet/DiT best 为 `0.50/0.24`。 |
 
 ## 可直接放入汇报的一段话
 
