@@ -1,6 +1,12 @@
 # Task Knowledge
 
-<!-- METADATA:SESSION=136 -->
+<!-- METADATA:SESSION=137 -->
+
+## Session 137 Knowledge
+- Session 136 Push-T / LH-ALOHA a8 runs remain active at the Session 137 progress check.
+- Current best scores are Push-T DP `0.6398046700698842`, Push-T PTP `0.6464833823344924`, LH-ALOHA DP `0.47`, and LH-ALOHA PTP `0.29`.
+- Push-T score trend is improving through epoch 399 for DP and peaked so far at epoch 299 for PTP.
+- LH-ALOHA DP peaked at the first rollout and then stayed lower, while LH-ALOHA PTP improved from `0.06` to `0.29` across the first five rollout checks.
 
 ## Session 136 Knowledge
 - Session 136 launch script for Push-T / LH-ALOHA 2x2 a8 is `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/scripts/session136_launch_ptp_py39_pusht_aloha_2x2_a8_2000ep.sh`.

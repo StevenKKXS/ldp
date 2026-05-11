@@ -1,6 +1,25 @@
 # History Log
 
-<!-- METADATA:SESSION=136 -->
+<!-- METADATA:SESSION=137 -->
+
+## Session 137
+- User asked for the current progress of the active Push-T / LH-ALOHA a8 batch.
+- All four Session 136 training processes remain active.
+- Output root:
+- `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/outputs/session136_ptp_py39_pusht_aloha_2x2_a8_2000ep_20260511_084500`
+- Latest sampled progress:
+- LH-ALOHA DP: epoch `599`, `5` rollout scores at epochs `[99, 199, 299, 399, 499]`, latest score `0.33`, best score `0.47`, `24` mp4 files.
+- LH-ALOHA PTP: epoch `599`, `5` rollout scores at epochs `[99, 199, 299, 399, 499]`, latest score `0.29`, best score `0.29`, `24` mp4 files.
+- Push-T DP: epoch `499`, `4` rollout scores at epochs `[99, 199, 299, 399]`, latest score `0.6398046700698842`, best score `0.6398046700698842`, `38` mp4 files.
+- Push-T PTP: epoch `497`, `4` rollout scores at epochs `[99, 199, 299, 399]`, latest score `0.6239056159843158`, best score `0.6464833823344924`, `32` mp4 files.
+- Latest score sequences:
+- LH-ALOHA DP: `[0.47, 0.32, 0.36, 0.29, 0.33]`.
+- LH-ALOHA PTP: `[0.06, 0.2, 0.19, 0.28, 0.29]`.
+- Push-T DP: `[0.5759698960210787, 0.573577898325564, 0.5990833387929431, 0.6398046700698842]`.
+- Push-T PTP: `[0.570208492839418, 0.6217402200459567, 0.6464833823344924, 0.6239056159843158]`.
+- GPU sample:
+- `10.100.2.35:33486`: Push-T pair active, GPU0 about `3388 MiB / 16%`, GPU1 about `3388 MiB / 36%`.
+- `10.100.16.46:36566`: LH-ALOHA pair active, GPU0 about `2381 MiB / 43%`, GPU1 about `1702 MiB / 0%` at sample time.
 
 ## Session 136
 - User requested a p39-style rerun modeled after the previous 4x2x2 batch, but with `global_action=8` only and only two tasks:
