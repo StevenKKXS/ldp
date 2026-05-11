@@ -11,7 +11,7 @@
 - Common Session 136 settings are `global_obs=16`, `global_horizon=32`, `global_action=8`, `num_epochs=2000`, `batch_size=64`, `rollout_every=100`, `checkpoint_every=100`, `n_test=100`, and `n_test_vis=4`.
 - DP is implemented with `policy.past_action_pred=false` and `policy.past_steps_reg=-1`; PTP is implemented with `policy.past_action_pred=true` and `policy.past_steps_reg=-1`.
 - `threadpoolctl==3.1.0` is a required package in the new `/root/ptp_ldp_py39` servers for LH-ALOHA / RobomimicReplayImageDataset imports.
-- Current Session 136 state: LH-ALOHA DP/PTP are in the first epoch-100 `n_test=100` rollout with videos generated but no score written; Push-T DP/PTP are still pre-rollout around epoch 67.
+- Current Session 136 first 100-episode rollout scores are Push-T DP `0.5759698960210787`, Push-T PTP `0.570208492839418`, LH-ALOHA DP `0.47`, and LH-ALOHA PTP `0.06`.
 
 ## Session 135 Knowledge
 - New Push-T / LH-ALOHA setup servers:

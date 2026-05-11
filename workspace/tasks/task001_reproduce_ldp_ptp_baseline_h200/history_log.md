@@ -47,11 +47,11 @@
 - dataset `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/datasets/aloha_twomodes_single/demos.hdf5`.
 - frozen encoder `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/obs_encoders/obs_encoders/aloha_encoder.ckpt`.
 - cached dataset embeddings are enabled with `policy.use_embed_if_present=true` and `task.dataset.use_embed_if_present=true`.
-- Current progress sample:
-- LH-ALOHA DP: epoch `99`, global step `39598`, train loss `0.017880`, first `n_test=100` rollout in progress, `4` mp4 files generated, no `test_mean_score` written yet.
-- LH-ALOHA PTP: epoch `99`, global step `39598`, train loss `0.009861`, first `n_test=100` rollout in progress, `4` mp4 files generated, no `test_mean_score` written yet.
-- Push-T DP: epoch `67`, global step `11218`, train loss `0.050072`, no rollout score yet.
-- Push-T PTP: epoch `67`, global step `11218`, train loss `0.048030`, no rollout score yet.
+- First 100-episode rollout results:
+- LH-ALOHA DP: epoch `99`, `test/mean_score=0.47`, `4` mp4 files generated.
+- LH-ALOHA PTP: epoch `99`, `test/mean_score=0.06`, `4` mp4 files generated.
+- Push-T DP: epoch `99/100` rollout, `test/mean_score=0.5759698960210787`, `8` mp4 files generated.
+- Push-T PTP: epoch `99/100` rollout, `test/mean_score=0.570208492839418`, `8` mp4 files generated.
 - Latest GPU sample:
 - `10.100.2.35`: GPU0 `3388 MiB / 24%`, GPU1 `3388 MiB / 16%`.
 - `10.100.16.46`: GPU0 `2381 MiB / 34%`, GPU1 `1702 MiB / 0%` while the DP process remains active in rollout / CPU work.
