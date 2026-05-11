@@ -1,6 +1,60 @@
 # History Log
 
-<!-- METADATA:SESSION=135 -->
+<!-- METADATA:SESSION=136 -->
+
+## Session 136
+- User requested a p39-style rerun modeled after the previous 4x2x2 batch, but with `global_action=8` only and only two tasks:
+- Push-T DP / PTP
+- LH-ALOHA DP / PTP
+- Created shared launch script:
+- `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/scripts/session136_launch_ptp_py39_pusht_aloha_2x2_a8_2000ep.sh`
+- Script fixes made during bring-up:
+- changed Push-T override to `+policy.use_embed_if_present=false` because `transformer_pusht.yaml` does not define that key under Hydra struct mode.
+- changed shared-directory creation to the previous robust `mkdir -p || [[ -d path ]]` pattern because concurrent HF3FS directory creation returned `File exists`.
+- installed `threadpoolctl==3.1.0` into `/root/ptp_ldp_py39` on both new servers because `RobomimicReplayImageDataset` imports `threadpool_limits`.
+- Preflight checks:
+- Push-T PTP one-train-step / one-val-step preflight passed on `10.100.2.35:33486`.
+- LH-ALOHA PTP one-train-step / one-val-step preflight passed on `10.100.16.46:36566`.
+- Formal launch stamp:
+- `20260511_084500`
+- Output root:
+- `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/outputs/session136_ptp_py39_pusht_aloha_2x2_a8_2000ep_20260511_084500`
+- Log root:
+- `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/logs/session136_ptp_py39_pusht_aloha_2x2_a8_2000ep_20260511_084500`
+- Server / GPU assignment:
+- Push-T PTP: `10.100.2.35:33486`, GPU 0.
+- Push-T DP: `10.100.2.35:33486`, GPU 1.
+- LH-ALOHA PTP: `10.100.16.46:36566`, GPU 0.
+- LH-ALOHA DP: `10.100.16.46:36566`, GPU 1.
+- Common training settings:
+- Python env `/root/ptp_ldp_py39`.
+- training repo `/mnt/3fs2/data/tingwen.du/workspace/ldp`.
+- `global_obs=16`, `global_horizon=32`, `global_action=8`.
+- `training.num_epochs=2000`.
+- `training.rollout_every=100`, `training.checkpoint_every=100`, `training.val_every=1`, `training.sample_every=5`.
+- `dataloader.batch_size=64`, `val_dataloader.batch_size=64`.
+- `task.env_runner.n_envs=4`, `task.env_runner.n_test=100`, `task.env_runner.n_test_vis=4`.
+- DP uses `policy.past_action_pred=false`, `policy.past_steps_reg=-1`.
+- PTP uses `policy.past_action_pred=true`, `policy.past_steps_reg=-1`.
+- Push-T task settings:
+- config `experiment_configs/transformer_pusht`.
+- dataset `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/datasets/pusht/pusht_cchi_v7_replay.zarr`.
+- frozen encoder `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/obs_encoders/obs_encoders/pusht_encoder.ckpt`.
+- no cached embedding path; raw zarr image observations are used with `+policy.use_embed_if_present=false`.
+- `task.dataset.pad_before=15`, `task.dataset.pad_after=7`.
+- LH-ALOHA task settings:
+- config `experiment_configs/aloha/transformer_aloha_emb`.
+- dataset `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/datasets/aloha_twomodes_single/demos.hdf5`.
+- frozen encoder `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/obs_encoders/obs_encoders/aloha_encoder.ckpt`.
+- cached dataset embeddings are enabled with `policy.use_embed_if_present=true` and `task.dataset.use_embed_if_present=true`.
+- Current progress sample:
+- LH-ALOHA DP: epoch `99`, global step `39598`, train loss `0.017880`, first `n_test=100` rollout in progress, `4` mp4 files generated, no `test_mean_score` written yet.
+- LH-ALOHA PTP: epoch `99`, global step `39598`, train loss `0.009861`, first `n_test=100` rollout in progress, `4` mp4 files generated, no `test_mean_score` written yet.
+- Push-T DP: epoch `67`, global step `11218`, train loss `0.050072`, no rollout score yet.
+- Push-T PTP: epoch `67`, global step `11218`, train loss `0.048030`, no rollout score yet.
+- Latest GPU sample:
+- `10.100.2.35`: GPU0 `3388 MiB / 24%`, GPU1 `3388 MiB / 16%`.
+- `10.100.16.46`: GPU0 `2381 MiB / 34%`, GPU1 `1702 MiB / 0%` while the DP process remains active in rollout / CPU work.
 
 ## Session 135
 - User provided two new servers dedicated to Push-T and LH-ALOHA environment setup:

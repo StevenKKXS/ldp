@@ -8,5 +8,5 @@
 | Status | Working |
 | Current Task | task001_reproduce_ldp_ptp_baseline_h200 |
 | PR | https://github.com/StevenKKXS/ldp/pull/new/intern_ldp_explorer/task001_reproduce_ldp_ptp_baseline_h200 |
-| Session | 135 |
-| Recent Progress | Configured the PTP Python 3.9 environment for Push-T and LH-ALOHA on the two new H200 servers, validated task smoke tests, and recorded reusable setup requirements. |
+| Session | 136 |
+| Recent Progress | Launched Session 136 Push-T / LH-ALOHA DP/PTP a8 runs; all four processes are active, ALOHA is in the first 100-episode rollout, and Push-T is pre-rollout around epoch 67. |

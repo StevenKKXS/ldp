@@ -1,6 +1,17 @@
 # Task Knowledge
 
-<!-- METADATA:SESSION=135 -->
+<!-- METADATA:SESSION=136 -->
+
+## Session 136 Knowledge
+- Session 136 launch script for Push-T / LH-ALOHA 2x2 a8 is `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/scripts/session136_launch_ptp_py39_pusht_aloha_2x2_a8_2000ep.sh`.
+- Formal Session 136 output root is `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/outputs/session136_ptp_py39_pusht_aloha_2x2_a8_2000ep_20260511_084500`.
+- Formal Session 136 log root is `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/logs/session136_ptp_py39_pusht_aloha_2x2_a8_2000ep_20260511_084500`.
+- Push-T runs use `experiment_configs/transformer_pusht`, raw zarr data, `pusht_encoder.ckpt`, `policy.obs_encoder_freeze=true`, and `+policy.use_embed_if_present=false`.
+- LH-ALOHA runs use `experiment_configs/aloha/transformer_aloha_emb`, `aloha_twomodes_single/demos.hdf5`, `aloha_encoder.ckpt`, and cached `obs/embedding`.
+- Common Session 136 settings are `global_obs=16`, `global_horizon=32`, `global_action=8`, `num_epochs=2000`, `batch_size=64`, `rollout_every=100`, `checkpoint_every=100`, `n_test=100`, and `n_test_vis=4`.
+- DP is implemented with `policy.past_action_pred=false` and `policy.past_steps_reg=-1`; PTP is implemented with `policy.past_action_pred=true` and `policy.past_steps_reg=-1`.
+- `threadpoolctl==3.1.0` is a required package in the new `/root/ptp_ldp_py39` servers for LH-ALOHA / RobomimicReplayImageDataset imports.
+- Current Session 136 state: LH-ALOHA DP/PTP are in the first epoch-100 `n_test=100` rollout with videos generated but no score written; Push-T DP/PTP are still pre-rollout around epoch 67.
 
 ## Session 135 Knowledge
 - New Push-T / LH-ALOHA setup servers:
