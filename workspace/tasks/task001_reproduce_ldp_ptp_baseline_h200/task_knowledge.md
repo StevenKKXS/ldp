@@ -1,6 +1,13 @@
 # Task Knowledge
 
-<!-- METADATA:SESSION=137 -->
+<!-- METADATA:SESSION=138 -->
+
+## Session 138 Knowledge
+- Session 136 Push-T / LH-ALOHA 2x2 a8 2000-epoch batch completed on `2026-05-12`.
+- Final best scores are Push-T DP `0.6579065803076461`, Push-T PTP `0.6464833823344924`, LH-ALOHA DP `0.49`, and LH-ALOHA PTP `0.49`.
+- Best checkpoints are Push-T DP epoch `599`, Push-T PTP epoch `299`, LH-ALOHA DP epoch `1599`, and LH-ALOHA PTP epoch `1599`.
+- Latest epoch-1999 scores are Push-T DP `0.5911164950268697`, Push-T PTP `0.587009633204277`, LH-ALOHA DP `0.31`, and LH-ALOHA PTP `0.37`.
+- Both new H200 servers were idle after the Session 138 check, with no matching training process and both GPUs at about `1 MiB` memory use.
 
 ## Session 137 Knowledge
 - Session 136 Push-T / LH-ALOHA a8 runs remain active at the Session 137 progress check.

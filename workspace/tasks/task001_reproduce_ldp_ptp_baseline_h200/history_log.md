@@ -1,6 +1,30 @@
 # History Log
 
-<!-- METADATA:SESSION=137 -->
+<!-- METADATA:SESSION=138 -->
+
+## Session 138
+- User asked for the current state of the Push-T / LH-ALOHA a8 batch on `2026-05-12`.
+- The Session 136 2x2 a8 training batch has completed all planned `2000` epochs for all four runs.
+- Both servers are idle after completion:
+- `10.100.2.35:33486`: `2 x H200`, both sampled at `1 MiB` and `0%` utilization, no matching training process.
+- `10.100.16.46:36566`: `2 x H200`, both sampled at `1 MiB` and `0%` utilization, no matching training process.
+- Output root:
+- `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/outputs/session136_ptp_py39_pusht_aloha_2x2_a8_2000ep_20260511_084500`
+- Final result summary:
+- LH-ALOHA DP: completed epoch `1999`, `20` rollout scores, latest score `0.31`, best score `0.49` at epoch `1599`, `21` checkpoints, `80` mp4 files.
+- LH-ALOHA PTP: completed epoch `1999`, `20` rollout scores, latest score `0.37`, best score `0.49` at epoch `1599`, `21` checkpoints, `80` mp4 files.
+- Push-T DP: completed epoch `1999`, `20` rollout scores, latest score `0.5911164950268697`, best score `0.6579065803076461` at epoch `599`, `21` checkpoints, `160` mp4 files.
+- Push-T PTP: completed epoch `1999`, `20` rollout scores, latest score `0.587009633204277`, best score `0.6464833823344924` at epoch `299`, `21` checkpoints, `160` mp4 files.
+- Best checkpoint files:
+- LH-ALOHA DP: `session136_aloha_dp_a8_2000ep_s42_20260511_084500/checkpoints/epoch=1599-test_mean_score=0.490.ckpt`.
+- LH-ALOHA PTP: `session136_aloha_ptp_a8_2000ep_s42_20260511_084500/checkpoints/epoch=1599-test_mean_score=0.490.ckpt`.
+- Push-T DP: `session136_pusht_dp_a8_2000ep_s42_20260511_084500/checkpoints/epoch=0599-test_mean_score=0.658.ckpt`.
+- Push-T PTP: `session136_pusht_ptp_a8_2000ep_s42_20260511_084500/checkpoints/epoch=0299-test_mean_score=0.646.ckpt`.
+- Last eight rollout scores:
+- LH-ALOHA DP: epochs `[1299, 1399, 1499, 1599, 1699, 1799, 1899, 1999]`, scores `[0.41, 0.37, 0.37, 0.49, 0.41, 0.27, 0.39, 0.31]`.
+- LH-ALOHA PTP: epochs `[1299, 1399, 1499, 1599, 1699, 1799, 1899, 1999]`, scores `[0.27, 0.29, 0.32, 0.49, 0.37, 0.33, 0.44, 0.37]`.
+- Push-T DP: epochs `[1299, 1399, 1499, 1599, 1699, 1799, 1899, 1999]`, scores `[0.594945729138831, 0.6243686211579837, 0.6454227578390193, 0.6168009124913468, 0.6153856950464639, 0.5934631675082392, 0.6130857270915615, 0.5911164950268697]`.
+- Push-T PTP: epochs `[1299, 1399, 1499, 1599, 1699, 1799, 1899, 1999]`, scores `[0.6126536944741664, 0.5729014986642941, 0.6268449178232355, 0.6444618923865231, 0.6014512074766615, 0.6432572107813174, 0.6363517197511256, 0.587009633204277]`.
 
 ## Session 137
 - User asked for the current progress of the active Push-T / LH-ALOHA a8 batch.
