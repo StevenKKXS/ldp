@@ -1,6 +1,6 @@
 # History Log
 
-<!-- METADATA:SESSION=0 -->
+<!-- METADATA:SESSION=1 -->
 
 ## Session 0
 
@@ -14,3 +14,8 @@
 - Added four experiment configs: square/tool_hang crossed with full `horizon=10` and direct action-only 8-step policy horizon.
 - Fixed transformer workspace sampled-action MSE alignment for `pred_action_steps_only=true`.
 - Local syntax check passed for the new policy and touched workspace file; full Hydra check requires the remote training env because local Python lacks hydra.
+- Pushed branch `intern_method_developer/task002_flow_matching_square_toolhang` at commit `3914a6b`.
+- Synced the pushed worktree from CPU side to GPU node path `/mnt/nfs/tingwen/intern_method_developer/repos/ldp_flow_matching` using `tar | ssh`; avoided GPU-node external network access.
+- Linked remote `data` to `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/datasets`.
+- Remote `gmp-py310` py_compile passed and all four Hydra configs parsed with `--cfg job`.
+- Stopped before smoke/training launch per user handoff request; no GPU training process was started by this session.
