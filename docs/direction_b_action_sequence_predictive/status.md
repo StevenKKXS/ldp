@@ -4,11 +4,12 @@ Last updated: 2026-05-18
 
 ## Active Plan
 
-- Active plan: `docs/direction_b_action_sequence_predictive/plan_init_2026-05-18.md`
+- Active plan: `docs/direction_b_action_sequence_predictive/plan_detailed_2026-05-18.md`
+- Review: `docs/direction_b_action_sequence_predictive/review_2026-05-18.md`
 
 ## Current Stage
 
-- Waiting for detailed plan review
+- Reviewed, PTP-compatible encoder-pretraining first pass preferred
 
 ## Completed Experiments
 
@@ -23,13 +24,15 @@ Last updated: 2026-05-18
 ## Key Observations
 
 - Initial direction document created.
+- Detailed Direction B plan saved.
+- Review recommends exact-PTP-compatible encoder pretraining first: auxiliary action decoder is discarded, and the existing PTP policy loads the pretrained encoder.
 - No experiment has been launched.
 - No validated conclusion exists.
 
 ## Current Decision
 
-- Wait for the detailed Direction B plan before formal review.
+- Direction B is a good low-cost implementation smoke candidate, but downstream policy should remain exact PTP in the first pass.
 
 ## Next Step
 
-- Review decoder capacity, future-only vs past+future target choice, loss weighting, encoder integration, and baseline matrix.
+- Decide exact PTP baseline, target action sequence, decoder capacity, encoder checkpoint format, and frozen/finetune protocol.

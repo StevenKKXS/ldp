@@ -1,6 +1,6 @@
 # History Log
 
-<!-- METADATA:SESSION=6 -->
+<!-- METADATA:SESSION=7 -->
 
 ## Session 0
 
@@ -55,4 +55,13 @@
 - User clarified first Direction A experiments should preserve the proven PTP structure in the robomimic 0.2.0-compatible setup as much as possible.
 - Added `docs/direction_a_future_action_contrastive/review_update_ptp_compat_2026-05-18.md`.
 - Updated Direction A status, obs log, global docs status, and main docs entry to favor exact-PTP-compatible encoder pretraining rather than policy-side condition concat.
+- Performed no GPU, SSH, training, smoke, or remote file operation in this session.
+
+## Session 7
+
+- Saved the user-provided Direction B detailed plan as `docs/direction_b_action_sequence_predictive/plan_detailed_2026-05-18.md`.
+- Added review notes at `docs/direction_b_action_sequence_predictive/review_2026-05-18.md`.
+- Updated `docs/main.md`, `docs/status.md`, Direction B `status.md`, and Direction B `obs_log.md` to mark Direction B as reviewed but not implemented.
+- Main review recommendation: first-pass Direction B should preserve exact PTP policy structure and use action-sequence prediction only as encoder pretraining.
+- Code observations recorded: existing PTP has `obs_encoder_dir` / `obs_encoder_freeze`, `past_action_pred=true` keeps full action trajectory loss, and the dataset returns `n_obs_steps` observations plus an action sequence of length `horizon`.
 - Performed no GPU, SSH, training, smoke, or remote file operation in this session.

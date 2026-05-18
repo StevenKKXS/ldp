@@ -6,14 +6,14 @@ Last updated: 2026-05-18
 
 - Global: `docs/plans/plan_init_2026-05-18.md`
 - Direction A: `docs/direction_a_future_action_contrastive/plan_detailed_2026-05-18.md`
-- Direction B: `docs/direction_b_action_sequence_predictive/plan_init_2026-05-18.md`
+- Direction B: `docs/direction_b_action_sequence_predictive/plan_detailed_2026-05-18.md`
 
 ## 总体状态表
 
 | Direction | Status | Current Task | Current Experiment | Latest Result | Next Step |
 |---|---|---|---|---|---|
 | A: Future-Action Contrastive | Reviewed, PTP-compatible plan preferred | Square / ToolHang | N/A | N/A | Finalize exact PTP baseline, contrastive action segment, encoder checkpoint protocol, and frozen/finetune settings |
-| B: Action-Sequence Predictive | Waiting for detailed plan review | Square / ToolHang | N/A | N/A | Review detailed plan when provided, then decide minimal validation design |
+| B: Action-Sequence Predictive | Reviewed, PTP-compatible plan preferred | Square / ToolHang | N/A | N/A | Finalize action target sequence, decoder capacity, checkpoint protocol, and frozen/finetune settings |
 
 ## 当前实验顺序
 
@@ -29,6 +29,8 @@ Last updated: 2026-05-18
 - 尚未开始实验。
 - Direction A 已保存详细 plan 并完成初步 review，但没有实验结果。
 - Direction A review 已根据用户澄清更新: first pass 优先保持 PTP policy 结构不变，只做 encoder pretraining。
-- Direction B 仍只有初始草案，等待详细 plan。
+- Direction B 已保存详细 plan 并完成初步 review，但没有实验结果。
+- Direction B review 建议 first pass 保持 PTP policy 结构不变，只做 predictive encoder pretraining。
 - 不允许把任何方向视为已验证有效。
 - Direction A 需要先讨论 exact PTP baseline、contrastive action segment、encoder checkpoint format、frozen/finetune protocol、以及 B2 是否与 B1 区分。
+- Direction B 需要先讨论 exact PTP baseline、predictive action target、decoder capacity、encoder checkpoint format、frozen/finetune protocol、以及 B2 是否与 B1 区分。

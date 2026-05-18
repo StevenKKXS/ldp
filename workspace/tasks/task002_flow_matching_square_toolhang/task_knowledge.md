@@ -1,6 +1,6 @@
 # Task Knowledge
 
-<!-- METADATA:SESSION=6 -->
+<!-- METADATA:SESSION=7 -->
 
 ## Working Rules
 
@@ -20,6 +20,11 @@
 - Direction A first implementation should preserve the proven PTP policy structure and use future-action contrastive learning as encoder pretraining loaded through existing PTP encoder checkpoint hooks.
 - Policy-side condition concat is deferred; exact-PTP-compatible encoder pretraining is preferred for the first pass.
 - Direction A B2 is mandatory only if a new policy-side architecture is added; if policy structure is unchanged, compare exact PTP baseline against contrastive-pretrained encoder frozen/finetuned and record whether B2 is distinct from B1.
+- Direction B plan file: `docs/direction_b_action_sequence_predictive/plan_detailed_2026-05-18.md`.
+- Direction B review file: `docs/direction_b_action_sequence_predictive/review_2026-05-18.md`.
+- Direction B first implementation should preserve the proven PTP policy structure and use action-sequence prediction only as encoder pretraining; discard the decoder before downstream PTP training.
+- Direction B is likely the simpler smoke path: `dataset batch -> obs_encoder -> small MLP decoder -> Huber(normalized action sequence) -> compatible encoder checkpoint`.
+- If no new retained policy module is added, Direction B B2 may not be distinct from B1; record this rather than inventing a misleading control.
 
 ## Findings
 

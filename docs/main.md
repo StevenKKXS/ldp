@@ -18,11 +18,12 @@
 
 ### Direction B: Action-Sequence Predictive Encoder Pretraining
 
-- Active plan: `docs/direction_b_action_sequence_predictive/plan_init_2026-05-18.md`
+- Active plan: `docs/direction_b_action_sequence_predictive/plan_detailed_2026-05-18.md`
+- Review: `docs/direction_b_action_sequence_predictive/review_2026-05-18.md`
 - Status file: `docs/direction_b_action_sequence_predictive/status.md`
 - Experiment file: `docs/direction_b_action_sequence_predictive/experiments.md`
 - Observation log: `docs/direction_b_action_sequence_predictive/obs_log.md`
-- 当前阶段: 等待详细 plan review
+- 当前阶段: 已 review，优先定型 PTP-compatible predictive pretraining
 
 ## 文件说明
 
@@ -47,3 +48,4 @@
 - 不允许声称 Direction A 或 Direction B 已经有效。
 - GPU 资源在用户明确分配前不申请、不使用。
 - Direction A 已保存详细 plan 和 review；仍未进入实现或实验。
+- Direction B 已保存详细 plan 和 review；仍未进入实现或实验。
