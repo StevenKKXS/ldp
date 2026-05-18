@@ -1,6 +1,6 @@
 ## Task: Flow-Matching DP Baselines on Square and Tool Hang
 
-<!-- METADATA:STATUS=Open,ASSIGNEE= -->
+<!-- METADATA:STATUS=InProgress,ASSIGNEE=intern_method_developer -->
 
 ### Background
 
@@ -36,4 +36,3 @@
 - Record early offline metrics: train loss, validation loss if available, sampled action MSE if available.
 - If sufficient time/resources allow, run rollout evaluation and report success rate.
 - Report whether flow matching shows evidence of learning compared with DDPM baselines.
-
