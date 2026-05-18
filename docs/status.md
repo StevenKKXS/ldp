@@ -5,6 +5,7 @@ Last updated: 2026-05-18
 ## 当前 Active Plan
 
 - Global: `docs/plans/plan_init_2026-05-18.md`
+- Execution: `docs/plans/encoder_probe_execution_2026-05-18.md`
 - Direction A: `docs/direction_a_future_action_contrastive/plan_detailed_2026-05-18.md`
 - Direction B: `docs/direction_b_action_sequence_predictive/plan_detailed_2026-05-18.md`
 
@@ -34,3 +35,6 @@ Last updated: 2026-05-18
 - 不允许把任何方向视为已验证有效。
 - Direction A 需要先讨论 exact PTP baseline、contrastive action segment、encoder checkpoint format、frozen/finetune protocol、以及 B2 是否与 B1 区分。
 - Direction B 需要先讨论 exact PTP baseline、predictive action target、decoder capacity、encoder checkpoint format、frozen/finetune protocol、以及 B2 是否与 B1 区分。
+- New GPU `10.100.2.4:35140` has 8x H200 available for exploration.
+- Initial environment check found `gmp-py310` with RoboMimic `0.4.0`; documented py39/RoboMimic `0.2.0` venv was not present on the node. Any smoke in 0.4.0 is an implementation feasibility observation, not final release-like evidence.
+- Cached PTP embedding datasets bypass `obs_encoder`; encoder-pretraining downstream tests must either disable cached embeddings or regenerate embeddings.
