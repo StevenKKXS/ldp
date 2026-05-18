@@ -251,7 +251,11 @@ class TrainDiffusionTransformerHybridWorkspace(BaseWorkspace):
                         result = policy.predict_action(obs_dict)
                         pred_action = result['action_pred']
                         
-                        if not policy.past_action_pred:
+                        if policy.pred_action_steps_only:
+                            start = policy.n_obs_steps - 1
+                            end = start + policy.n_action_steps
+                            gt_action = gt_action[:, start:end]
+                        elif not policy.past_action_pred:
                             pred_action = pred_action[:, policy.n_obs_steps - 1:]
                             gt_action = gt_action[:, policy.n_obs_steps - 1:]
 
