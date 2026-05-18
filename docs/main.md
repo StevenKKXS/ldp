@@ -14,7 +14,7 @@
 - Status file: `docs/direction_a_future_action_contrastive/status.md`
 - Experiment file: `docs/direction_a_future_action_contrastive/experiments.md`
 - Observation log: `docs/direction_a_future_action_contrastive/obs_log.md`
-- 当前阶段: 已 review，优先定型 PTP-compatible encoder pretraining
+- 当前阶段: encoder pretraining smoke 已通过，Square / ToolHang probes running
 
 ### Direction B: Action-Sequence Predictive Encoder Pretraining
 
@@ -23,7 +23,7 @@
 - Status file: `docs/direction_b_action_sequence_predictive/status.md`
 - Experiment file: `docs/direction_b_action_sequence_predictive/experiments.md`
 - Observation log: `docs/direction_b_action_sequence_predictive/obs_log.md`
-- 当前阶段: 已 review，优先定型 PTP-compatible predictive pretraining
+- 当前阶段: encoder pretraining smoke 已通过，Square / ToolHang probes running
 
 ## 文件说明
 
@@ -44,8 +44,9 @@
 
 ## 当前约束
 
-- 当前只有启动规则和方向草案，没有实验结果。
+- 当前已有 encoder pretraining smoke 和 running probe 记录，但没有 downstream PTP policy score。
 - 不允许声称 Direction A 或 Direction B 已经有效。
-- GPU 资源在用户明确分配前不申请、不使用。
-- Direction A 已保存详细 plan 和 review；仍未进入实现或实验。
-- Direction B 已保存详细 plan 和 review；仍未进入实现或实验。
+- 新 GPU 资源: `10.100.2.4:35140`，Session 8 使用 8x H200 跑 Square / ToolHang encoder pretraining probes。
+- Session 8 logs: `/mnt/nfs/tingwen/intern_method_developer/tasks/ptp_encoder_probe/logs/20260518_session8/pids.tsv`。
+- Session 8 outputs: `/mnt/3fs2/data/tingwen.du/intern_method_developer/ptp_encoder_probe/runs/20260518_session8`。
+- 当前 GPU 环境是 `gmp-py310` + RoboMimic `0.4.0`；目标 release-like py39 / RoboMimic `0.2.0` 环境在该节点未发现，因此当前结果只作为可实现性 observation。

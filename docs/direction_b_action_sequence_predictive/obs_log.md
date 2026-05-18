@@ -36,3 +36,25 @@
 - Possible explanation: Predictive pretraining can be implemented as an auxiliary decoder over current obs encoder features, then load only the encoder into PTP.
 - Decision: First-pass Direction B should be exact-PTP-compatible encoder pretraining, not policy-side condition concat.
 - Next step: Decide target action sequence, decoder capacity, checkpoint compatibility, and frozen/finetune protocol.
+
+### Log 2026-05-18-03
+
+- Date: 2026-05-18
+- Direction: Direction B
+- Related experiment: `B_square_predictive_smoke`, `B_toolhang_predictive_smoke`
+- Observation: Predictive encoder pretraining runs on raw image Square and ToolHang and writes compatible encoder checkpoints.
+- Evidence: Square smoke produced train loss `0.4260`, val loss `0.4002`; ToolHang smoke produced train loss `0.4394`, val loss `0.3929`. Checkpoints were written under `/mnt/3fs2/data/tingwen.du/intern_method_developer/ptp_encoder_probe/smoke/`.
+- Possible explanation: A lightweight MLP decoder over PTP obs encoder features is enough for implementation-level action-sequence pretraining.
+- Decision: Keep Direction B as the lower-risk pretraining branch.
+- Next step: Compare full action target against future-only target in longer probes.
+
+### Log 2026-05-18-04
+
+- Date: 2026-05-18
+- Direction: Direction B
+- Related experiment: `B_square_full_seed42`, `B_square_future_seed42`, `B_tool_hang_full_seed42`, `B_tool_hang_future_seed42`
+- Observation: Four Direction B pretraining probes were launched on GPU node `10.100.2.4:35140`.
+- Evidence: PID table is `/mnt/nfs/tingwen/intern_method_developer/tasks/ptp_encoder_probe/logs/20260518_session8/pids.tsv`; outputs are under `/mnt/3fs2/data/tingwen.du/intern_method_developer/ptp_encoder_probe/runs/20260518_session8`.
+- Possible explanation: Full-target vs future-only target is the most direct first ablation for the user question about whether past/current action prediction helps encoder representations.
+- Decision: Treat these as pretraining feasibility observations until downstream PTP scores are available.
+- Next step: Poll `scripts/poll_encoder_pretrain_probe.sh`, then inspect `logs.jsonl` and checkpoint paths once jobs complete.

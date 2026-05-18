@@ -94,3 +94,21 @@
   - outputs: `/mnt/nfs/tingwen/intern_method_developer/tasks/task002_flow_matching_square_toolhang/outputs/formal_train_20260518_143331`
   - logs: `/mnt/nfs/tingwen/intern_method_developer/tasks/task002_flow_matching_square_toolhang/logs/formal_train_20260518_143331`
 - Formal launch settings: default 3500 epochs and batch size 64 from the configs, `training.rollout_every=999999` to avoid online rollout until env-runner dependencies are repaired, and `checkpoint.topk.k=0` to keep only rolling `latest.ckpt` instead of accumulating top-k checkpoint files.
+- Switched to the new user-assigned encoder-method GPU node `10.100.2.4:35140`; verified 8x H200 were idle before launch.
+- Checked available envs on that node: `gmp-py310` is usable but has RoboMimic `0.4.0`; the documented py39/RoboMimic `0.2.0` env was not present on this node, so current runs are feasibility probes rather than final release-like evidence.
+- Added PTP-compatible encoder pretraining workspace `diffusion_policy/workspace/train_encoder_pretrain_workspace.py`.
+- Added encoder pretraining configs for Direction A/B on Square/ToolHang under `experiment_configs/encoder_pretrain/`.
+- Fixed raw-image encoder configs by removing stale dataset-side `embedding` keys that caused the dataset converter to read missing `obs/embedding`.
+- Fixed Direction A contrastive loss NaN by zeroing diagonal `log_p` after masked `log_softmax`.
+- Added `scripts/launch_encoder_pretrain_probe.sh` and `scripts/poll_encoder_pretrain_probe.sh`.
+- Passed local `py_compile`, bash syntax checks, and `git diff --check` for code/scripts before committing code commit `7dcc632`.
+- Passed remote encoder pretraining smokes on `10.100.2.4`:
+  - `B_square_predictive_smoke`: train loss `0.4260`, val loss `0.4002`.
+  - `A_square_contrastive_smoke`: train loss `1.2313`, val loss `1.2405` after NaN fix.
+  - `B_toolhang_predictive_smoke`: train loss `0.4394`, val loss `0.3929`.
+  - `A_toolhang_contrastive_smoke`: train loss `1.3928`, val loss `1.1212`.
+- Launched 8 long-running encoder pretraining probes on the 8-H200 node:
+  - Direction B: `B_square_full_seed42`, `B_square_future_seed42`, `B_tool_hang_full_seed42`, `B_tool_hang_future_seed42`.
+  - Direction A: `A_square_future_seed42`, `A_square_future_seed43`, `A_tool_hang_future_seed42`, `A_tool_hang_future_seed43`.
+- Encoder probe logs are tracked at `/mnt/nfs/tingwen/intern_method_developer/tasks/ptp_encoder_probe/logs/20260518_session8/pids.tsv`.
+- Encoder probe outputs and checkpoints are under `/mnt/3fs2/data/tingwen.du/intern_method_developer/ptp_encoder_probe/runs/20260518_session8`.

@@ -25,6 +25,11 @@
 - Direction B first implementation should preserve the proven PTP policy structure and use action-sequence prediction only as encoder pretraining; discard the decoder before downstream PTP training.
 - Direction B is likely the simpler smoke path: `dataset batch -> obs_encoder -> small MLP decoder -> Huber(normalized action sequence) -> compatible encoder checkpoint`.
 - If no new retained policy module is added, Direction B B2 may not be distinct from B1; record this rather than inventing a misleading control.
+- New encoder probe code path: `diffusion_policy/workspace/train_encoder_pretrain_workspace.py`.
+- Encoder probe configs: `experiment_configs/encoder_pretrain/{predictive_square,contrastive_square,predictive_tool_hang,contrastive_tool_hang}.yaml`.
+- Session 8 launcher script: `scripts/launch_encoder_pretrain_probe.sh`; poll script: `scripts/poll_encoder_pretrain_probe.sh`.
+- Session 8 encoder probe logs are on NFS at `/mnt/nfs/tingwen/intern_method_developer/tasks/ptp_encoder_probe/logs/20260518_session8`.
+- Session 8 encoder probe outputs and checkpoints are on 3fs2 at `/mnt/3fs2/data/tingwen.du/intern_method_developer/ptp_encoder_probe/runs/20260518_session8`.
 
 ## Findings
 
@@ -43,3 +48,13 @@
 - The current `gmp-py310` env is sufficient for training when rollout is disabled. Online rollout still needs env-runner dependencies fixed: at minimum `gym` is missing, and current `cv2` import requires `libGL.so.1`.
 - The transformer workspace now skips env-runner instantiation when the local training run will not hit a rollout epoch or when `n_train+n_test == 0`.
 - Formal runs started with online rollout disabled via `training.rollout_every=999999`; rollout evaluation should be launched as a separate phase after env-runner dependencies are repaired.
+- New GPU node for encoder probes is `10.100.2.4:35140`; existing `gmp-py310` env has RoboMimic `0.4.0`, and the documented py39/RoboMimic `0.2.0` env was not present on that node.
+- Raw-image encoder pretraining configs must not include `task.dataset.shape_meta.obs.embedding`; the dataset converter reads every key listed there even when `use_embed_if_present=false`.
+- Contrastive loss must zero diagonal `log_p` after masked `log_softmax`; otherwise `q * log_p` can compute `0 * -inf` and produce NaN.
+- Encoder pretraining Square smokes passed in Session 8:
+  - Direction B predictive: train loss `0.4260`, val loss `0.4002`.
+  - Direction A contrastive after NaN fix: train loss `1.2313`, val loss `1.2405`.
+- Encoder pretraining ToolHang smokes passed in Session 8:
+  - Direction B predictive: train loss `0.4394`, val loss `0.3929`.
+  - Direction A contrastive: train loss `1.3928`, val loss `1.1212`.
+- Current encoder probe smoke results are implementation feasibility observations only; method validity still requires downstream exact-PTP frozen/finetune scores.
