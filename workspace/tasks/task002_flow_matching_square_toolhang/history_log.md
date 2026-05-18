@@ -1,6 +1,6 @@
 # History Log
 
-<!-- METADATA:SESSION=4 -->
+<!-- METADATA:SESSION=5 -->
 
 ## Session 0
 
@@ -39,4 +39,12 @@
 - Answered storage-location question for the new PTP encoder docs.
 - Verified `docs/` is located at `/work-agents/intern_method_developer/ldp/docs` on filesystem `overlay` mounted at `/`.
 - Noted this is not `/mnt/nfs/tingwen` and not `/mnt/cephfs/home/tinwen.du`; the docs are also committed and pushed to the task branch.
+- Performed no GPU, SSH, training, smoke, or remote file operation in this session.
+
+## Session 5
+
+- Saved the user-provided Direction A detailed plan as `docs/direction_a_future_action_contrastive/plan_detailed_2026-05-18.md`.
+- Added review notes at `docs/direction_a_future_action_contrastive/review_2026-05-18.md`.
+- Updated `docs/main.md`, `docs/status.md`, Direction A `status.md`, and Direction A `obs_log.md` to mark Direction A as reviewed but not implemented.
+- Main review concerns: exact action-window alignment, condition fusion tensor shape, B2 architecture parity, diagonal masking in soft contrastive loss, action normalization, sigma choice, and frozen/finetune semantics.
 - Performed no GPU, SSH, training, smoke, or remote file operation in this session.

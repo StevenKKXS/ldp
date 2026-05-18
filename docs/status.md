@@ -5,14 +5,14 @@ Last updated: 2026-05-18
 ## 当前 Active Plan
 
 - Global: `docs/plans/plan_init_2026-05-18.md`
-- Direction A: `docs/direction_a_future_action_contrastive/plan_init_2026-05-18.md`
+- Direction A: `docs/direction_a_future_action_contrastive/plan_detailed_2026-05-18.md`
 - Direction B: `docs/direction_b_action_sequence_predictive/plan_init_2026-05-18.md`
 
 ## 总体状态表
 
 | Direction | Status | Current Task | Current Experiment | Latest Result | Next Step |
 |---|---|---|---|---|---|
-| A: Future-Action Contrastive | Waiting for detailed plan review | Square / ToolHang | N/A | N/A | Review detailed plan when provided, then decide minimal validation design |
+| A: Future-Action Contrastive | Reviewed, discussion needed | Square / ToolHang | N/A | N/A | Resolve indexing, condition fusion, B2 definition, and contrastive hyperparameters |
 | B: Action-Sequence Predictive | Waiting for detailed plan review | Square / ToolHang | N/A | N/A | Review detailed plan when provided, then decide minimal validation design |
 
 ## 当前实验顺序
@@ -27,6 +27,7 @@ Last updated: 2026-05-18
 ## 最新关键结论
 
 - 尚未开始实验。
-- 当前只有启动规则和方向草案，没有实验结果。
+- Direction A 已保存详细 plan 并完成初步 review，但没有实验结果。
+- Direction B 仍只有初始草案，等待详细 plan。
 - 不允许把任何方向视为已验证有效。
-- 等待用户提供 Direction A / Direction B 的详细 plan 后再做正式 review。
+- Direction A 需要先讨论 action-window 对齐、condition fusion、B2 控制组和 contrastive loss 细节。

@@ -4,11 +4,12 @@ Last updated: 2026-05-18
 
 ## Active Plan
 
-- Active plan: `docs/direction_a_future_action_contrastive/plan_init_2026-05-18.md`
+- Active plan: `docs/direction_a_future_action_contrastive/plan_detailed_2026-05-18.md`
+- Review: `docs/direction_a_future_action_contrastive/review_2026-05-18.md`
 
 ## Current Stage
 
-- Waiting for detailed plan review
+- Reviewed, discussion needed before implementation
 
 ## Completed Experiments
 
@@ -23,13 +24,15 @@ Last updated: 2026-05-18
 ## Key Observations
 
 - Initial direction document created.
+- Detailed Direction A plan saved.
+- Review identified required decisions: action-window alignment, condition fusion tensor shape, B2 architecture parity, diagonal masking, action normalization, sigma choice, and frozen/finetune definition.
 - No experiment has been launched.
 - No validated conclusion exists.
 
 ## Current Decision
 
-- Wait for the detailed Direction A plan before formal review.
+- Do not implement until the open design questions in `review_2026-05-18.md` are resolved.
 
 ## Next Step
 
-- Review detailed plan for action distance normalization, hard negative mining, encoder integration, and baseline matrix.
+- Discuss and finalize the first-pass implementation: aligned action chunk, feature-dim condition concat, B2 baseline, diagonal-masked soft CE, and offline representation checks.

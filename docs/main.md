@@ -8,11 +8,12 @@
 
 ### Direction A: Future-Action / Behavior Contrastive History Encoder
 
-- Active plan: `docs/direction_a_future_action_contrastive/plan_init_2026-05-18.md`
+- Active plan: `docs/direction_a_future_action_contrastive/plan_detailed_2026-05-18.md`
+- Review: `docs/direction_a_future_action_contrastive/review_2026-05-18.md`
 - Status file: `docs/direction_a_future_action_contrastive/status.md`
 - Experiment file: `docs/direction_a_future_action_contrastive/experiments.md`
 - Observation log: `docs/direction_a_future_action_contrastive/obs_log.md`
-- 当前阶段: 等待详细 plan review
+- 当前阶段: 已 review，等待讨论定型
 
 ### Direction B: Action-Sequence Predictive Encoder Pretraining
 
@@ -44,3 +45,4 @@
 - 当前只有启动规则和方向草案，没有实验结果。
 - 不允许声称 Direction A 或 Direction B 已经有效。
 - GPU 资源在用户明确分配前不申请、不使用。
+- Direction A 已保存详细 plan 和 review；仍未进入实现或实验。

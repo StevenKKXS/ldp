@@ -1,6 +1,6 @@
 # Task Knowledge
 
-<!-- METADATA:SESSION=4 -->
+<!-- METADATA:SESSION=5 -->
 
 ## Working Rules
 
@@ -14,6 +14,10 @@
 - New PTP encoder method-development docs live under `docs/`; start from `docs/main.md` and `docs/status.md` before answering progress questions.
 - For the new encoder task, no experiment is valid until Direction A / Direction B detailed plans are reviewed and experiment logs are recorded.
 - Current local `docs/` path is `/work-agents/intern_method_developer/ldp/docs`, on container `overlay` mounted at `/`; it is not currently placed under `/mnt/nfs/tingwen` or `/mnt/cephfs/home/tinwen.du`.
+- Direction A review file: `docs/direction_a_future_action_contrastive/review_2026-05-18.md`.
+- For Direction A, first implementation should likely use feature-dimension condition concat by repeating `z_t` across `To` tokens, rather than appending new condition tokens, because current `TransformerForDiffusion` sets `T_cond = 1 + n_obs_steps`.
+- Direction A action targets must align with current policy action slicing: `start = n_obs_steps - 1`, `end = start + n_action_steps`.
+- Direction A B2 baseline must use the same history encoder/fusion architecture as O1/O2 without contrastive pretraining, otherwise results are not interpretable.
 
 ## Findings
 
