@@ -1,6 +1,6 @@
 # History Log
 
-<!-- METADATA:SESSION=2 -->
+<!-- METADATA:SESSION=3 -->
 
 ## Session 0
 
@@ -25,3 +25,11 @@
 - User instructed not to touch the previously assigned GPU node and to switch away from this flow-matching task.
 - Performed no GPU, SSH, training, smoke, or remote file operation in this session.
 - Recorded handoff status locally for task continuity.
+
+## Session 3
+
+- User provided rules for the next PTP encoder method-development task and confirmed the previous GPU must not be touched.
+- Created local documentation structure under `docs/` for global plan tracking and two candidate encoder directions.
+- Added `docs/main.md`, `docs/agents.md`, `docs/status.md`, global plan, and per-direction plan/status/experiments/obs_log files.
+- Marked both directions as waiting for detailed Direction A / Direction B plans before formal review.
+- Performed no GPU, SSH, training, smoke, or remote file operation in this session.

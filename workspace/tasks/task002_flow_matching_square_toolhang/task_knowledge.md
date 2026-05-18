@@ -1,6 +1,6 @@
 # Task Knowledge
 
-<!-- METADATA:SESSION=2 -->
+<!-- METADATA:SESSION=3 -->
 
 ## Working Rules
 
@@ -11,6 +11,8 @@
 - Do not persist checkpoints, large rollout outputs, datasets, or videos unless explicitly requested.
 - GPU nodes must not perform external network operations; fetch/clone/pip/network prep should happen on CPU/common environment and then be copied to the GPU node.
 - Do not touch the previous GPU node for this task; ownership has moved to another agent.
+- New PTP encoder method-development docs live under `docs/`; start from `docs/main.md` and `docs/status.md` before answering progress questions.
+- For the new encoder task, no experiment is valid until Direction A / Direction B detailed plans are reviewed and experiment logs are recorded.
 
 ## Findings
 
