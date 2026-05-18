@@ -1,6 +1,6 @@
 # History Log
 
-<!-- METADATA:SESSION=7 -->
+<!-- METADATA:SESSION=8 -->
 
 ## Session 0
 
@@ -65,3 +65,32 @@
 - Main review recommendation: first-pass Direction B should preserve exact PTP policy structure and use action-sequence prediction only as encoder pretraining.
 - Code observations recorded: existing PTP has `obs_encoder_dir` / `obs_encoder_freeze`, `past_action_pred=true` keeps full action trajectory loss, and the dataset returns `n_obs_steps` observations plus an action sequence of length `horizon`.
 - Performed no GPU, SSH, training, smoke, or remote file operation in this session.
+
+## Session 8
+
+- Took over PR #1 on branch `intern_method_developer/task002_flow_matching_square_toolhang` from `intern_method_developer`.
+- Confirmed assigned GPU node `10.100.2.35:33805` is reachable and has 4 idle H200 GPUs.
+- Fixed runtime compatibility issues found by smoke:
+  - Added robomimic 0.4 fallback for `CropRandomizer`, which moved from `robomimic.models.base_nets` to `robomimic.models.obs_core`.
+  - Removed stale `embedding` entries from the two square raw-image FM dataset configs.
+  - Changed transformer workspace to instantiate `env_runner` only when the current training run will actually perform rollout and has rollout init states.
+  - Installed missing `threadpoolctl==3.6.0` into the NFS `gmp-py310` env from the CPU/common side.
+  - Linked the existing pure-Python `pytorch3d` transforms stub into the NFS `gmp-py310` env.
+- Smoke command pattern used 1 epoch, 1 train step, 1 val step, sample MSE enabled, rollout disabled, batch size 2, and raw-image mode.
+- Smoke passed for all four configs:
+  - `square_h10`: train_loss `1.3324`, val_loss `0.9522`, train_action_mse_error `0.8067`.
+  - `square_action8`: train_loss `1.3735`, val_loss `1.3963`, train_action_mse_error `0.7950`.
+  - `tool_hang_h10`: train_loss `1.3295`, val_loss `0.9937`, train_action_mse_error `1.0175`.
+  - `tool_hang_action8`: train_loss `1.3992`, val_loss `1.3916`, train_action_mse_error `0.7914`.
+- Smoke artifacts:
+  - outputs: `/mnt/nfs/tingwen/intern_method_developer/tasks/task002_flow_matching_square_toolhang/outputs/handoff_smoke_20260518_141621`
+  - logs: `/mnt/nfs/tingwen/intern_method_developer/tasks/task002_flow_matching_square_toolhang/logs/handoff_smoke_20260518_141621`
+- Launched four formal training jobs on the 4-GPU node:
+  - `square_h10`, GPU 0, launcher pid `115480`.
+  - `square_action8`, GPU 1, launcher pid `115487`.
+  - `tool_hang_h10`, GPU 2, launcher pid `115494`.
+  - `tool_hang_action8`, GPU 3, launcher pid `115501`.
+- Formal training artifacts:
+  - outputs: `/mnt/nfs/tingwen/intern_method_developer/tasks/task002_flow_matching_square_toolhang/outputs/formal_train_20260518_143331`
+  - logs: `/mnt/nfs/tingwen/intern_method_developer/tasks/task002_flow_matching_square_toolhang/logs/formal_train_20260518_143331`
+- Formal launch settings: default 3500 epochs and batch size 64 from the configs, `training.rollout_every=999999` to avoid online rollout until env-runner dependencies are repaired, and `checkpoint.topk.k=0` to keep only rolling `latest.ckpt` instead of accumulating top-k checkpoint files.

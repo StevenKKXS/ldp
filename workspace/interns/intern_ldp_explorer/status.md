@@ -1,11 +1,12 @@
 # intern_ldp_explorer - 状态
 
-<!-- METADATA:STATUS=Idle,TASK= -->
+<!-- METADATA:STATUS=Working,TASK=task002_flow_matching_square_toolhang -->
 
 | 字段 | 值 |
 |------|-----|
 | Name | intern_ldp_explorer |
-| Status | Idle |
-| Current Task | |
-| PR | N/A |
-| Session | 0 |
+| Status | Working |
+| Current Task | task002_flow_matching_square_toolhang |
+| PR | https://github.com/StevenKKXS/ldp/pull/1 |
+| Session | 1 |
+| Recent Progress | Took over flow-matching PR, fixed runtime compatibility, passed 4 smoke runs, and launched 4 formal training jobs on 10.100.2.35:33805. |

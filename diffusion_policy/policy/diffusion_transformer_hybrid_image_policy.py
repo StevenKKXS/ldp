@@ -17,10 +17,17 @@ from robomimic.algo import algo_factory
 from robomimic.algo.algo import PolicyAlgo
 import robomimic.utils.obs_utils as ObsUtils
 import robomimic.models.base_nets as rmbn
+import robomimic.models.obs_core as rmoc
 import diffusion_policy.model.vision.crop_randomizer as dmvc
 from diffusion_policy.common.pytorch_util import dict_apply, replace_submodules
 import wandb
 import numpy as np
+
+RobomimicCropRandomizer = getattr(
+    rmbn,
+    'CropRandomizer',
+    getattr(rmoc, 'CropRandomizer', None)
+)
 
 
 def dct_2d(x):
@@ -175,7 +182,10 @@ class DiffusionTransformerHybridImagePolicy(BaseImagePolicy):
         if eval_fixed_crop:
             replace_submodules(
                 root_module=obs_encoder,
-                predicate=lambda x: isinstance(x, rmbn.CropRandomizer),
+                predicate=lambda x: (
+                    RobomimicCropRandomizer is not None
+                    and isinstance(x, RobomimicCropRandomizer)
+                ),
                 func=lambda x: dmvc.CropRandomizer(
                     input_shape=x.input_shape,
                     crop_height=x.crop_height,

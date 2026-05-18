@@ -118,10 +118,25 @@ class TrainDiffusionTransformerHybridWorkspace(BaseWorkspace):
         # configure env
         env_runner: BaseImageRunner = None
         if "env_runner" in cfg.task:
-            env_runner = hydra.utils.instantiate(
-                cfg.task.env_runner,
-                output_dir=self.output_dir)
-            assert isinstance(env_runner, BaseImageRunner)
+            rollout_every = cfg.training.rollout_every
+            rollout_enabled = rollout_every is not None and rollout_every > 0
+            will_rollout = False
+            if rollout_enabled:
+                start_epoch = int(self.epoch)
+                end_epoch = start_epoch + int(cfg.training.num_epochs)
+                will_rollout = any(
+                    ((epoch + 1) % rollout_every) == 0
+                    for epoch in range(start_epoch, end_epoch)
+                )
+            n_rollout_inits = (
+                int(cfg.task.env_runner.get("n_train", 0))
+                + int(cfg.task.env_runner.get("n_test", 0))
+            )
+            if will_rollout and n_rollout_inits > 0:
+                env_runner = hydra.utils.instantiate(
+                    cfg.task.env_runner,
+                    output_dir=self.output_dir)
+                assert isinstance(env_runner, BaseImageRunner)
 
         # configure logging
         wandb_run = wandb.init(

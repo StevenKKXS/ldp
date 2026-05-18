@@ -1,6 +1,6 @@
 ## Task: Flow-Matching DP Baselines on Square and Tool Hang
 
-<!-- METADATA:STATUS=InProgress,ASSIGNEE=intern_method_developer -->
+<!-- METADATA:STATUS=InProgress,ASSIGNEE=intern_ldp_explorer -->
 
 ### Background
 

@@ -168,9 +168,6 @@ task:
         shape:
         - 10
       obs:
-        embedding:
-          shape:
-          - 137
         agentview_image:
           shape:
           - 3
