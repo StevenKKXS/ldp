@@ -94,12 +94,12 @@ B_toolhang_o2_past_future_predictive_finetune
 - Frozen or finetuned: pretraining updates obs encoder
 - Key hyperparameters: config `predictive_square`, seed 42, default batch 16, max 200 train steps per epoch, 10 epochs
 - Start date: 2026-05-18
-- End date: N/A while running
+- End date: 2026-05-18
 - Best score: N/A
 - Best epoch: N/A
-- Current epoch: running
-- Status: running
-- Notes: Output path `/mnt/3fs2/data/tingwen.du/intern_method_developer/ptp_encoder_probe/runs/20260518_session8/B_square_full_seed42`.
+- Current epoch: 9
+- Status: completed
+- Notes: Final train loss `0.0167`, val loss `0.0373`. Output path `/mnt/3fs2/data/tingwen.du/intern_method_developer/ptp_encoder_probe/runs/20260518_session8/B_square_full_seed42`.
 
 ### Exp ID: B_square_future_seed42
 
@@ -115,12 +115,12 @@ B_toolhang_o2_past_future_predictive_finetune
 - Frozen or finetuned: pretraining updates obs encoder
 - Key hyperparameters: config `predictive_square`, override `pretrain.target_mode=future`, seed 42, default batch 16, max 200 train steps per epoch, 10 epochs
 - Start date: 2026-05-18
-- End date: N/A while running
+- End date: 2026-05-18
 - Best score: N/A
 - Best epoch: N/A
-- Current epoch: running
-- Status: running
-- Notes: Output path `/mnt/3fs2/data/tingwen.du/intern_method_developer/ptp_encoder_probe/runs/20260518_session8/B_square_future_seed42`.
+- Current epoch: 9
+- Status: completed
+- Notes: Final train loss `0.0164`, val loss `0.0426`. Output path `/mnt/3fs2/data/tingwen.du/intern_method_developer/ptp_encoder_probe/runs/20260518_session8/B_square_future_seed42`.
 
 ### Exp ID: B_tool_hang_full_seed42
 
@@ -136,12 +136,12 @@ B_toolhang_o2_past_future_predictive_finetune
 - Frozen or finetuned: pretraining updates obs encoder
 - Key hyperparameters: config `predictive_tool_hang`, seed 42, default batch 8, max 100 train steps per epoch, 10 epochs
 - Start date: 2026-05-18
-- End date: N/A while running
+- End date: 2026-05-18
 - Best score: N/A
 - Best epoch: N/A
-- Current epoch: running
-- Status: running
-- Notes: Output path `/mnt/3fs2/data/tingwen.du/intern_method_developer/ptp_encoder_probe/runs/20260518_session8/B_tool_hang_full_seed42`.
+- Current epoch: 9
+- Status: completed
+- Notes: Final train loss `0.0243`, val loss `0.0494`. Output path `/mnt/3fs2/data/tingwen.du/intern_method_developer/ptp_encoder_probe/runs/20260518_session8/B_tool_hang_full_seed42`.
 
 ### Exp ID: B_tool_hang_future_seed42
 
@@ -157,9 +157,9 @@ B_toolhang_o2_past_future_predictive_finetune
 - Frozen or finetuned: pretraining updates obs encoder
 - Key hyperparameters: config `predictive_tool_hang`, override `pretrain.target_mode=future`, seed 42, default batch 8, max 100 train steps per epoch, 10 epochs
 - Start date: 2026-05-18
-- End date: N/A while running
+- End date: 2026-05-18
 - Best score: N/A
 - Best epoch: N/A
-- Current epoch: running
-- Status: running
-- Notes: Output path `/mnt/3fs2/data/tingwen.du/intern_method_developer/ptp_encoder_probe/runs/20260518_session8/B_tool_hang_future_seed42`.
+- Current epoch: 9
+- Status: completed
+- Notes: Final train loss `0.0252`, val loss `0.0420`. Output path `/mnt/3fs2/data/tingwen.du/intern_method_developer/ptp_encoder_probe/runs/20260518_session8/B_tool_hang_future_seed42`.

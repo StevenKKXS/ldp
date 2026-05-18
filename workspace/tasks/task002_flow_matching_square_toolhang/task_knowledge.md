@@ -1,6 +1,6 @@
 # Task Knowledge
 
-<!-- METADATA:SESSION=8 -->
+<!-- METADATA:SESSION=9 -->
 
 ## Working Rules
 
@@ -58,3 +58,7 @@
   - Direction B predictive: train loss `0.4394`, val loss `0.3929`.
   - Direction A contrastive: train loss `1.3928`, val loss `1.1212`.
 - Current encoder probe smoke results are implementation feasibility observations only; method validity still requires downstream exact-PTP frozen/finetune scores.
+- Session 9 GPU check: `10.100.2.4:35140` has all 8 H200 idle after Session 8 probes completed.
+- Session 8 encoder pretraining probes completed 10 epochs and wrote `latest.ckpt` in each run directory.
+- Final Direction A long-run losses: `A_square_future_seed42` train/val `3.3737`/`3.3962`; `A_square_future_seed43` `3.3742`/`3.3965`; `A_tool_hang_future_seed42` `2.6360`/`2.6933`; `A_tool_hang_future_seed43` `2.6395`/`2.6921`.
+- Final Direction B long-run losses: `B_square_full_seed42` train/val `0.0167`/`0.0373`; `B_square_future_seed42` `0.0164`/`0.0426`; `B_tool_hang_full_seed42` `0.0243`/`0.0494`; `B_tool_hang_future_seed42` `0.0252`/`0.0420`.

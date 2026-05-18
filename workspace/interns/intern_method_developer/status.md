@@ -8,6 +8,6 @@
 | Status | Working |
 | Current Task | task002_flow_matching_square_toolhang |
 | PR | https://github.com/StevenKKXS/ldp/pull/1 |
-| Session | 8 |
-| Recent Progress | Implemented PTP-compatible encoder pretraining probes, fixed raw-image/contrastive smoke issues, passed Square and ToolHang smokes, and launched 8 H200 long-running probes on `10.100.2.4:35140`. |
-| Handoff | Direction A/B probes are running; monitor `/mnt/nfs/tingwen/intern_method_developer/tasks/ptp_encoder_probe/logs/20260518_session8/pids.tsv` and outputs under `/mnt/3fs2/data/tingwen.du/intern_method_developer/ptp_encoder_probe/runs/20260518_session8`. |
+| Session | 9 |
+| Recent Progress | Checked `10.100.2.4:35140`: all 8 H200 GPUs are idle; the 8 Session 8 encoder pretraining probes exited after completing 10 epochs and writing checkpoints. |
+| Handoff | Use completed probe outputs under `/mnt/3fs2/data/tingwen.du/intern_method_developer/ptp_encoder_probe/runs/20260518_session8` for exact-PTP downstream frozen/finetune ablations. |

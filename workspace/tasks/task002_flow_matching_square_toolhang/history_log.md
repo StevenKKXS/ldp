@@ -1,6 +1,6 @@
 # History Log
 
-<!-- METADATA:SESSION=8 -->
+<!-- METADATA:SESSION=9 -->
 
 ## Session 0
 
@@ -112,3 +112,21 @@
   - Direction A: `A_square_future_seed42`, `A_square_future_seed43`, `A_tool_hang_future_seed42`, `A_tool_hang_future_seed43`.
 - Encoder probe logs are tracked at `/mnt/nfs/tingwen/intern_method_developer/tasks/ptp_encoder_probe/logs/20260518_session8/pids.tsv`.
 - Encoder probe outputs and checkpoints are under `/mnt/3fs2/data/tingwen.du/intern_method_developer/ptp_encoder_probe/runs/20260518_session8`.
+
+## Session 9
+
+- Checked current GPU usage on the user-assigned encoder node `10.100.2.4:35140`.
+- `nvidia-smi` reports all 8 H200 GPUs idle: each has 1 MiB memory used and 0% utilization.
+- `scripts/poll_encoder_pretrain_probe.sh` reports all 8 Session 8 probe PIDs exited.
+- Verified each run wrote 10 `logs.jsonl` entries and `latest.ckpt` under `/mnt/3fs2/data/tingwen.du/intern_method_developer/ptp_encoder_probe/runs/20260518_session8`.
+- Direction A final long-run losses:
+  - `A_square_future_seed42`: train `3.3737`, val `3.3962`.
+  - `A_square_future_seed43`: train `3.3742`, val `3.3965`.
+  - `A_tool_hang_future_seed42`: train `2.6360`, val `2.6933`.
+  - `A_tool_hang_future_seed43`: train `2.6395`, val `2.6921`.
+- Direction B final long-run losses:
+  - `B_square_full_seed42`: train `0.0167`, val `0.0373`.
+  - `B_square_future_seed42`: train `0.0164`, val `0.0426`.
+  - `B_tool_hang_full_seed42`: train `0.0243`, val `0.0494`.
+  - `B_tool_hang_future_seed42`: train `0.0252`, val `0.0420`.
+- Updated global docs and per-direction status/experiments/obs logs to mark encoder pretraining probes completed, while preserving that there is still no downstream PTP policy score.

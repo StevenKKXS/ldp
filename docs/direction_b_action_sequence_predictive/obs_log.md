@@ -58,3 +58,14 @@
 - Possible explanation: Full-target vs future-only target is the most direct first ablation for the user question about whether past/current action prediction helps encoder representations.
 - Decision: Treat these as pretraining feasibility observations until downstream PTP scores are available.
 - Next step: Poll `scripts/poll_encoder_pretrain_probe.sh`, then inspect `logs.jsonl` and checkpoint paths once jobs complete.
+
+### Log 2026-05-18-05
+
+- Date: 2026-05-18
+- Direction: Direction B
+- Related experiment: `B_square_full_seed42`, `B_square_future_seed42`, `B_tool_hang_full_seed42`, `B_tool_hang_future_seed42`
+- Observation: All four Direction B pretraining probes completed 10 epochs and the GPU node is idle.
+- Evidence: `scripts/poll_encoder_pretrain_probe.sh` reports all Session 8 PIDs exited. Final losses were Square full/future train `0.0167`/`0.0164`, ToolHang full/future train `0.0243`/`0.0252`; all runs wrote `latest.ckpt`.
+- Possible explanation: Predictive action decoding is an easy and stable auxiliary objective, but lower prediction loss does not imply better downstream PTP score.
+- Decision: Treat the generated checkpoints as candidates for exact-PTP frozen/finetune ablation.
+- Next step: Run downstream PTP ablations and compare against baseline PTP under the same policy architecture.

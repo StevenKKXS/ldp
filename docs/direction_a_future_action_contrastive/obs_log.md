@@ -69,3 +69,14 @@
 - Possible explanation: Running two Square seeds plus two ToolHang seeds gives a quick stability check before downstream PTP ablations.
 - Decision: Treat these as implementation/pretraining probes only.
 - Next step: Poll `scripts/poll_encoder_pretrain_probe.sh`, then inspect `logs.jsonl` and checkpoint paths once jobs complete.
+
+### Log 2026-05-18-06
+
+- Date: 2026-05-18
+- Direction: Direction A
+- Related experiment: `A_square_future_seed42`, `A_square_future_seed43`, `A_tool_hang_future_seed42`, `A_tool_hang_future_seed43`
+- Observation: All four Direction A pretraining probes completed 10 epochs and the GPU node is idle.
+- Evidence: `scripts/poll_encoder_pretrain_probe.sh` reports all Session 8 PIDs exited. Final losses were Square seed42 train/val `3.3737`/`3.3962`, Square seed43 `3.3742`/`3.3965`, ToolHang seed42 `2.6360`/`2.6933`, ToolHang seed43 `2.6395`/`2.6921`.
+- Possible explanation: The contrastive objective runs stably after the diagonal masking fix, but validation embedding std is small, especially on ToolHang, so downstream evaluation is necessary.
+- Decision: Do not claim method effectiveness from pretraining loss alone.
+- Next step: Run exact-PTP frozen/finetune downstream ablations using the generated encoder checkpoints.
