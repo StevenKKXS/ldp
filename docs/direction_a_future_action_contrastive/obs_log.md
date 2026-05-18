@@ -36,3 +36,14 @@
 - Possible explanation: The method idea is high-level and valid, but current PTP implementation has fixed assumptions about condition token count and action slicing.
 - Decision: Keep Direction A as a high-priority candidate, but discuss and finalize action-window alignment, condition fusion, B2 baseline parity, diagonal masking, action normalization, and frozen/finetune semantics before implementation.
 - Next step: Review Direction B plan when provided, then jointly choose first-pass validation order and resource request.
+
+### Log 2026-05-18-03
+
+- Date: 2026-05-18
+- Direction: Direction A
+- Related experiment: N/A
+- Observation: User clarified that first-pass experiments should reproduce the proven PTP structure as much as possible. The review was updated to recommend encoder pretraining through the existing PTP encoder-loading path instead of adding a new policy condition module.
+- Evidence: `review_update_ptp_compat_2026-05-18.md` explains that "action window" means the contrastive label segment, not a change to PTP prediction horizon. It recommends preserving PTP policy architecture and loading a contrastive-pretrained encoder via `obs_encoder_dir`.
+- Possible explanation: Since PTP already works in the target robomimic 0.2.0-compatible setup, the cleanest first test is whether a better encoder initialization helps unchanged PTP.
+- Decision: First-pass Direction A should be exact-PTP-compatible encoder pretraining. Policy-side `concat(original_condition, z_t)` is deferred.
+- Next step: Decide exact PTP baseline config/checkpoint, action segment for contrastive similarity, encoder checkpoint compatibility, and frozen/finetune protocol.

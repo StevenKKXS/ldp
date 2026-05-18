@@ -10,10 +10,11 @@
 
 - Active plan: `docs/direction_a_future_action_contrastive/plan_detailed_2026-05-18.md`
 - Review: `docs/direction_a_future_action_contrastive/review_2026-05-18.md`
+- Latest review update: `docs/direction_a_future_action_contrastive/review_update_ptp_compat_2026-05-18.md`
 - Status file: `docs/direction_a_future_action_contrastive/status.md`
 - Experiment file: `docs/direction_a_future_action_contrastive/experiments.md`
 - Observation log: `docs/direction_a_future_action_contrastive/obs_log.md`
-- 当前阶段: 已 review，等待讨论定型
+- 当前阶段: 已 review，优先定型 PTP-compatible encoder pretraining
 
 ### Direction B: Action-Sequence Predictive Encoder Pretraining
 

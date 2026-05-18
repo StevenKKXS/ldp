@@ -1,6 +1,6 @@
 # History Log
 
-<!-- METADATA:SESSION=5 -->
+<!-- METADATA:SESSION=6 -->
 
 ## Session 0
 
@@ -47,4 +47,12 @@
 - Added review notes at `docs/direction_a_future_action_contrastive/review_2026-05-18.md`.
 - Updated `docs/main.md`, `docs/status.md`, Direction A `status.md`, and Direction A `obs_log.md` to mark Direction A as reviewed but not implemented.
 - Main review concerns: exact action-window alignment, condition fusion tensor shape, B2 architecture parity, diagonal masking in soft contrastive loss, action normalization, sigma choice, and frozen/finetune semantics.
+- Performed no GPU, SSH, training, smoke, or remote file operation in this session.
+
+## Session 6
+
+- Clarified that "action window" in Direction A means the action segment used as contrastive similarity supervision, not a change to PTP prediction horizon or rollout logic.
+- User clarified first Direction A experiments should preserve the proven PTP structure in the robomimic 0.2.0-compatible setup as much as possible.
+- Added `docs/direction_a_future_action_contrastive/review_update_ptp_compat_2026-05-18.md`.
+- Updated Direction A status, obs log, global docs status, and main docs entry to favor exact-PTP-compatible encoder pretraining rather than policy-side condition concat.
 - Performed no GPU, SSH, training, smoke, or remote file operation in this session.

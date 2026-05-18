@@ -12,7 +12,7 @@ Last updated: 2026-05-18
 
 | Direction | Status | Current Task | Current Experiment | Latest Result | Next Step |
 |---|---|---|---|---|---|
-| A: Future-Action Contrastive | Reviewed, discussion needed | Square / ToolHang | N/A | N/A | Resolve indexing, condition fusion, B2 definition, and contrastive hyperparameters |
+| A: Future-Action Contrastive | Reviewed, PTP-compatible plan preferred | Square / ToolHang | N/A | N/A | Finalize exact PTP baseline, contrastive action segment, encoder checkpoint protocol, and frozen/finetune settings |
 | B: Action-Sequence Predictive | Waiting for detailed plan review | Square / ToolHang | N/A | N/A | Review detailed plan when provided, then decide minimal validation design |
 
 ## 当前实验顺序
@@ -28,6 +28,7 @@ Last updated: 2026-05-18
 
 - 尚未开始实验。
 - Direction A 已保存详细 plan 并完成初步 review，但没有实验结果。
+- Direction A review 已根据用户澄清更新: first pass 优先保持 PTP policy 结构不变，只做 encoder pretraining。
 - Direction B 仍只有初始草案，等待详细 plan。
 - 不允许把任何方向视为已验证有效。
-- Direction A 需要先讨论 action-window 对齐、condition fusion、B2 控制组和 contrastive loss 细节。
+- Direction A 需要先讨论 exact PTP baseline、contrastive action segment、encoder checkpoint format、frozen/finetune protocol、以及 B2 是否与 B1 区分。

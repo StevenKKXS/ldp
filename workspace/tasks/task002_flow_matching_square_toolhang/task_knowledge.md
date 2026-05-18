@@ -1,6 +1,6 @@
 # Task Knowledge
 
-<!-- METADATA:SESSION=5 -->
+<!-- METADATA:SESSION=6 -->
 
 ## Working Rules
 
@@ -15,9 +15,11 @@
 - For the new encoder task, no experiment is valid until Direction A / Direction B detailed plans are reviewed and experiment logs are recorded.
 - Current local `docs/` path is `/work-agents/intern_method_developer/ldp/docs`, on container `overlay` mounted at `/`; it is not currently placed under `/mnt/nfs/tingwen` or `/mnt/cephfs/home/tinwen.du`.
 - Direction A review file: `docs/direction_a_future_action_contrastive/review_2026-05-18.md`.
-- For Direction A, first implementation should likely use feature-dimension condition concat by repeating `z_t` across `To` tokens, rather than appending new condition tokens, because current `TransformerForDiffusion` sets `T_cond = 1 + n_obs_steps`.
-- Direction A action targets must align with current policy action slicing: `start = n_obs_steps - 1`, `end = start + n_action_steps`.
-- Direction A B2 baseline must use the same history encoder/fusion architecture as O1/O2 without contrastive pretraining, otherwise results are not interpretable.
+- Direction A latest review update: `docs/direction_a_future_action_contrastive/review_update_ptp_compat_2026-05-18.md`.
+- Direction A "action window" means the action segment used as contrastive similarity supervision, not a change to PTP prediction horizon or rollout logic.
+- Direction A first implementation should preserve the proven PTP policy structure and use future-action contrastive learning as encoder pretraining loaded through existing PTP encoder checkpoint hooks.
+- Policy-side condition concat is deferred; exact-PTP-compatible encoder pretraining is preferred for the first pass.
+- Direction A B2 is mandatory only if a new policy-side architecture is added; if policy structure is unchanged, compare exact PTP baseline against contrastive-pretrained encoder frozen/finetuned and record whether B2 is distinct from B1.
 
 ## Findings
 
