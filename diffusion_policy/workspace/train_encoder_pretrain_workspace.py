@@ -229,6 +229,7 @@ class TrainEncoderPretrainWorkspace(BaseWorkspace):
         sim = torch.matmul(z, z.T) / float(self.cfg.pretrain.tau)
         sim = sim.masked_fill(diag, float("-inf"))
         log_p = torch.log_softmax(sim, dim=-1)
+        log_p = log_p.masked_fill(diag, 0.0)
         loss = -(q * log_p).sum(dim=-1).mean()
         return loss, {
             "contrast_loss": loss.detach(),

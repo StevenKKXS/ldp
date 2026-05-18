@@ -176,9 +176,6 @@ task:
         shape:
         - 10
       obs:
-        embedding:
-          shape:
-          - 137
         robot0_eef_pos:
           shape:
           - 3
