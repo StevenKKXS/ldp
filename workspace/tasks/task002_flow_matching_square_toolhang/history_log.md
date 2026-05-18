@@ -1,6 +1,6 @@
 # History Log
 
-<!-- METADATA:SESSION=8 -->
+<!-- METADATA:SESSION=9 -->
 
 ## Session 0
 
@@ -94,3 +94,13 @@
   - outputs: `/mnt/nfs/tingwen/intern_method_developer/tasks/task002_flow_matching_square_toolhang/outputs/formal_train_20260518_143331`
   - logs: `/mnt/nfs/tingwen/intern_method_developer/tasks/task002_flow_matching_square_toolhang/logs/formal_train_20260518_143331`
 - Formal launch settings: default 3500 epochs and batch size 64 from the configs, `training.rollout_every=999999` to avoid online rollout until env-runner dependencies are repaired, and `checkpoint.topk.k=0` to keep only rolling `latest.ckpt` instead of accumulating top-k checkpoint files.
+
+## Session 9
+
+- Checked GPU node `10.100.2.35:33805` at `2026-05-18T22:40:48+00:00`.
+- All four formal training jobs were still alive:
+  - `square_h10`: GPU 0, pid `115485`, 2284 MiB, instantaneous GPU util 49%, latest metric epoch 299, train_loss `0.0178`.
+  - `square_action8`: GPU 1, pid `115492`, 2276 MiB, instantaneous GPU util 58%, latest metric epoch 298, train_loss `0.0219`.
+  - `tool_hang_h10`: GPU 2, pid `115500`, 8746 MiB, instantaneous GPU util 53%, latest metric epoch 40, train_loss `0.0406`.
+  - `tool_hang_action8`: GPU 3, pid `115506`, 8742 MiB, instantaneous GPU util 0%, latest metric epoch 40, train_loss `0.0790`; log showed it was in validation epoch 40 during the snapshot.
+- Confirmed ToolHang cache construction had completed because both ToolHang jobs had entered training/validation.

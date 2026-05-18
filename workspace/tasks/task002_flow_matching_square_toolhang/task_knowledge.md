@@ -1,6 +1,6 @@
 # Task Knowledge
 
-<!-- METADATA:SESSION=8 -->
+<!-- METADATA:SESSION=9 -->
 
 ## Working Rules
 
@@ -43,3 +43,4 @@
 - The current `gmp-py310` env is sufficient for training when rollout is disabled. Online rollout still needs env-runner dependencies fixed: at minimum `gym` is missing, and current `cv2` import requires `libGL.so.1`.
 - The transformer workspace now skips env-runner instantiation when the local training run will not hit a rollout epoch or when `n_train+n_test == 0`.
 - Formal runs started with online rollout disabled via `training.rollout_every=999999`; rollout evaluation should be launched as a separate phase after env-runner dependencies are repaired.
+- As of `2026-05-18T22:40:48+00:00`, all four formal FM jobs were alive; ToolHang cache construction had completed and both ToolHang jobs had entered training/validation.
