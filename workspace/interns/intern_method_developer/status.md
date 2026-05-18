@@ -8,6 +8,6 @@
 | Status | Working |
 | Current Task | task002_flow_matching_square_toolhang |
 | PR | https://github.com/StevenKKXS/ldp/pull/1 |
-| Session | 1 |
-| Recent Progress | Flow-matching policy/config implementation pushed; GPU node code sync and config checks completed; no training job launched. |
-| Handoff | User requested stop and transfer of this task to another agent. |
+| Session | 2 |
+| Recent Progress | User instructed not to touch the previously assigned GPU; task002 remains handed off with no new remote operation. |
+| Handoff | Flow-matching task transferred to another agent; ready to receive the next method-development task. |

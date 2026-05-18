@@ -1,6 +1,6 @@
 # Task Knowledge
 
-<!-- METADATA:SESSION=1 -->
+<!-- METADATA:SESSION=2 -->
 
 ## Working Rules
 
@@ -10,6 +10,7 @@
 - Store small files and launch metadata under `/mnt/nfs/tingwen/intern_method_developer/tasks/task002_flow_matching_square_toolhang/`, then archive to CephFS when stable.
 - Do not persist checkpoints, large rollout outputs, datasets, or videos unless explicitly requested.
 - GPU nodes must not perform external network operations; fetch/clone/pip/network prep should happen on CPU/common environment and then be copied to the GPU node.
+- Do not touch the previous GPU node for this task; ownership has moved to another agent.
 
 ## Findings
 

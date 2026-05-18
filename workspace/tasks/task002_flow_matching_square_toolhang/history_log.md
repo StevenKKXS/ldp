@@ -1,6 +1,6 @@
 # History Log
 
-<!-- METADATA:SESSION=1 -->
+<!-- METADATA:SESSION=2 -->
 
 ## Session 0
 
@@ -19,3 +19,9 @@
 - Linked remote `data` to `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/datasets`.
 - Remote `gmp-py310` py_compile passed and all four Hydra configs parsed with `--cfg job`.
 - Stopped before smoke/training launch per user handoff request; no GPU training process was started by this session.
+
+## Session 2
+
+- User instructed not to touch the previously assigned GPU node and to switch away from this flow-matching task.
+- Performed no GPU, SSH, training, smoke, or remote file operation in this session.
+- Recorded handoff status locally for task continuity.
