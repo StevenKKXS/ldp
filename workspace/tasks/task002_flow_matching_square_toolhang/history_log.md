@@ -1,6 +1,6 @@
 # History Log
 
-<!-- METADATA:SESSION=3 -->
+<!-- METADATA:SESSION=4 -->
 
 ## Session 0
 
@@ -32,4 +32,11 @@
 - Created local documentation structure under `docs/` for global plan tracking and two candidate encoder directions.
 - Added `docs/main.md`, `docs/agents.md`, `docs/status.md`, global plan, and per-direction plan/status/experiments/obs_log files.
 - Marked both directions as waiting for detailed Direction A / Direction B plans before formal review.
+- Performed no GPU, SSH, training, smoke, or remote file operation in this session.
+
+## Session 4
+
+- Answered storage-location question for the new PTP encoder docs.
+- Verified `docs/` is located at `/work-agents/intern_method_developer/ldp/docs` on filesystem `overlay` mounted at `/`.
+- Noted this is not `/mnt/nfs/tingwen` and not `/mnt/cephfs/home/tinwen.du`; the docs are also committed and pushed to the task branch.
 - Performed no GPU, SSH, training, smoke, or remote file operation in this session.
