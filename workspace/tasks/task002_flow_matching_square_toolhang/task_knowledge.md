@@ -1,6 +1,6 @@
 # Task Knowledge
 
-<!-- METADATA:SESSION=9 -->
+<!-- METADATA:SESSION=10 -->
 
 ## Working Rules
 
@@ -44,3 +44,4 @@
 - The transformer workspace now skips env-runner instantiation when the local training run will not hit a rollout epoch or when `n_train+n_test == 0`.
 - Formal runs started with online rollout disabled via `training.rollout_every=999999`; rollout evaluation should be launched as a separate phase after env-runner dependencies are repaired.
 - As of `2026-05-18T22:40:48+00:00`, all four formal FM jobs were alive; ToolHang cache construction had completed and both ToolHang jobs had entered training/validation.
+- As of `2026-05-19T02:58:12+00:00`, all four formal FM jobs were still alive, all had written `latest.ckpt`, Square was around epoch 457-459, and ToolHang was at epoch 64.

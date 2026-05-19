@@ -1,6 +1,6 @@
 # History Log
 
-<!-- METADATA:SESSION=9 -->
+<!-- METADATA:SESSION=10 -->
 
 ## Session 0
 
@@ -104,3 +104,18 @@
   - `tool_hang_h10`: GPU 2, pid `115500`, 8746 MiB, instantaneous GPU util 53%, latest metric epoch 40, train_loss `0.0406`.
   - `tool_hang_action8`: GPU 3, pid `115506`, 8742 MiB, instantaneous GPU util 0%, latest metric epoch 40, train_loss `0.0790`; log showed it was in validation epoch 40 during the snapshot.
 - Confirmed ToolHang cache construction had completed because both ToolHang jobs had entered training/validation.
+
+## Session 10
+
+- Checked GPU node `10.100.2.35:33805` at `2026-05-19T02:58:12+00:00`.
+- All four formal training jobs were still alive after about 12h25m runtime:
+  - `square_h10`: GPU 0, pid `115485`, 2284 MiB, instantaneous GPU util 23%, latest metric epoch 459, train_loss `0.0137`.
+  - `square_action8`: GPU 1, pid `115492`, 2276 MiB, instantaneous GPU util 0%, latest metric epoch 457, train_loss `0.0157`.
+  - `tool_hang_h10`: GPU 2, pid `115500`, 8746 MiB, instantaneous GPU util 0%, latest metric epoch 64, train_loss `0.0397`.
+  - `tool_hang_action8`: GPU 3, pid `115506`, 8742 MiB, instantaneous GPU util 0%, latest metric epoch 64, train_loss `0.0942`.
+- Confirmed `latest.ckpt` existed for all four runs:
+  - `square_h10`: `2026-05-19 01:22`, 681963039 bytes.
+  - `square_action8`: `2026-05-19 01:25`, 681954591 bytes.
+  - `tool_hang_h10`: `2026-05-19 02:09`, 681965791 bytes.
+  - `tool_hang_action8`: `2026-05-19 02:10`, 681957343 bytes.
+- No traceback, killed process, or exception marker was found in the latest progress grep.
