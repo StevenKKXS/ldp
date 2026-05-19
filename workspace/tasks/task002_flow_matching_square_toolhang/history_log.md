@@ -1,6 +1,6 @@
 # History Log
 
-<!-- METADATA:SESSION=10 -->
+<!-- METADATA:SESSION=11 -->
 
 ## Session 0
 
@@ -154,3 +154,35 @@
   - Extra ToolHang at epoch 1-2: `A_future_frozen` val `0.2679`, `B_future_frozen` `0.2668`, `B_future_finetune` `0.2624`, `A_future_seed43_finetune` `0.3481`.
 - Interpretation recorded: early downstream train/val diffusion losses are close across encoder choices; the current evidence supports implementation feasibility and running comparisons, but it is not a validated success-rate improvement.
 - GPU utilization note: 16 downstream processes are running across the 8-H200 node; raw-image PTP training remains CPU/data-pipeline limited, but all GPUs are occupied by active training processes.
+
+## Session 11
+
+- Polled current downstream status on `10.100.2.4:35140`.
+- All 16 Session 10 downstream PTP jobs are still running across the 8-H200 node; `nvidia-smi` reports 16 compute apps.
+- Main matrix progress:
+  - Square rows are around epoch 38-39.
+  - ToolHang rows are around epoch 15-16.
+- Extra matrix progress:
+  - Square rows are around epoch 28-29.
+  - ToolHang rows are around epoch 11-12.
+- Latest main Square train/val diffusion losses:
+  - original finetune val `0.0735`
+  - `B_full_frozen` val `0.0702`
+  - `B_full_finetune` val `0.0739`
+  - `A_future_finetune` val `0.0758`
+- Latest main ToolHang train/val diffusion losses:
+  - original finetune val `0.1001`
+  - `B_full_frozen` val `0.0943`
+  - `B_full_finetune` val `0.1002`
+  - `A_future_finetune` val `0.1004`
+- Latest extra Square train/val diffusion losses:
+  - `A_future_frozen` val `0.0820`
+  - `A_future_seed43_finetune` val `0.0768`
+  - `B_future_frozen` val `0.0839`
+  - `B_future_finetune` val `0.0861`
+- Latest extra ToolHang train/val diffusion losses:
+  - `A_future_frozen` val `0.1178`
+  - `A_future_seed43_finetune` val `0.1206`
+  - `B_future_frozen` val `0.1226`
+  - `B_future_finetune` val `0.1211`
+- Interpretation: early downstream loss has a small favorable signal for `B_full_frozen` on both Square and ToolHang, but this remains train/val diffusion loss only and cannot be treated as rollout success-rate evidence.

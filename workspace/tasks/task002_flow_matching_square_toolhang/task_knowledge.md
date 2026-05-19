@@ -1,6 +1,6 @@
 # Task Knowledge
 
-<!-- METADATA:SESSION=10 -->
+<!-- METADATA:SESSION=11 -->
 
 ## Working Rules
 
@@ -77,3 +77,6 @@
 - Early downstream diffusion loss comparison is not a rollout score. As of the Session 10 poll, Square main matrix at epoch 17-18 shows original val `0.0965`, `B_full_frozen` `0.0933`, `B_full_finetune` `0.0865`, `A_future_finetune` `0.0866`.
 - Early ToolHang main matrix at epoch 6 is close: original val `0.1568`, `B_full_frozen` `0.1585`, `B_full_finetune` `0.1566`, `A_future_finetune` `0.1572`.
 - The 8-H200 node can run 16 downstream jobs concurrently with memory headroom, but raw-image PTP training is CPU/data-pipeline limited; low instantaneous SM utilization does not mean the jobs are absent.
+- Session 11 poll: all 16 downstream PTP jobs remain active on `10.100.2.4:35140`; main Square is near epoch 38-39, main ToolHang near epoch 15-16.
+- Session 11 latest main-matrix val losses show a small `B_full_frozen` train/val diffusion-loss advantage: Square `0.0702` vs original `0.0735`, ToolHang `0.0943` vs original `0.1001`.
+- Session 11 results are still train/val diffusion losses with rollout disabled, so they should be discussed as optimization signals, not success-rate evidence.
