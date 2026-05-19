@@ -1,6 +1,6 @@
 # History Log
 
-<!-- METADATA:SESSION=11 -->
+<!-- METADATA:SESSION=12 -->
 
 ## Session 0
 
@@ -142,3 +142,10 @@
   - `square_h10`: `/mnt/nfs/tingwen/intern_method_developer/tasks/task002_flow_matching_square_toolhang/outputs/rollout_square_eval_20260519_0309/square_h10_n10/eval_log.json`
   - `square_action8`: `/mnt/nfs/tingwen/intern_method_developer/tasks/task002_flow_matching_square_toolhang/outputs/rollout_square_eval_20260519_0309/square_action8_n10_reward_only/eval_log.json`
 - The standard runner's extra action-HSIC logging path is not robust for `square_action8` ragged action chunks, so the score was collected with a reward-only rollout loop using the same env, policy, checkpoint, and seeds.
+
+## Session 12
+
+- Checked the active Python environments for `robomimic` version.
+- Local default Python in `/work-agents/intern_ldp_explorer` does not have `robomimic` installed.
+- The NFS/GPU environment used for training and rollout is `/mnt/nfs/tingwen/ldp/envs/gmp_released_ckpt/miniforge3/envs/gmp-py310/bin/python`.
+- That active environment imports `robomimic 0.4.0` from `/mnt/nfs/tingwen/ldp/small_files/intern_ldp_explorer/vendor/gmp/gated-memory-policy/mujoco-env/third_party/robomimic/robomimic/__init__.py`.

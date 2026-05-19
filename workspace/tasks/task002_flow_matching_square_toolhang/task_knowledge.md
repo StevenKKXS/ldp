@@ -1,6 +1,6 @@
 # Task Knowledge
 
-<!-- METADATA:SESSION=11 -->
+<!-- METADATA:SESSION=12 -->
 
 ## Working Rules
 
@@ -48,3 +48,4 @@
 - Square rollout env now needs these runtime shims in the GMP py310 environment: `LD_LIBRARY_PATH` must include the NFS env lib directory with linked GLVND libs; `PYOPENGL_PLATFORM=egl` and `MUJOCO_GL=egl`; legacy robomimic `OSC_POSE` controller metadata must be converted to robosuite 1.5 `BASIC` composite controller metadata; Gym 0.23 requires AsyncVectorEnv reset/step/concatenate compatibility shims.
 - Current saved Square FM `latest.ckpt` rollout result at `2026-05-19T03:21:00+00:00`: `square_h10` 10 test seeds `0/10`, `square_action8` 10 test seeds `0/10`.
 - Standard RobomimicImageRunner reward aggregation works for `square_h10`, but its extra online action-HSIC path can fail on `square_action8` ragged chunks; use reward-only rollout for score-only checks or patch the runner before relying on action-HSIC logs.
+- Active NFS/GPU `gmp-py310` imports `robomimic 0.4.0` from the GMP vendor checkout, not robomimic 0.2.0.
