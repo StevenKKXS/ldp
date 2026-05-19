@@ -8,5 +8,5 @@
 | Status | Working |
 | Current Task | task002_flow_matching_square_toolhang |
 | PR | https://github.com/StevenKKXS/ldp/pull/1 |
-| Session | 15 |
-| Recent Progress | Confirmed original PTP normalization behavior from local code: robomimic abs-action configs normalize action position dimensions to [-1,1] while leaving other action dimensions identity; low-dim proprio position/gripper qpos keys are range-normalized and quaternion keys are identity. |
+| Session | 16 |
+| Recent Progress | Analyzed PTP dataloader windowing: SequenceSampler returns fixed contiguous windows; RobomimicReplayImageDataset keeps first obs history tokens and returns action tokens spanning history through future, so fixed historical obs plus historical-to-future action ranges are mostly config-level changes. |

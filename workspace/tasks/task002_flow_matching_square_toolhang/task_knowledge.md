@@ -1,6 +1,6 @@
 # Task Knowledge
 
-<!-- METADATA:SESSION=15 -->
+<!-- METADATA:SESSION=16 -->
 
 ## Working Rules
 
@@ -61,3 +61,5 @@
 - Original PTP normalization answer: the workspace calls `dataset.get_normalizer()` and installs it into model/EMA; policy training normalizes `batch['obs']` and `batch['action']`, rollout normalizes obs and unnormalizes predicted actions.
 - For robomimic `abs_action: true`, action normalization is partial: first 3 EEF position dimensions are range-normalized to `[-1,1]`; remaining rotation/gripper dimensions are identity. For dual-arm actions, the first 3 position dimensions of each arm are range-normalized and the remaining dimensions are identity.
 - For proprio in original robomimic PTP configs, `robot*_eef_pos` and `robot*_gripper_qpos` are range-normalized to `[-1,1]`; `robot*_eef_quat` is identity. This is not a uniform z-score normalizer.
+- PTP dataloader window rule: `SequenceSampler` emits one contiguous sequence; `RobomimicReplayImageDataset.__getitem__` returns obs from the first `n_obs_steps * subsample_frames` samples, then returns actions as subsampled historical actions plus future actions. With `subsample_frames=1`, `n_obs_steps=K+1` and `horizon=K+1+F` represent obs offsets `[-K, ..., 0]` and action offsets `[-K, ..., F]` around the current frame.
+- Current policy assumes chronological order. Reversing obs order to current-to-history instead of history-to-current is mechanically easy but changes positional semantics and should be treated as an architecture/training change.

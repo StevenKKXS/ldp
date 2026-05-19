@@ -1,6 +1,6 @@
 # History Log
 
-<!-- METADATA:SESSION=15 -->
+<!-- METADATA:SESSION=16 -->
 
 ## Session 0
 
@@ -187,3 +187,13 @@
 - Confirmed robomimic `abs_action: true` configs normalize only absolute action position dimensions to `[-1,1]`; non-position action dimensions are identity. Dual-arm transport applies the same rule per arm.
 - Confirmed robomimic proprio is field-wise: `robot*_eef_pos` and `robot*_gripper_qpos` are range-normalized to `[-1,1]`, while `robot*_eef_quat` is identity because it is already bounded.
 - Confirmed `abs_action: false` configs use identity action normalization because actions are treated as already normalized.
+
+## Session 16
+
+- User asked whether PTP dataloader can fetch current-to-history observations and history-to-future actions.
+- Checked `SequenceSampler` and `RobomimicReplayImageDataset.__getitem__`.
+- Confirmed `SequenceSampler` creates a fixed contiguous sequence window with episode-boundary repetition padding controlled by `pad_before` and `pad_after`.
+- Confirmed robomimic image dataset loads only the first `n_obs_steps * subsample_frames` tokens for obs keys via `key_first_k`, then returns `obs[key]` as the selected historical obs tokens.
+- Confirmed action returns a composed sequence: subsampled historical action tokens from the obs window plus all future action tokens, producing `batch['action']` length `horizon`.
+- With `subsample_frames=1`, setting `n_obs_steps=K+1` and `horizon=K+1+F` gives obs offsets `[-K, ..., 0]` and action offsets `[-K, ..., F]` relative to the current frame at index `n_obs_steps-1`.
+- For fixed windows this is easy and mostly config-level; arbitrary nonuniform frame sets or separate named obs/action ranges require a small dataset/sampler extension.
