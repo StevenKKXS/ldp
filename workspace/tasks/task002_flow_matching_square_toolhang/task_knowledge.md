@@ -1,6 +1,6 @@
 # Task Knowledge
 
-<!-- METADATA:SESSION=10 -->
+<!-- METADATA:SESSION=11 -->
 
 ## Working Rules
 
@@ -40,8 +40,11 @@
 - `gmp-py310` also lacked `pytorch3d`; a pure-Python transforms stub already existed at `/mnt/nfs/tingwen/ldp/small_files/intern_ldp_explorer/pytorch3d_src` and was symlinked into the NFS env as `site-packages/pytorch3d`.
 - The GMP robomimic 0.4 checkout has `CropRandomizer` in `robomimic.models.obs_core`, not `robomimic.models.base_nets`.
 - The square FM configs must not include `task.dataset.shape_meta.obs.embedding` when using raw `image_abs.hdf5`; the dataset conversion tries to load every key in dataset `shape_meta`.
-- The current `gmp-py310` env is sufficient for training when rollout is disabled. Online rollout still needs env-runner dependencies fixed: at minimum `gym` is missing, and current `cv2` import requires `libGL.so.1`.
+- The current `gmp-py310` env is sufficient for training when rollout is disabled.
 - The transformer workspace now skips env-runner instantiation when the local training run will not hit a rollout epoch or when `n_train+n_test == 0`.
 - Formal runs started with online rollout disabled via `training.rollout_every=999999`; rollout evaluation should be launched as a separate phase after env-runner dependencies are repaired.
 - As of `2026-05-18T22:40:48+00:00`, all four formal FM jobs were alive; ToolHang cache construction had completed and both ToolHang jobs had entered training/validation.
 - As of `2026-05-19T02:58:12+00:00`, all four formal FM jobs were still alive, all had written `latest.ckpt`, Square was around epoch 457-459, and ToolHang was at epoch 64.
+- Square rollout env now needs these runtime shims in the GMP py310 environment: `LD_LIBRARY_PATH` must include the NFS env lib directory with linked GLVND libs; `PYOPENGL_PLATFORM=egl` and `MUJOCO_GL=egl`; legacy robomimic `OSC_POSE` controller metadata must be converted to robosuite 1.5 `BASIC` composite controller metadata; Gym 0.23 requires AsyncVectorEnv reset/step/concatenate compatibility shims.
+- Current saved Square FM `latest.ckpt` rollout result at `2026-05-19T03:21:00+00:00`: `square_h10` 10 test seeds `0/10`, `square_action8` 10 test seeds `0/10`.
+- Standard RobomimicImageRunner reward aggregation works for `square_h10`, but its extra online action-HSIC path can fail on `square_action8` ragged chunks; use reward-only rollout for score-only checks or patch the runner before relying on action-HSIC logs.

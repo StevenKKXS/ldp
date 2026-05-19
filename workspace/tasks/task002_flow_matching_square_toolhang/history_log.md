@@ -1,6 +1,6 @@
 # History Log
 
-<!-- METADATA:SESSION=10 -->
+<!-- METADATA:SESSION=11 -->
 
 ## Session 0
 
@@ -119,3 +119,26 @@
   - `tool_hang_h10`: `2026-05-19 02:09`, 681965791 bytes.
   - `tool_hang_action8`: `2026-05-19 02:10`, 681957343 bytes.
 - No traceback, killed process, or exception marker was found in the latest progress grep.
+
+## Session 11
+
+- User asked whether current Square checkpoints already show rollout effect without waiting for 3500 epochs.
+- Prepared Square rollout on GPU node `10.100.2.35:33805` using current saved `latest.ckpt` files:
+  - `square_h10`: `/mnt/nfs/tingwen/intern_method_developer/tasks/task002_flow_matching_square_toolhang/outputs/formal_train_20260518_143331/square_h10/checkpoints/latest.ckpt`
+  - `square_action8`: `/mnt/nfs/tingwen/intern_method_developer/tasks/task002_flow_matching_square_toolhang/outputs/formal_train_20260518_143331/square_action8/checkpoints/latest.ckpt`
+- Added missing rollout runtime dependencies to the shared NFS `gmp-py310` env from the CPU/common side, not through GPU-node network:
+  - installed `gym==0.23.1`;
+  - installed `opencv-python-headless==4.11.0.86`;
+  - downloaded/extracted Ubuntu Noble GLVND packages under `/mnt/nfs/tingwen/ldp/small_files/intern_ldp_explorer/system_libs/noble_extract`;
+  - linked `libEGL.so`, `libGL.so`, `libGLX.so.0`, and `libGLdispatch.so.0` into the NFS env lib directory.
+- Used evaluation-time compatibility shims for the GMP robosuite 1.5 / gym 0.23 environment:
+  - converted legacy robomimic `OSC_POSE` controller metadata to robosuite 1.5 `BASIC` composite controller metadata;
+  - disabled `AsyncVectorEnv` shared memory for Gym Dict observations;
+  - adapted `AsyncVectorEnv.reset`, `step`, and `concatenate` calls to gym 0.23 signatures.
+- Ran 10 test-seed Square rollouts:
+  - `square_h10_n10`: `test/mean_score = 0.0`, all 10 seeds reward 0.0.
+  - `square_action8_n10_reward_only`: `test/mean_score = 0.0`, all 10 seeds reward 0.0.
+- Rollout artifacts:
+  - `square_h10`: `/mnt/nfs/tingwen/intern_method_developer/tasks/task002_flow_matching_square_toolhang/outputs/rollout_square_eval_20260519_0309/square_h10_n10/eval_log.json`
+  - `square_action8`: `/mnt/nfs/tingwen/intern_method_developer/tasks/task002_flow_matching_square_toolhang/outputs/rollout_square_eval_20260519_0309/square_action8_n10_reward_only/eval_log.json`
+- The standard runner's extra action-HSIC logging path is not robust for `square_action8` ragged action chunks, so the score was collected with a reward-only rollout loop using the same env, policy, checkpoint, and seeds.

@@ -8,5 +8,5 @@
 | Status | Working |
 | Current Task | task002_flow_matching_square_toolhang |
 | PR | https://github.com/StevenKKXS/ldp/pull/1 |
-| Session | 10 |
-| Recent Progress | Checked 10.100.2.35:33805 at 2026-05-19 02:58 UTC: all four formal FM jobs are alive; square runs are around epochs 457-459 and tool_hang runs are at epoch 64 with latest checkpoints written. |
+| Session | 11 |
+| Recent Progress | Evaluated current Square FM latest checkpoints with 10 rollout test seeds each: square_h10 and square_action8 both returned test mean score 0.0. |
