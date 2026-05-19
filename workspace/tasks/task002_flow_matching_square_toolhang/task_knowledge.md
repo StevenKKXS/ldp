@@ -1,6 +1,6 @@
 # Task Knowledge
 
-<!-- METADATA:SESSION=24 -->
+<!-- METADATA:SESSION=25 -->
 
 ## Working Rules
 
@@ -78,3 +78,6 @@
 - On this GPU node, avoid using shell variable name `ENV` for Python env paths because shell initialization can set it to `/etc/shinit_v2`. Use a name like `PY39`.
 - For remote background launches containing many quoted paths, send the script with `ssh ... 'bash -s' <<'REMOTE'` so local shell quoting does not erase remote variables.
 - Direction C Stage 1 Square translator speed on `10.100.2.35:25076`: current batch throughput is about 2.6-2.7 train batches/sec for `2478` train batches per epoch, so one epoch is about 15-16 minutes plus validation/checkpoint overhead. The 1000-epoch plan is about 10.5-12 days; a 96h allocation reaches roughly 340-380 epochs.
+- Direction C Stage 1 speed-up note: current formal configs already use `num_workers=8` per run and `pin_memory=true`; with three runs this creates 24 dataloader workers. Benchmark `num_workers=12/16` before adopting it, because extra workers may stress CPU/NFS without improving H200 throughput.
+- More GPUs only increase throughput across independent experiments unless the workspace is changed to DDP. Current Direction C Stage 1 jobs are single-GPU processes.
+- Larger batch size is likely the safest first benchmark because each run uses only about `5.3GB` on a 144GB H200 at batch 32. Test batch 64 and 128 with identical short-step settings before restarting formal runs.

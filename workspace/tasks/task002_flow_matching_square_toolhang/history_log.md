@@ -1,6 +1,6 @@
 # History Log
 
-<!-- METADATA:SESSION=24 -->
+<!-- METADATA:SESSION=25 -->
 
 ## Session 0
 
@@ -286,3 +286,15 @@
 - Live tqdm progress showed roughly 2.6-2.7 train batches/sec over `2478` train batches per epoch, so one train epoch is about 15-16 minutes before small validation/checkpoint overhead.
 - Estimated wall time with the current 1000-epoch configs: about 10.5-12 days if uninterrupted. A 96h allocation should cover about 340-380 epochs, not the full 1000.
 - Estimated time to first useful periodic checkpoint: epoch 50 in about 13-14 hours from launch; epoch 100 in about 26-28 hours.
+
+## Session 25
+
+- User asked what speed-up methods are available, including more GPUs and `num_workers`.
+- Checked the active config values: all three formal translator configs already use `batch_size: 32`, `num_workers: 8`, `pin_memory: true`, `persistent_workers: false`, `num_epochs: 1000`, and `checkpoint_every: 50`.
+- Checked the node at `2026-05-19T14:37:09+00:00`: pids `26881`, `26883`, and `26885` were alive, each using about `5.3GB` H200 memory; each run had 8 child dataloader workers, for 24 workers total.
+- Recorded speed-up assessment:
+  - Increasing `num_workers` beyond 8 might help only if dataloader stalls dominate; because there are already 24 workers and node load was about 25, it should be benchmarked before changing the formal runs.
+  - More GPUs do not automatically speed up a single run because the current workspace is single-process/single-GPU. True per-run GPU scaling requires DDP changes: distributed sampler, DDP wrapping, rank-aware logging/checkpointing, and metric reduction.
+  - The lowest-risk throughput change is to benchmark larger batches such as 64 or 128 on idle GPU3; H200 memory use is low enough that batch size, not memory, is likely the next easy lever.
+  - AMP/bf16 could plausibly improve raw-image obs-encoder plus transformer throughput, but needs a smoke test before formal use.
+  - The most reliable wall-clock reduction for this exploratory stage is to compare eval-loss trends at epoch 50 or 100 rather than waiting for all 1000 epochs.
