@@ -1,6 +1,6 @@
 # Task Knowledge
 
-<!-- METADATA:SESSION=11 -->
+<!-- METADATA:SESSION=12 -->
 
 ## Working Rules
 
@@ -80,3 +80,6 @@
 - Session 11 poll: all 16 downstream PTP jobs remain active on `10.100.2.4:35140`; main Square is near epoch 38-39, main ToolHang near epoch 15-16.
 - Session 11 latest main-matrix val losses show a small `B_full_frozen` train/val diffusion-loss advantage: Square `0.0702` vs original `0.0735`, ToolHang `0.0943` vs original `0.1001`.
 - Session 11 results are still train/val diffusion losses with rollout disabled, so they should be discussed as optimization signals, not success-rate evidence.
+- Session 12 high-level summary: both Direction A and Direction B are under test, but the clearest current emphasis is Direction B full-action predictive encoder pretraining, with Direction A contrastive encoder retained as a parallel comparison.
+- The chosen protocol intentionally keeps the downstream PTP policy structure unchanged and tests encoder checkpoints through existing `obs_encoder_dir` / `obs_encoder_freeze` controls.
+- Current downstream results should be described as encoder-pretraining ablations for exact PTP, not as new policy architectures.

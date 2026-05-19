@@ -1,6 +1,6 @@
 # History Log
 
-<!-- METADATA:SESSION=11 -->
+<!-- METADATA:SESSION=12 -->
 
 ## Session 0
 
@@ -186,3 +186,25 @@
   - `B_future_frozen` val `0.1226`
   - `B_future_finetune` val `0.1211`
 - Interpretation: early downstream loss has a small favorable signal for `B_full_frozen` on both Square and ToolHang, but this remains train/val diffusion loss only and cannot be treated as rollout success-rate evidence.
+
+## Session 12
+
+- Clarified high-level task progress for the user.
+- Both planned encoder directions are being advanced:
+  - Direction A: Future-action / behavior contrastive encoder pretraining.
+  - Direction B: Action-sequence predictive encoder pretraining.
+- Completed high-level work:
+  - Saved and reviewed both plans.
+  - Implemented exact-PTP-compatible encoder pretraining instead of changing the downstream PTP policy structure.
+  - Ran pretraining probes for both directions on Square and ToolHang.
+  - Produced compatible encoder checkpoints for Direction A and Direction B.
+  - Launched downstream PTP ablations that load those encoders as frozen or finetuned encoders.
+- Current experimental focus:
+  - Compare Direction B full-action predictive encoder against original PTP encoder.
+  - Compare Direction A contrastive encoder as a parallel candidate.
+  - Keep PTP policy/head/horizon structure unchanged so the first comparison isolates encoder pretraining as much as possible.
+- Latest poll confirmed all 16 downstream jobs are still active on `10.100.2.4:35140`.
+- Latest high-level signal:
+  - Direction B full-action predictive pretraining has the most interesting early loss signal so far on the main matrix.
+  - Direction A remains viable but has not shown a clearly stronger signal than Direction B in the current train/val diffusion-loss view.
+  - These are optimization signals only; rollout success-rate evaluation has not been run.
