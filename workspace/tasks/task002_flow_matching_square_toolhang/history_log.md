@@ -1,6 +1,6 @@
 # History Log
 
-<!-- METADATA:SESSION=18 -->
+<!-- METADATA:SESSION=20 -->
 
 ## Session 0
 
@@ -219,3 +219,20 @@
 - Confirmed latest checkpoints exist for all four formal runs under `formal_train_20260518_143331/*/checkpoints/latest.ckpt`.
 - Reconfirmed py39 / `robomimic 0.2.0` reward-only rollout results from current checkpoints: Square h10 `7/10`, Square action8 `4/10`, ToolHang h10 `0/10`, ToolHang action8 `0/10`.
 - Conclusion recorded for handoff: the current FM GPU work can stay stopped and the GPU can be released; if continuing FM seriously, restart clean training in the py39 / `robomimic 0.2.0` environment rather than extending the old gmp-py310 / `robomimic 0.4.0` run.
+
+## Session 19
+
+- User handed off a new Behavior Translator experiment idea and asked for feasibility review plus an updated experiment plan before implementation.
+- Created Direction C documentation under `docs/direction_c_behavior_translator/`.
+- Main feasibility correction: current PTP dataloader normally returns raw image/proprio tensors, not camera embeddings, so the v0 plan should use `raw obs history -> existing robomimic obs_encoder -> obs feature tokens -> BehaviorTranslator`.
+- Main scope correction: do not connect DP/PTP in the first implementation; first deliver Stage 1 offline translation and Stage 2a frozen-head probe.
+- Main go/no-go criterion: frozen pretrained translator context must outperform frozen random translator context before DP/PTP integration.
+- Updated `docs/main.md` and `docs/status.md` to include Direction C.
+- Planned first implementation step: build `BehaviorTranslationDataset`, `BehaviorTranslator`, and one Square history->past+future config, then run shape and forward/backward smoke checks in the py39 / `robomimic 0.2.0` environment.
+
+## Session 20
+
+- User clarified ownership: `intern_ldp_explorer` should mainly own Direction C; Direction A/B are handled by another intern.
+- Updated `docs/main.md`, `docs/status.md`, `docs/direction_c_behavior_translator/status.md`, and `docs/direction_c_behavior_translator/obs_log.md` to reflect that Direction C is the active execution queue for this agent.
+- Preserved Direction A/B docs as references, but marked them outside this agent's execution queue.
+- Current Direction C next implementation unit remains: `BehaviorTranslationDataset`, `BehaviorTranslator`, and one Square history->past+future config, followed by shape and forward/backward smoke checks in py39 / `robomimic 0.2.0`.

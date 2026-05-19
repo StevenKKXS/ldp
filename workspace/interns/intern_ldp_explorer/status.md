@@ -8,5 +8,5 @@
 | Status | Working |
 | Current Task | task002_flow_matching_square_toolhang |
 | PR | https://github.com/StevenKKXS/ldp/pull/1 |
-| Session | 18 |
-| Recent Progress | Checked current Flow Matching status: GPU node 10.100.2.35:33805 is idle with no FM train/eval processes; prior gmp-py310 formal runs stopped around Square epoch 786-788 and ToolHang epoch 115, with py39 rollout results Square h10 7/10, Square action8 4/10, ToolHang h10/action8 0/10. |
+| Session | 20 |
+| Recent Progress | Set Direction C Behavior Translator as the main responsibility for intern_ldp_explorer, marked Direction A/B as owned by another intern, and kept the Direction C plan offline-first with Stage 1 translation plus Stage 2a frozen-head probe before DP/PTP integration. |

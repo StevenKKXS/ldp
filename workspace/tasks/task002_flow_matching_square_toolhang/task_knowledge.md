@@ -1,6 +1,6 @@
 # Task Knowledge
 
-<!-- METADATA:SESSION=18 -->
+<!-- METADATA:SESSION=20 -->
 
 ## Working Rules
 
@@ -66,3 +66,6 @@
 - PTP dataloader obs format: default image configs return raw image/proprio tensors, not encoder outputs. `DiffusionTransformerHybridImagePolicy` runs `self.obs_encoder(...)` inside training and rollout.
 - Embedding-cache exception: when `use_embed_if_present=True` and replay data has an `embedding` key, `RobomimicReplayImageDataset` returns `obs['embedding']` plus action only; the normalizer skips `embedding`, and the policy uses the embedding directly as condition.
 - Session 18 FM stop decision: no FM process is currently running on `10.100.2.35:33805`; current checkpoints already have py39 rollout measurements. It is reasonable to release the GPU. Further FM improvement should restart clean py39 / `robomimic 0.2.0` training instead of resuming the old gmp-py310 run.
+- Direction C Behavior Translator plan lives at `docs/direction_c_behavior_translator/plan_review_2026-05-19.md`; its first implementation should be offline-first and use existing robomimic obs_encoder features rather than assuming dataloader camera embeddings.
+- Direction C DP/PTP integration is gated on the frozen-head probe: pretrained frozen translator context must beat a same-architecture frozen random translator context.
+- Ownership clarification: `intern_ldp_explorer` mainly owns Direction C Behavior Translator. Direction A/B are owned by another intern and should not be placed in this agent's execution queue.

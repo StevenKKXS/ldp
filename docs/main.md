@@ -3,6 +3,7 @@
 ## 当前采用的总计划
 
 - Active global plan: `docs/plans/plan_init_2026-05-18.md`
+- Current owner focus for `intern_ldp_explorer`: Direction C only. Direction A/B are owned by another intern.
 
 ## 当前候选方向
 
@@ -14,7 +15,7 @@
 - Status file: `docs/direction_a_future_action_contrastive/status.md`
 - Experiment file: `docs/direction_a_future_action_contrastive/experiments.md`
 - Observation log: `docs/direction_a_future_action_contrastive/obs_log.md`
-- 当前阶段: 已 review，优先定型 PTP-compatible encoder pretraining
+- 当前阶段: 已 review；not owned by `intern_ldp_explorer`
 
 ### Direction B: Action-Sequence Predictive Encoder Pretraining
 
@@ -23,7 +24,15 @@
 - Status file: `docs/direction_b_action_sequence_predictive/status.md`
 - Experiment file: `docs/direction_b_action_sequence_predictive/experiments.md`
 - Observation log: `docs/direction_b_action_sequence_predictive/obs_log.md`
-- 当前阶段: 已 review，优先定型 PTP-compatible predictive pretraining
+- 当前阶段: 已 review；not owned by `intern_ldp_explorer`
+
+### Direction C: Behavior Translator Context Pretraining
+
+- Active plan: `docs/direction_c_behavior_translator/plan_review_2026-05-19.md`
+- Status file: `docs/direction_c_behavior_translator/status.md`
+- Experiment file: `docs/direction_c_behavior_translator/experiments.md`
+- Observation log: `docs/direction_c_behavior_translator/obs_log.md`
+- 当前阶段: `intern_ldp_explorer` 主负责，先做 offline translator 与 frozen-head probe，不接 DP/PTP
 
 ## 文件说明
 
@@ -33,14 +42,16 @@
 - `plans/`: 总计划历史。
 - `direction_a_*/`: Direction A 的方案、实验和 observation。
 - `direction_b_*/`: Direction B 的方案、实验和 observation。
+- `direction_c_*/`: Direction C 的方案、实验和 observation。
 
-## 当前任务顺序
+## 当前任务顺序 for intern_ldp_explorer
 
-1. 保存并 review Direction A / Direction B 初始 plan。
-2. agent 对两个方向提出异议或补充建议。
-3. 如果没有新的关键 idea，先在 Square 和 ToolHang 上验证。
-4. 如果 Square / ToolHang 至少一个任务出现稳定提升，再扩展 Push-T 和 Transport。
-5. 每次实验后更新对应方向的 `obs_log.md`、`experiments.md` 和 `status.md`。
+1. Direction C: implement dataset/model/config smoke path.
+2. Direction C: run Square offline translator Stage 1.
+3. Direction C: run Square frozen-head probe Stage 2a.
+4. Direction C: add ToolHang only after Square shape/loss path is stable.
+5. Direction C: consider DP/PTP integration only after pretrained frozen context beats random frozen context.
+6. 每次实验后更新 Direction C 的 `obs_log.md`、`experiments.md` 和 `status.md`。
 
 ## 当前约束
 
@@ -49,5 +60,4 @@
 - 当前只有启动规则和方向草案，没有实验结果。
 - 不允许声称 Direction A 或 Direction B 已经有效。
 - GPU 资源在用户明确分配前不申请、不使用。
-- Direction A 已保存详细 plan 和 review；仍未进入实现或实验。
-- Direction B 已保存详细 plan 和 review；仍未进入实现或实验。
+- Direction A/B 由另一个 intern 负责；`intern_ldp_explorer` 不把 A/B 放入自己的执行队列。
