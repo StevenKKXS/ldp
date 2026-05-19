@@ -1,6 +1,6 @@
 # History Log
 
-<!-- METADATA:SESSION=9 -->
+<!-- METADATA:SESSION=10 -->
 
 ## Session 0
 
@@ -130,3 +130,27 @@
   - `B_tool_hang_full_seed42`: train `0.0243`, val `0.0494`.
   - `B_tool_hang_future_seed42`: train `0.0252`, val `0.0420`.
 - Updated global docs and per-direction status/experiments/obs logs to mark encoder pretraining probes completed, while preserving that there is still no downstream PTP policy score.
+
+## Session 10
+
+- Continued on the user-assigned encoder node `10.100.2.4:35140`; verified all 8 H200 GPUs were initially idle before launch.
+- Added downstream launch/poll scripts:
+  - `scripts/launch_encoder_downstream_probe.sh`
+  - `scripts/launch_encoder_downstream_extra_probe.sh`
+  - `scripts/poll_encoder_downstream_probe.sh`
+- Validated the exact-PTP downstream entrypoint with a 1-step Square smoke using `B_square_full_seed42` frozen encoder:
+  - output: `/mnt/3fs2/data/tingwen.du/intern_method_developer/ptp_encoder_probe/downstream_smoke/B_square_full_frozen_smoke_20260519_01`
+  - train loss `1.0785`, val loss `1.2045`, train action MSE `0.7062`
+- Launched the first downstream matrix under `/mnt/3fs2/data/tingwen.du/intern_method_developer/ptp_encoder_probe/downstream_runs/20260519_session10` with logs at `/mnt/nfs/tingwen/intern_method_developer/tasks/ptp_encoder_probe/downstream_logs/20260519_session10`:
+  - Square: original finetune, `B_full` frozen, `B_full` finetune, `A_future` finetune
+  - ToolHang: original finetune, `B_full` frozen, `B_full` finetune, `A_future` finetune
+- Added a second matrix under `/mnt/3fs2/data/tingwen.du/intern_method_developer/ptp_encoder_probe/downstream_runs/20260519_session10_extra` with logs at `/mnt/nfs/tingwen/intern_method_developer/tasks/ptp_encoder_probe/downstream_logs/20260519_session10_extra`:
+  - Square: `A_future` frozen, `B_future` frozen, `B_future` finetune, `A_future_seed43` finetune
+  - ToolHang: `A_future` frozen, `B_future` frozen, `B_future` finetune, `A_future_seed43` finetune
+- Early downstream observations from the latest poll:
+  - Main Square at epoch 17-18: original val `0.0965`, `B_full_frozen` `0.0933`, `B_full_finetune` `0.0865`, `A_future_finetune` `0.0866`.
+  - Main ToolHang at epoch 6: original val `0.1568`, `B_full_frozen` `0.1585`, `B_full_finetune` `0.1566`, `A_future_finetune` `0.1572`.
+  - Extra Square at epoch 7-8: `A_future_frozen` val `0.1001`, `B_future_frozen` `0.1012`, `B_future_finetune` `0.1144`, `A_future_seed43_finetune` `0.1126`.
+  - Extra ToolHang at epoch 1-2: `A_future_frozen` val `0.2679`, `B_future_frozen` `0.2668`, `B_future_finetune` `0.2624`, `A_future_seed43_finetune` `0.3481`.
+- Interpretation recorded: early downstream train/val diffusion losses are close across encoder choices; the current evidence supports implementation feasibility and running comparisons, but it is not a validated success-rate improvement.
+- GPU utilization note: 16 downstream processes are running across the 8-H200 node; raw-image PTP training remains CPU/data-pipeline limited, but all GPUs are occupied by active training processes.

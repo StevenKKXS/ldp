@@ -163,3 +163,45 @@ B_toolhang_o2_past_future_predictive_finetune
 - Current epoch: 9
 - Status: completed
 - Notes: Final train loss `0.0252`, val loss `0.0420`. Output path `/mnt/3fs2/data/tingwen.du/intern_method_developer/ptp_encoder_probe/runs/20260518_session8/B_tool_hang_future_seed42`.
+
+### Exp ID: B_downstream_session10_main
+
+- Direction: B
+- Task: Square / ToolHang
+- Method: exact-PTP downstream training from full-action predictive-pretrained encoder
+- Code branch / commit: `intern_method_developer/task002_flow_matching_square_toolhang`, running from Session 10 workspace
+- Dataset version: Square `/mnt/nfs/tingwen/ldp/runtime_data/datasets/robomimic/datasets/square/mh/image_abs.hdf5`; ToolHang `/mnt/nfs/tingwen/ldp/runtime_data/datasets/robomimic/datasets/tool_hang/ph/image_abs.hdf5`
+- Checkpoint: `B_square_full_seed42/checkpoints/latest.ckpt`, `B_tool_hang_full_seed42/checkpoints/latest.ckpt`
+- Encoder input: exact PTP raw-image observations, cached embeddings disabled
+- History length H: downstream config `n_obs_steps=2`
+- Action horizon K: unchanged PTP config per task
+- Frozen or finetuned: frozen and finetuned rows
+- Key hyperparameters: 50 epochs, Square max 200 train steps / 20 val steps per epoch, ToolHang max 100 train steps / 10 val steps per epoch, rollout disabled
+- Start date: 2026-05-19
+- End date: running
+- Best score: N/A
+- Best epoch: N/A
+- Current epoch: Square 17-18, ToolHang 6
+- Status: running
+- Notes: Latest poll: Square `B_full_frozen` val `0.0933`, `B_full_finetune` `0.0865`, original `0.0965`; ToolHang `B_full_frozen` `0.1585`, `B_full_finetune` `0.1566`, original `0.1568`. Output path `/mnt/3fs2/data/tingwen.du/intern_method_developer/ptp_encoder_probe/downstream_runs/20260519_session10`.
+
+### Exp ID: B_downstream_session10_extra
+
+- Direction: B
+- Task: Square / ToolHang
+- Method: exact-PTP downstream training from future-only predictive-pretrained encoder
+- Code branch / commit: `intern_method_developer/task002_flow_matching_square_toolhang`, running from Session 10 workspace
+- Dataset version: same raw-image datasets as main matrix
+- Checkpoint: `B_square_future_seed42/checkpoints/latest.ckpt`, `B_tool_hang_future_seed42/checkpoints/latest.ckpt`
+- Encoder input: exact PTP raw-image observations, cached embeddings disabled
+- History length H: downstream config `n_obs_steps=2`
+- Action horizon K: unchanged PTP config per task
+- Frozen or finetuned: frozen and finetuned rows
+- Key hyperparameters: same as main matrix, rollout disabled
+- Start date: 2026-05-19
+- End date: running
+- Best score: N/A
+- Best epoch: N/A
+- Current epoch: Square 7-8, ToolHang 2
+- Status: running
+- Notes: Latest poll: Square `B_future_frozen` val `0.1012`, `B_future_finetune` `0.1144`; ToolHang `B_future_frozen` val `0.2668`, `B_future_finetune` `0.2624`. Output path `/mnt/3fs2/data/tingwen.du/intern_method_developer/ptp_encoder_probe/downstream_runs/20260519_session10_extra`.

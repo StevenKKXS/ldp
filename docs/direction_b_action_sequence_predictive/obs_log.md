@@ -69,3 +69,14 @@
 - Possible explanation: Predictive action decoding is an easy and stable auxiliary objective, but lower prediction loss does not imply better downstream PTP score.
 - Decision: Treat the generated checkpoints as candidates for exact-PTP frozen/finetune ablation.
 - Next step: Run downstream PTP ablations and compare against baseline PTP under the same policy architecture.
+
+### Log 2026-05-19-01
+
+- Date: 2026-05-19
+- Direction: Direction B
+- Related experiment: `B_downstream_session10_main`, `B_downstream_session10_extra`
+- Observation: Exact-PTP downstream training runs from Direction B checkpoints are active on Square and ToolHang. Early train/val diffusion losses are close to original encoder baselines.
+- Evidence: Main matrix latest poll: Square `B_full_frozen` val `0.0933`, `B_full_finetune` `0.0865`, original `0.0965`; ToolHang `B_full_frozen` `0.1585`, `B_full_finetune` `0.1566`, original `0.1568`. Extra matrix latest poll: Square `B_future_frozen` val `0.1012`, `B_future_finetune` `0.1144`; ToolHang `B_future_frozen` val `0.2668`, `B_future_finetune` `0.2624`.
+- Possible explanation: Full-action predictive pretraining is stable and loads into the exact PTP policy. Early Square finetuned rows now show lower val loss than original, while ToolHang remains nearly tied; future-only rows started later and need completed curves before comparison.
+- Decision: Continue comparing full-target vs future-only and frozen vs finetuned curves; do not claim method effectiveness from the current small loss differences.
+- Next step: Compare completed downstream loss curves and decide whether any row deserves rollout evaluation after environment dependencies are repaired.

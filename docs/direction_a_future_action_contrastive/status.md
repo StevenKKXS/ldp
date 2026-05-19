@@ -1,6 +1,6 @@
 # Direction A Status
 
-Last updated: 2026-05-18
+Last updated: 2026-05-19
 
 ## Active Plan
 
@@ -10,7 +10,7 @@ Last updated: 2026-05-18
 
 ## Current Stage
 
-- Encoder pretraining probes completed on Square and ToolHang
+- Downstream exact-PTP probes running on Square and ToolHang
 
 ## Completed Experiments
 
@@ -27,6 +27,12 @@ Last updated: 2026-05-18
 
 | Exp ID | Task | Setting | Current Epoch | Current Score | Status | Notes |
 |---|---|---|---:|---:|---|---|
+| square_A_future_finetune | Square | exact PTP, `A_square_future_seed42` encoder, finetune | 17 | val loss `0.0866` | Running | Main matrix; below original val `0.0965` at latest poll. |
+| square_A_future_frozen | Square | exact PTP, `A_square_future_seed42` encoder, frozen | 8 | val loss `0.1001` | Running | Extra matrix; still earlier in training than main matrix. |
+| square_A_future_seed43_finetune | Square | exact PTP, `A_square_future_seed43` encoder, finetune | 7 | val loss `0.1126` | Running | Extra matrix seed-sensitivity probe. |
+| tool_hang_A_future_finetune | ToolHang | exact PTP, `A_tool_hang_future_seed42` encoder, finetune | 6 | val loss `0.1572` | Running | Main matrix; close to original val `0.1568`. |
+| tool_hang_A_future_frozen | ToolHang | exact PTP, `A_tool_hang_future_seed42` encoder, frozen | 2 | val loss `0.2679` | Running | Extra matrix. |
+| tool_hang_A_future_seed43_finetune | ToolHang | exact PTP, `A_tool_hang_future_seed43` encoder, finetune | 1 | val loss `0.3481` | Running | Extra matrix seed-sensitivity probe. |
 
 ## Key Observations
 
@@ -38,12 +44,13 @@ Last updated: 2026-05-18
 - Soft contrastive loss must mask diagonal `log_p` before multiplying by `q`; diagonal masked `log_softmax` otherwise creates `0 * -inf = NaN`.
 - Square and ToolHang contrastive smokes can write compatible encoder checkpoints.
 - Four long-run contrastive pretraining probes completed 10 epochs and wrote `latest.ckpt`.
-- No downstream PTP policy score exists.
+- Session 10 exact-PTP downstream probes are running from those checkpoints.
+- Early Direction A downstream train/val diffusion losses are close to original encoder baselines; no rollout success-rate score exists.
 
 ## Current Decision
 
-- First-pass Direction A keeps the PTP policy architecture unchanged and uses future-action contrastive learning as encoder pretraining.
+- First-pass Direction A keeps the PTP policy architecture unchanged and uses future-action contrastive learning as encoder pretraining. Continue comparing frozen vs finetuned downstream loss curves before deciding whether rollout evaluation is justified.
 
 ## Next Step
 
-- Use resulting encoder checkpoints for exact-PTP downstream frozen/finetune ablation on Square and ToolHang.
+- Poll Session 10 downstream jobs and compare completed Square / ToolHang loss curves against original encoder baselines.

@@ -1,6 +1,6 @@
 # Task Knowledge
 
-<!-- METADATA:SESSION=9 -->
+<!-- METADATA:SESSION=10 -->
 
 ## Working Rules
 
@@ -62,3 +62,18 @@
 - Session 8 encoder pretraining probes completed 10 epochs and wrote `latest.ckpt` in each run directory.
 - Final Direction A long-run losses: `A_square_future_seed42` train/val `3.3737`/`3.3962`; `A_square_future_seed43` `3.3742`/`3.3965`; `A_tool_hang_future_seed42` `2.6360`/`2.6933`; `A_tool_hang_future_seed43` `2.6395`/`2.6921`.
 - Final Direction B long-run losses: `B_square_full_seed42` train/val `0.0167`/`0.0373`; `B_square_future_seed42` `0.0164`/`0.0426`; `B_tool_hang_full_seed42` `0.0243`/`0.0494`; `B_tool_hang_future_seed42` `0.0252`/`0.0420`.
+- Session 10 downstream scripts:
+  - `scripts/launch_encoder_downstream_probe.sh`
+  - `scripts/launch_encoder_downstream_extra_probe.sh`
+  - `scripts/poll_encoder_downstream_probe.sh`
+- Exact-PTP downstream Square raw-image config needs these overrides when cached embeddings are disabled: `task.dataset.use_cache=false`, `~task.dataset.shape_meta.obs.embedding`, `policy.use_embed_if_present=false`, and `task.dataset.use_embed_if_present=false`.
+- Session 10 B-square frozen downstream smoke passed with train loss `1.0785`, val loss `1.2045`, and train action MSE `0.7062`.
+- Session 10 main downstream matrix output/log paths:
+  - outputs: `/mnt/3fs2/data/tingwen.du/intern_method_developer/ptp_encoder_probe/downstream_runs/20260519_session10`
+  - logs: `/mnt/nfs/tingwen/intern_method_developer/tasks/ptp_encoder_probe/downstream_logs/20260519_session10`
+- Session 10 extra downstream matrix output/log paths:
+  - outputs: `/mnt/3fs2/data/tingwen.du/intern_method_developer/ptp_encoder_probe/downstream_runs/20260519_session10_extra`
+  - logs: `/mnt/nfs/tingwen/intern_method_developer/tasks/ptp_encoder_probe/downstream_logs/20260519_session10_extra`
+- Early downstream diffusion loss comparison is not a rollout score. As of the Session 10 poll, Square main matrix at epoch 17-18 shows original val `0.0965`, `B_full_frozen` `0.0933`, `B_full_finetune` `0.0865`, `A_future_finetune` `0.0866`.
+- Early ToolHang main matrix at epoch 6 is close: original val `0.1568`, `B_full_frozen` `0.1585`, `B_full_finetune` `0.1566`, `A_future_finetune` `0.1572`.
+- The 8-H200 node can run 16 downstream jobs concurrently with memory headroom, but raw-image PTP training is CPU/data-pipeline limited; low instantaneous SM utilization does not mean the jobs are absent.

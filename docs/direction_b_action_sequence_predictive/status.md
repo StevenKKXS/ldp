@@ -1,6 +1,6 @@
 # Direction B Status
 
-Last updated: 2026-05-18
+Last updated: 2026-05-19
 
 ## Active Plan
 
@@ -9,7 +9,7 @@ Last updated: 2026-05-18
 
 ## Current Stage
 
-- Encoder pretraining probes completed on Square and ToolHang
+- Downstream exact-PTP probes running on Square and ToolHang
 
 ## Completed Experiments
 
@@ -26,6 +26,14 @@ Last updated: 2026-05-18
 
 | Exp ID | Task | Setting | Current Epoch | Current Score | Status | Notes |
 |---|---|---|---:|---:|---|---|
+| square_B_full_frozen | Square | exact PTP, `B_square_full_seed42` encoder, frozen | 18 | val loss `0.0933` | Running | Main matrix; below original val `0.0965` at latest poll. |
+| square_B_full_finetune | Square | exact PTP, `B_square_full_seed42` encoder, finetune | 17 | val loss `0.0865` | Running | Main matrix; currently close to `A_future_finetune`. |
+| square_B_future_frozen | Square | exact PTP, `B_square_future_seed42` encoder, frozen | 8 | val loss `0.1012` | Running | Extra matrix; still earlier in training than main matrix. |
+| square_B_future_finetune | Square | exact PTP, `B_square_future_seed42` encoder, finetune | 7 | val loss `0.1144` | Running | Extra matrix. |
+| tool_hang_B_full_frozen | ToolHang | exact PTP, `B_tool_hang_full_seed42` encoder, frozen | 6 | val loss `0.1585` | Running | Main matrix; currently above original val `0.1568`. |
+| tool_hang_B_full_finetune | ToolHang | exact PTP, `B_tool_hang_full_seed42` encoder, finetune | 6 | val loss `0.1566` | Running | Main matrix; close to original val `0.1568`. |
+| tool_hang_B_future_frozen | ToolHang | exact PTP, `B_tool_hang_future_seed42` encoder, frozen | 2 | val loss `0.2668` | Running | Extra matrix. |
+| tool_hang_B_future_finetune | ToolHang | exact PTP, `B_tool_hang_future_seed42` encoder, finetune | 2 | val loss `0.2624` | Running | Extra matrix. |
 
 ## Key Observations
 
@@ -35,12 +43,13 @@ Last updated: 2026-05-18
 - Predictive pretraining smoke can run on raw image Square and ToolHang and writes compatible encoder checkpoints.
 - Raw-image dataset configs must not include stale `embedding` under dataset-side `shape_meta`.
 - Four long-run predictive pretraining probes completed 10 epochs and wrote `latest.ckpt`.
-- No downstream PTP policy score exists.
+- Session 10 exact-PTP downstream probes are running from those checkpoints.
+- Early Direction B downstream train/val diffusion losses are close to original encoder baselines; no rollout success-rate score exists.
 
 ## Current Decision
 
-- Direction B remains the lower-risk pretraining probe; downstream policy should remain exact PTP in the first pass.
+- Direction B remains the lower-risk pretraining probe; downstream policy remains exact PTP in the first pass. Continue comparing full-target vs future-only and frozen vs finetuned loss curves before any rollout request.
 
 ## Next Step
 
-- Use resulting encoder checkpoints for exact-PTP downstream frozen/finetune ablation on Square and ToolHang.
+- Poll Session 10 downstream jobs and compare completed Square / ToolHang loss curves against original encoder baselines.

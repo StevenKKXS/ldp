@@ -80,3 +80,14 @@
 - Possible explanation: The contrastive objective runs stably after the diagonal masking fix, but validation embedding std is small, especially on ToolHang, so downstream evaluation is necessary.
 - Decision: Do not claim method effectiveness from pretraining loss alone.
 - Next step: Run exact-PTP frozen/finetune downstream ablations using the generated encoder checkpoints.
+
+### Log 2026-05-19-01
+
+- Date: 2026-05-19
+- Direction: Direction A
+- Related experiment: `A_downstream_session10_main`, `A_downstream_session10_extra`
+- Observation: Exact-PTP downstream training runs from Direction A checkpoints are active on Square and ToolHang. Early train/val diffusion losses are close to the original encoder baseline.
+- Evidence: Main matrix latest poll: Square `A_future_finetune` val loss `0.0866` vs original `0.0965`; ToolHang `A_future_finetune` val loss `0.1572` vs original `0.1568`. Extra matrix latest poll: Square `A_future_frozen` val `0.1001`, Square `A_future_seed43_finetune` val `0.1126`; ToolHang `A_future_frozen` val `0.2679`, ToolHang `A_future_seed43_finetune` val `0.3481`.
+- Possible explanation: Downstream transformer training from scratch may dominate the first epochs, so encoder pretraining differences can move as training progresses. Frozen contrastive encoders and seed43 rows are still earlier in training than the main matrix.
+- Decision: Keep Direction A running but do not treat the early loss as a validated improvement or failure.
+- Next step: Compare completed loss curves and only request rollout evaluation if the downstream gap becomes stable enough to justify it.

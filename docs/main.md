@@ -14,7 +14,7 @@
 - Status file: `docs/direction_a_future_action_contrastive/status.md`
 - Experiment file: `docs/direction_a_future_action_contrastive/experiments.md`
 - Observation log: `docs/direction_a_future_action_contrastive/obs_log.md`
-- 当前阶段: encoder pretraining probes 已完成，等待 downstream PTP frozen/finetune ablation
+- 当前阶段: exact-PTP downstream frozen/finetune ablations running on Square / ToolHang
 
 ### Direction B: Action-Sequence Predictive Encoder Pretraining
 
@@ -23,7 +23,7 @@
 - Status file: `docs/direction_b_action_sequence_predictive/status.md`
 - Experiment file: `docs/direction_b_action_sequence_predictive/experiments.md`
 - Observation log: `docs/direction_b_action_sequence_predictive/obs_log.md`
-- 当前阶段: encoder pretraining probes 已完成，等待 downstream PTP frozen/finetune ablation
+- 当前阶段: exact-PTP downstream frozen/finetune ablations running on Square / ToolHang
 
 ## 文件说明
 
@@ -44,10 +44,12 @@
 
 ## 当前约束
 
-- 当前已有 encoder pretraining smoke 和 completed probe 记录，但没有 downstream PTP policy score。
+- 当前已有 encoder pretraining smoke、completed pretraining probe，以及 downstream exact-PTP train/val diffusion-loss probe 记录；没有 rollout success-rate score。
 - 不允许声称 Direction A 或 Direction B 已经有效。
 - 新 GPU 资源: `10.100.2.4:35140`，Session 8 使用 8x H200 跑 Square / ToolHang encoder pretraining probes。
 - Session 8 logs: `/mnt/nfs/tingwen/intern_method_developer/tasks/ptp_encoder_probe/logs/20260518_session8/pids.tsv`。
 - Session 8 outputs: `/mnt/3fs2/data/tingwen.du/intern_method_developer/ptp_encoder_probe/runs/20260518_session8`。
-- `10.100.2.4:35140` 当前 8x H200 空闲；Session 8 的 8 个 probe PID 均已退出并写出 `logs.jsonl` / `latest.ckpt`。
+- `10.100.2.4:35140` 当前运行 16 个 downstream PTP 训练进程，覆盖 main 和 extra 两组 Square / ToolHang encoder ablation。
 - 当前 GPU 环境是 `gmp-py310` + RoboMimic `0.4.0`；目标 release-like py39 / RoboMimic `0.2.0` 环境在该节点未发现，因此当前结果只作为可实现性 observation。
+- Session 10 downstream main logs: `/mnt/nfs/tingwen/intern_method_developer/tasks/ptp_encoder_probe/downstream_logs/20260519_session10/pids.tsv`。
+- Session 10 downstream extra logs: `/mnt/nfs/tingwen/intern_method_developer/tasks/ptp_encoder_probe/downstream_logs/20260519_session10_extra/pids.tsv`。
