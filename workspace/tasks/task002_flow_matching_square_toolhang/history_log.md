@@ -1,6 +1,6 @@
 # History Log
 
-<!-- METADATA:SESSION=15 -->
+<!-- METADATA:SESSION=16 -->
 
 ## Session 0
 
@@ -276,3 +276,25 @@
   - Current Square repeat around epoch 35: original val `0.0756`, `A_future_frozen` `0.0731`, `B_full_frozen` `0.0731`, `B_future_frozen` `0.0735`.
   - Current ToolHang repeat around epoch 14: original val `0.1024`, `A_future_frozen` `0.1038`, `B_full_frozen` `0.1012`, `B_full_finetune` `0.1021`; rows remain close.
 - Interpretation: the main experimental signal so far is Square frozen encoder pretraining, with Direction A and Direction B both viable in loss-only metrics. ToolHang has not shown a clear benefit.
+
+## Session 16
+
+- Provided a concise user-facing explanation of the two encoder plans and connected them to current results.
+- Plan A meaning:
+  - Future-action / behavior contrastive encoder pretraining.
+  - It trains the encoder so histories with similar future expert action chunks have nearby embeddings, and histories with different future behavior are separated.
+  - Downstream PTP policy structure is unchanged; only the encoder checkpoint is loaded and either frozen or finetuned.
+- Plan B meaning:
+  - Action-sequence predictive encoder pretraining.
+  - It trains the encoder with a lightweight decoder to predict expert action sequences, then discards the decoder and loads only the encoder into PTP.
+  - Tested variants include full-action target and future-only target.
+- Current result summary:
+  - First seed Square: original best val `0.0711`, Plan A `A_future_frozen` `0.0677`, Plan B `B_full_frozen` `0.0691`, Plan B `B_future_frozen` `0.0700`.
+  - Seed-43 Square repeat completed: original best val `0.0692`, Plan A `A_future_frozen` `0.0640`, Plan B `B_full_frozen` `0.0659`, Plan B `B_future_frozen` `0.0662`.
+  - ToolHang first seed was essentially tied around best val `0.0636-0.0646`.
+  - ToolHang seed-43 repeat is still running and remains close across rows so far.
+- Current interpretation:
+  - Plan A frozen is currently the strongest loss-only candidate on Square.
+  - Plan B full frozen is also consistently better than original on Square, but weaker than Plan A frozen in the two Square seeds.
+  - ToolHang has no clear method signal yet.
+  - No formal rollout success-rate comparison has been completed.

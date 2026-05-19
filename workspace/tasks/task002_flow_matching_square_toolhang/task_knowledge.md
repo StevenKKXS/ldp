@@ -1,6 +1,6 @@
 # Task Knowledge
 
-<!-- METADATA:SESSION=15 -->
+<!-- METADATA:SESSION=16 -->
 
 ## Working Rules
 
@@ -100,3 +100,7 @@
 - Current seed-43 repeat around epoch 35 still favors frozen pretrained encoders over original on Square by a small margin: original `0.0756`, `A_future_frozen` `0.0731`, `B_full_frozen` `0.0731`, `B_future_frozen` `0.0735`.
 - ToolHang has not shown a clear loss-only benefit; first round and seed-43 repeat are both close across methods.
 - Formal method conclusion requires either completed seed-43 repeat consistency or rollout success-rate comparison.
+- Plan A short name: future-action contrastive encoder pretraining. It organizes history embeddings by future expert action similarity.
+- Plan B short name: action-sequence predictive encoder pretraining. It makes the encoder predict expert action sequences during pretraining, then discards the decoder.
+- Updated Square seed-43 repeat completed: original best val `0.0692`, Plan A `A_future_frozen` `0.0640`, Plan B `B_full_frozen` `0.0659`, Plan B `B_future_frozen` `0.0662`.
+- Current concise takeaway: on Square, frozen pretrained encoders beat original in both seeds, with Plan A frozen strongest; on ToolHang, loss-only results are still close.

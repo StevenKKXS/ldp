@@ -8,6 +8,6 @@
 | Status | Working |
 | Current Task | task002_flow_matching_square_toolhang |
 | PR | https://github.com/StevenKKXS/ldp/pull/1 |
-| Session | 15 |
-| Recent Progress | High-level progress beyond environment setup: Direction A and Direction B have both been implemented, pretrained, and tested in a first 50-epoch exact-PTP downstream ablation. Direction A frozen is currently the strongest Square loss-only row; Direction B full frozen is also positive. |
-| Handoff | Seed-43 repeat is still running on `10.100.2.4:35140` with 8 active jobs. At epoch 35, Square repeat vals are original `0.0756`, `A_future_frozen` `0.0731`, `B_full_frozen` `0.0731`, `B_future_frozen` `0.0735`; ToolHang repeat is around epoch 14 and remains close across rows. |
+| Session | 16 |
+| Recent Progress | Explained Plan A and Plan B in plain language with current results. Plan A is future-action contrastive encoder pretraining; Plan B is action-sequence predictive encoder pretraining. |
+| Handoff | Square seed-43 repeat completed and confirms the loss-only signal: original best val `0.0692`, Plan A `A_future_frozen` `0.0640`, Plan B `B_full_frozen` `0.0659`, Plan B `B_future_frozen` `0.0662`. ToolHang repeat is still running and remains close across rows. |
