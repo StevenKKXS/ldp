@@ -1,6 +1,6 @@
 # Task Knowledge
 
-<!-- METADATA:SESSION=25 -->
+<!-- METADATA:SESSION=26 -->
 
 ## Working Rules
 
@@ -81,3 +81,5 @@
 - Direction C Stage 1 speed-up note: current formal configs already use `num_workers=8` per run and `pin_memory=true`; with three runs this creates 24 dataloader workers. Benchmark `num_workers=12/16` before adopting it, because extra workers may stress CPU/NFS without improving H200 throughput.
 - More GPUs only increase throughput across independent experiments unless the workspace is changed to DDP. Current Direction C Stage 1 jobs are single-GPU processes.
 - Larger batch size is likely the safest first benchmark because each run uses only about `5.3GB` on a 144GB H200 at batch 32. Test batch 64 and 128 with identical short-step settings before restarting formal runs.
+- GPU3 speed benchmark results live at `/mnt/nfs/tingwen/intern_ldp_explorer/tasks/direction_c_behavior_translator/benchmarks/stage1_square_speed_20260519_144034/results.tsv`. In the short benchmark, `batch=128,num_workers=12` had the best wall throughput, but `batch=32,num_workers=12` is the safer systems-only change because it preserves optimizer-step count.
+- Recommended Direction C speed change if restarting the current formal runs: set `dataloader.num_workers=12` and `val_dataloader.num_workers=12` first; consider `batch_size=64/128` only as a training hyperparameter experiment.

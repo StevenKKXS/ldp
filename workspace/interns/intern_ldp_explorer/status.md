@@ -8,5 +8,5 @@
 | Status | Working |
 | Current Task | task002_flow_matching_square_toolhang |
 | PR | https://github.com/StevenKKXS/ldp/pull/1 |
-| Session | 25 |
-| Recent Progress | Analyzed Direction C Stage 1 speed-up options: current runs already use batch size 32 and num_workers 8 per job, with 24 dataloader workers total and about 5.3GB H200 memory per run; best practical acceleration candidates are batch-size benchmarking, AMP/bf16, and early comparison at 50-100 epochs, while multi-GPU per single run requires DDP code changes. |
+| Session | 26 |
+| Recent Progress | Ran GPU3 speed benchmark for Direction C Stage 1 while the three formal jobs continued: batch 32/64/128 crossed with num_workers 8/12 all completed. The clearest low-risk improvement is num_workers 12 at batch 32, which preserves optimizer-step semantics and improves steady train-loop throughput by roughly 40%; larger batches run successfully but change the training hyperparameter. |

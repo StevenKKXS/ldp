@@ -1,6 +1,6 @@
 # History Log
 
-<!-- METADATA:SESSION=25 -->
+<!-- METADATA:SESSION=26 -->
 
 ## Session 0
 
@@ -298,3 +298,19 @@
   - The lowest-risk throughput change is to benchmark larger batches such as 64 or 128 on idle GPU3; H200 memory use is low enough that batch size, not memory, is likely the next easy lever.
   - AMP/bf16 could plausibly improve raw-image obs-encoder plus transformer throughput, but needs a smoke test before formal use.
   - The most reliable wall-clock reduction for this exploratory stage is to compare eval-loss trends at epoch 50 or 100 rather than waiting for all 1000 epochs.
+
+## Session 26
+
+- User asked to test speed on the last idle GPU.
+- Ran a GPU3 benchmark on `10.100.2.35:25076` under `/mnt/nfs/tingwen/intern_ldp_explorer/tasks/direction_c_behavior_translator/benchmarks/stage1_square_speed_20260519_144034`.
+- Benchmark command used `behavior_translator_square_past_future`, `training.max_train_steps=120`, `training.max_val_batches=1`, GPU3 only, and did not stop or change the formal GPU0-2 jobs.
+- Wall-time benchmark results, including model/dataset startup, one validation batch, and checkpoint write:
+  - `batch=32,num_workers=8`: `49.35` samples/sec, projected short-run epoch `26.78` minutes.
+  - `batch=64,num_workers=8`: `58.15` samples/sec, projected short-run epoch `22.73` minutes.
+  - `batch=128,num_workers=8`: `63.94` samples/sec, projected short-run epoch `20.67` minutes.
+  - `batch=32,num_workers=12`: `61.81` samples/sec, projected short-run epoch `21.38` minutes.
+  - `batch=64,num_workers=12`: `74.52` samples/sec, projected short-run epoch `17.73` minutes.
+  - `batch=128,num_workers=12`: `86.09` samples/sec, projected short-run epoch `15.35` minutes.
+- Training-loop tqdm suggests the stable improvement is mainly from `num_workers=12`: `batch=32,num_workers=12` reached about `3.6` steps/sec versus about `2.4-2.7` steps/sec for `batch=32,num_workers=8`.
+- Interpretation: `num_workers=12` is the safest speed improvement because it preserves batch size and optimizer-step count. `batch=64/128` is runnable and improves short-run wall throughput, but it changes optimizer-step semantics and should be treated as a training hyperparameter change rather than a pure systems optimization.
+- One benign Python multiprocessing finalizer warning appeared in the `batch=32,num_workers=8` stdout after metrics were written: `/tmp/pymp-*` directory not empty. The run still exited successfully and produced `metrics.csv`.
