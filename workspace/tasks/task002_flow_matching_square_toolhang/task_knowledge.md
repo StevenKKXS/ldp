@@ -1,6 +1,6 @@
 # Task Knowledge
 
-<!-- METADATA:SESSION=20 -->
+<!-- METADATA:SESSION=21 -->
 
 ## Working Rules
 
@@ -69,3 +69,4 @@
 - Direction C Behavior Translator plan lives at `docs/direction_c_behavior_translator/plan_review_2026-05-19.md`; its first implementation should be offline-first and use existing robomimic obs_encoder features rather than assuming dataloader camera embeddings.
 - Direction C DP/PTP integration is gated on the frozen-head probe: pretrained frozen translator context must beat a same-architecture frozen random translator context.
 - Ownership clarification: `intern_ldp_explorer` mainly owns Direction C Behavior Translator. Direction A/B are owned by another intern and should not be placed in this agent's execution queue.
+- Direction C Stage 1 first run should be Square `C1-T3` with `H=16`, `P=16`, `K=8`, explicit anchor slicing, trainable robomimic obs encoder plus BehaviorTranslator, SmoothL1 past/future loss, and best checkpoint by `val/future_l1`.

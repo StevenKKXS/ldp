@@ -11,3 +11,10 @@
 
 - User clarified that `intern_ldp_explorer` is mainly responsible for Direction C.
 - Direction A/B are owned by another intern and should not be placed in this agent's execution queue.
+
+## 2026-05-19 Stage 1 Training Plan
+
+- The first Stage 1 run should be Square `C1-T3`: history observations to past+future actions.
+- Use `H=16`, `P=16`, `K=8`.
+- The BehaviorTranslationDataset needs explicit anchor slicing: for `H=P=16`, use sequence offsets `0...23`, obs offsets `1...16`, past action offsets `0...15`, and future action offsets `16...23`.
+- Train the robomimic obs encoder together with the translator in Stage 1; freezing a randomly initialized obs encoder would not test the intended visual-history representation.

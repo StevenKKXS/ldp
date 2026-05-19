@@ -11,6 +11,7 @@ Owner: `intern_ldp_explorer`.
 ## Active Plan
 
 - `docs/direction_c_behavior_translator/plan_review_2026-05-19.md`
+- `docs/direction_c_behavior_translator/stage1_training_plan_2026-05-19.md`
 
 ## Current Decision
 
@@ -25,6 +26,17 @@ The first go/no-go is Stage 2a:
 ```text
 frozen pretrained translator context > frozen random translator context
 ```
+
+## Stage 1 Training Decision
+
+Train the first Stage 1 run as `C1-T3-square-history-past-future`:
+
+```text
+H=16, P=16, K=8
+raw Square obs history -> trainable robomimic obs_encoder -> BehaviorTranslator -> past+future actions
+```
+
+The run should use explicit anchor slicing, not the default PTP action-window slicing.
 
 ## Next Step
 

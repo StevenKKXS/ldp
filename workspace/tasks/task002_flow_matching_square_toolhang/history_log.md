@@ -1,6 +1,6 @@
 # History Log
 
-<!-- METADATA:SESSION=20 -->
+<!-- METADATA:SESSION=21 -->
 
 ## Session 0
 
@@ -236,3 +236,13 @@
 - Updated `docs/main.md`, `docs/status.md`, `docs/direction_c_behavior_translator/status.md`, and `docs/direction_c_behavior_translator/obs_log.md` to reflect that Direction C is the active execution queue for this agent.
 - Preserved Direction A/B docs as references, but marked them outside this agent's execution queue.
 - Current Direction C next implementation unit remains: `BehaviorTranslationDataset`, `BehaviorTranslator`, and one Square history->past+future config, followed by shape and forward/backward smoke checks in py39 / `robomimic 0.2.0`.
+
+## Session 21
+
+- User asked whether Stage 1 translator training can be completed first and requested the intended training plan.
+- Added `docs/direction_c_behavior_translator/stage1_training_plan_2026-05-19.md`.
+- Selected the first Stage 1 run as Square `C1-T3-square-history-past-future`.
+- Planned horizons: obs history `H=16`, past action `P=16`, future action `K=8`.
+- Corrected the dataset slicing plan: for `H=P=16`, use sequence offsets `0...23`, obs offsets `1...16`, past action offsets `0...15`, and future action offsets `16...23`, so current action is not included in the past target.
+- Planned to train the robomimic obs encoder together with the BehaviorTranslator for Stage 1, because the default dataloader returns raw images/proprio and freezing a random obs encoder would not test the intended representation.
+- Planned optimization: smoke with batch `8` and max `20` train steps, then first Square run with batch `32`, AdamW lr `1e-4`, weight decay `1e-4`, grad clip `1.0`, `20` epochs, best checkpoint by `val/future_l1`.
