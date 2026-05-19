@@ -10,7 +10,7 @@ Last updated: 2026-05-19
 
 ## Current Stage
 
-- Downstream exact-PTP probes running on Square and ToolHang
+- Downstream exact-PTP first matrix completed; seed-43 repeat running
 
 ## Completed Experiments
 
@@ -46,11 +46,14 @@ Last updated: 2026-05-19
 - Four long-run contrastive pretraining probes completed 10 epochs and wrote `latest.ckpt`.
 - Session 10 exact-PTP downstream probes are running from those checkpoints.
 - Early Direction A downstream train/val diffusion losses are close to original encoder baselines; no rollout success-rate score exists.
+- First completed 50-epoch Square matrix favored `A_future_frozen` in train/val diffusion loss: best val `0.0677` vs original `0.0711`.
+- First completed 50-epoch ToolHang matrix did not show a clear Direction A separation; best vals were clustered around `0.0636-0.0646`.
+- Seed-43 repeat includes `square_A_future_frozen_s43` and `tool_hang_A_future_frozen_s43`.
 
 ## Current Decision
 
-- First-pass Direction A keeps the PTP policy architecture unchanged and uses future-action contrastive learning as encoder pretraining. Continue comparing frozen vs finetuned downstream loss curves before deciding whether rollout evaluation is justified.
+- First-pass Direction A keeps the PTP policy architecture unchanged and uses future-action contrastive learning as encoder pretraining. Square `A_future_frozen` is the current strongest loss-only row, pending seed-43 repeat and rollout evaluation.
 
 ## Next Step
 
-- Poll Session 10 downstream jobs and compare completed Square / ToolHang loss curves against original encoder baselines.
+- Poll Session 13 seed-43 repeat and evaluate whether `A_future_frozen` remains ahead of original on Square.

@@ -13,8 +13,8 @@ Last updated: 2026-05-19
 
 | Direction | Status | Current Task | Current Experiment | Latest Result | Next Step |
 |---|---|---|---|---|---|
-| A: Future-Action Contrastive | Downstream probes running | Square / ToolHang | `20260519_session10`, `20260519_session10_extra` | Early train/val diffusion losses are close to original encoder baselines; no rollout score yet | Let running exact-PTP probes continue and compare completed loss curves before any rollout request |
-| B: Action-Sequence Predictive | Downstream probes running | Square / ToolHang | `20260519_session10`, `20260519_session10_extra` | Early Square finetuned rows are below original at epoch 17, but there is no rollout score yet | Let running exact-PTP probes continue and compare full vs future-only frozen/finetune curves |
+| A: Future-Action Contrastive | Downstream repeats running | Square / ToolHang | `20260519_session13_seed43` | First 50-epoch matrix: Square `A_future_frozen` had best val `0.0677` vs original `0.0711`; ToolHang tied | Run seed-43 repeat and then evaluate rollout candidates |
+| B: Action-Sequence Predictive | Downstream repeats running | Square / ToolHang | `20260519_session13_seed43` | First 50-epoch matrix: Square `B_full_frozen` best val `0.0691`; ToolHang tied | Run seed-43 repeat and compare against Direction A frozen |
 
 ## 当前实验顺序
 
@@ -39,12 +39,11 @@ Last updated: 2026-05-19
 - Session 10 downstream exact-PTP smoke passed for `B_square_full_seed42` frozen encoder: train loss `1.0785`, val loss `1.2045`, train action MSE `0.7062`.
 - Session 10 main downstream matrix is running at `/mnt/3fs2/data/tingwen.du/intern_method_developer/ptp_encoder_probe/downstream_runs/20260519_session10`.
 - Session 10 extra downstream matrix is running at `/mnt/3fs2/data/tingwen.du/intern_method_developer/ptp_encoder_probe/downstream_runs/20260519_session10_extra`.
-- Latest main Square poll, epoch 17-18: original val `0.0965`, `B_full_frozen` `0.0933`, `B_full_finetune` `0.0865`, `A_future_finetune` `0.0866`.
-- Latest main ToolHang poll, epoch 6: original val `0.1568`, `B_full_frozen` `0.1585`, `B_full_finetune` `0.1566`, `A_future_finetune` `0.1572`.
-- Latest extra Square poll, epoch 7-8: `A_future_frozen` val `0.1001`, `B_future_frozen` `0.1012`, `B_future_finetune` `0.1144`, `A_future_seed43_finetune` `0.1126`.
-- Latest extra ToolHang poll, epoch 1-2: `A_future_frozen` val `0.2679`, `B_future_frozen` `0.2668`, `B_future_finetune` `0.2624`, `A_future_seed43_finetune` `0.3481`.
-- Current evidence is downstream train/val diffusion loss only; there is no rollout success-rate score.
-- GPU node `10.100.2.4:35140` is running 16 downstream PTP training processes across 8 H200 GPUs. Raw-image PTP remains CPU/data-pipeline limited, so instantaneous SM utilization is low even while processes are active.
+- Completed first downstream matrices at 50 epochs.
+- Square best val summary: original `0.0711`, `A_future_frozen` `0.0677`, `B_full_frozen` `0.0691`, `B_future_frozen` `0.0700`.
+- ToolHang best val summary: all tested rows clustered around `0.0636-0.0646`; no clear winner.
+- Rollout smoke now runs for Square original latest checkpoint for 5 steps using current py310 env after compatibility fixes; this is env-runner validation only, not a method score.
+- Session 13 seed-43 repeat matrix is running on `10.100.2.4:35140` with 8 active downstream jobs.
 - New GPU `10.100.2.4:35140` has 8x H200 available for exploration.
 - Initial environment check found `gmp-py310` with RoboMimic `0.4.0`; documented py39/RoboMimic `0.2.0` venv was not present on the node. Any smoke in 0.4.0 is an implementation feasibility observation, not final release-like evidence.
 - Cached PTP embedding datasets bypass `obs_encoder`; encoder-pretraining downstream tests must either disable cached embeddings or regenerate embeddings.

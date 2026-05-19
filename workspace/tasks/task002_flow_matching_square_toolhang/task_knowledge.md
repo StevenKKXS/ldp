@@ -1,6 +1,6 @@
 # Task Knowledge
 
-<!-- METADATA:SESSION=12 -->
+<!-- METADATA:SESSION=13 -->
 
 ## Working Rules
 
@@ -83,3 +83,12 @@
 - Session 12 high-level summary: both Direction A and Direction B are under test, but the clearest current emphasis is Direction B full-action predictive encoder pretraining, with Direction A contrastive encoder retained as a parallel comparison.
 - The chosen protocol intentionally keeps the downstream PTP policy structure unchanged and tests encoder checkpoints through existing `obs_encoder_dir` / `obs_encoder_freeze` controls.
 - Current downstream results should be described as encoder-pretraining ablations for exact PTP, not as new policy architectures.
+- Session 13 completed first downstream matrix: Square best val favored frozen pretrained encoders (`A_future_frozen` best `0.0677`, `B_full_frozen` best `0.0691`, original best `0.0711`); ToolHang was effectively tied across methods.
+- Current strongest loss-only candidate is Square `A_future_frozen`, with `B_full_frozen` also positive. This is not a success-rate result.
+- Current py310 rollout compatibility fixes needed for robosuite 1.5 / gym 0.23:
+  - refactor old `OSC_POSE` controller configs into composite controller configs;
+  - map old `damping` / `damping_limits` / `control_delta` fields to current keys;
+  - run `AsyncVectorEnv` with `shared_memory=False`;
+  - accept gym 0.23 reset kwargs and use current `concatenate(space, items, out)` argument order.
+- A 5-step Square rollout smoke using `scripts/run_checkpoint_rollout_eval.py` passed; it validates env-runner execution only.
+- Session 13 seed-43 repeat matrix is running on 8 GPUs to test whether the Square frozen-encoder loss signal survives a different training seed.

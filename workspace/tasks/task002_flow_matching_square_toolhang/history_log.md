@@ -1,6 +1,6 @@
 # History Log
 
-<!-- METADATA:SESSION=12 -->
+<!-- METADATA:SESSION=13 -->
 
 ## Session 0
 
@@ -208,3 +208,28 @@
   - Direction B full-action predictive pretraining has the most interesting early loss signal so far on the main matrix.
   - Direction A remains viable but has not shown a clearly stronger signal than Direction B in the current train/val diffusion-loss view.
   - These are optimization signals only; rollout success-rate evaluation has not been run.
+
+## Session 13
+
+- Continued after the first downstream matrices completed.
+- All 16 Session 10 downstream jobs reached 50 epochs and exited cleanly; GPU node was idle before the next launch.
+- First completed downstream train/val diffusion-loss summary:
+  - Square original best val `0.0711`, last val `0.0739`.
+  - Square `A_future_frozen` best val `0.0677`, last val `0.0679`.
+  - Square `B_full_frozen` best val `0.0691`, last val `0.0697`.
+  - Square `B_future_frozen` best val `0.0700`, last val `0.0702`.
+  - Square finetuned rows were close to or worse than original in this loss-only view.
+  - ToolHang rows all clustered near best val `0.0636-0.0646`; no meaningful separation appeared in train/val loss.
+- Interpretation: Square has a small but consistent-looking loss signal for frozen pretrained encoders, strongest for Direction A frozen and then Direction B frozen. ToolHang has no clear loss signal.
+- Added `scripts/run_checkpoint_rollout_eval.py`, a non-interactive checkpoint rollout evaluator that avoids the blocking `IPython.embed()` in `eval.py`.
+- Repaired current py310 rollout compatibility enough for a Square 5-step smoke:
+  - converted old robosuite part-controller configs such as `OSC_POSE` into robosuite 1.5 composite controller configs in `RobomimicImageRunner`;
+  - disabled shared memory in `AsyncVectorEnv` for custom observation spaces;
+  - updated `AsyncVectorEnv` reset/concatenate compatibility for gym 0.23.
+- Rollout smoke command on Square original latest checkpoint completed and wrote `test/mean_score: 0.0` for a 5-step single-test rollout. This validates env-runner execution only; it is not a method score.
+- Launched seed-43 downstream repeat matrix to test robustness while rollout evaluation is being prepared:
+  - Square: original finetune, `A_future_frozen`, `B_full_frozen`, `B_future_frozen`.
+  - ToolHang: original finetune, `A_future_frozen`, `B_full_frozen`, `B_full_finetune`.
+  - Logs: `/mnt/nfs/tingwen/intern_method_developer/tasks/ptp_encoder_probe/downstream_logs/20260519_session13_seed43/pids.tsv`.
+  - Outputs: `/mnt/3fs2/data/tingwen.du/intern_method_developer/ptp_encoder_probe/downstream_runs/20260519_session13_seed43`.
+- Latest seed-43 poll: all 8 repeat jobs are running across the 8-H200 node; Square rows are around epoch 5-6 and ToolHang rows around epoch 1.

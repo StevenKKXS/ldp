@@ -8,6 +8,6 @@
 | Status | Working |
 | Current Task | task002_flow_matching_square_toolhang |
 | PR | https://github.com/StevenKKXS/ldp/pull/1 |
-| Session | 12 |
-| Recent Progress | High-level status: both Direction A and Direction B are being advanced under an exact-PTP-compatible protocol. Encoder pretraining is complete; downstream PTP frozen/finetune ablations are running on Square and ToolHang. |
-| Handoff | Current emphasis is Direction B full-action predictive pretraining plus Direction A future-action contrastive as comparison. All 16 downstream jobs are active on `10.100.2.4:35140`; current signals are train/val diffusion losses, not rollout success rates. |
+| Session | 13 |
+| Recent Progress | Completed the first 16 exact-PTP downstream ablations. Square shows the clearest train/val loss signal for frozen pretrained encoders; ToolHang is essentially tied across methods. Added rollout eval smoke tooling and repaired current py310 env-runner compatibility enough for a 5-step Square rollout smoke to pass. |
+| Handoff | Launched 8 seed-43 downstream repeat jobs on `10.100.2.4:35140` to test whether Square frozen-encoder gains are stable. Logs: `/mnt/nfs/tingwen/intern_method_developer/tasks/ptp_encoder_probe/downstream_logs/20260519_session13_seed43/pids.tsv`; outputs: `/mnt/3fs2/data/tingwen.du/intern_method_developer/ptp_encoder_probe/downstream_runs/20260519_session13_seed43`. |
