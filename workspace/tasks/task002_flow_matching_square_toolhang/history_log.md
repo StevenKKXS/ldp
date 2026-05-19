@@ -1,6 +1,6 @@
 # History Log
 
-<!-- METADATA:SESSION=14 -->
+<!-- METADATA:SESSION=15 -->
 
 ## Session 0
 
@@ -247,3 +247,32 @@
 - Important interpretation: current downstream and rollout-smoke results are not from the target release-like RoboMimic `0.2.0` stack.
 - The documented closer release-like py39 environment is in `workspace/shared/ldp_ptp_py39_h200_environment.md`; it records Python 3.9, RoboMimic `0.2.0`, and RoboSuite source version `1.2.0`.
 - Current plan implication: keep using `10.100.2.4` results for feasibility, loss ablations, and code path debugging; use the py39/RoboMimic `0.2.0` stack for final rollout-level evidence when available.
+
+## Session 15
+
+- Clarified high-level progress beyond environment setup.
+- Direction A has progressed through:
+  - plan review;
+  - exact-PTP-compatible future-action contrastive encoder pretraining;
+  - Square and ToolHang pretraining probes;
+  - downstream exact-PTP frozen/finetune ablation.
+- Direction B has progressed through:
+  - plan review;
+  - exact-PTP-compatible action-sequence predictive encoder pretraining;
+  - full-action and future-only pretraining probes;
+  - downstream exact-PTP frozen/finetune ablation.
+- First completed 50-epoch downstream matrix result:
+  - Square original best val `0.0711`.
+  - Square `A_future_frozen` best val `0.0677`, currently the strongest loss-only row.
+  - Square `B_full_frozen` best val `0.0691`, also positive versus original.
+  - Square `B_future_frozen` best val `0.0700`, mildly positive versus original.
+  - ToolHang rows clustered around best val `0.0636-0.0646`, so no meaningful method separation appeared.
+- Rollout path status:
+  - Added non-interactive rollout eval script.
+  - Repaired py310 env-runner compatibility enough for a 5-step Square rollout smoke to complete.
+  - No formal rollout success-rate comparison has been run.
+- Current active work:
+  - Seed-43 repeat matrix is running with 8 active jobs on `10.100.2.4:35140`.
+  - Current Square repeat around epoch 35: original val `0.0756`, `A_future_frozen` `0.0731`, `B_full_frozen` `0.0731`, `B_future_frozen` `0.0735`.
+  - Current ToolHang repeat around epoch 14: original val `0.1024`, `A_future_frozen` `0.1038`, `B_full_frozen` `0.1012`, `B_full_finetune` `0.1021`; rows remain close.
+- Interpretation: the main experimental signal so far is Square frozen encoder pretraining, with Direction A and Direction B both viable in loss-only metrics. ToolHang has not shown a clear benefit.

@@ -1,6 +1,6 @@
 # Task Knowledge
 
-<!-- METADATA:SESSION=14 -->
+<!-- METADATA:SESSION=15 -->
 
 ## Working Rules
 
@@ -95,3 +95,8 @@
 - Session 14 version clarification: current `10.100.2.4:35140` experiments run in `gmp-py310` with RoboMimic `0.4.0`, RoboSuite `1.5.1`, Gym `0.23.1`, Torch `2.8.0+cu128`, and Diffusers `0.33.1`.
 - The closer release-like stack documented in `workspace/shared/ldp_ptp_py39_h200_environment.md` uses Python 3.9, RoboMimic `0.2.0`, and RoboSuite source version `1.2.0`.
 - Results from RoboMimic `0.4.0` should be described as feasibility / ablation evidence, not final release-like evidence.
+- Session 15 high-level method progress: Direction A and Direction B are both implemented, pretrained, and evaluated through first-round exact-PTP downstream loss ablations.
+- Current strongest signal is Square frozen encoder pretraining: first-round best vals were original `0.0711`, `A_future_frozen` `0.0677`, `B_full_frozen` `0.0691`, and `B_future_frozen` `0.0700`.
+- Current seed-43 repeat around epoch 35 still favors frozen pretrained encoders over original on Square by a small margin: original `0.0756`, `A_future_frozen` `0.0731`, `B_full_frozen` `0.0731`, `B_future_frozen` `0.0735`.
+- ToolHang has not shown a clear loss-only benefit; first round and seed-43 repeat are both close across methods.
+- Formal method conclusion requires either completed seed-43 repeat consistency or rollout success-rate comparison.
