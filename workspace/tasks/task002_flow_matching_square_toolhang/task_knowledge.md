@@ -1,6 +1,6 @@
 # Task Knowledge
 
-<!-- METADATA:SESSION=16 -->
+<!-- METADATA:SESSION=17 -->
 
 ## Working Rules
 
@@ -104,3 +104,6 @@
 - Plan B short name: action-sequence predictive encoder pretraining. It makes the encoder predict expert action sequences during pretraining, then discards the decoder.
 - Updated Square seed-43 repeat completed: original best val `0.0692`, Plan A `A_future_frozen` `0.0640`, Plan B `B_full_frozen` `0.0659`, Plan B `B_future_frozen` `0.0662`.
 - Current concise takeaway: on Square, frozen pretrained encoders beat original in both seeds, with Plan A frozen strongest; on ToolHang, loss-only results are still close.
+- Current active GPU resource after Session 17 check is `10.100.2.4:35140`, hostname `lg-cmc-b7r201-c08u06-h200-000067`, with 8x NVIDIA H200 GPUs. All 8 are idle with no compute apps reported.
+- Historical node `10.100.2.35:33805` should not be touched for this encoder-method task unless the user explicitly reassigns it.
+- The py39/RoboMimic `0.2.0` host `10.100.0.29:36645` is documented as a closer release-like stack, but it is not a current verified active GPU allocation in Session 17.

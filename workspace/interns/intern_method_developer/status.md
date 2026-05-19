@@ -8,6 +8,6 @@
 | Status | Working |
 | Current Task | task002_flow_matching_square_toolhang |
 | PR | https://github.com/StevenKKXS/ldp/pull/1 |
-| Session | 16 |
-| Recent Progress | Explained Plan A and Plan B in plain language with current results. Plan A is future-action contrastive encoder pretraining; Plan B is action-sequence predictive encoder pretraining. |
-| Handoff | Square seed-43 repeat completed and confirms the loss-only signal: original best val `0.0692`, Plan A `A_future_frozen` `0.0640`, Plan B `B_full_frozen` `0.0659`, Plan B `B_future_frozen` `0.0662`. ToolHang repeat is still running and remains close across rows. |
+| Session | 17 |
+| Recent Progress | Checked current GPU resources and recorded that the active encoder-method node `10.100.2.4:35140` has 8 idle H200 GPUs. The seed-43 downstream repeat jobs have all exited cleanly. |
+| Handoff | Current managed GPU resource is `10.100.2.4:35140`, hostname `lg-cmc-b7r201-c08u06-h200-000067`, with 8x NVIDIA H200 GPUs, each reporting `1 MiB / 143771 MiB` memory used and `0%` utilization. No compute processes are running. Historical node `10.100.2.35:33805` was not touched per user instruction. |

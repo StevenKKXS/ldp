@@ -1,6 +1,6 @@
 # History Log
 
-<!-- METADATA:SESSION=16 -->
+<!-- METADATA:SESSION=17 -->
 
 ## Session 0
 
@@ -298,3 +298,27 @@
   - Plan B full frozen is also consistently better than original on Square, but weaker than Plan A frozen in the two Square seeds.
   - ToolHang has no clear method signal yet.
   - No formal rollout success-rate comparison has been completed.
+
+## Session 17
+
+- Checked the current GPU resource state for the active encoder-method allocation.
+- Active managed node:
+  - SSH: `10.100.2.4:35140`
+  - Hostname: `lg-cmc-b7r201-c08u06-h200-000067`
+  - GPUs: 8x NVIDIA H200
+  - Per-GPU memory: `143771 MiB`
+  - Current usage: each GPU reports `1 MiB / 143771 MiB` and `0%` utilization.
+  - Compute apps: none reported by `nvidia-smi`.
+- All 8 seed-43 downstream repeat jobs under `/mnt/nfs/tingwen/intern_method_developer/tasks/ptp_encoder_probe/downstream_logs/20260519_session13_seed43` have exited cleanly.
+- Final seed-43 last validation losses from the poll:
+  - `square_original_finetune_s43`: epoch 49, val `0.07197584211826324`.
+  - `square_A_future_frozen_s43`: epoch 49, val `0.0668635219335556`.
+  - `square_B_full_frozen_s43`: epoch 49, val `0.06879491358995438`.
+  - `square_B_future_frozen_s43`: epoch 49, val `0.06895673274993896`.
+  - `tool_hang_original_finetune_s43`: epoch 49, val `0.07313244789838791`.
+  - `tool_hang_A_future_frozen_s43`: epoch 49, val `0.07459280639886856`.
+  - `tool_hang_B_full_frozen_s43`: epoch 49, val `0.07380388677120209`.
+  - `tool_hang_B_full_finetune_s43`: epoch 49, val `0.07351262867450714`.
+- Resource boundary:
+  - Historical flow-matching node `10.100.2.35:33805` was not touched because the user instructed not to use the earlier GPU.
+  - Documented py39/RoboMimic `0.2.0` host `10.100.0.29:36645` remains a recorded release-like environment reference, not an active allocation verified in this session.
