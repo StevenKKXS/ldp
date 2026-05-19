@@ -1,6 +1,6 @@
 # Task Knowledge
 
-<!-- METADATA:SESSION=13 -->
+<!-- METADATA:SESSION=14 -->
 
 ## Working Rules
 
@@ -92,3 +92,6 @@
   - accept gym 0.23 reset kwargs and use current `concatenate(space, items, out)` argument order.
 - A 5-step Square rollout smoke using `scripts/run_checkpoint_rollout_eval.py` passed; it validates env-runner execution only.
 - Session 13 seed-43 repeat matrix is running on 8 GPUs to test whether the Square frozen-encoder loss signal survives a different training seed.
+- Session 14 version clarification: current `10.100.2.4:35140` experiments run in `gmp-py310` with RoboMimic `0.4.0`, RoboSuite `1.5.1`, Gym `0.23.1`, Torch `2.8.0+cu128`, and Diffusers `0.33.1`.
+- The closer release-like stack documented in `workspace/shared/ldp_ptp_py39_h200_environment.md` uses Python 3.9, RoboMimic `0.2.0`, and RoboSuite source version `1.2.0`.
+- Results from RoboMimic `0.4.0` should be described as feasibility / ablation evidence, not final release-like evidence.

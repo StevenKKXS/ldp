@@ -8,6 +8,6 @@
 | Status | Working |
 | Current Task | task002_flow_matching_square_toolhang |
 | PR | https://github.com/StevenKKXS/ldp/pull/1 |
-| Session | 13 |
-| Recent Progress | Completed the first 16 exact-PTP downstream ablations. Square shows the clearest train/val loss signal for frozen pretrained encoders; ToolHang is essentially tied across methods. Added rollout eval smoke tooling and repaired current py310 env-runner compatibility enough for a 5-step Square rollout smoke to pass. |
-| Handoff | Launched 8 seed-43 downstream repeat jobs on `10.100.2.4:35140` to test whether Square frozen-encoder gains are stable. Logs: `/mnt/nfs/tingwen/intern_method_developer/tasks/ptp_encoder_probe/downstream_logs/20260519_session13_seed43/pids.tsv`; outputs: `/mnt/3fs2/data/tingwen.du/intern_method_developer/ptp_encoder_probe/downstream_runs/20260519_session13_seed43`. |
+| Session | 14 |
+| Recent Progress | Answered environment-version question. Current `10.100.2.4:35140` experiments use `gmp-py310` with RoboMimic `0.4.0`, RoboSuite `1.5.1`, Gym `0.23.1`, Torch `2.8.0+cu128`, and Diffusers `0.33.1`. |
+| Handoff | Treat current py310/RoboMimic `0.4.0` results as feasibility and ablation signals. The closer release-like environment documented in `workspace/shared/ldp_ptp_py39_h200_environment.md` uses Python 3.9 with RoboMimic `0.2.0` and RoboSuite source version `1.2.0`. |

@@ -1,6 +1,6 @@
 # History Log
 
-<!-- METADATA:SESSION=13 -->
+<!-- METADATA:SESSION=14 -->
 
 ## Session 0
 
@@ -233,3 +233,17 @@
   - Logs: `/mnt/nfs/tingwen/intern_method_developer/tasks/ptp_encoder_probe/downstream_logs/20260519_session13_seed43/pids.tsv`.
   - Outputs: `/mnt/3fs2/data/tingwen.du/intern_method_developer/ptp_encoder_probe/downstream_runs/20260519_session13_seed43`.
 - Latest seed-43 poll: all 8 repeat jobs are running across the 8-H200 node; Square rows are around epoch 5-6 and ToolHang rows around epoch 1.
+
+## Session 14
+
+- Checked and clarified RoboMimic / environment versions for the user.
+- Current active GPU node `10.100.2.4:35140` uses env `/mnt/nfs/tingwen/ldp/envs/gmp_released_ckpt/miniforge3/envs/gmp-py310`.
+- Confirmed current env versions:
+  - RoboMimic `0.4.0`
+  - RoboSuite `1.5.1`
+  - Gym `0.23.1`
+  - Torch `2.8.0+cu128`
+  - Diffusers `0.33.1`
+- Important interpretation: current downstream and rollout-smoke results are not from the target release-like RoboMimic `0.2.0` stack.
+- The documented closer release-like py39 environment is in `workspace/shared/ldp_ptp_py39_h200_environment.md`; it records Python 3.9, RoboMimic `0.2.0`, and RoboSuite source version `1.2.0`.
+- Current plan implication: keep using `10.100.2.4` results for feasibility, loss ablations, and code path debugging; use the py39/RoboMimic `0.2.0` stack for final rollout-level evidence when available.
