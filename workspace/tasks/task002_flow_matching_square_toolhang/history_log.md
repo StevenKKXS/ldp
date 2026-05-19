@@ -1,6 +1,6 @@
 # History Log
 
-<!-- METADATA:SESSION=14 -->
+<!-- METADATA:SESSION=15 -->
 
 ## Session 0
 
@@ -178,3 +178,12 @@
   - ToolHang h10: `0/10`, mean score `0.0`, output `/mnt/nfs/tingwen/intern_method_developer/tasks/task002_flow_matching_square_toolhang/outputs/rollout_toolhang_eval_py39_rm020_20260519_122543/tool_hang_h10_n10/eval_log.json`.
   - ToolHang action8: `0/10`, mean score `0.0`, output `/mnt/nfs/tingwen/intern_method_developer/tasks/task002_flow_matching_square_toolhang/outputs/rollout_toolhang_eval_py39_rm020_20260519_122543/tool_hang_action8_n10/eval_log.json`.
 - After rollout completion, `nvidia-smi` showed GPUs 0-3 at 1 MiB used and 0% utilization; no eval process remained.
+
+## Session 15
+
+- User asked whether original PTP normalizes action and proprio.
+- Checked `diffusion_policy/dataset/robomimic_replay_image_dataset.py`, `diffusion_policy/common/normalize_util.py`, `diffusion_policy/policy/diffusion_transformer_hybrid_image_policy.py`, and original transformer configs for Square, Transport, and ALOHA.
+- Confirmed the original PTP image policy fits a dataset normalizer in the workspace, loads it into both model and EMA model, normalizes observations/actions during training, normalizes observations during rollout, and unnormalizes predicted actions before environment stepping.
+- Confirmed robomimic `abs_action: true` configs normalize only absolute action position dimensions to `[-1,1]`; non-position action dimensions are identity. Dual-arm transport applies the same rule per arm.
+- Confirmed robomimic proprio is field-wise: `robot*_eef_pos` and `robot*_gripper_qpos` are range-normalized to `[-1,1]`, while `robot*_eef_quat` is identity because it is already bounded.
+- Confirmed `abs_action: false` configs use identity action normalization because actions are treated as already normalized.

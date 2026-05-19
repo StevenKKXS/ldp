@@ -1,6 +1,6 @@
 # Task Knowledge
 
-<!-- METADATA:SESSION=14 -->
+<!-- METADATA:SESSION=15 -->
 
 ## Working Rules
 
@@ -58,3 +58,6 @@
 - `eval_flow_matching_rollout.py` is the reward-only evaluator used for py39 tests; it loads the workspace checkpoint, selects `ema_model` by default, overrides rollout counts, and writes `eval_log.json`.
 - Robomimic 0.2.0 compatibility fix: `diffusion_transformer_hybrid_image_policy.py` must not unconditionally import `robomimic.models.obs_core`; use `base_nets.CropRandomizer` first and fall back to `obs_core.CropRandomizer` only when available.
 - Current py39 / robomimic 0.2.0 FM rollout results from `formal_train_20260518_143331/latest.ckpt`: Square h10 `7/10`, Square action8 `4/10`, ToolHang h10 `0/10`, ToolHang action8 `0/10`.
+- Original PTP normalization answer: the workspace calls `dataset.get_normalizer()` and installs it into model/EMA; policy training normalizes `batch['obs']` and `batch['action']`, rollout normalizes obs and unnormalizes predicted actions.
+- For robomimic `abs_action: true`, action normalization is partial: first 3 EEF position dimensions are range-normalized to `[-1,1]`; remaining rotation/gripper dimensions are identity. For dual-arm actions, the first 3 position dimensions of each arm are range-normalized and the remaining dimensions are identity.
+- For proprio in original robomimic PTP configs, `robot*_eef_pos` and `robot*_gripper_qpos` are range-normalized to `[-1,1]`; `robot*_eef_quat` is identity. This is not a uniform z-score normalizer.
