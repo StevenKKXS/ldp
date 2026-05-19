@@ -1,6 +1,6 @@
 # History Log
 
-<!-- METADATA:SESSION=13 -->
+<!-- METADATA:SESSION=14 -->
 
 ## Session 0
 
@@ -159,3 +159,22 @@
 - Recorded the environment rule in `workspace/interns/intern_ldp_explorer/knowledge.md`, `workspace/ERROR_BOOK.md`, `workspace/shared/ldp_ptp_py39_h200_environment.md`, task knowledge, and encoder experiment docs.
 - Marked the current `gmp-py310` / `robomimic 0.4.0` FM runs as version-confounded for PTP-data reproduction; before launching any new trusted training or rollout, rebuild or sync a verified Python 3.9 + `robomimic==0.2.0` environment from CPU/common storage.
 - Stopped the remaining `formal_train_20260518_143331` `gmp-py310` training processes on `10.100.2.35:33805`; after termination, `nvidia-smi` showed GPUs 0-3 at 1 MiB used and 0% utilization.
+
+## Session 14
+
+- Built a reusable NFS conda env at `/mnt/nfs/tingwen/ldp/envs/ptp_ldp_py39_rm020` from the CPU/common side and verified it on GPU node `10.100.2.35:33805`.
+- Verified core versions on the GPU node: Python `3.9.23`, `robomimic 0.2.0`, `robosuite 1.2.0`, `mujoco-py 2.1.2.14`, `gym 0.21.0`, `torch 2.5.1`, CUDA available on H200.
+- Used MuJoCo runtime `/mnt/3fs2/data/tingwen.du/intern_method_developer/task006_eval_official_robomimic_square_bcrnn/runtimes/mujoco210` with `MUJOCO_GL=egl` and `PYOPENGL_PLATFORM=egl`.
+- Installed GPU-node system render/build deps from the internal apt mirror so `mujoco_py` could compile under py39.
+- Patched `diffusion_policy/policy/diffusion_transformer_hybrid_image_policy.py` so `CropRandomizer` lookup works with both robomimic 0.2.0 (`base_nets`) and robomimic 0.4.0 (`obs_core`).
+- Added `eval_flow_matching_rollout.py`, a reward-only rollout evaluator that loads the current workspace checkpoint and avoids the standard runner's action-HSIC / wandb logging path.
+- Smoke checks passed:
+  - imported FM policy, RobomimicImageRunner, and RobomimicReplayImageDataset under py39 / robomimic 0.2.0;
+  - `square_h10` 1-seed smoke completed in NutAssemblySquare;
+  - `tool_hang_h10` 1-seed smoke completed in ToolHang.
+- Ran current `formal_train_20260518_143331/latest.ckpt` rollouts with `ema_model`, reward-only, no videos:
+  - Square h10: `7/10`, mean score `0.7`, output `/mnt/nfs/tingwen/intern_method_developer/tasks/task002_flow_matching_square_toolhang/outputs/rollout_square_eval_py39_rm020_20260519_122543/square_h10_n10/eval_log.json`.
+  - Square action8: `4/10`, mean score `0.4`, output `/mnt/nfs/tingwen/intern_method_developer/tasks/task002_flow_matching_square_toolhang/outputs/rollout_square_eval_py39_rm020_20260519_122543/square_action8_n10/eval_log.json`.
+  - ToolHang h10: `0/10`, mean score `0.0`, output `/mnt/nfs/tingwen/intern_method_developer/tasks/task002_flow_matching_square_toolhang/outputs/rollout_toolhang_eval_py39_rm020_20260519_122543/tool_hang_h10_n10/eval_log.json`.
+  - ToolHang action8: `0/10`, mean score `0.0`, output `/mnt/nfs/tingwen/intern_method_developer/tasks/task002_flow_matching_square_toolhang/outputs/rollout_toolhang_eval_py39_rm020_20260519_122543/tool_hang_action8_n10/eval_log.json`.
+- After rollout completion, `nvidia-smi` showed GPUs 0-3 at 1 MiB used and 0% utilization; no eval process remained.

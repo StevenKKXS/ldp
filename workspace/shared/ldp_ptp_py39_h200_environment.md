@@ -14,6 +14,29 @@ Session 13 check on `2026-05-19T11:52:47Z`:
 - The older recorded host `10.100.0.29:36645` refused SSH connection and should not be treated as available.
 - No ready py39 / `robomimic==0.2.0` NFS environment was found under `/mnt/nfs/tingwen/ldp/envs`; before any new trusted run on the current GPU node, recreate or sync this environment from the CPU/common side and verify `robomimic.__version__ == "0.2.0"`.
 
+Session 14 current NFS environment on `2026-05-19`:
+
+- Env path: `/mnt/nfs/tingwen/ldp/envs/ptp_ldp_py39_rm020`
+- Verified GPU node: `10.100.2.35:33805`
+- Python: `3.9.23`
+- RoboMimic: `0.2.0`
+- RoboSuite: `1.2.0`, pinned `cheng-chi/robosuite@277ab9588ad7a4f4b55cf75508b44aa67ec171f0`
+- Torch: `2.5.1`
+- Gym: `0.21.0`
+- MuJoCo runtime: `/mnt/3fs2/data/tingwen.du/intern_method_developer/task006_eval_official_robomimic_square_bcrnn/runtimes/mujoco210`
+
+Activation on GPU nodes with `/mnt/nfs` and `/mnt/3fs2` mounted:
+
+```bash
+ENV=/mnt/nfs/tingwen/ldp/envs/ptp_ldp_py39_rm020
+MUJOCO210=/mnt/3fs2/data/tingwen.du/intern_method_developer/task006_eval_official_robomimic_square_bcrnn/runtimes/mujoco210
+source "$ENV/bin/activate"
+export MUJOCO_PY_MUJOCO_PATH="$MUJOCO210"
+export LD_LIBRARY_PATH="$MUJOCO210/bin:$ENV/lib:${LD_LIBRARY_PATH:-}"
+export MUJOCO_GL=egl
+export PYOPENGL_PLATFORM=egl
+```
+
 ## Ready-To-Use Environment
 
 Previously verified host:

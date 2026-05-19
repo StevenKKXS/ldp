@@ -17,17 +17,18 @@ from robomimic.algo import algo_factory
 from robomimic.algo.algo import PolicyAlgo
 import robomimic.utils.obs_utils as ObsUtils
 import robomimic.models.base_nets as rmbn
-import robomimic.models.obs_core as rmoc
+try:
+    import robomimic.models.obs_core as rmoc
+except ImportError:
+    rmoc = None
 import diffusion_policy.model.vision.crop_randomizer as dmvc
 from diffusion_policy.common.pytorch_util import dict_apply, replace_submodules
 import wandb
 import numpy as np
 
-RobomimicCropRandomizer = getattr(
-    rmbn,
-    'CropRandomizer',
-    getattr(rmoc, 'CropRandomizer', None)
-)
+RobomimicCropRandomizer = getattr(rmbn, 'CropRandomizer', None)
+if RobomimicCropRandomizer is None and rmoc is not None:
+    RobomimicCropRandomizer = getattr(rmoc, 'CropRandomizer', None)
 
 
 def dct_2d(x):

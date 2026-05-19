@@ -1,6 +1,6 @@
 # Task Knowledge
 
-<!-- METADATA:SESSION=13 -->
+<!-- METADATA:SESSION=14 -->
 
 ## Working Rules
 
@@ -53,3 +53,8 @@
 - Treat the current FM `gmp-py310` / `robomimic 0.4.0` training and rollout results as version-confounded; do not use them as trusted PTP-data evidence.
 - Session 13 environment check: current GPU node `10.100.2.35:33805` lacks `/root/ptp_ldp_py39/bin/python`; old py39 note host `10.100.0.29:36645` is no longer reachable; rebuild or sync a py39 / `robomimic==0.2.0` env from CPU/common storage before the next trusted run.
 - Session 13 stopped the `formal_train_20260518_143331` `gmp-py310` FM jobs on `10.100.2.35:33805`; existing checkpoints/logs remain on NFS, but the run should be treated as noncompliant with the py39 / robomimic 0.2.0 requirement.
+- Session 14 created and verified NFS env `/mnt/nfs/tingwen/ldp/envs/ptp_ldp_py39_rm020` for current GPU node `10.100.2.35:33805`; verified Python `3.9.23`, `robomimic 0.2.0`, `robosuite 1.2.0`, `mujoco-py 2.1.2.14`, `gym 0.21.0`, `torch 2.5.1`.
+- Required py39 rollout environment exports: `MUJOCO_PY_MUJOCO_PATH=/mnt/3fs2/data/tingwen.du/intern_method_developer/task006_eval_official_robomimic_square_bcrnn/runtimes/mujoco210`, `LD_LIBRARY_PATH=$MUJOCO_PY_MUJOCO_PATH/bin:/mnt/nfs/tingwen/ldp/envs/ptp_ldp_py39_rm020/lib:$LD_LIBRARY_PATH`, `MUJOCO_GL=egl`, `PYOPENGL_PLATFORM=egl`, and `PYTHONPATH=/mnt/nfs/tingwen/intern_method_developer/repos/ldp_flow_matching:$PYTHONPATH`.
+- `eval_flow_matching_rollout.py` is the reward-only evaluator used for py39 tests; it loads the workspace checkpoint, selects `ema_model` by default, overrides rollout counts, and writes `eval_log.json`.
+- Robomimic 0.2.0 compatibility fix: `diffusion_transformer_hybrid_image_policy.py` must not unconditionally import `robomimic.models.obs_core`; use `base_nets.CropRandomizer` first and fall back to `obs_core.CropRandomizer` only when available.
+- Current py39 / robomimic 0.2.0 FM rollout results from `formal_train_20260518_143331/latest.ckpt`: Square h10 `7/10`, Square action8 `4/10`, ToolHang h10 `0/10`, ToolHang action8 `0/10`.

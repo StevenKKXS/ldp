@@ -1,6 +1,6 @@
 # intern_ldp_explorer - 个人知识库
 
-<!-- METADATA:SESSION=13 -->
+<!-- METADATA:SESSION=14 -->
 
 ---
 
@@ -12,3 +12,4 @@
 - `gmp-py310` / `robomimic 0.4.0` 只能作为明确标注的版本消融；不能作为可信的 PTP 数据复现实验环境。
 - 新 task 开始前先读 `workspace/shared/ldp_ptp_py39_h200_environment.md`，并在启动训练或 rollout 前记录 `python executable`、`robomimic.__version__`、`robomimic.__file__`。
 - Session 13 检查结果：当前 FM GPU 节点 `10.100.2.35:33805` 没有 `/root/ptp_ldp_py39/bin/python`；旧记录节点 `10.100.0.29:36645` 已不可达；在当前节点继续可信实验前需要从 CPU/公共侧重建或同步 py39 / `robomimic==0.2.0` 环境。
+- Session 14 已创建当前可用 NFS 环境 `/mnt/nfs/tingwen/ldp/envs/ptp_ldp_py39_rm020`，在 `10.100.2.35:33805` 验证为 Python `3.9.23` + `robomimic 0.2.0`；MuJoCo runtime 使用 `/mnt/3fs2/data/tingwen.du/intern_method_developer/task006_eval_official_robomimic_square_bcrnn/runtimes/mujoco210`。
