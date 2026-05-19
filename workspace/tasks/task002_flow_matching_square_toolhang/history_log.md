@@ -1,6 +1,6 @@
 # History Log
 
-<!-- METADATA:SESSION=17 -->
+<!-- METADATA:SESSION=18 -->
 
 ## Session 0
 
@@ -206,3 +206,16 @@
 - Confirmed policy-side code then normalizes obs and calls `self.obs_encoder(this_nobs)` during training and rollout.
 - Confirmed embedding-cache mode is separate: if `use_embed_if_present=True` and the replay buffer contains `embedding`, the sampler loads only `embedding` and `action`, and `__getitem__` returns `obs['embedding']` instead of raw image/proprio keys.
 - Confirmed the normalizer intentionally skips `embedding`, and policy uses `batch['obs']['embedding']` directly as condition when embedding mode is active.
+
+## Session 18
+
+- User asked current Flow Matching progress and whether it can be stopped.
+- Checked GPU node `10.100.2.35:33805`: all four H200 GPUs were idle at 1 MiB used and 0% utilization, with no `flow_matching`, `train.py`, `eval_flow_matching`, `diffusion_policy`, or Python training/eval process found.
+- Checked `formal_train_20260518_143331` logs:
+  - `square_h10` latest log line at epoch `788`, global step `973291`, train loss `0.0223`;
+  - `square_action8` latest log line at epoch `786`, global step `970838`, train loss `0.0100`;
+  - `tool_hang_h10` latest log line at epoch `115`, global step `168850`, train loss `0.0324`;
+  - `tool_hang_action8` latest log line at epoch `115`, global step `168391`, train loss `0.0319`.
+- Confirmed latest checkpoints exist for all four formal runs under `formal_train_20260518_143331/*/checkpoints/latest.ckpt`.
+- Reconfirmed py39 / `robomimic 0.2.0` reward-only rollout results from current checkpoints: Square h10 `7/10`, Square action8 `4/10`, ToolHang h10 `0/10`, ToolHang action8 `0/10`.
+- Conclusion recorded for handoff: the current FM GPU work can stay stopped and the GPU can be released; if continuing FM seriously, restart clean training in the py39 / `robomimic 0.2.0` environment rather than extending the old gmp-py310 / `robomimic 0.4.0` run.

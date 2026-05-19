@@ -8,5 +8,5 @@
 | Status | Working |
 | Current Task | task002_flow_matching_square_toolhang |
 | PR | https://github.com/StevenKKXS/ldp/pull/1 |
-| Session | 17 |
-| Recent Progress | Confirmed PTP dataloader observation format: normal image configs return raw image/proprio tensors, and the policy obs_encoder encodes them during forward; only embedding-cache configs with use_embed_if_present=true and an embedding key return precomputed embeddings. |
+| Session | 18 |
+| Recent Progress | Checked current Flow Matching status: GPU node 10.100.2.35:33805 is idle with no FM train/eval processes; prior gmp-py310 formal runs stopped around Square epoch 786-788 and ToolHang epoch 115, with py39 rollout results Square h10 7/10, Square action8 4/10, ToolHang h10/action8 0/10. |

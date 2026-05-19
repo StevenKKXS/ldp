@@ -1,6 +1,6 @@
 # Task Knowledge
 
-<!-- METADATA:SESSION=17 -->
+<!-- METADATA:SESSION=18 -->
 
 ## Working Rules
 
@@ -65,3 +65,4 @@
 - Current policy assumes chronological order. Reversing obs order to current-to-history instead of history-to-current is mechanically easy but changes positional semantics and should be treated as an architecture/training change.
 - PTP dataloader obs format: default image configs return raw image/proprio tensors, not encoder outputs. `DiffusionTransformerHybridImagePolicy` runs `self.obs_encoder(...)` inside training and rollout.
 - Embedding-cache exception: when `use_embed_if_present=True` and replay data has an `embedding` key, `RobomimicReplayImageDataset` returns `obs['embedding']` plus action only; the normalizer skips `embedding`, and the policy uses the embedding directly as condition.
+- Session 18 FM stop decision: no FM process is currently running on `10.100.2.35:33805`; current checkpoints already have py39 rollout measurements. It is reasonable to release the GPU. Further FM improvement should restart clean py39 / `robomimic 0.2.0` training instead of resuming the old gmp-py310 run.
