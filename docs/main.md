@@ -44,6 +44,8 @@
 
 ## 当前约束
 
+- PTP 数据相关实验硬约束：必须使用 Python 3.9 + `robomimic==0.2.0`。`gmp-py310` / `robomimic 0.4.0` 的结果只能当作版本消融，不能作为可信 PTP claim 复现结果。
+- 新实验启动前必须记录 `sys.executable`、`robomimic.__version__`、`robomimic.__file__`，并确认版本为 `0.2.0`。
 - 当前只有启动规则和方向草案，没有实验结果。
 - 不允许声称 Direction A 或 Direction B 已经有效。
 - GPU 资源在用户明确分配前不申请、不使用。

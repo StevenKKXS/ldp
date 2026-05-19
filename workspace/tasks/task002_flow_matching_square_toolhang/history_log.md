@@ -1,6 +1,6 @@
 # History Log
 
-<!-- METADATA:SESSION=12 -->
+<!-- METADATA:SESSION=13 -->
 
 ## Session 0
 
@@ -149,3 +149,13 @@
 - Local default Python in `/work-agents/intern_ldp_explorer` does not have `robomimic` installed.
 - The NFS/GPU environment used for training and rollout is `/mnt/nfs/tingwen/ldp/envs/gmp_released_ckpt/miniforge3/envs/gmp-py310/bin/python`.
 - That active environment imports `robomimic 0.4.0` from `/mnt/nfs/tingwen/ldp/small_files/intern_ldp_explorer/vendor/gmp/gated-memory-policy/mujoco-env/third_party/robomimic/robomimic/__init__.py`.
+
+## Session 13
+
+- User required switching future PTP-data work back to the native PTP-style Python 3.9 environment with `robomimic==0.2.0`, because the PTP datasets were prepared for that version family.
+- Checked current FM GPU node `10.100.2.35:33805`: `/root/ptp_ldp_py39/bin/python` is missing.
+- Checked old py39 note host `10.100.0.29:36645`: SSH connection was refused, so the old ready-env record is stale.
+- Searched NFS/3FS paths for a ready py39 / `robomimic==0.2.0` environment; found prior py39 logs/scripts and outputs, but no ready reusable env under `/mnt/nfs/tingwen/ldp/envs`.
+- Recorded the environment rule in `workspace/interns/intern_ldp_explorer/knowledge.md`, `workspace/ERROR_BOOK.md`, `workspace/shared/ldp_ptp_py39_h200_environment.md`, task knowledge, and encoder experiment docs.
+- Marked the current `gmp-py310` / `robomimic 0.4.0` FM runs as version-confounded for PTP-data reproduction; before launching any new trusted training or rollout, rebuild or sync a verified Python 3.9 + `robomimic==0.2.0` environment from CPU/common storage.
+- Stopped the remaining `formal_train_20260518_143331` `gmp-py310` training processes on `10.100.2.35:33805`; after termination, `nvidia-smi` showed GPUs 0-3 at 1 MiB used and 0% utilization.

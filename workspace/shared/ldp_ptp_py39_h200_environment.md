@@ -2,9 +2,21 @@
 
 This note records a reusable PTP-style environment for `long-context-dp/ldp` on H200 GPU machines. It is intended for interns who need a closer upstream-version environment than the Python 3.12 / RoboMimic 0.3 compatibility stack.
 
+## Mandatory Rule For PTP-Data Runs
+
+For PTP reproduction, PTP encoder pretraining, downstream PTP/DP comparison on the PTP-preprocessed RoboMimic datasets, and rollout evaluation meant to compare with PTP claims, use a Python 3.9 environment with `robomimic==0.2.0`.
+
+Do not use `gmp-py310` / `robomimic 0.4.0` for trusted PTP-data training or rollout unless the run is explicitly labeled as a version-ablation. Results produced under `robomimic 0.4.0` are version-confounded for this project.
+
+Session 13 check on `2026-05-19T11:52:47Z`:
+
+- Current FM GPU node `10.100.2.35:33805` does not have `/root/ptp_ldp_py39/bin/python`.
+- The older recorded host `10.100.0.29:36645` refused SSH connection and should not be treated as available.
+- No ready py39 / `robomimic==0.2.0` NFS environment was found under `/mnt/nfs/tingwen/ldp/envs`; before any new trusted run on the current GPU node, recreate or sync this environment from the CPU/common side and verify `robomimic.__version__ == "0.2.0"`.
+
 ## Ready-To-Use Environment
 
-Current verified host:
+Previously verified host:
 
 - SSH target: `10.100.0.29`
 - SSH port: `36645`
@@ -234,7 +246,7 @@ Additional smoke already passed on `10.100.0.29:36645`:
 
 For reproduction experiments that need the PTP-style stack:
 
-1. Use `/root/ptp_ldp_py39` on `10.100.0.29:36645`.
+1. Use `/root/ptp_ldp_py39` only on a node where it has been verified with `robomimic==0.2.0`; the older `10.100.0.29:36645` record is stale as of Session 13.
 2. Use the training checkout branch `intern_ldp_explorer/task001_ptp_py39_rerun`.
 3. Record `git status`, venv package versions, and the output root before launch.
 4. Treat results as H200-adapted PTP-style results, not exact upstream conda results, because Torch and `av` are adapted for the current container.

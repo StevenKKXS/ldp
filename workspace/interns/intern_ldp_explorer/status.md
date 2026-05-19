@@ -8,5 +8,5 @@
 | Status | Working |
 | Current Task | task002_flow_matching_square_toolhang |
 | PR | https://github.com/StevenKKXS/ldp/pull/1 |
-| Session | 12 |
-| Recent Progress | Checked robomimic version: the active NFS/GPU gmp-py310 environment imports robomimic 0.4.0 from the GMP vendor checkout; local default Python has no robomimic installed. |
+| Session | 13 |
+| Recent Progress | Recorded the mandatory Python 3.9 + robomimic 0.2.0 rule for PTP-data runs, stopped the noncompliant gmp-py310 formal FM jobs, and confirmed current GPU node 10.100.2.35:33805 needs a verified py39/rm0.2.0 env before trusted training or rollout. |

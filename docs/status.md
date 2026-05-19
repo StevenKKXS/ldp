@@ -1,6 +1,6 @@
 # 全局实验状态
 
-Last updated: 2026-05-18
+Last updated: 2026-05-19
 
 ## 当前 Active Plan
 
@@ -26,6 +26,8 @@ Last updated: 2026-05-18
 
 ## 最新关键结论
 
+- PTP 数据相关训练、encoder pretraining 对比、rollout 复现必须使用 Python 3.9 + `robomimic==0.2.0`；`gmp-py310` / `robomimic 0.4.0` 结果不可作为可信 PTP-data 复现证据。
+- 当前 FM GPU 节点 `10.100.2.35:33805` 尚未发现可用 `/root/ptp_ldp_py39`；继续可信实验前需要从 CPU/公共侧重建或同步并验证 py39 / `robomimic==0.2.0` 环境。
 - 尚未开始实验。
 - Direction A 已保存详细 plan 并完成初步 review，但没有实验结果。
 - Direction A review 已根据用户澄清更新: first pass 优先保持 PTP policy 结构不变，只做 encoder pretraining。

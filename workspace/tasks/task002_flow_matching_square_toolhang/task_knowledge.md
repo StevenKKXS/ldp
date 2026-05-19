@@ -1,6 +1,6 @@
 # Task Knowledge
 
-<!-- METADATA:SESSION=12 -->
+<!-- METADATA:SESSION=13 -->
 
 ## Working Rules
 
@@ -49,3 +49,7 @@
 - Current saved Square FM `latest.ckpt` rollout result at `2026-05-19T03:21:00+00:00`: `square_h10` 10 test seeds `0/10`, `square_action8` 10 test seeds `0/10`.
 - Standard RobomimicImageRunner reward aggregation works for `square_h10`, but its extra online action-HSIC path can fail on `square_action8` ragged chunks; use reward-only rollout for score-only checks or patch the runner before relying on action-HSIC logs.
 - Active NFS/GPU `gmp-py310` imports `robomimic 0.4.0` from the GMP vendor checkout, not robomimic 0.2.0.
+- User requires all future PTP-data training, encoder-pretraining comparisons, and rollout intended for PTP claim reproduction to use Python 3.9 + `robomimic==0.2.0`.
+- Treat the current FM `gmp-py310` / `robomimic 0.4.0` training and rollout results as version-confounded; do not use them as trusted PTP-data evidence.
+- Session 13 environment check: current GPU node `10.100.2.35:33805` lacks `/root/ptp_ldp_py39/bin/python`; old py39 note host `10.100.0.29:36645` is no longer reachable; rebuild or sync a py39 / `robomimic==0.2.0` env from CPU/common storage before the next trusted run.
+- Session 13 stopped the `formal_train_20260518_143331` `gmp-py310` FM jobs on `10.100.2.35:33805`; existing checkpoints/logs remain on NFS, but the run should be treated as noncompliant with the py39 / robomimic 0.2.0 requirement.
