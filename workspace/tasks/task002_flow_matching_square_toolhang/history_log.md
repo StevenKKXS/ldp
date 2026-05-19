@@ -1,6 +1,6 @@
 # History Log
 
-<!-- METADATA:SESSION=21 -->
+<!-- METADATA:SESSION=22 -->
 
 ## Session 0
 
@@ -246,3 +246,21 @@
 - Corrected the dataset slicing plan: for `H=P=16`, use sequence offsets `0...23`, obs offsets `1...16`, past action offsets `0...15`, and future action offsets `16...23`, so current action is not included in the past target.
 - Planned to train the robomimic obs encoder together with the BehaviorTranslator for Stage 1, because the default dataloader returns raw images/proprio and freezing a random obs encoder would not test the intended representation.
 - Planned optimization: smoke with batch `8` and max `20` train steps, then first Square run with batch `32`, AdamW lr `1e-4`, weight decay `1e-4`, grad clip `1.0`, `20` epochs, best checkpoint by `val/future_l1`.
+
+## Session 22
+
+- User requested three Stage 1 translator objectives for comparison: obs history -> past actions, obs history -> future actions, and obs history -> past+future actions.
+- Implemented `diffusion_policy/dataset/behavior_translation_dataset.py` with explicit anchor slicing and edge-padding-compatible sampling over the existing robomimic replay dataset.
+- Implemented `diffusion_policy/model/behavior_translator.py` with obs projection, causal Transformer obs encoder, action-query Transformer decoder, sketch action head, and context projector.
+- Implemented `diffusion_policy/workspace/train_behavior_translator_workspace.py` to train the robomimic obs encoder jointly with the BehaviorTranslator, normalize actions with the PTP dataset normalizer, log eval metrics, save `latest`/`best`, and save periodic checkpoints.
+- Added three Square configs:
+  - `experiment_configs/square/behavior_translator_square_past.yaml`
+  - `experiment_configs/square/behavior_translator_square_future.yaml`
+  - `experiment_configs/square/behavior_translator_square_past_future.yaml`
+- Set all three configs to `1000` epochs, batch `32`, AdamW lr `1e-4`, checkpoint every `50` epochs, and monitor `val/loss_total`.
+- Patched `RobomimicReplayImageDataset` so the optional `expert_actions_corr` MLP diagnostic is skipped unless explicitly requested and CUDA is available; this makes CPU-side dataset smoke possible.
+- Verification passed:
+  - `py_compile` for new dataset/model/workspace and patched robomimic dataset;
+  - Hydra `--cfg job` parse for all three configs;
+  - dataset shape smoke for Square: obs history length `16`, `act_past` `[16,10]`, `act_future` `[8,10]`;
+  - CPU one-step forward/backward smoke for `past_future`, which wrote `latest.ckpt`, `best.ckpt`, `logs.json.txt`, `metrics.csv`, and `env.json`.

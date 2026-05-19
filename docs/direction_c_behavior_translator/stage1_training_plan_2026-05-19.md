@@ -22,19 +22,28 @@ The downstream go/no-go is still Stage 2a:
 frozen pretrained translator context > frozen random translator context
 ```
 
-## 1. First Run
+## 1. First Run Set
 
-Start with one main translator run:
+Start with three Square translator objectives that share the same architecture and windowing:
+
+| Experiment ID | Target | Purpose |
+|---|---|---|
+| `behavior_translator_square_past` | `a[t-16:t-1]` | Checks whether obs history can reconstruct historical behavior |
+| `behavior_translator_square_future` | `a[t:t+7]` | Checks direct future translation |
+| `behavior_translator_square_past_future` | both | Main representation objective |
+
+Shared setup:
 
 | Field | Value |
 |---|---|
-| Experiment ID | `C1-T3-square-history-past-future` |
 | Task | Square `mh` |
-| Dataset | `data/robomimic/datasets/square/mh/image_abs.hdf5` |
+| Dataset | `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/datasets/robomimic/datasets/square/mh/image_abs.hdf5` |
 | Environment | Python 3.9 + `robomimic==0.2.0` |
 | Input | raw image/proprio history |
-| Target | past actions + future actions |
 | Rollout | disabled |
+| Epochs | `1000` |
+| Periodic checkpoint | every `50` epochs |
+| Monitor | `val/loss_total` |
 
 The existing verified env is:
 
@@ -164,10 +173,10 @@ w_future: 1.0
 Checkpoint selection:
 
 ```text
-best by val/future_l1
+best by val/loss_total
 ```
 
-Reason: past prediction is a representation-shaping auxiliary objective; future action quality is the first practical signal.
+Reason: the three objectives have different supervised targets, so their own eval loss is the cleanest first comparison. Future L1 is still logged for all variants.
 
 ## 6. Optimization
 
@@ -185,13 +194,15 @@ First real Square run:
 ```yaml
 batch_size: 32
 gradient_accumulate_every: 1
-epochs: 20
+epochs: 1000
 optimizer: AdamW
 lr: 1.0e-4
 weight_decay: 1.0e-4
 grad_clip: 1.0
 num_workers: 8
 mixed_precision: false
+checkpoint_every: 50
+monitor_key: val/loss_total
 ```
 
 If H200 memory is underused and dataloading is stable, increase batch size to 64. Do not start with batch 256 because raw image history means each batch contains `B * H` image observations through the robomimic encoder.
@@ -230,10 +241,12 @@ Use NFS task output:
 /mnt/nfs/tingwen/intern_ldp_explorer/tasks/direction_c_behavior_translator/
 ```
 
-Suggested first run path:
+Suggested run paths:
 
 ```text
-/mnt/nfs/tingwen/intern_ldp_explorer/tasks/direction_c_behavior_translator/outputs/stage1_square_t3_YYYYMMDD_HHMMSS/
+/mnt/nfs/tingwen/intern_ldp_explorer/tasks/direction_c_behavior_translator/outputs/behavior_translator_square_past_YYYYMMDD_HHMMSS/
+/mnt/nfs/tingwen/intern_ldp_explorer/tasks/direction_c_behavior_translator/outputs/behavior_translator_square_future_YYYYMMDD_HHMMSS/
+/mnt/nfs/tingwen/intern_ldp_explorer/tasks/direction_c_behavior_translator/outputs/behavior_translator_square_past_future_YYYYMMDD_HHMMSS/
 ```
 
 Keep only:
@@ -245,18 +258,20 @@ logs.jsonl
 metrics.csv
 checkpoints/latest.ckpt
 checkpoints/best.ckpt
+checkpoints/epoch_0050.ckpt
+checkpoints/epoch_0100.ckpt
+...
 ```
 
 Do not archive checkpoints to CephFS unless requested.
 
-## 9. Controls After First Run
+## 9. Controls After First Run Set
 
-After `C1-T3` trains and validates cleanly, run the cheaper controls:
+After the three Square objectives train and validate cleanly, run these controls:
 
 | ID | Change |
 |---|---|
 | `C1-T1` | single-frame obs, future-only target |
-| `C1-T2` | history obs, future-only target |
 | `C1-T4` | shuffled obs history, past+future target |
 
 Only move to ToolHang after Square training and validation are stable.
@@ -266,9 +281,9 @@ Only move to ToolHang after Square training and validation are stable.
 1. Implement `BehaviorTranslationDataset` with explicit anchor slicing.
 2. Implement `BehaviorTranslator`.
 3. Implement `TrainBehaviorTranslatorWorkspace`.
-4. Add `experiment_configs/square/behavior_translator_square_t3.yaml`.
+4. Add Square configs for `past`, `future`, and `past_future`.
 5. Run `py_compile` and Hydra config parse.
 6. Run local dataset shape inspection.
 7. Run GPU smoke in py39 / `robomimic==0.2.0`.
-8. Start the 20-epoch Square `C1-T3` run.
-9. Report first validation metrics and checkpoint path.
+8. Start the three 1000-epoch Square runs.
+9. Report eval-loss curves and checkpoint paths every 50 epochs.

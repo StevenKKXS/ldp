@@ -1,6 +1,6 @@
 # Task Knowledge
 
-<!-- METADATA:SESSION=21 -->
+<!-- METADATA:SESSION=22 -->
 
 ## Working Rules
 
@@ -70,3 +70,5 @@
 - Direction C DP/PTP integration is gated on the frozen-head probe: pretrained frozen translator context must beat a same-architecture frozen random translator context.
 - Ownership clarification: `intern_ldp_explorer` mainly owns Direction C Behavior Translator. Direction A/B are owned by another intern and should not be placed in this agent's execution queue.
 - Direction C Stage 1 first run should be Square `C1-T3` with `H=16`, `P=16`, `K=8`, explicit anchor slicing, trainable robomimic obs encoder plus BehaviorTranslator, SmoothL1 past/future loss, and best checkpoint by `val/future_l1`.
+- Direction C Stage 1 now has three implemented Square configs: `behavior_translator_square_past.yaml`, `behavior_translator_square_future.yaml`, and `behavior_translator_square_past_future.yaml`. Each trains for `1000` epochs, checkpoints every `50`, and uses `val/loss_total` as the eval-loss monitor.
+- `RobomimicReplayImageDataset` no longer computes the action-correlation diagnostic unless `compute_action_corr=True` and CUDA is available; this diagnostic is not required for translator training.

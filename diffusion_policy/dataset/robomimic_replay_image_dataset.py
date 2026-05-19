@@ -51,6 +51,7 @@ class RobomimicReplayImageDataset(BaseImageDataset):
             subsample_frames=1,
             subsampling_method="uniform",
             use_cache=False,
+            compute_action_corr=False,
             seed=42,
             val_ratio=0.0
         ):
@@ -162,9 +163,13 @@ class RobomimicReplayImageDataset(BaseImageDataset):
         self.use_legacy_normalizer = use_legacy_normalizer
 
 
-        actions = np.array(self.replay_buffer["action"])[None]
-        corr = batch_mlp_corr(actions)
-        print(actions.shape, {"expert_actions_corr": corr})
+        if compute_action_corr:
+            if torch.cuda.is_available():
+                actions = np.array(self.replay_buffer["action"])[None]
+                corr = batch_mlp_corr(actions)
+                print(actions.shape, {"expert_actions_corr": corr})
+            else:
+                print("Skipping expert_actions_corr because CUDA is not available.")
 
     def get_validation_dataset(self):
         val_set = copy.copy(self)

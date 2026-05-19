@@ -4,7 +4,7 @@ Last updated: 2026-05-19
 
 ## Current State
 
-Status: active for `intern_ldp_explorer`, planned, reviewed, not implemented.
+Status: active for `intern_ldp_explorer`; Stage 1 implementation smoke passed.
 
 Owner: `intern_ldp_explorer`.
 
@@ -29,15 +29,43 @@ frozen pretrained translator context > frozen random translator context
 
 ## Stage 1 Training Decision
 
-Train the first Stage 1 run as `C1-T3-square-history-past-future`:
+Train three first-round Stage 1 translator objectives on Square:
 
 ```text
 H=16, P=16, K=8
-raw Square obs history -> trainable robomimic obs_encoder -> BehaviorTranslator -> past+future actions
+raw Square obs history -> trainable robomimic obs_encoder -> BehaviorTranslator
 ```
 
-The run should use explicit anchor slicing, not the default PTP action-window slicing.
+Objectives:
+
+```text
+past:        predict a[t-16:t-1]
+future:      predict a[t:t+7]
+past_future: predict both
+```
+
+Each config trains for `1000` epochs and saves `latest`, `best`, and `epoch_0050`, `epoch_0100`, ... checkpoints. The monitor metric is `val/loss_total`.
+
+The runs use explicit anchor slicing, not the default PTP action-window slicing.
+
+## Implemented Files
+
+```text
+diffusion_policy/dataset/behavior_translation_dataset.py
+diffusion_policy/model/behavior_translator.py
+diffusion_policy/workspace/train_behavior_translator_workspace.py
+experiment_configs/square/behavior_translator_square_past.yaml
+experiment_configs/square/behavior_translator_square_future.yaml
+experiment_configs/square/behavior_translator_square_past_future.yaml
+```
+
+## Verification
+
+- `py_compile` passed for the new dataset/model/workspace and the patched robomimic dataset.
+- Hydra `--cfg job` parses for all three Square configs.
+- Dataset shape smoke passed: obs keys have `[16, ...]`, `act_past` is `[16, 10]`, `act_future` is `[8, 10]`.
+- CPU one-step forward/backward smoke passed for `behavior_translator_square_past_future`; it wrote `latest.ckpt`, `best.ckpt`, `logs.json.txt`, `metrics.csv`, and `env.json`.
 
 ## Next Step
 
-Implement `BehaviorTranslationDataset`, `BehaviorTranslator`, and one Square T3 config, then run shape and forward/backward smoke checks in py39 / `robomimic==0.2.0`.
+Launch the three 1000-epoch Square Stage 1 jobs on an assigned H200 GPU node using py39 / `robomimic==0.2.0`.

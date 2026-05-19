@@ -1,0 +1,134 @@
+_target_: diffusion_policy.workspace.train_behavior_translator_workspace.TrainBehaviorTranslatorWorkspace
+
+name: behavior_translator_square_past
+
+obs_encoder_policy:
+  _target_: diffusion_policy.policy.diffusion_transformer_hybrid_image_policy.DiffusionTransformerHybridImagePolicy
+  causal_attn: true
+  crop_shape: [76, 76]
+  eval_fixed_crop: true
+  horizon: 24
+  n_action_steps: 8
+  n_cond_layers: 0
+  n_emb: 256
+  n_head: 4
+  n_layer: 8
+  n_obs_steps: 16
+  noise_scheduler:
+    _target_: diffusers.schedulers.scheduling_ddpm.DDPMScheduler
+    beta_end: 0.02
+    beta_schedule: squaredcos_cap_v2
+    beta_start: 0.0001
+    clip_sample: true
+    num_train_timesteps: 100
+    prediction_type: epsilon
+    variance_type: fixed_small
+  num_inference_steps: 100
+  obs_as_cond: true
+  obs_encoder_dir: null
+  obs_encoder_freeze: false
+  obs_encoder_group_norm: true
+  p_drop_attn: 0.3
+  p_drop_emb: 0.0
+  past_action_pred: true
+  past_steps_reg: -1
+  shape_meta: ${shape_meta}
+  time_as_cond: true
+  use_embed_if_present: false
+
+model:
+  _target_: diffusion_policy.model.behavior_translator.BehaviorTranslator
+  action_dim: 10
+  obs_horizon: 16
+  past_action_horizon: 16
+  future_action_horizon: 8
+  d_model: 256
+  n_encoder_layers: 4
+  n_decoder_layers: 2
+  n_heads: 4
+  ff_dim: 1024
+  dropout: 0.1
+  context_dim: 512
+  causal_obs_encoder: true
+
+shape_meta:
+  action:
+    shape: [10]
+  obs:
+    agentview_image:
+      shape: [3, 84, 84]
+      type: rgb
+    robot0_eef_pos:
+      shape: [3]
+    robot0_eef_quat:
+      shape: [4]
+    robot0_eye_in_hand_image:
+      shape: [3, 84, 84]
+      type: rgb
+    robot0_gripper_qpos:
+      shape: [2]
+
+task:
+  dataset:
+    _target_: diffusion_policy.dataset.behavior_translation_dataset.BehaviorTranslationDataset
+    obs_horizon: 16
+    past_action_horizon: 16
+    future_action_horizon: 8
+    shuffle_obs_history: false
+    single_frame_obs: false
+    seed: 42
+    base_dataset:
+      _target_: diffusion_policy.dataset.robomimic_replay_image_dataset.RobomimicReplayImageDataset
+      abs_action: true
+      dataset_path: /mnt/3fs2/data/tingwen.du/intern_ldp_explorer/datasets/robomimic/datasets/square/mh/image_abs.hdf5
+      horizon: 24
+      n_obs_steps: 24
+      pad_after: 7
+      pad_before: 16
+      rotation_rep: rotation_6d
+      seed: 42
+      shape_meta: ${shape_meta}
+      use_cache: true
+      use_embed_if_present: false
+      val_ratio: 0.02
+
+dataloader:
+  batch_size: 32
+  shuffle: true
+  num_workers: 8
+  pin_memory: true
+  persistent_workers: false
+
+val_dataloader:
+  batch_size: 32
+  shuffle: false
+  num_workers: 8
+  pin_memory: true
+  persistent_workers: false
+
+optimizer:
+  obs_encoder_lr: 1.0e-4
+  translator_lr: 1.0e-4
+  obs_encoder_weight_decay: 1.0e-6
+  translator_weight_decay: 1.0e-4
+  betas: [0.9, 0.95]
+
+training:
+  seed: 42
+  device: cuda:0
+  resume: true
+  target_mode: past
+  w_past: 1.0
+  w_future: 1.0
+  num_epochs: 1000
+  gradient_accumulate_every: 1
+  grad_clip: 1.0
+  max_train_steps: null
+  max_val_batches: null
+  checkpoint_every: 50
+  monitor_key: val/loss_total
+  tqdm_interval_sec: 1.0
+
+hydra:
+  run:
+    dir: /mnt/nfs/tingwen/intern_ldp_explorer/tasks/direction_c_behavior_translator/outputs/${name}_${now:%Y%m%d_%H%M%S}
