@@ -1,6 +1,6 @@
 # Task Knowledge
 
-<!-- METADATA:SESSION=23 -->
+<!-- METADATA:SESSION=24 -->
 
 ## Working Rules
 
@@ -77,3 +77,4 @@
 - Direction C Stage 1 active run root: `/mnt/nfs/tingwen/intern_ldp_explorer/tasks/direction_c_behavior_translator/outputs/stage1_square_20260519_143020`; manifest maps `past` to GPU0 pid `26881`, `future` to GPU1 pid `26883`, and `past_future` to GPU2 pid `26885`.
 - On this GPU node, avoid using shell variable name `ENV` for Python env paths because shell initialization can set it to `/etc/shinit_v2`. Use a name like `PY39`.
 - For remote background launches containing many quoted paths, send the script with `ssh ... 'bash -s' <<'REMOTE'` so local shell quoting does not erase remote variables.
+- Direction C Stage 1 Square translator speed on `10.100.2.35:25076`: current batch throughput is about 2.6-2.7 train batches/sec for `2478` train batches per epoch, so one epoch is about 15-16 minutes plus validation/checkpoint overhead. The 1000-epoch plan is about 10.5-12 days; a 96h allocation reaches roughly 340-380 epochs.

@@ -1,6 +1,6 @@
 # History Log
 
-<!-- METADATA:SESSION=23 -->
+<!-- METADATA:SESSION=24 -->
 
 ## Session 0
 
@@ -277,3 +277,12 @@
   - `past_future`: GPU2, pid `26885`, config `behavior_translator_square_past_future`.
 - Confirmed all three jobs entered epoch 1. Snapshot after launch showed GPUs 0/1/2 each using about 5.3GB; GPU1/GPU2 instantaneous utilization was about 83%/86%, and GPU0 had an alive training process while the utilization sample was 0%.
 - First two launch attempts did not enter training: one used shell variable `ENV`, which conflicted with the node's shell initialization, and one used nested local SSH quotes that stripped remote variables. The working launch used `ssh ... 'bash -s' <<'REMOTE'` and a non-conflicting `PY39` variable.
+
+## Session 24
+
+- User asked how long the three Direction C Stage 1 Square translator jobs will take.
+- Checked `10.100.2.35:25076` at `2026-05-19T14:35:48+00:00`: pids `26881`, `26883`, and `26885` were all alive in epoch 1.
+- GPU snapshot: GPU0 `5312 MiB`, GPU1 `5308 MiB`, GPU2 `5312 MiB`, GPU3 idle.
+- Live tqdm progress showed roughly 2.6-2.7 train batches/sec over `2478` train batches per epoch, so one train epoch is about 15-16 minutes before small validation/checkpoint overhead.
+- Estimated wall time with the current 1000-epoch configs: about 10.5-12 days if uninterrupted. A 96h allocation should cover about 340-380 epochs, not the full 1000.
+- Estimated time to first useful periodic checkpoint: epoch 50 in about 13-14 hours from launch; epoch 100 in about 26-28 hours.
