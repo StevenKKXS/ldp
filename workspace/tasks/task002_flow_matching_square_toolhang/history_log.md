@@ -1,6 +1,6 @@
 # History Log
 
-<!-- METADATA:SESSION=22 -->
+<!-- METADATA:SESSION=23 -->
 
 ## Session 0
 
@@ -264,3 +264,16 @@
   - Hydra `--cfg job` parse for all three configs;
   - dataset shape smoke for Square: obs history length `16`, `act_past` `[16,10]`, `act_future` `[8,10]`;
   - CPU one-step forward/backward smoke for `past_future`, which wrote `latest.ckpt`, `best.ckpt`, `logs.json.txt`, `metrics.csv`, and `env.json`.
+
+## Session 23
+
+- User provided new GPU endpoint `10.100.2.35:25076` for Direction C Stage 1 translator training.
+- Verified the node is reachable as `lg-cmc-b7r201-e02u16-h200-000098`, with 4 H200 GPUs idle, `/mnt/nfs` and `/mnt/3fs2` mounted, and `/mnt/nfs/tingwen/ldp/envs/ptp_ldp_py39_rm020/bin/python` importing torch `2.5.1+cu124` and `robomimic 0.2.0`.
+- Synced local branch commit `cf95686` to `/mnt/nfs/tingwen/intern_ldp_explorer/repos/ldp_behavior_translator` without using GPU-node network access.
+- Ran a GPU smoke for `behavior_translator_square_past_future` on GPU0 with 1 epoch, 2 train steps, 1 val batch, batch size 2; it completed and wrote `best.ckpt`, `latest.ckpt`, `metrics.csv`, `logs.json.txt`, and `env.json` under `/mnt/nfs/tingwen/intern_ldp_explorer/tasks/direction_c_behavior_translator/smoke/gpu_smoke_20260519_142812`.
+- Launched the formal Square Stage 1 comparison set under `/mnt/nfs/tingwen/intern_ldp_explorer/tasks/direction_c_behavior_translator/outputs/stage1_square_20260519_143020`:
+  - `past`: GPU0, pid `26881`, config `behavior_translator_square_past`.
+  - `future`: GPU1, pid `26883`, config `behavior_translator_square_future`.
+  - `past_future`: GPU2, pid `26885`, config `behavior_translator_square_past_future`.
+- Confirmed all three jobs entered epoch 1. Snapshot after launch showed GPUs 0/1/2 each using about 5.3GB; GPU1/GPU2 instantaneous utilization was about 83%/86%, and GPU0 had an alive training process while the utilization sample was 0%.
+- First two launch attempts did not enter training: one used shell variable `ENV`, which conflicted with the node's shell initialization, and one used nested local SSH quotes that stripped remote variables. The working launch used `ssh ... 'bash -s' <<'REMOTE'` and a non-conflicting `PY39` variable.

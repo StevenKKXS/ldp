@@ -1,6 +1,6 @@
 # Direction C Experiments
 
-No experiments have been run.
+Stage 1 Square comparison jobs are running on `10.100.2.35:25076` in py39 / `robomimic==0.2.0`.
 
 ## Planned Stage 1 Offline Translation
 
@@ -8,11 +8,11 @@ No experiments have been run.
 |---|---|---|---|---|
 | C1-T1 | Square | single-frame -> future | deferred | N/A |
 | C1-T2 | Square | history -> future | implemented config | N/A |
-| C1-T3 | Square | history -> past+future | implemented config and CPU smoke passed | one-step smoke only |
+| C1-T3 | Square | history -> past+future | GPU smoke passed; formal run started | one-step GPU smoke only so far |
 | C1-T4 | Square | shuffled history -> past+future | planned | N/A |
 | C1-T5 | ToolHang | history -> future | planned | N/A |
 | C1-T6 | ToolHang | history -> past+future | planned | N/A |
-| C1-T7 | Square | history -> past | implemented config | N/A |
+| C1-T7 | Square | history -> past | formal run started | N/A |
 
 ## Planned Stage 2a Frozen-Head Probe
 
@@ -59,3 +59,27 @@ No experiments have been run.
 | `val/gripper_acc` | 1.0000 |
 
 This is a one-step smoke result only; it should not be interpreted as model quality.
+
+`behavior_translator_square_past_future` GPU smoke:
+
+| Field | Value |
+|---|---|
+| Node | `10.100.2.35:25076` |
+| Env | `/mnt/nfs/tingwen/ldp/envs/ptp_ldp_py39_rm020` |
+| Run dir | `/mnt/nfs/tingwen/intern_ldp_explorer/tasks/direction_c_behavior_translator/smoke/gpu_smoke_20260519_142812` |
+| Setting | 1 epoch, 2 train steps, 1 val batch, batch size 2 |
+| Result | completed; wrote `best.ckpt`, `latest.ckpt`, `metrics.csv`, `logs.json.txt`, and `env.json` |
+
+## Active Formal Runs
+
+Run root:
+
+```text
+/mnt/nfs/tingwen/intern_ldp_explorer/tasks/direction_c_behavior_translator/outputs/stage1_square_20260519_143020
+```
+
+| ID | Config | GPU | PID | Status |
+|---|---|---:|---:|---|
+| C1-T7 | `behavior_translator_square_past` | 0 | 26881 | epoch 1 running |
+| C1-T2 | `behavior_translator_square_future` | 1 | 26883 | epoch 1 running |
+| C1-T3 | `behavior_translator_square_past_future` | 2 | 26885 | epoch 1 running |

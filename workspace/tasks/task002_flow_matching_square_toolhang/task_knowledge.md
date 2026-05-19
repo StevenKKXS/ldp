@@ -1,6 +1,6 @@
 # Task Knowledge
 
-<!-- METADATA:SESSION=22 -->
+<!-- METADATA:SESSION=23 -->
 
 ## Working Rules
 
@@ -72,3 +72,8 @@
 - Direction C Stage 1 first run should be Square `C1-T3` with `H=16`, `P=16`, `K=8`, explicit anchor slicing, trainable robomimic obs encoder plus BehaviorTranslator, SmoothL1 past/future loss, and best checkpoint by `val/future_l1`.
 - Direction C Stage 1 now has three implemented Square configs: `behavior_translator_square_past.yaml`, `behavior_translator_square_future.yaml`, and `behavior_translator_square_past_future.yaml`. Each trains for `1000` epochs, checkpoints every `50`, and uses `val/loss_total` as the eval-loss monitor.
 - `RobomimicReplayImageDataset` no longer computes the action-correlation diagnostic unless `compute_action_corr=True` and CUDA is available; this diagnostic is not required for translator training.
+- Direction C GPU node `10.100.2.35:25076` is verified for py39 / `robomimic 0.2.0` work with 4xH200, `/mnt/nfs`, and `/mnt/3fs2`.
+- Direction C synced GPU worktree path: `/mnt/nfs/tingwen/intern_ldp_explorer/repos/ldp_behavior_translator`, currently from branch `intern_ldp_explorer/task002_flow_matching_square_toolhang` commit `cf95686`.
+- Direction C Stage 1 active run root: `/mnt/nfs/tingwen/intern_ldp_explorer/tasks/direction_c_behavior_translator/outputs/stage1_square_20260519_143020`; manifest maps `past` to GPU0 pid `26881`, `future` to GPU1 pid `26883`, and `past_future` to GPU2 pid `26885`.
+- On this GPU node, avoid using shell variable name `ENV` for Python env paths because shell initialization can set it to `/etc/shinit_v2`. Use a name like `PY39`.
+- For remote background launches containing many quoted paths, send the script with `ssh ... 'bash -s' <<'REMOTE'` so local shell quoting does not erase remote variables.

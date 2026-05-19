@@ -8,5 +8,5 @@
 | Status | Working |
 | Current Task | task002_flow_matching_square_toolhang |
 | PR | https://github.com/StevenKKXS/ldp/pull/1 |
-| Session | 22 |
-| Recent Progress | Implemented Direction C Stage 1 translator pipeline and three Square configs for past, future, and past+future objectives; each is set to 1000 epochs with checkpoints every 50 epochs and val/loss_total monitoring, with py_compile, Hydra parse, dataset shape smoke, and CPU one-step forward/backward smoke passing. |
+| Session | 23 |
+| Recent Progress | Accepted GPU node 10.100.2.35:25076 for Direction C, verified 4xH200 plus py39 / robomimic 0.2.0, synced commit cf95686 to NFS, passed a GPU smoke run, and launched three Square Stage 1 translator jobs for past, future, and past+future objectives under stage1_square_20260519_143020. |

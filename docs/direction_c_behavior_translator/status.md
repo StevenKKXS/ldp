@@ -4,7 +4,7 @@ Last updated: 2026-05-19
 
 ## Current State
 
-Status: active for `intern_ldp_explorer`; Stage 1 implementation smoke passed.
+Status: active for `intern_ldp_explorer`; Stage 1 Square comparison is running on GPU.
 
 Owner: `intern_ldp_explorer`.
 
@@ -68,4 +68,4 @@ experiment_configs/square/behavior_translator_square_past_future.yaml
 
 ## Next Step
 
-Launch the three 1000-epoch Square Stage 1 jobs on an assigned H200 GPU node using py39 / `robomimic==0.2.0`.
+Monitor the three Square Stage 1 jobs under `/mnt/nfs/tingwen/intern_ldp_explorer/tasks/direction_c_behavior_translator/outputs/stage1_square_20260519_143020` and compare eval loss curves plus every-50-epoch checkpoints.
