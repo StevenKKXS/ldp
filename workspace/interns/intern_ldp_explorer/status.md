@@ -8,5 +8,5 @@
 | Status | Working |
 | Current Task | task002_flow_matching_square_toolhang |
 | PR | https://github.com/StevenKKXS/ldp/pull/1 |
-| Session | 16 |
-| Recent Progress | Analyzed PTP dataloader windowing: SequenceSampler returns fixed contiguous windows; RobomimicReplayImageDataset keeps first obs history tokens and returns action tokens spanning history through future, so fixed historical obs plus historical-to-future action ranges are mostly config-level changes. |
+| Session | 17 |
+| Recent Progress | Confirmed PTP dataloader observation format: normal image configs return raw image/proprio tensors, and the policy obs_encoder encodes them during forward; only embedding-cache configs with use_embed_if_present=true and an embedding key return precomputed embeddings. |

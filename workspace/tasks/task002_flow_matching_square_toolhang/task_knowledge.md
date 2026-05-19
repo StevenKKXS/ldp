@@ -1,6 +1,6 @@
 # Task Knowledge
 
-<!-- METADATA:SESSION=16 -->
+<!-- METADATA:SESSION=17 -->
 
 ## Working Rules
 
@@ -63,3 +63,5 @@
 - For proprio in original robomimic PTP configs, `robot*_eef_pos` and `robot*_gripper_qpos` are range-normalized to `[-1,1]`; `robot*_eef_quat` is identity. This is not a uniform z-score normalizer.
 - PTP dataloader window rule: `SequenceSampler` emits one contiguous sequence; `RobomimicReplayImageDataset.__getitem__` returns obs from the first `n_obs_steps * subsample_frames` samples, then returns actions as subsampled historical actions plus future actions. With `subsample_frames=1`, `n_obs_steps=K+1` and `horizon=K+1+F` represent obs offsets `[-K, ..., 0]` and action offsets `[-K, ..., F]` around the current frame.
 - Current policy assumes chronological order. Reversing obs order to current-to-history instead of history-to-current is mechanically easy but changes positional semantics and should be treated as an architecture/training change.
+- PTP dataloader obs format: default image configs return raw image/proprio tensors, not encoder outputs. `DiffusionTransformerHybridImagePolicy` runs `self.obs_encoder(...)` inside training and rollout.
+- Embedding-cache exception: when `use_embed_if_present=True` and replay data has an `embedding` key, `RobomimicReplayImageDataset` returns `obs['embedding']` plus action only; the normalizer skips `embedding`, and the policy uses the embedding directly as condition.

@@ -1,6 +1,6 @@
 # History Log
 
-<!-- METADATA:SESSION=16 -->
+<!-- METADATA:SESSION=17 -->
 
 ## Session 0
 
@@ -197,3 +197,12 @@
 - Confirmed action returns a composed sequence: subsampled historical action tokens from the obs window plus all future action tokens, producing `batch['action']` length `horizon`.
 - With `subsample_frames=1`, setting `n_obs_steps=K+1` and `horizon=K+1+F` gives obs offsets `[-K, ..., 0]` and action offsets `[-K, ..., F]` relative to the current frame at index `n_obs_steps-1`.
 - For fixed windows this is easy and mostly config-level; arbitrary nonuniform frame sets or separate named obs/action ranges require a small dataset/sampler extension.
+
+## Session 17
+
+- User asked whether dataloader observations are encoder outputs or raw images.
+- Checked `RobomimicReplayImageDataset.__init__`, `RobomimicReplayImageDataset.__getitem__`, `LinearNormalizer`, and `DiffusionTransformerHybridImagePolicy`.
+- Confirmed normal image configs return raw image tensors in `obs['agentview_image']`, `obs['robot0_eye_in_hand_image']`, plus low-dim proprio tensors; images are converted from HWC uint8 to CHW float in `[0,1]`.
+- Confirmed policy-side code then normalizes obs and calls `self.obs_encoder(this_nobs)` during training and rollout.
+- Confirmed embedding-cache mode is separate: if `use_embed_if_present=True` and the replay buffer contains `embedding`, the sampler loads only `embedding` and `action`, and `__getitem__` returns `obs['embedding']` instead of raw image/proprio keys.
+- Confirmed the normalizer intentionally skips `embedding`, and policy uses `batch['obs']['embedding']` directly as condition when embedding mode is active.
