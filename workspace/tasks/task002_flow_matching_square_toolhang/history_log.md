@@ -483,3 +483,14 @@
   - `stage2a_past_future_e50`, GPU2, pid `714246`, checkpoint `past_future/checkpoints/epoch_0050.ckpt`.
   - `stage2a_future_best`, GPU3, pid `714247`, checkpoint `future/checkpoints/best.ckpt`.
 - Recorded answer to the metric question: Stage 2a is an offline representation probe, not an environment policy. It can compare eval loss / future action L1 / MSE / gripper accuracy, but it cannot produce Robomimic rollout success rate. Success rate becomes available only after integrating the translator context into a DP/PTP policy, training that policy, and running rollout evaluation.
+
+### Stage 1 Past LR Sweep
+
+- User asked to preserve old-parameter checkpoints for later testing and start fast Stage 1 `past` hyperparameter tuning, using the approximately 8-9 minute/epoch `batch=128` setting, with quick 5-10 epoch iteration and early stopping when loss is abnormal.
+- Kept the old formal Stage 1 runs and their checkpoints untouched on `10.100.2.35:25076`.
+- On the new 4xH200 node, kept only the minimal Stage 2a gate jobs (`stage2a_random_frozen` and `stage2a_past_e50`) and stopped lower-priority Stage 2a jobs (`stage2a_past_future_e50` and `stage2a_future_best`) to free GPUs for Stage 1 tuning.
+- Launched Stage 1 `past` LR sweep root `/mnt/nfs/tingwen/intern_ldp_explorer/tasks/direction_c_behavior_translator/outputs/stage1_square_past_lr_sweep_20260520_0722`:
+  - `stage1_past_bs128_lr1e4`, GPU2, pid `729937`, `batch=128`, `num_workers=48`, `obs_encoder_lr=1e-4`, `translator_lr=1e-4`, `num_epochs=8`.
+  - `stage1_past_bs128_obs5e5_tr1e4`, GPU3, pid `729938`, `batch=128`, `num_workers=48`, `obs_encoder_lr=5e-5`, `translator_lr=1e-4`, `num_epochs=8`.
+- Added a run-local watchdog at `stage1_square_past_lr_sweep_20260520_0722/watchdog.py`, pid recorded in `watchdog.pid`, which checks every 300 seconds and terminates a run after epoch 5 if `val/loss_total` is not finite or exceeds `0.004`.
+- Initial status at `2026-05-20T07:22:02+00:00`: both new Stage 1 jobs were alive and had entered epoch 1 startup/training; metrics had not been written yet.
