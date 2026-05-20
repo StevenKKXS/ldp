@@ -1,6 +1,6 @@
 # History Log
 
-<!-- METADATA:SESSION=39 -->
+<!-- METADATA:SESSION=40 -->
 
 ## Session 0
 
@@ -520,3 +520,16 @@
 - Ran a 5-sample utilization check on the old node: first four samples had GPU0/GPU2 at `0%`, and the fifth sample showed GPU0 `77%` and GPU2 `85%`. This indicates intermittent compute with substantial input-pipeline or host-side waiting, not steady GPU saturation.
 - Checked new 4xH200 node `10.100.4.35:19382`: all GPUs had `0%` utilization and `1 MiB` memory, with no train/eval/rollout processes. The Stage 2a 50-epoch jobs and the 8-epoch `past` LR sweep are complete.
 - Latest metric rows at this check: formal `past` epoch `94` val loss `0.000634`; formal `past_future` epoch `95` val loss `0.019400`; Stage2a `past_e50` and `random_frozen` both finished epoch `50`; LR sweep jobs both finished epoch `8`.
+
+## Session 40
+
+- User asked to continue, launch the previous tuning parameters, run the next stage on the new cards, and avoid idle GPUs.
+- Launched two additional Stage 1 tuned jobs on old node `10.100.2.35:25076` under `/mnt/nfs/tingwen/intern_ldp_explorer/tasks/direction_c_behavior_translator/outputs/stage1_square_tuned_fill_20260520_1536`:
+  - GPU1 pid `2254676`: `stage1_past_bs128_obs5e5_tr1e4_long`, `behavior_translator_square_past`, `batch=128`, `num_workers=32`, `obs_encoder_lr=5e-5`, `translator_lr=1e-4`, `num_epochs=200`, `checkpoint_every=25`.
+  - GPU3 pid `2254680`: `stage1_past_future_bs128_obs5e5_tr1e4_wfuture05`, `behavior_translator_square_past_future`, `batch=128`, `num_workers=32`, `obs_encoder_lr=5e-5`, `translator_lr=1e-4`, `w_past=1.0`, `w_future=0.5`, `num_epochs=200`, `checkpoint_every=25`.
+- Launched four Stage 2a next-stage probes on new node `10.100.4.35:19382` under `/mnt/nfs/tingwen/intern_ldp_explorer/tasks/direction_c_behavior_translator/outputs/stage2a_square_next_20260520_1536`:
+  - GPU0 pid `1896872`: `stage2a_past_best_frozen`, checkpoint `past/checkpoints/best.ckpt`, frozen context.
+  - GPU1 pid `1896876`: `stage2a_past_latest_frozen`, checkpoint `past/checkpoints/latest.ckpt`, frozen context.
+  - GPU2 pid `1896880`: `stage2a_past_best_finetune_tr1e5`, checkpoint `past/checkpoints/best.ckpt`, `freeze_context=false`, `obs_encoder_lr=5e-5`, `translator_lr=1e-5`, `head_lr=1e-3`.
+  - GPU3 pid `1896884`: `stage2a_past_future_best_frozen`, checkpoint `past_future/checkpoints/best.ckpt`, frozen context.
+- Rechecked GPU occupancy after startup. Old node has compute apps on GPU0/GPU1/GPU2/GPU3; new node has compute apps on GPU0/GPU1/GPU2/GPU3. Startup logs show datasets loaded and training loops started; first new metrics rows had not been written at the check time.

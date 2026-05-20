@@ -8,5 +8,5 @@
 | Status | Working |
 | Current Task | task002_flow_matching_square_toolhang |
 | PR | https://github.com/StevenKKXS/ldp/pull/1 |
-| Session | 39 |
-| Recent Progress | Checked current GPU utilization. Old formal node `10.100.2.35:25076` has two active Stage 1 jobs: `past` on GPU0 pid `1086376` using about `5.5GB` and `past_future` on GPU2 pid `26885` using about `5.4GB`; GPU1 and GPU3 are idle. A 5-sample check showed intermittent compute, with four samples at `0%` util and the final sample at GPU0 `77%` / GPU2 `85%`, consistent with input-pipeline waiting. New 4xH200 node `10.100.4.35:19382` is fully idle with no train/eval/rollout processes. Stage2a 50-epoch probes and the 8-epoch `past` LR sweep have completed. |
+| Session | 40 |
+| Recent Progress | Filled the idle GPUs. Old node `10.100.2.35:25076` now uses all 4 H200s: existing formal Stage1 `past` on GPU0 and `past_future` on GPU2, plus new tuned Stage1 jobs on GPU1/GPU3 under `/mnt/nfs/tingwen/intern_ldp_explorer/tasks/direction_c_behavior_translator/outputs/stage1_square_tuned_fill_20260520_1536`. New node `10.100.4.35:19382` now uses all 4 H200s for Stage2a next-stage probes under `/mnt/nfs/tingwen/intern_ldp_explorer/tasks/direction_c_behavior_translator/outputs/stage2a_square_next_20260520_1536`: `past_best_frozen`, `past_latest_frozen`, `past_best_finetune_tr1e5`, and `past_future_best_frozen`. Startup logs show jobs entered training/cache-load without immediate errors. |
