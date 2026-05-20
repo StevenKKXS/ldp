@@ -1,6 +1,6 @@
 # Task Knowledge
 
-<!-- METADATA:SESSION=27 -->
+<!-- METADATA:SESSION=28 -->
 
 ## Working Rules
 
@@ -86,3 +86,4 @@
 - Direction C dataloader training-set rule: the base robomimic image dataset selects train/val at the episode level using `get_val_mask(n_episodes, val_ratio=0.02, seed=42)`, then `SequenceSampler` only creates training window indices for episodes where `train_mask=True`.
 - Direction C translator slicing rule for `H=16,P=16,K=8`: base sequence length is `24`, `anchor=max(P,H-1)=16`, obs history uses offsets `1..16`, past actions use `0..15`, and future actions use `16..23`.
 - The training PyTorch `DataLoader` shuffles sampler indices each epoch; it does not randomly crop frames inside an already sampled window. Boundary padding is handled by `SequenceSampler` with repeated first/last valid frames.
+- Direction C frame/sample counts under `val_ratio=0.02,seed=42,sequence_length=24,pad_before=16,pad_after=7`: Square mh has 80,731 total frames and 79,289 train samples; ToolHang ph has 95,962 total frames and 93,885 train samples. The padded-window sample count equals selected frame count because `L - 24 + 16 + 7 + 1 = L`.

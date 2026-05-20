@@ -1,6 +1,6 @@
 # History Log
 
-<!-- METADATA:SESSION=27 -->
+<!-- METADATA:SESSION=28 -->
 
 ## Session 0
 
@@ -323,3 +323,12 @@
 - Confirmed `SequenceSampler` builds one sample index for each valid contiguous `sequence_length=24` window within training episodes, with `pad_before=16` and `pad_after=7` allowing repeated boundary frames near episode starts/ends.
 - Confirmed the PyTorch `DataLoader` then shuffles those window indices for training (`shuffle=true`) and keeps validation ordered (`shuffle=false`).
 - Confirmed the translator wrapper does not change which windows are train samples. It samples a full 24-step window from the base sampler, then for `H=16,P=16,K=8` uses `anchor=16`, obs offsets `1..16`, past action offsets `0..15`, and future action offsets `16..23`.
+
+## Session 28
+
+- User asked how many frames Square and ToolHang have and how many training samples are available under the current split.
+- Counted hdf5 demo action lengths directly using `/mnt/nfs/tingwen/ldp/envs/ptp_ldp_py39_rm020/bin/python` and `h5py`; image arrays were not loaded.
+- Used the Direction C sampler assumptions: `val_ratio=0.02`, `seed=42`, `sequence_length=24`, `pad_before=16`, and `pad_after=7`.
+- Square mh `image_abs.hdf5`: 300 episodes, 80,731 total frames, 6 validation episodes, 294 training episodes, 79,289 train frames/samples, 1,442 validation frames/samples, and 2,478 train batches at batch size 32.
+- ToolHang ph `image_abs.hdf5`: 200 episodes, 95,962 total frames, 4 validation episodes, 196 training episodes, 93,885 train frames/samples, 2,077 validation frames/samples, and 2,934 train batches at batch size 32.
+- Because `sequence_length=24`, `pad_before=16`, and `pad_after=7`, each episode of length `L` contributes `L - 24 + 16 + 7 + 1 = L` padded-window samples, so the sampler sample count equals the frame count within the selected train or validation episodes.
