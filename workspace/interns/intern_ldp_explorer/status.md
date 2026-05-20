@@ -8,5 +8,5 @@
 | Status | Working |
 | Current Task | task002_flow_matching_square_toolhang |
 | PR | https://github.com/StevenKKXS/ldp/pull/1 |
-| Session | 29 |
-| Recent Progress | Checked Direction C Stage 1 Square training at 2026-05-20T01:40Z: all three jobs are alive at epoch 42. Past prediction is stable with best val loss 0.000622 at epoch 23; future-only and past+future train losses keep decreasing, but their best val losses were early at epoch 4, so the next useful step is to inspect epoch 50 checkpoints and loss curves before committing to longer training. |
+| Session | 30 |
+| Recent Progress | Plotted Direction C Stage 1 Square loss curves through epoch 42 under /mnt/nfs/tingwen/intern_ldp_explorer/tasks/direction_c_behavior_translator/analysis/stage1_square_curves_20260520_0143. The curves show past prediction validation loss flattening low, while future and past_future train loss continues downward but validation loss is noisier with early best epochs. |

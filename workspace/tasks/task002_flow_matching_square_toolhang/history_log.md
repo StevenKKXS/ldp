@@ -1,6 +1,6 @@
 # History Log
 
-<!-- METADATA:SESSION=29 -->
+<!-- METADATA:SESSION=30 -->
 
 ## Session 0
 
@@ -353,3 +353,14 @@
   - `future`: epoch 42, val future L1 `0.04716`.
   - `past_future`: epoch 10, val future L1 `0.04479`.
 - Interpretation recorded: Stage 1 train losses are decreasing. `past` validation is stable; `future` and `past_future` show early best val SmoothL1 and later train/val gap, so epoch 50 checkpoints and curves should be inspected before extending long training unchanged.
+
+## Session 30
+
+- User asked to plot the curves for a quick trend check.
+- Generated plots from the three `metrics.csv` files under `/mnt/nfs/tingwen/intern_ldp_explorer/tasks/direction_c_behavior_translator/outputs/stage1_square_20260519_143020`.
+- Wrote analysis artifacts to `/mnt/nfs/tingwen/intern_ldp_explorer/tasks/direction_c_behavior_translator/analysis/stage1_square_curves_20260520_0143`:
+  - `stage1_square_curve_overview.png`: 2x3 overview of train/val total loss and validation L1/gripper metrics.
+  - `stage1_square_curve_overview.pdf`: PDF version of the overview.
+  - `stage1_square_val_loss_compare.png`: val loss comparison across `past`, `future`, and `past_future`.
+  - `summary.csv`: latest and best metric table through epoch 42.
+- Curve interpretation: `past` validation total loss drops quickly and stays low; `future` and `past_future` train losses keep decreasing, but validation total loss has early best values and later noise/rise, so epoch 50 should be used as a decision point for checkpoint selection and potential hyperparameter changes.
