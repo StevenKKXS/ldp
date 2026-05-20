@@ -1,6 +1,6 @@
 # History Log
 
-<!-- METADATA:SESSION=32 -->
+<!-- METADATA:SESSION=33 -->
 
 ## Session 0
 
@@ -401,3 +401,11 @@
 - User asked why larger batch sizes such as 128/256 were not used and whether multi-GPU training would speed up the run.
 - Recorded clarification: batch 128 was already tested in the lighter Session 26 benchmark with `num_workers=12` and succeeded at `86.09` samples/sec, projected `15.35` minutes/epoch. In the Session 32 CPU-pressure benchmark, batch 128 paired with 96/144 workers failed due DataLoader shared-memory/IPC pressure, and batch 256 was not run because it would be an even higher-risk version of the same failure mode on the current `/dev/shm=16G` node.
 - Recorded plan for future resources: test batch 128/256 with controlled lower worker counts, lowered prefetch/shared-memory pressure, and learning-rate/update-count semantics separated from pure throughput. For single-objective multi-GPU speedup, implement DDP rather than only launching a single-GPU workspace on multiple visible GPUs.
+
+## Session 33
+
+- User asked to test `batch_size=128,num_workers=64`.
+- Confirmed GPU3 on `10.100.2.35:25076` was idle while the formal `past`, `future`, and `past_future` jobs remained alive on GPUs 0/1/2.
+- Ran a short GPU3 benchmark under `/mnt/nfs/tingwen/intern_ldp_explorer/tasks/direction_c_behavior_translator/benchmarks/stage1_square_past_b128_nw64_20260520_023318` using `behavior_translator_square_past`, `training.num_epochs=1`, `training.max_train_steps=120`, `training.max_val_batches=1`, `dataloader.batch_size=128`, `val_dataloader.batch_size=128`, `dataloader.num_workers=64`, and `val_dataloader.num_workers=64`.
+- Result: run completed successfully with status `ok`, no DataLoader crash. Wall-clock result was `105.914` seconds for 120 train steps plus one validation batch/checkpoint, `145.02` samples/sec, projected `9.11` minutes/epoch by the same short-run wall-clock method, average GPU3 utilization `15.0%`, max GPU3 utilization `99%`, and average GPU3 memory `8427.4 MiB`.
+- Confirmed after the benchmark that the formal GPU0-2 jobs were still alive and GPU3 returned to idle.

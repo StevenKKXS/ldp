@@ -8,5 +8,5 @@
 | Status | Working |
 | Current Task | task002_flow_matching_square_toolhang |
 | PR | https://github.com/StevenKKXS/ldp/pull/1 |
-| Session | 32 |
-| Recent Progress | Clarified the speed plan after the CPU-pressure benchmark: batch 128 already worked in the lighter worker sweep, while batch 128 failed only under aggressive 96/144-worker shared-memory pressure; batch 256 should be tested later with lower worker counts and explicit LR/update-count semantics. Multi-GPU will speed independent experiment matrices immediately, but speeding one translator objective requires DDP changes to the Stage 1 workspace. |
+| Session | 33 |
+| Recent Progress | Tested Direction C Stage 1 Square `past` with `batch_size=128,num_workers=64` on GPU3. The short 120-step run completed successfully without DataLoader crash: 145.02 samples/sec, projected 9.11 minutes/epoch by the same wall-clock benchmark method, average GPU3 utilization 15.0%, max 99%, average GPU3 memory 8427 MiB. Formal GPU0-2 jobs remained alive. |

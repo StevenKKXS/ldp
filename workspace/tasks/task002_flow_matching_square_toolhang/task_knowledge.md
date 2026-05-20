@@ -1,6 +1,6 @@
 # Task Knowledge
 
-<!-- METADATA:SESSION=32 -->
+<!-- METADATA:SESSION=33 -->
 
 ## Working Rules
 
@@ -97,3 +97,4 @@
 - Batch-size note: Session 26 did test `batch=128,num_workers=12` successfully at `86.09` samples/sec and projected `15.35` minutes/epoch. Session 32 `batch=128` failed only under much more aggressive worker settings (`num_workers=96/144`), so future batch 128/256 tests should sweep lower worker counts and lower shared-memory pressure rather than assuming large batch itself is impossible.
 - Training semantics note: Square has about 79,289 train samples, so batch 32 is about 2,478 optimizer steps/epoch, batch 128 is about 620 steps/epoch, and batch 256 is about 310 steps/epoch. Larger batch improves wall-clock samples/sec but changes optimizer update count and may require LR/epoch/step-budget review.
 - Multi-GPU note: current Direction C Stage 1 workspace is single-process/single-GPU. More GPUs accelerate the experiment matrix by running different objectives in parallel, but a single objective needs DDP changes: distributed sampler, DDP-wrapped obs encoder and translator, rank-aware logging/checkpointing, and validation metric reduction.
+- Direction C `batch=128,num_workers=64` benchmark result: GPU3 short run `stage1_square_past_b128_nw64_20260520_023318` completed successfully at `145.02` samples/sec, projected `9.11` minutes/epoch, average GPU3 utilization `15.0%`, max `99%`, average GPU3 memory `8427.4 MiB`. This is the fastest successful short-run wall-clock result so far, but it changes batch-size/update-count semantics relative to the formal batch-32 runs.
