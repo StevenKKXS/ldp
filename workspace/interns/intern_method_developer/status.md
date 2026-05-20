@@ -8,6 +8,6 @@
 | Status | Working |
 | Current Task | task002_flow_matching_square_toolhang |
 | PR | https://github.com/StevenKKXS/ldp/pull/1 |
-| Session | 17 |
-| Recent Progress | Checked current GPU resources and recorded that the active encoder-method node `10.100.2.4:35140` has 8 idle H200 GPUs. The seed-43 downstream repeat jobs have all exited cleanly. |
-| Handoff | Current managed GPU resource is `10.100.2.4:35140`, hostname `lg-cmc-b7r201-c08u06-h200-000067`, with 8x NVIDIA H200 GPUs, each reporting `1 MiB / 143771 MiB` memory used and `0%` utilization. No compute processes are running. Historical node `10.100.2.35:33805` was not touched per user instruction. |
+| Session | 18 |
+| Recent Progress | Checked progress and GPU reachability. The current assigned encoder-method GPU endpoint `10.100.2.4:35140` is not reachable now: SSH and raw TCP probe both return `Connection refused`. |
+| Handoff | Method progress remains: Plan A/B encoder pretraining and two-seed downstream loss ablations are complete; Square shows a consistent frozen-pretrained encoder loss signal, strongest for Plan A frozen, while ToolHang remains close across methods. No active GPU is reachable through the current assignment, so more rollout or release-like evaluation needs a reachable allocation. Historical node `10.100.2.35:33805` was not touched per user instruction. |

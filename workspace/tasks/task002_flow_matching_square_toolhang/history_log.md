@@ -1,6 +1,6 @@
 # History Log
 
-<!-- METADATA:SESSION=17 -->
+<!-- METADATA:SESSION=18 -->
 
 ## Session 0
 
@@ -322,3 +322,21 @@
 - Resource boundary:
   - Historical flow-matching node `10.100.2.35:33805` was not touched because the user instructed not to use the earlier GPU.
   - Documented py39/RoboMimic `0.2.0` host `10.100.0.29:36645` remains a recorded release-like environment reference, not an active allocation verified in this session.
+
+## Session 18
+
+- Checked current task progress for the user.
+- Progress summary:
+  - Direction A, future-action contrastive encoder pretraining, has been implemented, pretrained on Square/ToolHang, and evaluated through exact-PTP downstream loss ablations.
+  - Direction B, action-sequence predictive encoder pretraining, has been implemented, pretrained with full-action and future-only variants, and evaluated through exact-PTP downstream loss ablations.
+  - Square shows a repeatable loss-only benefit for frozen pretrained encoders across two seeds; Plan A frozen is the strongest current row.
+  - ToolHang remains close across methods and does not yet show a clear method signal.
+  - Formal rollout success-rate comparison has not been completed; only a short Square rollout smoke was completed earlier to validate the evaluator path.
+- Checked current GPU reachability:
+  - SSH probe: `ssh -o BatchMode=yes -o ConnectTimeout=10 -p 35140 10.100.2.4 ...`
+  - Result: `Connection refused`.
+  - Raw TCP probe via `/dev/tcp/10.100.2.4/35140` also returned `Connection refused`.
+- Current resource interpretation:
+  - The previously active encoder-method GPU endpoint `10.100.2.4:35140` is not reachable now.
+  - No current GPU process state can be confirmed from that endpoint.
+  - Historical node `10.100.2.35:33805` was not touched, following the user's prior instruction.

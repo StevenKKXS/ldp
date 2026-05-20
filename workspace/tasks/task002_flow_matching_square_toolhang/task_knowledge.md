@@ -1,6 +1,6 @@
 # Task Knowledge
 
-<!-- METADATA:SESSION=17 -->
+<!-- METADATA:SESSION=18 -->
 
 ## Working Rules
 
@@ -107,3 +107,5 @@
 - Current active GPU resource after Session 17 check is `10.100.2.4:35140`, hostname `lg-cmc-b7r201-c08u06-h200-000067`, with 8x NVIDIA H200 GPUs. All 8 are idle with no compute apps reported.
 - Historical node `10.100.2.35:33805` should not be touched for this encoder-method task unless the user explicitly reassigns it.
 - The py39/RoboMimic `0.2.0` host `10.100.0.29:36645` is documented as a closer release-like stack, but it is not a current verified active GPU allocation in Session 17.
+- Session 18 reachability check: `10.100.2.4:35140` returned `Connection refused` for SSH and a raw TCP probe, so it must not be treated as currently reachable.
+- Before launching additional rollout or release-like evaluation, confirm a reachable GPU allocation and then re-check `nvidia-smi`.
