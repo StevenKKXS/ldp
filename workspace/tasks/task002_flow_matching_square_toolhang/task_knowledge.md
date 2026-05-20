@@ -1,6 +1,6 @@
 # Task Knowledge
 
-<!-- METADATA:SESSION=31 -->
+<!-- METADATA:SESSION=32 -->
 
 ## Working Rules
 
@@ -94,3 +94,6 @@
 - Direction C extreme `past` benchmark results live at `/mnt/nfs/tingwen/intern_ldp_explorer/tasks/direction_c_behavior_translator/benchmarks/stage1_square_past_cpu_extreme_20260520_020004_v2/results.tsv`. Best valid same-batch setting was `batch=32,num_workers=64` at `80.59` samples/sec and projected `16.40` minutes/epoch. Fastest valid raw wall-clock setting was `batch=64,num_workers=96` at `104.43` samples/sec and projected `12.65` minutes/epoch, but this changes batch-size semantics.
 - Avoid Direction C `num_workers=144` or `batch=128` on this node unless `/dev/shm` or DataLoader sharing is changed. `/dev/shm` is 16G, and high worker/batch tests exited with DataLoader worker failures before CPU could be driven near 90%.
 - Translator workspace checkpoint resume must move optimizer state to the training device after loading because `BaseWorkspace.save_checkpoint` copies optimizer state to CPU. `TrainBehaviorTranslatorWorkspace` now calls `optimizer_to(self.optimizer, device)` after moving the model and normalizer.
+- Batch-size note: Session 26 did test `batch=128,num_workers=12` successfully at `86.09` samples/sec and projected `15.35` minutes/epoch. Session 32 `batch=128` failed only under much more aggressive worker settings (`num_workers=96/144`), so future batch 128/256 tests should sweep lower worker counts and lower shared-memory pressure rather than assuming large batch itself is impossible.
+- Training semantics note: Square has about 79,289 train samples, so batch 32 is about 2,478 optimizer steps/epoch, batch 128 is about 620 steps/epoch, and batch 256 is about 310 steps/epoch. Larger batch improves wall-clock samples/sec but changes optimizer update count and may require LR/epoch/step-budget review.
+- Multi-GPU note: current Direction C Stage 1 workspace is single-process/single-GPU. More GPUs accelerate the experiment matrix by running different objectives in parallel, but a single objective needs DDP changes: distributed sampler, DDP-wrapped obs encoder and translator, rank-aware logging/checkpointing, and validation metric reduction.

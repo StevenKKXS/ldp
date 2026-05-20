@@ -1,6 +1,6 @@
 # History Log
 
-<!-- METADATA:SESSION=31 -->
+<!-- METADATA:SESSION=32 -->
 
 ## Session 0
 
@@ -398,3 +398,6 @@
   - `past`: GPU0, pid `1086376`, resumed at epoch 44.
   - `future`: GPU1, pid `1086384`, resumed at epoch 44.
   - `past_future`: GPU2, pid `26885`, remained alive and reached epoch 44.
+- User asked why larger batch sizes such as 128/256 were not used and whether multi-GPU training would speed up the run.
+- Recorded clarification: batch 128 was already tested in the lighter Session 26 benchmark with `num_workers=12` and succeeded at `86.09` samples/sec, projected `15.35` minutes/epoch. In the Session 32 CPU-pressure benchmark, batch 128 paired with 96/144 workers failed due DataLoader shared-memory/IPC pressure, and batch 256 was not run because it would be an even higher-risk version of the same failure mode on the current `/dev/shm=16G` node.
+- Recorded plan for future resources: test batch 128/256 with controlled lower worker counts, lowered prefetch/shared-memory pressure, and learning-rate/update-count semantics separated from pure throughput. For single-objective multi-GPU speedup, implement DDP rather than only launching a single-GPU workspace on multiple visible GPUs.
