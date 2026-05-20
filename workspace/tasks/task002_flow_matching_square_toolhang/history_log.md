@@ -457,3 +457,15 @@
 - Training interpretation: `past` is the most stable Stage 1 representation target so far; `past_future` is conceptually closest to Direction C but current equal-weight future target overfits/noises validation and should be re-run with better balancing or LR; `future` alone is the least stable because future action is multimodal from observation history alone.
 - Recommended training plan recorded: use epoch-46/47/50 `past` checkpoints first for Stage 2a frozen-head probes, compare `past_future` epoch-4/10/46/50 and `future` epoch-4/42 as additional probes, and include the frozen random translator control before integrating with PTP/DP.
 - Hyperparameter recommendation recorded: for raw speed use `batch=128,num_workers=64,prefetch=2,persistent=false`, but compare by optimizer steps rather than epochs because Square has about `79,289` train samples, so batch 32 has about `2,478` steps/epoch while batch 128 has about `620`. For a batch-128 restart, use a step budget or about 4x epochs for update-count parity; keep `past` near LR `1e-4`, and try future-bearing objectives with lower obs-encoder LR such as `5e-5` and translator LR `1e-4` or reduce future loss weight.
+
+## Session 36 Progress Check
+
+- User asked for current progress.
+- Rechecked old formal node `10.100.2.35:25076` at `2026-05-20T07:03:17+00:00`: `past` pid `1086376` remained alive on GPU0 and `past_future` pid `26885` remained alive on GPU2. `future` still had no active process and GPU1 was idle.
+- Rechecked new 4xH200 speed node `10.100.4.35:19382` at `2026-05-20T07:03:19+00:00`: no translator or `train.py` processes were running, and all four GPUs were idle.
+- Latest formal Stage 1 metrics:
+  - `past`: `61` rows, latest epoch `61`, latest train loss `0.000442`, latest val loss `0.001051`, best val loss `0.000571 @ e52`, best val past L1 `0.012920 @ e47`.
+  - `future`: `45` rows, latest epoch `45`, latest train loss `0.002228`, latest val loss `0.018893`, best val loss `0.008961 @ e4`, best val future L1 `0.047157 @ e42`; run remains stopped after DataLoader bus error.
+  - `past_future`: `62` rows, latest epoch `62`, latest train loss `0.002183`, latest val loss `0.018963`, best val loss `0.010111 @ e4`, best val future L1 `0.044792 @ e10`, best val past L1 `0.016729 @ e57`.
+- Confirmed epoch-50 checkpoints exist for `past` and `past_future`: `past/checkpoints/epoch_0050.ckpt` and `past_future/checkpoints/epoch_0050.ckpt`. `future` has `best.ckpt` and `latest.ckpt` through epoch 45.
+- Progress interpretation: Stage 1 has crossed the checkpoint point needed for Stage 2a on the two live objectives. `past` remains the strongest stable representation candidate; `past_future` still shows train loss improving while validation total loss is early-best, so it should be probed by selected checkpoints rather than judged by latest epoch only.
