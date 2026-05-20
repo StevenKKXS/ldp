@@ -8,5 +8,5 @@
 | Status | Working |
 | Current Task | task002_flow_matching_square_toolhang |
 | PR | https://github.com/StevenKKXS/ldp/pull/1 |
-| Session | 33 |
-| Recent Progress | Tested Direction C Stage 1 Square `past` with `batch_size=128,num_workers=64` on GPU3. The short 120-step run completed successfully without DataLoader crash: 145.02 samples/sec, projected 9.11 minutes/epoch by the same wall-clock benchmark method, average GPU3 utilization 15.0%, max 99%, average GPU3 memory 8427 MiB. Formal GPU0-2 jobs remained alive. |
+| Session | 34 |
+| Recent Progress | Generated GPU3 utilization and memory curves for the Direction C Stage 1 Square `past` `batch_size=128,num_workers=64` benchmark. The curve shows bursty GPU use: all-sample average utilization 14.84%, max 99%, nonzero-util samples 32.6%, and average utilization 45.48% only when nonzero. Bottleneck is mainly input pipeline / startup / DataLoader IPC scheduling rather than H200 memory or raw GPU compute. |

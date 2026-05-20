@@ -1,6 +1,6 @@
 # Task Knowledge
 
-<!-- METADATA:SESSION=33 -->
+<!-- METADATA:SESSION=34 -->
 
 ## Working Rules
 
@@ -98,3 +98,4 @@
 - Training semantics note: Square has about 79,289 train samples, so batch 32 is about 2,478 optimizer steps/epoch, batch 128 is about 620 steps/epoch, and batch 256 is about 310 steps/epoch. Larger batch improves wall-clock samples/sec but changes optimizer update count and may require LR/epoch/step-budget review.
 - Multi-GPU note: current Direction C Stage 1 workspace is single-process/single-GPU. More GPUs accelerate the experiment matrix by running different objectives in parallel, but a single objective needs DDP changes: distributed sampler, DDP-wrapped obs encoder and translator, rank-aware logging/checkpointing, and validation metric reduction.
 - Direction C `batch=128,num_workers=64` benchmark result: GPU3 short run `stage1_square_past_b128_nw64_20260520_023318` completed successfully at `145.02` samples/sec, projected `9.11` minutes/epoch, average GPU3 utilization `15.0%`, max `99%`, average GPU3 memory `8427.4 MiB`. This is the fastest successful short-run wall-clock result so far, but it changes batch-size/update-count semantics relative to the formal batch-32 runs.
+- Direction C GPU utilization curve for `batch=128,num_workers=64`: `/mnt/nfs/tingwen/intern_ldp_explorer/tasks/direction_c_behavior_translator/benchmarks/stage1_square_past_b128_nw64_20260520_023318/analysis/gpu3_util_memory_curve.png`. Summary: average util `14.84%`, max `99%`, p50 `0%`, p90 `86.2%`, nonzero-util fraction `32.6%`, average util when nonzero `45.48%`, max memory `17592 MiB`. Bottleneck is input pipeline / startup / DataLoader IPC / host-to-device scheduling rather than GPU memory or raw compute.
