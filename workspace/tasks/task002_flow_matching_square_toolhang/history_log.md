@@ -1,6 +1,6 @@
 # History Log
 
-<!-- METADATA:SESSION=38 -->
+<!-- METADATA:SESSION=39 -->
 
 ## Session 0
 
@@ -512,3 +512,11 @@
 - Parsed existing py39 / robomimic 0.2.0 Flow Matching rollout eval logs under `/mnt/nfs/tingwen/intern_method_developer/tasks/task002_flow_matching_square_toolhang/outputs`: Square h10 `7/10`, Square action8 `4/10`, ToolHang h10 `0/10`, ToolHang action8 `0/10`.
 - Parsed current Stage 2a offline metrics: `stage2a_past_e50` best val loss `0.007839` and future L1 `0.04917` at epoch 27; `stage2a_random_frozen` best val loss `0.011571` and future L1 `0.06736` at epoch 12.
 - Recorded answer: Direction C currently has offline eval-loss metrics only; environment success rate requires integrating translator context into DP/PTP and then running Robomimic rollout.
+
+## Session 39
+
+- User asked for current GPU resource utilization.
+- Checked old formal node `10.100.2.35:25076`: GPU0 has `past` Stage 1 pid `1086376`, `CUDA_VISIBLE_DEVICES=0`, about `5.5GB` memory; GPU2 has `past_future` Stage 1 pid `26885`, `CUDA_VISIBLE_DEVICES=2`, about `5.4GB` memory. GPU1 and GPU3 are idle.
+- Ran a 5-sample utilization check on the old node: first four samples had GPU0/GPU2 at `0%`, and the fifth sample showed GPU0 `77%` and GPU2 `85%`. This indicates intermittent compute with substantial input-pipeline or host-side waiting, not steady GPU saturation.
+- Checked new 4xH200 node `10.100.4.35:19382`: all GPUs had `0%` utilization and `1 MiB` memory, with no train/eval/rollout processes. The Stage 2a 50-epoch jobs and the 8-epoch `past` LR sweep are complete.
+- Latest metric rows at this check: formal `past` epoch `94` val loss `0.000634`; formal `past_future` epoch `95` val loss `0.019400`; Stage2a `past_e50` and `random_frozen` both finished epoch `50`; LR sweep jobs both finished epoch `8`.

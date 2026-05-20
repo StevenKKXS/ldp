@@ -1,6 +1,6 @@
 # Task Knowledge
 
-<!-- METADATA:SESSION=38 -->
+<!-- METADATA:SESSION=39 -->
 
 ## Working Rules
 
@@ -121,3 +121,4 @@
 - Stage 1 tuning watchdog policy: after epoch 5, kill a tuning run if `val/loss_total` is NaN/Inf or exceeds `0.004`; this threshold is intentionally loose relative to the stable old `past` run (`~0.0006-0.0011`) and is meant only to catch clearly bad LR choices.
 - Direction C Stage 1 `past` data flow: with `H=16,P=16,K=8`, `anchor=16`; obs input uses window positions `1..16`, `act_past` target uses actions `0..15`, and `act_future` uses actions `16..23`. Only raw obs is model input. `target_mode=past` optimizes SmoothL1 on normalized `pred_past` only; future predictions and context are logged/available for probes but do not drive gradients in this mode.
 - Direction C rollout status as of Session 38: Stage 1 and Stage 2a have no rollout eval because they are offline translator/head probes. Existing rollout success rates are from the earlier py39 / robomimic 0.2.0 Flow Matching baseline only: Square h10 `7/10`, Square action8 `4/10`, ToolHang h10 `0/10`, ToolHang action8 `0/10`. Stage 2a current offline signal: `past_e50` best val loss `0.007839` / future L1 `0.04917`, random frozen best val loss `0.011571` / future L1 `0.06736`.
+- Direction C GPU utilization as of Session 39: old node `10.100.2.35:25076` has only GPU0/GPU2 occupied by formal Stage 1 `past` and `past_future` jobs, each using about `5.4-5.5GB`; GPU1/GPU3 are idle. A short sample showed intermittent compute rather than steady saturation. New node `10.100.4.35:19382` is fully idle after Stage2a and the 8-epoch `past` LR sweep completed.

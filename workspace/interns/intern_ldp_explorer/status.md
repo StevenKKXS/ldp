@@ -8,5 +8,5 @@
 | Status | Working |
 | Current Task | task002_flow_matching_square_toolhang |
 | PR | https://github.com/StevenKKXS/ldp/pull/1 |
-| Session | 38 |
-| Recent Progress | Checked rollout status. Direction C BehaviorTranslator / Stage2a currently has no rollout eval output because Stage1 and Stage2a are offline representation/action-head probes, not rollout-capable policies. Existing py39 / robomimic 0.2.0 rollout results are only from the earlier Flow Matching baseline: Square h10 `7/10`, Square action8 `4/10`, ToolHang h10 `0/10`, ToolHang action8 `0/10`. Stage2a offline probe results are available: `past_e50` best val loss `0.007839` / future L1 `0.04917`, better than random frozen best val loss `0.011571` / future L1 `0.06736`. |
+| Session | 39 |
+| Recent Progress | Checked current GPU utilization. Old formal node `10.100.2.35:25076` has two active Stage 1 jobs: `past` on GPU0 pid `1086376` using about `5.5GB` and `past_future` on GPU2 pid `26885` using about `5.4GB`; GPU1 and GPU3 are idle. A 5-sample check showed intermittent compute, with four samples at `0%` util and the final sample at GPU0 `77%` / GPU2 `85%`, consistent with input-pipeline waiting. New 4xH200 node `10.100.4.35:19382` is fully idle with no train/eval/rollout processes. Stage2a 50-epoch probes and the 8-epoch `past` LR sweep have completed. |
