@@ -375,3 +375,26 @@
   - `future` learns the training objective, but validation total loss is best at epoch 4 and later becomes noisier/higher, while validation future L1 still trends down mildly.
   - `past_future` learns both targets, with past L1 low and future L1 competitive, but validation total loss is also best early; its best future L1 was around epoch 10 rather than the latest checkpoint.
 - Recorded recommendation: use early/best checkpoints plus epoch 50 for Stage 2a probes; do not select the latest checkpoint purely because train loss is lower.
+
+## Session 32
+
+- User asked whether CPU utilization is the bottleneck and requested an extreme GPU3 speed test for the Direction C Stage 1 Square `past` translator using as much remaining CPU as practical.
+- Checked node `10.100.2.35:25076`: it has 192 logical CPUs, 2 sockets, 48 cores per socket, 2 threads per core, and 4 H200 GPUs.
+- Current formal translator jobs each use `num_workers=8`, so the three formal runs create 24 DataLoader workers. The worker processes sit near 100% CPU each, while total node CPU was around 12.5% busy after restart and load average was around 20, leaving global CPU capacity unused.
+- Ran GPU3 benchmark under `/mnt/nfs/tingwen/intern_ldp_explorer/tasks/direction_c_behavior_translator/benchmarks/stage1_square_past_cpu_extreme_20260520_020004_v2` with `behavior_translator_square_past`, `training.max_train_steps=120`, `training.max_val_batches=1`, and `CUDA_VISIBLE_DEVICES=3`.
+- Valid benchmark results:
+  - `batch=32,num_workers=8`: `48.30` samples/sec, projected `27.36` minutes/epoch, average GPU3 util `2.8%`, max `69%`.
+  - `batch=32,num_workers=32`: `72.30` samples/sec, projected `18.28` minutes/epoch, average GPU3 util `7.2%`, max `78%`.
+  - `batch=32,num_workers=64`: `80.59` samples/sec, projected `16.40` minutes/epoch, average GPU3 util `13.2%`, max `80%`.
+  - `batch=32,num_workers=96`: `68.59` samples/sec, projected `19.27` minutes/epoch, average GPU3 util `8.1%`, max `65%`.
+  - `batch=64,num_workers=96`: `104.43` samples/sec, projected `12.65` minutes/epoch, average GPU3 util `10.5%`, max `89%`.
+- Invalid benchmark rows: `batch=32,num_workers=144`, `batch=64,num_workers=144`, `batch=128,num_workers=96`, and `batch=128,num_workers=144` exited with DataLoader worker failures, so their apparent throughput values are not usable.
+- Recorded systems interpretation: for same training batch semantics, `batch=32,num_workers=64` is the best valid setting in this short run. The fastest valid raw wall-clock setting was `batch=64,num_workers=96`, but it changes batch size and optimizer-step semantics.
+- Found `/dev/shm` is only 16G. High worker/batch combinations fail before the node can use 90% of the 192 logical CPUs, so the bottleneck is the DataLoader shared-memory/IPC path plus image loading, not global CPU availability alone.
+- During the pressure test, the formal `past` and `future` jobs were no longer alive while `past_future` remained running. First resume attempt exposed a workspace resume bug: checkpoints save optimizer state on CPU, but `TrainBehaviorTranslatorWorkspace` did not move optimizer state back to CUDA after loading.
+- Patched `diffusion_policy/workspace/train_behavior_translator_workspace.py` to import and call `optimizer_to(self.optimizer, device)` after moving model and normalizer to the training device.
+- Verified the patch with `python -m py_compile` locally and in the GPU worktree, then synced it to `/mnt/nfs/tingwen/intern_ldp_explorer/repos/ldp_behavior_translator`.
+- Restored formal jobs from `latest.ckpt`:
+  - `past`: GPU0, pid `1086376`, resumed at epoch 44.
+  - `future`: GPU1, pid `1086384`, resumed at epoch 44.
+  - `past_future`: GPU2, pid `26885`, remained alive and reached epoch 44.

@@ -1,10 +1,10 @@
 # Direction C Status
 
-Last updated: 2026-05-19
+Last updated: 2026-05-20
 
 ## Current State
 
-Status: active for `intern_ldp_explorer`; Stage 1 Square comparison is running on GPU.
+Status: active for `intern_ldp_explorer`; Stage 1 Square comparison is running on GPU with `py39` and `robomimic==0.2.0`.
 
 Owner: `intern_ldp_explorer`.
 
@@ -66,6 +66,44 @@ experiment_configs/square/behavior_translator_square_past_future.yaml
 - Dataset shape smoke passed: obs keys have `[16, ...]`, `act_past` is `[16, 10]`, `act_future` is `[8, 10]`.
 - CPU one-step forward/backward smoke passed for `behavior_translator_square_past_future`; it wrote `latest.ckpt`, `best.ckpt`, `logs.json.txt`, `metrics.csv`, and `env.json`.
 
+## Active Runs
+
+Run root:
+
+```text
+/mnt/nfs/tingwen/intern_ldp_explorer/tasks/direction_c_behavior_translator/outputs/stage1_square_20260519_143020
+```
+
+After Session 32 recovery:
+
+```text
+past:        GPU0, pid 1086376, resumed at epoch 44
+future:      GPU1, pid 1086384, resumed at epoch 44
+past_future: GPU2, pid 26885, reached epoch 44
+```
+
+The resume fix in `TrainBehaviorTranslatorWorkspace` moves optimizer state to CUDA after loading checkpoint state, matching the base workspace convention that checkpoints are saved on CPU.
+
+## CPU Benchmark
+
+GPU3 benchmark root:
+
+```text
+/mnt/nfs/tingwen/intern_ldp_explorer/tasks/direction_c_behavior_translator/benchmarks/stage1_square_past_cpu_extreme_20260520_020004_v2
+```
+
+Key results for the Square `past` objective:
+
+| Batch | Workers | Status | Samples/s | Projected min/epoch | Avg GPU3 util |
+|---:|---:|---|---:|---:|---:|
+| 32 | 8 | ok | 48.30 | 27.36 | 2.8% |
+| 32 | 64 | ok | 80.59 | 16.40 | 13.2% |
+| 64 | 96 | ok | 104.43 | 12.65 | 10.5% |
+| 32 | 144 | failed | - | - | - |
+| 128 | 96 | failed | - | - | - |
+
+The node has 192 logical CPUs, but `/dev/shm` is only 16G. High worker and large batch settings hit DataLoader worker failures before the node can use 90% CPU.
+
 ## Next Step
 
-Monitor the three Square Stage 1 jobs under `/mnt/nfs/tingwen/intern_ldp_explorer/tasks/direction_c_behavior_translator/outputs/stage1_square_20260519_143020` and compare eval loss curves plus every-50-epoch checkpoints.
+Use the current formal runs to reach the epoch-50 checkpoint, then compare `best`, epoch-50, and best-future-L1 checkpoints in the frozen-head probe.

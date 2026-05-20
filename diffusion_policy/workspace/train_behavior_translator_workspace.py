@@ -23,7 +23,7 @@ from omegaconf import OmegaConf
 from torch.utils.data import DataLoader
 
 from diffusion_policy.common.json_logger import JsonLogger
-from diffusion_policy.common.pytorch_util import dict_apply
+from diffusion_policy.common.pytorch_util import dict_apply, optimizer_to
 from diffusion_policy.dataset.base_dataset import BaseImageDataset
 from diffusion_policy.workspace.base_workspace import BaseWorkspace
 
@@ -178,6 +178,7 @@ class TrainBehaviorTranslatorWorkspace(BaseWorkspace):
         self.obs_encoder.to(device)
         self.model.to(device)
         normalizer.to(device)
+        optimizer_to(self.optimizer, device)
 
         env_info = {
             "python": os.sys.executable,
