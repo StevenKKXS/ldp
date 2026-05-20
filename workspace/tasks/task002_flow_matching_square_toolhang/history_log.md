@@ -1,6 +1,6 @@
 # History Log
 
-<!-- METADATA:SESSION=26 -->
+<!-- METADATA:SESSION=27 -->
 
 ## Session 0
 
@@ -314,3 +314,12 @@
 - Training-loop tqdm suggests the stable improvement is mainly from `num_workers=12`: `batch=32,num_workers=12` reached about `3.6` steps/sec versus about `2.4-2.7` steps/sec for `batch=32,num_workers=8`.
 - Interpretation: `num_workers=12` is the safest speed improvement because it preserves batch size and optimizer-step count. `batch=64/128` is runnable and improves short-run wall throughput, but it changes optimizer-step semantics and should be treated as a training hyperparameter change rather than a pure systems optimization.
 - One benign Python multiprocessing finalizer warning appeared in the `batch=32,num_workers=8` stdout after metrics were written: `/tmp/pymp-*` directory not empty. The run still exited successfully and produced `metrics.csv`.
+
+## Session 27
+
+- User asked how the current dataloader selects the training set.
+- Reviewed `BehaviorTranslationDataset`, `RobomimicReplayImageDataset`, `SequenceSampler`, and the Square translator configs.
+- Confirmed the base robomimic image dataset converts the hdf5 demonstrations into a replay buffer, then creates a validation mask over whole episodes with `val_ratio=0.02` and `seed=42`; the training sampler receives the complement train episode mask.
+- Confirmed `SequenceSampler` builds one sample index for each valid contiguous `sequence_length=24` window within training episodes, with `pad_before=16` and `pad_after=7` allowing repeated boundary frames near episode starts/ends.
+- Confirmed the PyTorch `DataLoader` then shuffles those window indices for training (`shuffle=true`) and keeps validation ordered (`shuffle=false`).
+- Confirmed the translator wrapper does not change which windows are train samples. It samples a full 24-step window from the base sampler, then for `H=16,P=16,K=8` uses `anchor=16`, obs offsets `1..16`, past action offsets `0..15`, and future action offsets `16..23`.

@@ -1,6 +1,6 @@
 # Task Knowledge
 
-<!-- METADATA:SESSION=26 -->
+<!-- METADATA:SESSION=27 -->
 
 ## Working Rules
 
@@ -83,3 +83,6 @@
 - Larger batch size is likely the safest first benchmark because each run uses only about `5.3GB` on a 144GB H200 at batch 32. Test batch 64 and 128 with identical short-step settings before restarting formal runs.
 - GPU3 speed benchmark results live at `/mnt/nfs/tingwen/intern_ldp_explorer/tasks/direction_c_behavior_translator/benchmarks/stage1_square_speed_20260519_144034/results.tsv`. In the short benchmark, `batch=128,num_workers=12` had the best wall throughput, but `batch=32,num_workers=12` is the safer systems-only change because it preserves optimizer-step count.
 - Recommended Direction C speed change if restarting the current formal runs: set `dataloader.num_workers=12` and `val_dataloader.num_workers=12` first; consider `batch_size=64/128` only as a training hyperparameter experiment.
+- Direction C dataloader training-set rule: the base robomimic image dataset selects train/val at the episode level using `get_val_mask(n_episodes, val_ratio=0.02, seed=42)`, then `SequenceSampler` only creates training window indices for episodes where `train_mask=True`.
+- Direction C translator slicing rule for `H=16,P=16,K=8`: base sequence length is `24`, `anchor=max(P,H-1)=16`, obs history uses offsets `1..16`, past actions use `0..15`, and future actions use `16..23`.
+- The training PyTorch `DataLoader` shuffles sampler indices each epoch; it does not randomly crop frames inside an already sampled window. Boundary padding is handled by `SequenceSampler` with repeated first/last valid frames.
