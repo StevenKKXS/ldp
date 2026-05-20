@@ -1,6 +1,6 @@
 # History Log
 
-<!-- METADATA:SESSION=30 -->
+<!-- METADATA:SESSION=31 -->
 
 ## Session 0
 
@@ -364,3 +364,14 @@
   - `stage1_square_val_loss_compare.png`: val loss comparison across `past`, `future`, and `past_future`.
   - `summary.csv`: latest and best metric table through epoch 42.
 - Curve interpretation: `past` validation total loss drops quickly and stays low; `future` and `past_future` train losses keep decreasing, but validation total loss has early best values and later noise/rise, so epoch 50 should be used as a decision point for checkpoint selection and potential hyperparameter changes.
+
+## Session 31
+
+- User shared the curve image and asked for an explanation.
+- Interpreted the plot as follows:
+  - Top row is train/validation total SmoothL1 loss on log scale; blue is train, red is validation, black dot marks best validation loss.
+  - Bottom row overlays validation `past_l1`, `future_l1`, and gripper accuracy; gripper accuracy is near 0.9 and visually dominates the bottom-axis scale.
+  - `past` learns the easiest and most stable objective: train and validation loss both drop, best validation loss is at epoch 23, and latest validation loss remains close.
+  - `future` learns the training objective, but validation total loss is best at epoch 4 and later becomes noisier/higher, while validation future L1 still trends down mildly.
+  - `past_future` learns both targets, with past L1 low and future L1 competitive, but validation total loss is also best early; its best future L1 was around epoch 10 rather than the latest checkpoint.
+- Recorded recommendation: use early/best checkpoints plus epoch 50 for Stage 2a probes; do not select the latest checkpoint purely because train loss is lower.

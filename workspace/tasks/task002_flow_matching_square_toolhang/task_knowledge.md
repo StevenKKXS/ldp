@@ -1,6 +1,6 @@
 # Task Knowledge
 
-<!-- METADATA:SESSION=30 -->
+<!-- METADATA:SESSION=31 -->
 
 ## Working Rules
 
@@ -89,3 +89,4 @@
 - Direction C frame/sample counts under `val_ratio=0.02,seed=42,sequence_length=24,pad_before=16,pad_after=7`: Square mh has 80,731 total frames and 79,289 train samples; ToolHang ph has 95,962 total frames and 93,885 train samples. The padded-window sample count equals selected frame count because `L - 24 + 16 + 7 + 1 = L`.
 - Direction C Stage 1 checkpoint at epoch 42: `past` is stable with best val loss `0.000622` at epoch 23; `future` best val loss is `0.008961` at epoch 4 and latest val future L1 is `0.04716`; `past_future` best val loss is `0.010111` at epoch 4 and best val future L1 is `0.04479` at epoch 10. Treat epoch 50 as an analysis checkpoint before committing to a long unchanged run.
 - Direction C Stage 1 curve artifacts through epoch 42: `/mnt/nfs/tingwen/intern_ldp_explorer/tasks/direction_c_behavior_translator/analysis/stage1_square_curves_20260520_0143/stage1_square_curve_overview.png` and `summary.csv`.
+- Direction C Stage 1 curve interpretation: `past` is a stable reconstruction objective; `future` and `past_future` have decreasing train loss but early-best validation total loss. For representation use, compare early best, best future-L1, and epoch-50 checkpoints in Stage 2a rather than relying only on latest.
