@@ -8,5 +8,5 @@
 | Status | Working |
 | Current Task | task002_flow_matching_square_toolhang |
 | PR | https://github.com/StevenKKXS/ldp/pull/1 |
-| Session | 34 |
-| Recent Progress | Generated GPU3 utilization and memory curves for the Direction C Stage 1 Square `past` `batch_size=128,num_workers=64` benchmark. The curve shows bursty GPU use: all-sample average utilization 14.84%, max 99%, nonzero-util samples 32.6%, and average utilization 45.48% only when nonzero. Bottleneck is mainly input pipeline / startup / DataLoader IPC scheduling rather than H200 memory or raw GPU compute. |
+| Session | 35 |
+| Recent Progress | Reviewed non-preencoding speed options for Direction C because the encoder must stay trainable. Identified promising directions: persistent DataLoader workers and prefetch tuning, removing or moving CPU ColorJitter/float conversion out of worker hot path, bf16 AMP plus channels-last for H200, validation/checkpoint cadence control, and lightweight data-time/compute-time profiling. Also tested a no-preencoding sampler change with `base_dataset.n_obs_steps=17`; it ran successfully but was slightly slower than the previous `bs128,nw64` short benchmark, so it is not the first optimization to adopt. |

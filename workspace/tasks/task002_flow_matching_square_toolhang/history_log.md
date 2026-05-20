@@ -1,6 +1,6 @@
 # History Log
 
-<!-- METADATA:SESSION=34 -->
+<!-- METADATA:SESSION=35 -->
 
 ## Session 0
 
@@ -421,3 +421,18 @@
   - `gpu3_util_summary.tsv`
 - Summary metrics: 95 samples over 105 seconds, average utilization `14.84%`, max utilization `99%`, p50 utilization `0%`, p90 utilization `86.2%`, p95 utilization `89%`, nonzero-util sample fraction `32.6%`, average utilization when nonzero `45.48%`, average memory `8338.7 MiB`, and max memory `17592 MiB`.
 - Recorded bottleneck interpretation: GPU use is bursty with long idle stretches and short high-utilization regions. The limiting path is primarily startup/cache/DataLoader warmup plus CPU DataLoader / multiprocessing IPC / host-to-device scheduling, not H200 memory capacity or raw GPU compute.
+
+## Session 35
+
+- User pointed out that pre-encoding is not appropriate because the goal is to train the encoder, and asked for other optimization directions.
+- Reviewed the translator training and dataset path. Current `BehaviorTranslationDataset._extract_obs` uses raw image samples, then performs `torch.from_numpy -> CPU ColorJitter -> float32 / 255 -> numpy -> torch.from_numpy` inside DataLoader workers. This keeps the encoder trainable but makes workers do image augmentation, dtype conversion, and extra CPU memory movement before the batch reaches GPU.
+- Identified non-preencoding optimization candidates:
+  - Enable `persistent_workers=true` and tune `prefetch_factor`; current formal configs respawn workers every epoch.
+  - Add timing logs for DataLoader wait time versus compute time, so future changes can be judged without relying only on `nvidia-smi`.
+  - Add a config switch to disable CPU ColorJitter for translator runs or move augmentation to the GPU path, keeping the obs encoder trainable.
+  - Test bf16 AMP and channels-last for the trainable obs encoder plus translator on H200.
+  - Reduce validation/checkpoint cadence for long throughput runs while preserving explicit eval checkpoints for model selection.
+  - Treat DDP as a later step because each rank would multiply DataLoader pressure unless the input pipeline is improved first.
+- Found a potential sampler waste: current configs set `task.dataset.base_dataset.n_obs_steps=24`, while the translator only uses obs indices `1..16`; in principle `n_obs_steps=17` can still provide all used obs frames while keeping full 24-step action windows.
+- Tested this no-preencoding sampler change on GPU3 under `/mnt/nfs/tingwen/intern_ldp_explorer/tasks/direction_c_behavior_translator/benchmarks/stage1_square_past_b128_nw64_obs17_20260520_024727` with `batch_size=128`, `num_workers=64`, `base_dataset.n_obs_steps=17`, 120 train steps, and one val batch.
+- Result: run completed successfully, but was not faster than the prior `bs128,nw64` short benchmark: `139.51` samples/sec and projected `9.47` minutes/epoch versus `145.02` samples/sec and projected `9.11` minutes/epoch. This direction is valid but not the highest-priority speed lever from the current short benchmark.

@@ -1,6 +1,6 @@
 # Task Knowledge
 
-<!-- METADATA:SESSION=34 -->
+<!-- METADATA:SESSION=35 -->
 
 ## Working Rules
 
@@ -99,3 +99,7 @@
 - Multi-GPU note: current Direction C Stage 1 workspace is single-process/single-GPU. More GPUs accelerate the experiment matrix by running different objectives in parallel, but a single objective needs DDP changes: distributed sampler, DDP-wrapped obs encoder and translator, rank-aware logging/checkpointing, and validation metric reduction.
 - Direction C `batch=128,num_workers=64` benchmark result: GPU3 short run `stage1_square_past_b128_nw64_20260520_023318` completed successfully at `145.02` samples/sec, projected `9.11` minutes/epoch, average GPU3 utilization `15.0%`, max `99%`, average GPU3 memory `8427.4 MiB`. This is the fastest successful short-run wall-clock result so far, but it changes batch-size/update-count semantics relative to the formal batch-32 runs.
 - Direction C GPU utilization curve for `batch=128,num_workers=64`: `/mnt/nfs/tingwen/intern_ldp_explorer/tasks/direction_c_behavior_translator/benchmarks/stage1_square_past_b128_nw64_20260520_023318/analysis/gpu3_util_memory_curve.png`. Summary: average util `14.84%`, max `99%`, p50 `0%`, p90 `86.2%`, nonzero-util fraction `32.6%`, average util when nonzero `45.48%`, max memory `17592 MiB`. Bottleneck is input pipeline / startup / DataLoader IPC / host-to-device scheduling rather than GPU memory or raw compute.
+- Do not use pre-encoded observations as the main Direction C speed solution because the experiment goal is to train the obs encoder. Acceptable speed work should preserve raw-image input and trainable encoder.
+- Current translator dataset worker hot path includes CPU image augmentation and extra copies: `torch.from_numpy -> ColorJitter -> float32/255 -> numpy -> torch.from_numpy`. A high-priority non-preencoding optimization is to make CPU ColorJitter configurable or move augmentation to the GPU path while keeping the encoder trainable.
+- Current configs set `base_dataset.n_obs_steps=24`, but Direction C `H=16,P=16,K=8` uses obs indices `1..16`; `base_dataset.n_obs_steps=17` is sufficient for obs keys while action still spans the full 24-step sequence. A short `bs128,nw64,n_obs_steps=17` benchmark completed but was slightly slower (`139.51` samples/sec, projected `9.47` minutes/epoch) than the prior `bs128,nw64,n_obs_steps=24` benchmark (`145.02` samples/sec, projected `9.11` minutes/epoch), so it is not the first config to adopt.
+- Non-preencoding speed priority for Direction C: first benchmark `persistent_workers=true` with controlled `prefetch_factor`, add data-time/compute-time logging, then test CPU ColorJitter off/GPU augmentation, bf16 AMP, and channels-last. DDP should come after input-pipeline improvements because it multiplies DataLoader pressure across ranks.
