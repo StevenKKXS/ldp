@@ -1,6 +1,6 @@
 # Task Knowledge
 
-<!-- METADATA:SESSION=37 -->
+<!-- METADATA:SESSION=38 -->
 
 ## Working Rules
 
@@ -120,3 +120,4 @@
 - Stage 1 `past` LR sweep root: `/mnt/nfs/tingwen/intern_ldp_explorer/tasks/direction_c_behavior_translator/outputs/stage1_square_past_lr_sweep_20260520_0722`. First two fast runs use `batch=128,num_workers=48,num_epochs=8`: `stage1_past_bs128_lr1e4` (`obs_encoder_lr=1e-4,translator_lr=1e-4`) and `stage1_past_bs128_obs5e5_tr1e4` (`obs_encoder_lr=5e-5,translator_lr=1e-4`).
 - Stage 1 tuning watchdog policy: after epoch 5, kill a tuning run if `val/loss_total` is NaN/Inf or exceeds `0.004`; this threshold is intentionally loose relative to the stable old `past` run (`~0.0006-0.0011`) and is meant only to catch clearly bad LR choices.
 - Direction C Stage 1 `past` data flow: with `H=16,P=16,K=8`, `anchor=16`; obs input uses window positions `1..16`, `act_past` target uses actions `0..15`, and `act_future` uses actions `16..23`. Only raw obs is model input. `target_mode=past` optimizes SmoothL1 on normalized `pred_past` only; future predictions and context are logged/available for probes but do not drive gradients in this mode.
+- Direction C rollout status as of Session 38: Stage 1 and Stage 2a have no rollout eval because they are offline translator/head probes. Existing rollout success rates are from the earlier py39 / robomimic 0.2.0 Flow Matching baseline only: Square h10 `7/10`, Square action8 `4/10`, ToolHang h10 `0/10`, ToolHang action8 `0/10`. Stage 2a current offline signal: `past_e50` best val loss `0.007839` / future L1 `0.04917`, random frozen best val loss `0.011571` / future L1 `0.06736`.

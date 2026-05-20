@@ -1,6 +1,6 @@
 # History Log
 
-<!-- METADATA:SESSION=37 -->
+<!-- METADATA:SESSION=38 -->
 
 ## Session 0
 
@@ -503,3 +503,12 @@
 - Recorded explanation: only observations/proprio are model inputs. Actions are not fed into the translator; `act_past` and `act_future` are supervision/diagnostic tensors.
 - Recorded explanation: the trainable robomimic obs encoder maps raw image/proprio history to obs tokens, the BehaviorTranslator predicts `P+K=24` normalized action vectors, and `target_mode=past` sets `loss_total = SmoothL1(pred_past, act_past)`.
 - Recorded explanation: `loss_future`, `future_l1`, `future_mse`, `gripper_acc`, and per-horizon future L1 are still logged in `past` runs, but they are diagnostics only and do not affect gradients for `target_mode=past`.
+
+## Session 38
+
+- User asked whether rollout eval results are available now.
+- Checked Direction C output roots under `/mnt/nfs/tingwen/intern_ldp_explorer/tasks/direction_c_behavior_translator`; no `eval_log.json` or rollout output exists for Stage 1 / Stage 2a.
+- Checked live GPU processes: new node `10.100.4.35:19382` had no active train/eval/rollout processes and all GPUs idle; old node `10.100.2.35:25076` still had Stage 1 `past` and `past_future` training processes, with no rollout process.
+- Parsed existing py39 / robomimic 0.2.0 Flow Matching rollout eval logs under `/mnt/nfs/tingwen/intern_method_developer/tasks/task002_flow_matching_square_toolhang/outputs`: Square h10 `7/10`, Square action8 `4/10`, ToolHang h10 `0/10`, ToolHang action8 `0/10`.
+- Parsed current Stage 2a offline metrics: `stage2a_past_e50` best val loss `0.007839` and future L1 `0.04917` at epoch 27; `stage2a_random_frozen` best val loss `0.011571` and future L1 `0.06736` at epoch 12.
+- Recorded answer: Direction C currently has offline eval-loss metrics only; environment success rate requires integrating translator context into DP/PTP and then running Robomimic rollout.
