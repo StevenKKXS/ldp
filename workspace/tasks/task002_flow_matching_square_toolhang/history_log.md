@@ -458,7 +458,7 @@
 - Recommended training plan recorded: use epoch-46/47/50 `past` checkpoints first for Stage 2a frozen-head probes, compare `past_future` epoch-4/10/46/50 and `future` epoch-4/42 as additional probes, and include the frozen random translator control before integrating with PTP/DP.
 - Hyperparameter recommendation recorded: for raw speed use `batch=128,num_workers=64,prefetch=2,persistent=false`, but compare by optimizer steps rather than epochs because Square has about `79,289` train samples, so batch 32 has about `2,478` steps/epoch while batch 128 has about `620`. For a batch-128 restart, use a step budget or about 4x epochs for update-count parity; keep `past` near LR `1e-4`, and try future-bearing objectives with lower obs-encoder LR such as `5e-5` and translator LR `1e-4` or reduce future loss weight.
 
-## Session 36 Progress Check
+### Progress Check
 
 - User asked for current progress.
 - Rechecked old formal node `10.100.2.35:25076` at `2026-05-20T07:03:17+00:00`: `past` pid `1086376` remained alive on GPU0 and `past_future` pid `26885` remained alive on GPU2. `future` still had no active process and GPU1 was idle.
