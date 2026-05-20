@@ -469,3 +469,17 @@
   - `past_future`: `62` rows, latest epoch `62`, latest train loss `0.002183`, latest val loss `0.018963`, best val loss `0.010111 @ e4`, best val future L1 `0.044792 @ e10`, best val past L1 `0.016729 @ e57`.
 - Confirmed epoch-50 checkpoints exist for `past` and `past_future`: `past/checkpoints/epoch_0050.ckpt` and `past_future/checkpoints/epoch_0050.ckpt`. `future` has `best.ckpt` and `latest.ckpt` through epoch 45.
 - Progress interpretation: Stage 1 has crossed the checkpoint point needed for Stage 2a on the two live objectives. `past` remains the strongest stable representation candidate; `past_future` still shows train loss improving while validation total loss is early-best, so it should be probed by selected checkpoints rather than judged by latest epoch only.
+
+### Stage 2a Launch
+
+- User asked to allocate current resources for Stage 2a and clarified whether this validation can produce success-rate metrics.
+- Implemented `diffusion_policy/workspace/train_translator_head_workspace.py`, which loads optional Stage 1 obs-encoder plus BehaviorTranslator checkpoints, freezes the context modules by default, trains a small MLP future-action head from `behavior_context`, and logs offline `val/loss_total`, `val/future_l1`, `val/future_mse`, `val/gripper_acc`, and per-horizon future L1.
+- Added `experiment_configs/square/translator_head_square.yaml` for Square Stage 2a with `batch_size=128`, `num_workers=16`, `future_action_horizon=8`, frozen context, and `num_epochs=50`.
+- Verified locally and on the new GPU node: `python -m py_compile diffusion_policy/workspace/train_translator_head_workspace.py` and Hydra `--cfg job` parse passed in py39 / `robomimic==0.2.0`.
+- Ran Stage 2a smoke on `10.100.4.35:19382` under `/mnt/nfs/tingwen/intern_ldp_explorer/tasks/direction_c_behavior_translator/smoke/stage2a_smoke_20260520_0718`: both `random` and `past_e50` completed one epoch with two train batches and one val batch, wrote `metrics.csv`, and validated checkpoint loading/freezing.
+- Launched first formal Stage 2a Square batch on the new 4xH200 node under `/mnt/nfs/tingwen/intern_ldp_explorer/tasks/direction_c_behavior_translator/outputs/stage2a_square_20260520_0721`:
+  - `stage2a_random_frozen`, GPU0, pid `714244`, random frozen context, no checkpoint.
+  - `stage2a_past_e50`, GPU1, pid `714245`, checkpoint `past/checkpoints/epoch_0050.ckpt`.
+  - `stage2a_past_future_e50`, GPU2, pid `714246`, checkpoint `past_future/checkpoints/epoch_0050.ckpt`.
+  - `stage2a_future_best`, GPU3, pid `714247`, checkpoint `future/checkpoints/best.ckpt`.
+- Recorded answer to the metric question: Stage 2a is an offline representation probe, not an environment policy. It can compare eval loss / future action L1 / MSE / gripper accuracy, but it cannot produce Robomimic rollout success rate. Success rate becomes available only after integrating the translator context into a DP/PTP policy, training that policy, and running rollout evaluation.
