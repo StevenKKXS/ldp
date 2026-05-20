@@ -8,5 +8,5 @@
 | Status | Working |
 | Current Task | task002_flow_matching_square_toolhang |
 | PR | https://github.com/StevenKKXS/ldp/pull/1 |
-| Session | 36 |
-| Recent Progress | Shifted priority to Direction C Stage 1 `past` LR tuning while preserving old Stage 1 checkpoints. On new 4xH200 node `10.100.4.35:19382`, kept the minimal Stage 2a gate jobs `stage2a_random_frozen` and `stage2a_past_e50`, stopped the lower-priority Stage 2a `past_future_e50` and `future_best` jobs to free GPUs, and launched two 8-epoch `past` sweeps using the fast `batch=128` setup: `stage1_past_bs128_lr1e4` and `stage1_past_bs128_obs5e5_tr1e4`. A watchdog monitors both runs after epoch 5 and terminates them if validation loss becomes abnormal. |
+| Session | 37 |
+| Recent Progress | Explained Direction C Stage 1 `past` data flow and loss. The dataset builds a 24-step sample with obs history indices `1..16`, past action targets `0..15`, and future action diagnostics `16..23`; the model receives only raw obs/proprio history, encodes it through the trainable robomimic obs encoder and BehaviorTranslator, predicts 16 past plus 8 future action tokens, and in `target_mode=past` backpropagates only SmoothL1 over the first 16 normalized action predictions. Future metrics are logged for diagnostics but do not contribute to the `past` loss. |

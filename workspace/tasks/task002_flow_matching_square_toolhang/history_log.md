@@ -1,6 +1,6 @@
 # History Log
 
-<!-- METADATA:SESSION=36 -->
+<!-- METADATA:SESSION=37 -->
 
 ## Session 0
 
@@ -494,3 +494,12 @@
   - `stage1_past_bs128_obs5e5_tr1e4`, GPU3, pid `729938`, `batch=128`, `num_workers=48`, `obs_encoder_lr=5e-5`, `translator_lr=1e-4`, `num_epochs=8`.
 - Added a run-local watchdog at `stage1_square_past_lr_sweep_20260520_0722/watchdog.py`, pid recorded in `watchdog.pid`, which checks every 300 seconds and terminates a run after epoch 5 if `val/loss_total` is not finite or exceeds `0.004`.
 - Initial status at `2026-05-20T07:22:02+00:00`: both new Stage 1 jobs were alive and had entered epoch 1 startup/training; metrics had not been written yet.
+
+## Session 37
+
+- User asked for a simple explanation of the `past` code logic, data flow, and loss.
+- Reviewed `BehaviorTranslationDataset`, `TrainBehaviorTranslatorWorkspace`, `BehaviorTranslator`, and `behavior_translator_square_past.yaml`.
+- Recorded explanation: for Square `past`, `H=16`, `P=16`, `K=8`, `anchor=16`, the dataset samples a 24-step robomimic window, uses obs indices `1..16`, past action indices `0..15`, and future action indices `16..23`.
+- Recorded explanation: only observations/proprio are model inputs. Actions are not fed into the translator; `act_past` and `act_future` are supervision/diagnostic tensors.
+- Recorded explanation: the trainable robomimic obs encoder maps raw image/proprio history to obs tokens, the BehaviorTranslator predicts `P+K=24` normalized action vectors, and `target_mode=past` sets `loss_total = SmoothL1(pred_past, act_past)`.
+- Recorded explanation: `loss_future`, `future_l1`, `future_mse`, `gripper_acc`, and per-horizon future L1 are still logged in `past` runs, but they are diagnostics only and do not affect gradients for `target_mode=past`.
