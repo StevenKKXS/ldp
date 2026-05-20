@@ -1,6 +1,6 @@
 # Task Knowledge
 
-<!-- METADATA:SESSION=28 -->
+<!-- METADATA:SESSION=29 -->
 
 ## Working Rules
 
@@ -87,3 +87,4 @@
 - Direction C translator slicing rule for `H=16,P=16,K=8`: base sequence length is `24`, `anchor=max(P,H-1)=16`, obs history uses offsets `1..16`, past actions use `0..15`, and future actions use `16..23`.
 - The training PyTorch `DataLoader` shuffles sampler indices each epoch; it does not randomly crop frames inside an already sampled window. Boundary padding is handled by `SequenceSampler` with repeated first/last valid frames.
 - Direction C frame/sample counts under `val_ratio=0.02,seed=42,sequence_length=24,pad_before=16,pad_after=7`: Square mh has 80,731 total frames and 79,289 train samples; ToolHang ph has 95,962 total frames and 93,885 train samples. The padded-window sample count equals selected frame count because `L - 24 + 16 + 7 + 1 = L`.
+- Direction C Stage 1 checkpoint at epoch 42: `past` is stable with best val loss `0.000622` at epoch 23; `future` best val loss is `0.008961` at epoch 4 and latest val future L1 is `0.04716`; `past_future` best val loss is `0.010111` at epoch 4 and best val future L1 is `0.04479` at epoch 10. Treat epoch 50 as an analysis checkpoint before committing to a long unchanged run.

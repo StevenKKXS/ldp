@@ -8,5 +8,5 @@
 | Status | Working |
 | Current Task | task002_flow_matching_square_toolhang |
 | PR | https://github.com/StevenKKXS/ldp/pull/1 |
-| Session | 28 |
-| Recent Progress | Counted Square and ToolHang robomimic frames and Direction C sampler sizes: Square mh has 300 episodes and 80,731 frames, with 79,289 train samples after the 2% episode split; ToolHang ph has 200 episodes and 95,962 frames, with 93,885 train samples under the same H=16/P=16/K=8 padded-window rule. |
+| Session | 29 |
+| Recent Progress | Checked Direction C Stage 1 Square training at 2026-05-20T01:40Z: all three jobs are alive at epoch 42. Past prediction is stable with best val loss 0.000622 at epoch 23; future-only and past+future train losses keep decreasing, but their best val losses were early at epoch 4, so the next useful step is to inspect epoch 50 checkpoints and loss curves before committing to longer training. |

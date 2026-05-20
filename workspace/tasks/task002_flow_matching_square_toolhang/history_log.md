@@ -1,6 +1,6 @@
 # History Log
 
-<!-- METADATA:SESSION=28 -->
+<!-- METADATA:SESSION=29 -->
 
 ## Session 0
 
@@ -332,3 +332,24 @@
 - Square mh `image_abs.hdf5`: 300 episodes, 80,731 total frames, 6 validation episodes, 294 training episodes, 79,289 train frames/samples, 1,442 validation frames/samples, and 2,478 train batches at batch size 32.
 - ToolHang ph `image_abs.hdf5`: 200 episodes, 95,962 total frames, 4 validation episodes, 196 training episodes, 93,885 train frames/samples, 2,077 validation frames/samples, and 2,934 train batches at batch size 32.
 - Because `sequence_length=24`, `pad_before=16`, and `pad_after=7`, each episode of length `L` contributes `L - 24 + 16 + 7 + 1 = L` padded-window samples, so the sampler sample count equals the frame count within the selected train or validation episodes.
+
+## Session 29
+
+- User asked for current training status, loss, and eval results.
+- Checked GPU node `10.100.2.35:25076` at `2026-05-20T01:40:08+00:00`.
+- All three Direction C Stage 1 Square runs were alive at epoch 42 / global step 104,076:
+  - `past`, pid `26881`, latest checkpoint updated `2026-05-20 01:35`.
+  - `future`, pid `26883`, latest checkpoint updated `2026-05-20 01:36`.
+  - `past_future`, pid `26885`, latest checkpoint updated `2026-05-20 01:35`.
+- Latest epoch 42 metrics:
+  - `past`: train loss `0.000511`, val loss `0.000677`, val past L1 `0.01376`, val future L1 diagnostic `0.06651`, val gripper acc `0.8988`.
+  - `future`: train loss `0.002349`, val loss `0.013663`, val future L1 `0.04716`, val gripper acc `0.9106`.
+  - `past_future`: train loss `0.002924`, val loss `0.016189`, val past L1 `0.01760`, val future L1 `0.04771`, val gripper acc `0.8992`.
+- Best validation loss so far:
+  - `past`: epoch 23, val loss `0.000622`.
+  - `future`: epoch 4, val loss `0.008961`.
+  - `past_future`: epoch 4, val loss `0.010111`.
+- Best future L1 so far:
+  - `future`: epoch 42, val future L1 `0.04716`.
+  - `past_future`: epoch 10, val future L1 `0.04479`.
+- Interpretation recorded: Stage 1 train losses are decreasing. `past` validation is stable; `future` and `past_future` show early best val SmoothL1 and later train/val gap, so epoch 50 checkpoints and curves should be inspected before extending long training unchanged.
