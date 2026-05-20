@@ -8,5 +8,5 @@
 | Status | Working |
 | Current Task | task002_flow_matching_square_toolhang |
 | PR | https://github.com/StevenKKXS/ldp/pull/1 |
-| Session | 35 |
-| Recent Progress | Reviewed non-preencoding speed options for Direction C because the encoder must stay trainable. Identified promising directions: persistent DataLoader workers and prefetch tuning, removing or moving CPU ColorJitter/float conversion out of worker hot path, bf16 AMP plus channels-last for H200, validation/checkpoint cadence control, and lightweight data-time/compute-time profiling. Also tested a no-preencoding sampler change with `base_dataset.n_obs_steps=17`; it ran successfully but was slightly slower than the previous `bs128,nw64` short benchmark, so it is not the first optimization to adopt. |
+| Session | 36 |
+| Recent Progress | Tested the new exclusive 4xH200 node `10.100.4.35:19382` for Direction C Stage 1 translator speed. Fastest stable raw-image setting was `batch=128,num_workers=64,prefetch=2,persistent=false` at about `149.21` samples/sec and projected `8.86` minutes/epoch; larger `batch=256/512`, high prefetch persistent workers, and naive DataParallel either failed on `/dev/shm=16G` DataLoader worker bus errors or were slower. Rechecked formal Square runs: `past` and `past_future` are alive, `future` hit a DataLoader bus error after resume. Current model signal favors `past` as the stable representation pretraining target, with `past_future` worth re-running under better loss/LR settings and `future` best treated as an early-checkpoint probe rather than a long unchanged run. |

@@ -1,6 +1,6 @@
 # Task Knowledge
 
-<!-- METADATA:SESSION=35 -->
+<!-- METADATA:SESSION=36 -->
 
 ## Working Rules
 
@@ -103,3 +103,13 @@
 - Current translator dataset worker hot path includes CPU image augmentation and extra copies: `torch.from_numpy -> ColorJitter -> float32/255 -> numpy -> torch.from_numpy`. A high-priority non-preencoding optimization is to make CPU ColorJitter configurable or move augmentation to the GPU path while keeping the encoder trainable.
 - Current configs set `base_dataset.n_obs_steps=24`, but Direction C `H=16,P=16,K=8` uses obs indices `1..16`; `base_dataset.n_obs_steps=17` is sufficient for obs keys while action still spans the full 24-step sequence. A short `bs128,nw64,n_obs_steps=17` benchmark completed but was slightly slower (`139.51` samples/sec, projected `9.47` minutes/epoch) than the prior `bs128,nw64,n_obs_steps=24` benchmark (`145.02` samples/sec, projected `9.11` minutes/epoch), so it is not the first config to adopt.
 - Non-preencoding speed priority for Direction C: first benchmark `persistent_workers=true` with controlled `prefetch_factor`, add data-time/compute-time logging, then test CPU ColorJitter off/GPU augmentation, bf16 AMP, and channels-last. DDP should come after input-pipeline improvements because it multiplies DataLoader pressure across ranks.
+- Direction C new exclusive speed node `10.100.4.35:19382` is verified: 4xH200, 192 logical CPUs, py39 / `robomimic==0.2.0` env at `/mnt/nfs/tingwen/ldp/envs/ptp_ldp_py39_rm020/bin/python`, repo at `/mnt/nfs/tingwen/intern_ldp_explorer/repos/ldp_behavior_translator`, `/mnt/nfs` and `/mnt/3fs2` mounted, but `/dev/shm` is only `16G`.
+- New-node fastest stable raw-image translator speed is `batch=128,num_workers=64,prefetch=2,persistent=false`: `149.21` samples/sec and projected `8.86` minutes/epoch in `/mnt/nfs/tingwen/intern_ldp_explorer/tasks/direction_c_behavior_translator/benchmarks/stage1_square_newnode_fast_grid_20260520_030431/results.tsv`.
+- New-node larger batch tests are limited by DataLoader shared-memory/IPC pressure: `batch=256` at 32/64 workers and `batch=512` at 16/32 workers failed, while conservative `batch=256,num_workers=16` ran but slowed to `94.51` samples/sec. High prefetch persistent workers also failed on `/dev/shm=16G`.
+- Naive `torch.nn.DataParallel` is not a good Direction C speed path. A 2-GPU conservative test completed at only `55.46` samples/sec and a larger 2-GPU test failed with DataLoader bus error. Use DDP only after reducing input-pipeline pressure.
+- `TrainBehaviorTranslatorWorkspace` now has optional timing metrics (`train/data_time_*`, `train/compute_time_*`) and an optional `training.data_parallel` benchmark flag. These are for systems profiling and do not change default training behavior.
+- Current formal Square Stage 1 status at Session 36: `past` and `past_future` remain alive on `10.100.2.35:25076`; `future` stopped after a DataLoader worker bus error during resume. `future` checkpoints should still be used for probes, but the run should not be trusted as a stable long-run configuration.
+- Current formal Stage 1 signal: `past` is stable and likely useful for behavior-history representation; `past_future` is conceptually closest but current equal-weight loss overfits/noises future validation; `future` alone is least stable because future action prediction from observations is multimodal.
+- Recommended Stage 2a checkpoint set: `past` epoch `46/47/50`, `past_future` epoch `4/10/46/50`, `future` epoch `4/42`, plus same-architecture frozen random translator. Select by probe performance, not only Stage 1 latest train loss.
+- If restarting Stage 1 with `batch=128`, compare by optimizer steps rather than epoch count. Square batch 32 gives about `2478` steps/epoch; batch 128 gives about `620` steps/epoch. For update-count parity, either run about 4x epochs or switch to a fixed global-step budget.
+- LR recommendation for the next Stage 1 sweep: keep `past` around `obs_encoder_lr=1e-4,translator_lr=1e-4`; for `future` and `past_future`, try `obs_encoder_lr=5e-5,translator_lr=1e-4`, or reduce `w_future` to `0.25-0.5`, because current train loss drops while validation total loss gets worse.

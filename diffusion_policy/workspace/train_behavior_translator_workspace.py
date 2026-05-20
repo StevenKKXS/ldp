@@ -13,6 +13,7 @@ import json
 import os
 import pathlib
 import random
+import time
 
 import hydra
 import numpy as np
@@ -91,7 +92,8 @@ class TrainBehaviorTranslatorWorkspace(BaseWorkspace):
 
         result = self.model(obs_tokens, return_context=True)
         pred = result["pred_actions"]
-        p = self.model.past_action_horizon
+        model = self.model.module if isinstance(self.model, torch.nn.DataParallel) else self.model
+        p = model.past_action_horizon
         pred_past = pred[:, :p]
         pred_future = pred[:, p:]
 
@@ -179,6 +181,12 @@ class TrainBehaviorTranslatorWorkspace(BaseWorkspace):
         self.model.to(device)
         normalizer.to(device)
         optimizer_to(self.optimizer, device)
+        if bool(cfg.training.get("data_parallel", False)):
+            n_devices = torch.cuda.device_count() if device.type == "cuda" else 0
+            if n_devices > 1:
+                self.obs_encoder = torch.nn.DataParallel(self.obs_encoder)
+                self.model = torch.nn.DataParallel(self.model)
+                print(f"Enabled DataParallel over {n_devices} CUDA devices.")
 
         env_info = {
             "python": os.sys.executable,
@@ -201,6 +209,8 @@ class TrainBehaviorTranslatorWorkspace(BaseWorkspace):
                 self.obs_encoder.train()
                 self.model.train()
                 train_metrics = []
+                train_data_times = []
+                train_compute_times = []
                 optimizer_zeroed = False
                 self.optimizer.zero_grad(set_to_none=True)
 
@@ -209,7 +219,13 @@ class TrainBehaviorTranslatorWorkspace(BaseWorkspace):
                     desc=f"Training epoch {epoch_idx}",
                     leave=False,
                     mininterval=float(cfg.training.tqdm_interval_sec))
+                last_iter_end = time.perf_counter()
                 for batch_idx, batch in enumerate(train_iter):
+                    iter_start = time.perf_counter()
+                    train_data_times.append(iter_start - last_iter_end)
+                    if bool(cfg.training.get("profile_sync_cuda", False)) and device.type == "cuda":
+                        torch.cuda.synchronize(device)
+                    compute_start = time.perf_counter()
                     loss, metrics = self._compute_batch(batch, normalizer, device)
                     loss = loss / int(cfg.training.gradient_accumulate_every)
                     loss.backward()
@@ -226,6 +242,11 @@ class TrainBehaviorTranslatorWorkspace(BaseWorkspace):
                         self.global_step += 1
 
                     train_metrics.append(metrics)
+                    if bool(cfg.training.get("profile_sync_cuda", False)) and device.type == "cuda":
+                        torch.cuda.synchronize(device)
+                    iter_end = time.perf_counter()
+                    train_compute_times.append(iter_end - compute_start)
+                    last_iter_end = iter_end
                     if cfg.training.max_train_steps is not None and batch_idx >= int(cfg.training.max_train_steps) - 1:
                         break
 
@@ -249,6 +270,14 @@ class TrainBehaviorTranslatorWorkspace(BaseWorkspace):
                             break
 
                 train_log = self._mean_metrics(train_metrics)
+                if train_data_times:
+                    train_log["data_time_mean"] = float(np.mean(train_data_times))
+                    train_log["data_time_max"] = float(np.max(train_data_times))
+                    train_log["data_time_total"] = float(np.sum(train_data_times))
+                if train_compute_times:
+                    train_log["compute_time_mean"] = float(np.mean(train_compute_times))
+                    train_log["compute_time_max"] = float(np.max(train_compute_times))
+                    train_log["compute_time_total"] = float(np.sum(train_compute_times))
                 val_log = self._mean_metrics(val_metrics)
                 step_log = {
                     "epoch": epoch_idx,
