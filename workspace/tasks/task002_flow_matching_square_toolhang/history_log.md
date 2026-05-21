@@ -1,6 +1,6 @@
 # History Log
 
-<!-- METADATA:SESSION=42 -->
+<!-- METADATA:SESSION=43 -->
 
 ## Session 0
 
@@ -564,3 +564,21 @@
   - Hydra `--cfg job` parse passed in the py39 / robomimic 0.2.0 environment locally and from the NFS GPU worktree.
   - CPU single-sample `compute_loss` smoke after the action-only fix produced finite losses for sample indices `0,1,2,10,100`.
   - Synced the new/changed Stage2b files into `/mnt/nfs/tingwen/intern_ldp_explorer/repos/ldp_behavior_translator`.
+
+## Session 43
+
+- User asked to continue.
+- Rechecked NFS Stage2b worktree on old node `10.100.2.35:25076`: `translator_conditioned_transformer_hybrid_image_policy.py` and `transformer_square_translator_context_action8.yaml` were present, and `py_compile` passed under `/mnt/nfs/tingwen/ldp/envs/ptp_ldp_py39_rm020/bin/python`.
+- Rechecked old-node GPU occupancy before launch: formal Stage1 `past` remained on GPU0 and formal Stage1 `past_future` remained on GPU2; GPU1 and GPU3 were idle.
+- Launched Stage2b Square action8 downstream training on the old-node idle GPUs under `/mnt/nfs/tingwen/intern_ldp_explorer/tasks/direction_c_behavior_translator/outputs/stage2b_square_translator_context_20260521_1252`:
+  - `stage2b_translator_context_past_best_action8`, GPU1, pid `4026333`, frozen tuned-`past` BehaviorTranslator best checkpoint, default `context_injection=add_all`.
+  - `stage2b_random_context_action8`, GPU3, pid `4026336`, same wrapper and trainable projector but frozen random translator context.
+- Verified both Stage2b jobs loaded cached replay data, initialized W&B offline logging, entered epoch 0 training, and wrote `logs.json.txt`. At `2026-05-21T12:53Z`, GPU1/GPU3 utilization sampled at `74%` and `82%` with about `5.2GB` memory each.
+- Rechecked new-node `10.100.4.35:19382` tuned Stage2a probes. They were not stuck: all four parent processes were alive and child workers were active; metrics were at epoch `25` while logs showed progress into epoch `26`.
+- Latest tuned Stage2a epoch-25 offline metrics:
+  - `stage2a_tuned_past_best_frozen`: val loss `0.008407`, val future L1 `0.048356`, best val loss `0.007959`.
+  - `stage2a_tuned_past_latest_frozen`: val loss `0.008673`, val future L1 `0.046338`, best val loss `0.008482`.
+  - `stage2a_tuned_past_future_best_frozen`: val loss `0.012199`, val future L1 `0.050204`, best val loss `0.011006`.
+  - `stage2a_tuned_past_future_latest_frozen`: val loss `0.013894`, val future L1 `0.046838`, best val loss `0.013560`.
+- Latest completed tuned Stage1 metrics under `/mnt/nfs/tingwen/intern_ldp_explorer/tasks/direction_c_behavior_translator/outputs/stage1_square_tuned_fill_20260520_1536`: tuned `past` completed epoch `200` with best val loss `0.000434 @ e118`; tuned `past_future` completed epoch `200` with best val loss `0.006501 @ e4`.
+- Current resource allocation after launch: old node GPU0/GPU2 run formal Stage1, old node GPU1/GPU3 run Stage2b downstream controls, and new node GPU0-GPU3 run tuned Stage2a probes.
