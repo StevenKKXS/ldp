@@ -1,6 +1,6 @@
 # History Log
 
-<!-- METADATA:SESSION=40 -->
+<!-- METADATA:SESSION=41 -->
 
 ## Session 0
 
@@ -533,3 +533,18 @@
   - GPU2 pid `1896880`: `stage2a_past_best_finetune_tr1e5`, checkpoint `past/checkpoints/best.ckpt`, `freeze_context=false`, `obs_encoder_lr=5e-5`, `translator_lr=1e-5`, `head_lr=1e-3`.
   - GPU3 pid `1896884`: `stage2a_past_future_best_frozen`, checkpoint `past_future/checkpoints/best.ckpt`, frozen context.
 - Rechecked GPU occupancy after startup. Old node has compute apps on GPU0/GPU1/GPU2/GPU3; new node has compute apps on GPU0/GPU1/GPU2/GPU3. Startup logs show datasets loaded and training loops started; first new metrics rows had not been written at the check time.
+
+## Session 41
+
+- User asked for current progress on 2026-05-21.
+- Checked old node `10.100.2.35:25076` at `2026-05-21T08:31Z`: all four Stage1 jobs were still alive. GPU0 formal `past` pid `1086376`, GPU2 formal `past_future` pid `26885`, GPU1 tuned `past` pid `2254676`, and GPU3 tuned `past_future w_future=0.5` pid `2254680`.
+- Current Stage1 formal metrics: `past` reached epoch `141`, latest val loss `0.000622`, best val loss `0.000455 @ e113`; `past_future` reached epoch `142`, latest val loss `0.018557`, best val loss `0.010111 @ e4`.
+- Current Stage1 tuned metrics: `stage1_past_bs128_obs5e5_tr1e4_long` reached epoch `169`, latest val loss `0.000751`, best val loss `0.000434 @ e118`; `stage1_past_future_bs128_obs5e5_tr1e4_wfuture05` reached epoch `168`, latest val loss `0.008793`, best val loss `0.006501 @ e4`, latest future L1 `0.044724`.
+- Checked new node `10.100.4.35:19382`: previous Stage2a next batch had completed and the node was idle before refilling.
+- Completed Stage2a next results under `/mnt/nfs/tingwen/intern_ldp_explorer/tasks/direction_c_behavior_translator/outputs/stage2a_square_next_20260520_1536`: `past_best_frozen` best val loss `0.007966 @ e27`, `past_latest_frozen` `0.008028 @ e15`, `past_best_finetune_tr1e5` `0.008056 @ e3`, and `past_future_best_frozen` `0.010617 @ e7`. Frozen `past` remains the strongest Stage2a family; finetuning overfits after the early best.
+- To avoid leaving the new node idle, launched tuned-checkpoint Stage2a probes under `/mnt/nfs/tingwen/intern_ldp_explorer/tasks/direction_c_behavior_translator/outputs/stage2a_square_tuned_20260521_0833`:
+  - GPU0 pid `98147`: `stage2a_tuned_past_best_frozen`.
+  - GPU1 pid `98151`: `stage2a_tuned_past_latest_frozen`.
+  - GPU2 pid `98155`: `stage2a_tuned_past_future_best_frozen`.
+  - GPU3 pid `98159`: `stage2a_tuned_past_future_latest_frozen`.
+- Rechecked tuned Stage2a startup: all four parent processes were alive; three had compute apps visible immediately, while `stage2a_tuned_past_best_frozen` was alive and inside the first training epoch but had not yet shown sustained GPU memory use at the sampling instant.

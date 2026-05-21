@@ -1,6 +1,6 @@
 # Task Knowledge
 
-<!-- METADATA:SESSION=40 -->
+<!-- METADATA:SESSION=41 -->
 
 ## Working Rules
 
@@ -123,3 +123,4 @@
 - Direction C rollout status as of Session 38: Stage 1 and Stage 2a have no rollout eval because they are offline translator/head probes. Existing rollout success rates are from the earlier py39 / robomimic 0.2.0 Flow Matching baseline only: Square h10 `7/10`, Square action8 `4/10`, ToolHang h10 `0/10`, ToolHang action8 `0/10`. Stage 2a current offline signal: `past_e50` best val loss `0.007839` / future L1 `0.04917`, random frozen best val loss `0.011571` / future L1 `0.06736`.
 - Direction C GPU utilization as of Session 39: old node `10.100.2.35:25076` has only GPU0/GPU2 occupied by formal Stage 1 `past` and `past_future` jobs, each using about `5.4-5.5GB`; GPU1/GPU3 are idle. A short sample showed intermittent compute rather than steady saturation. New node `10.100.4.35:19382` is fully idle after Stage2a and the 8-epoch `past` LR sweep completed.
 - Direction C active fill plan as of Session 40: old node `10.100.2.35:25076` now has Stage1 on all 4 GPUs, including tuned runs at `/mnt/nfs/tingwen/intern_ldp_explorer/tasks/direction_c_behavior_translator/outputs/stage1_square_tuned_fill_20260520_1536`; new node `10.100.4.35:19382` now has Stage2a probes on all 4 GPUs at `/mnt/nfs/tingwen/intern_ldp_explorer/tasks/direction_c_behavior_translator/outputs/stage2a_square_next_20260520_1536`. Stage2a probes cover `past_best_frozen`, `past_latest_frozen`, `past_best_finetune_tr1e5`, and `past_future_best_frozen`.
+- Direction C progress as of Session 41: Stage2a next batch completed and still favors frozen `past` context (`past_best_frozen` best val loss `0.007966`, `past_latest_frozen` `0.008028`) over `past_future_best_frozen` (`0.010617`) and finetuned `past_best` (`0.008056`, early best then overfit). Tuned Stage1 `past` best val loss is `0.000434 @ e118`, slightly better than formal `past` best `0.000455 @ e113`. Tuned `past_future` with `w_future=0.5` improves Stage1 total loss to best `0.006501 @ e4` and latest future L1 `0.044724`. New active Stage2a tuned probes live at `/mnt/nfs/tingwen/intern_ldp_explorer/tasks/direction_c_behavior_translator/outputs/stage2a_square_tuned_20260521_0833`.
