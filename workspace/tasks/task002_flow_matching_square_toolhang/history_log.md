@@ -1,6 +1,6 @@
 # History Log
 
-<!-- METADATA:SESSION=41 -->
+<!-- METADATA:SESSION=42 -->
 
 ## Session 0
 
@@ -548,3 +548,19 @@
   - GPU2 pid `98155`: `stage2a_tuned_past_future_best_frozen`.
   - GPU3 pid `98159`: `stage2a_tuned_past_future_latest_frozen`.
 - Rechecked tuned Stage2a startup: all four parent processes were alive; three had compute apps visible immediately, while `stage2a_tuned_past_best_frozen` was alive and inside the first training epoch but had not yet shown sustained GPU memory use at the sampling instant.
+
+## Session 42
+
+- User asked to continue.
+- Rechecked running work: old node `10.100.2.35:25076` still had all four Stage1 jobs alive; new node `10.100.4.35:19382` still had four tuned Stage2a parent processes alive. The tuned Stage2a runs had written first epoch metrics: `tuned_past_best_frozen` val loss `0.009392`, `tuned_past_latest_frozen` `0.010346`, `tuned_past_future_best_frozen` `0.011006`, and `tuned_past_future_latest_frozen` `0.014423`.
+- Implemented Stage2b translator-conditioned policy:
+  - Added `diffusion_policy/policy/translator_conditioned_transformer_hybrid_image_policy.py`.
+  - Added a base-policy hook `_augment_condition(...)` in `diffusion_policy/policy/diffusion_transformer_hybrid_image_policy.py`, preserving default behavior for existing policies.
+  - New policy loads a BehaviorTranslator checkpoint, freezes translator modules by default, computes context from the last `16` normalized obs tokens, projects context to obs-feature dimension, and injects it into condition tokens using `context_injection=add_all`.
+- Fixed an existing action-only diffusion transformer loss issue: when `pred_action_steps_only=true`, `compute_loss` already slices the normalized action target to the action chunk, so the later `n_obs_steps-1` loss slice must not run. The previous behavior produced empty tensors and NaN loss for action-only configs.
+- Added config `experiment_configs/square/transformer_square_translator_context_action8.yaml` for Square Stage2b smoke/training. It uses raw `image_abs.hdf5`, `n_obs_steps=16`, dataset horizon `24`, policy horizon/action chunk `8`, frozen tuned `past` translator checkpoint by default, offline logging, and no rollout during training.
+- Verification:
+  - `python -m py_compile` passed for the touched policy files.
+  - Hydra `--cfg job` parse passed in the py39 / robomimic 0.2.0 environment locally and from the NFS GPU worktree.
+  - CPU single-sample `compute_loss` smoke after the action-only fix produced finite losses for sample indices `0,1,2,10,100`.
+  - Synced the new/changed Stage2b files into `/mnt/nfs/tingwen/intern_ldp_explorer/repos/ldp_behavior_translator`.

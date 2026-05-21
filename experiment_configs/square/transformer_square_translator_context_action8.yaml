@@ -1,0 +1,207 @@
+_target_: diffusion_policy.workspace.train_diffusion_transformer_hybrid_workspace.TrainDiffusionTransformerHybridWorkspace
+
+name: train_translator_context_transformer_square_action8
+task_name: square_image
+exp_name: translator_context_action8
+
+obs_encoder_dir: null
+obs_encoder_freeze: false
+global_horizon: 24
+policy_horizon: 8
+global_obs: 16
+global_action: 8
+subsample_frames: 1
+subsampling_method: uniform
+
+shape_meta:
+  action:
+    shape: [10]
+  obs:
+    agentview_image:
+      shape: [3, 84, 84]
+      type: rgb
+    robot0_eef_pos:
+      shape: [3]
+    robot0_eef_quat:
+      shape: [4]
+    robot0_eye_in_hand_image:
+      shape: [3, 84, 84]
+      type: rgb
+    robot0_gripper_qpos:
+      shape: [2]
+
+horizon: ${global_horizon}
+n_obs_steps: ${global_obs}
+n_action_steps: ${global_action}
+obs_as_cond: true
+past_action_visible: false
+keypoint_visible_rate: 1.0
+n_latency_steps: 0
+
+checkpoint:
+  save_last_ckpt: true
+  save_last_snapshot: false
+  topk:
+    format_str: epoch={epoch:04d}-val_loss={val_loss:.6f}.ckpt
+    k: 5
+    mode: min
+    monitor_key: val_loss
+
+dataloader:
+  batch_size: 32
+  shuffle: true
+  num_workers: 16
+  pin_memory: true
+  persistent_workers: false
+
+val_dataloader:
+  batch_size: 32
+  shuffle: false
+  num_workers: 16
+  pin_memory: true
+  persistent_workers: false
+
+optimizer:
+  learning_rate: 1.0e-4
+  transformer_weight_decay: 1.0e-3
+  obs_encoder_weight_decay: 1.0e-6
+  betas: [0.9, 0.95]
+
+ema:
+  _target_: diffusion_policy.model.diffusion.ema_model.EMAModel
+  inv_gamma: 1.0
+  max_value: 0.9999
+  min_value: 0.0
+  power: 0.75
+  update_after_step: 0
+
+policy:
+  _target_: diffusion_policy.policy.translator_conditioned_transformer_hybrid_image_policy.TranslatorConditionedTransformerHybridImagePolicy
+  shape_meta: ${shape_meta}
+  noise_scheduler:
+    _target_: diffusers.schedulers.scheduling_ddpm.DDPMScheduler
+    beta_start: 0.0001
+    beta_end: 0.02
+    beta_schedule: squaredcos_cap_v2
+    num_train_timesteps: 100
+    variance_type: fixed_small
+    clip_sample: true
+    prediction_type: epsilon
+  horizon: ${policy_horizon}
+  n_action_steps: ${global_action}
+  n_obs_steps: ${global_obs}
+  num_inference_steps: 100
+  use_embed_if_present: false
+  crop_shape: [76, 76]
+  obs_encoder_group_norm: true
+  eval_fixed_crop: true
+  n_layer: 8
+  n_cond_layers: 0
+  n_head: 4
+  n_emb: 256
+  p_drop_emb: 0.0
+  p_drop_attn: 0.3
+  causal_attn: true
+  time_as_cond: true
+  obs_as_cond: true
+  pred_action_steps_only: true
+  past_action_pred: false
+  past_steps_reg: -1
+  obs_encoder_dir: ${obs_encoder_dir}
+  obs_encoder_freeze: ${obs_encoder_freeze}
+  translator_checkpoint: /mnt/nfs/tingwen/intern_ldp_explorer/tasks/direction_c_behavior_translator/outputs/stage1_square_tuned_fill_20260520_1536/stage1_past_bs128_obs5e5_tr1e4_long/checkpoints/best.ckpt
+  translator_context_source: checkpoint
+  translator_obs_horizon: 16
+  translator_past_action_horizon: 16
+  translator_future_action_horizon: 8
+  translator_d_model: 256
+  translator_n_encoder_layers: 4
+  translator_n_decoder_layers: 2
+  translator_n_heads: 4
+  translator_ff_dim: 1024
+  translator_dropout: 0.1
+  translator_context_dim: 512
+  translator_causal_obs_encoder: true
+  translator_freeze: true
+  context_injection: add_all
+  context_projector_zero_init: true
+
+task:
+  name: square_image
+  task_name: square
+  dataset_type: mh
+  dataset_path: /mnt/3fs2/data/tingwen.du/intern_ldp_explorer/datasets/robomimic/datasets/square/mh/image_abs.hdf5
+  abs_action: true
+  shape_meta: ${shape_meta}
+  dataset:
+    _target_: diffusion_policy.dataset.robomimic_replay_image_dataset.RobomimicReplayImageDataset
+    shape_meta: ${shape_meta}
+    dataset_path: ${task.dataset_path}
+    horizon: ${global_horizon}
+    n_obs_steps: ${global_obs}
+    pad_before: 16
+    pad_after: 7
+    abs_action: true
+    rotation_rep: rotation_6d
+    use_cache: true
+    use_embed_if_present: false
+    seed: 42
+    val_ratio: 0.02
+  env_runner:
+    _target_: diffusion_policy.env_runner.robomimic_image_runner.RobomimicImageRunner
+    shape_meta: ${shape_meta}
+    dataset_path: ${task.dataset_path}
+    abs_action: true
+    n_train: 0
+    n_train_vis: 0
+    n_test: 0
+    n_test_vis: 0
+    n_envs: 1
+    n_obs_steps: ${global_obs}
+    n_action_steps: ${global_action}
+    max_steps: 500
+    past_action: false
+    render_obs_key: agentview_image
+    fps: 10
+    crf: 22
+    train_start_idx: 0
+    test_start_seed: 100000
+    tqdm_interval_sec: 1.0
+
+logging:
+  project: diffusion_pickandplace_real
+  name: ptp_square_translator_context_action8
+  group: direction_c_translator_context
+  tags:
+    - train_diffusion_transformer_hybrid
+    - square_image
+    - translator_context
+    - action8
+  mode: offline
+  resume: true
+
+multi_run:
+  run_dir: /mnt/nfs/tingwen/intern_ldp_explorer/tasks/direction_c_behavior_translator/outputs/stage2b_square_translator_context
+  wandb_name_base: ptp_square_translator_context_action8
+
+training:
+  seed: 42
+  device: cuda:0
+  resume: true
+  use_ema: true
+  num_epochs: 400
+  gradient_accumulate_every: 1
+  lr_scheduler: cosine
+  lr_warmup_steps: 1000
+  max_train_steps: null
+  max_val_steps: null
+  rollout_every: 999999
+  val_every: 1
+  sample_every: 10
+  checkpoint_every: 25
+  debug: false
+  tqdm_interval_sec: 1.0
+
+hydra:
+  run:
+    dir: /mnt/nfs/tingwen/intern_ldp_explorer/tasks/direction_c_behavior_translator/outputs/stage2b_square_translator_context/${now:%Y%m%d_%H%M%S}_${exp_name}

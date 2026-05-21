@@ -259,6 +259,14 @@ class DiffusionTransformerHybridImagePolicy(BaseImagePolicy):
         if num_inference_steps is None:
             num_inference_steps = noise_scheduler.config.num_train_timesteps
         self.num_inference_steps = num_inference_steps
+
+    def _augment_condition(
+            self,
+            cond: torch.Tensor,
+            nobs: Optional[Dict[str, torch.Tensor]] = None,
+            raw_obs: Optional[Dict[str, torch.Tensor]] = None
+        ) -> torch.Tensor:
+        return cond
     
     # ========= inference  ============
     def conditional_sample(self, 
@@ -409,6 +417,7 @@ class DiffusionTransformerHybridImagePolicy(BaseImagePolicy):
                 nobs_features = self.obs_encoder(this_nobs)
                 # reshape back to B, To, Do
                 cond = nobs_features.reshape(B, To, -1)
+            cond = self._augment_condition(cond, nobs=nobs, raw_obs=obs_dict)
             shape = (B, T, Da)
             if self.pred_action_steps_only:
                 shape = (B, self.n_action_steps, Da)
@@ -499,6 +508,7 @@ class DiffusionTransformerHybridImagePolicy(BaseImagePolicy):
                 nobs_features = self.obs_encoder(this_nobs)
                 # reshape back to B, T, Do
                 cond = nobs_features.reshape(batch_size, To, -1)
+            cond = self._augment_condition(cond, nobs=nobs, raw_obs=batch["obs"])
             if self.pred_action_steps_only:
                 start = To - 1
                 end = start + self.n_action_steps
@@ -548,7 +558,7 @@ class DiffusionTransformerHybridImagePolicy(BaseImagePolicy):
             raise ValueError(f"Unsupported prediction type {pred_type}")
 
         # val = self.horizon - self.n_obs_steps
-        if not self.past_action_pred:
+        if not self.past_action_pred and not self.pred_action_steps_only:
             # val = self.horizon - self.n_obs_steps
             pred = pred[:, self.n_obs_steps-1:]
             if debug:
