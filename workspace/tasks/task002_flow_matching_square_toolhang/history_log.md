@@ -1,6 +1,6 @@
 # History Log
 
-<!-- METADATA:SESSION=43 -->
+<!-- METADATA:SESSION=44 -->
 
 ## Session 0
 
@@ -582,3 +582,33 @@
   - `stage2a_tuned_past_future_latest_frozen`: val loss `0.013894`, val future L1 `0.046838`, best val loss `0.013560`.
 - Latest completed tuned Stage1 metrics under `/mnt/nfs/tingwen/intern_ldp_explorer/tasks/direction_c_behavior_translator/outputs/stage1_square_tuned_fill_20260520_1536`: tuned `past` completed epoch `200` with best val loss `0.000434 @ e118`; tuned `past_future` completed epoch `200` with best val loss `0.006501 @ e4`.
 - Current resource allocation after launch: old node GPU0/GPU2 run formal Stage1, old node GPU1/GPU3 run Stage2b downstream controls, and new node GPU0-GPU3 run tuned Stage2a probes.
+
+## Session 44
+
+- User asked to continue.
+- Rechecked running jobs and results:
+  - Old node `10.100.2.35:25076` kept formal Stage1 on GPU0/GPU2 and Stage2b add-all downstream jobs on GPU1/GPU3.
+  - New node `10.100.4.35:19382` had completed all four tuned Stage2a probes and was idle before rollout work.
+  - Tuned Stage2a final rows reached epoch `50`; best offline val losses remained `past_best_frozen 0.007959`, `past_latest_frozen 0.008110`, `past_future_best_frozen 0.011006`, and `past_future_latest_frozen 0.013452`.
+- Prepared Robomimic rollout on the new node without GPU-node network access:
+  - Initial smoke failed because `mujoco_py` selected CPU/OSMesa build and the node lacked `GL/osmesa.h`.
+  - Downloaded Ubuntu Noble OSMesa/GL `.deb` packages from the CPU side to `/mnt/nfs/tingwen/intern_ldp_explorer/packages/osmesa_noble_20260521`.
+  - Extracted packages to `/mnt/nfs/tingwen/intern_ldp_explorer/packages/osmesa_noble_20260521/rootfs`.
+  - Added `libllvm20` and `libdrm2` dependencies, then verified `mujoco_py`, `robosuite 1.2.0`, and `robomimic 0.2.0` imports with `MUJOCO_GL=osmesa`, `PYOPENGL_PLATFORM=osmesa`, and rootfs library/include paths.
+- Ran Stage2b Square action8 rollout smoke with reward-only evaluator:
+  - `pretrained_e49_smoke`: `0/1`, `max_steps=80`.
+  - `random_e49_smoke`: `0/1`, `max_steps=80`.
+- Ran full 10-seed rollout for Stage2b epoch 49:
+  - `pretrained_e49_n10`: `2/10`, mean score `0.2`, path `/mnt/nfs/tingwen/intern_ldp_explorer/tasks/direction_c_behavior_translator/evals/stage2b_square_rollout_20260521_2221_full_e49/pretrained_e49_n10/eval_log.json`.
+  - `random_e49_n10`: `5/10`, mean score `0.5`, path `/mnt/nfs/tingwen/intern_ldp_explorer/tasks/direction_c_behavior_translator/evals/stage2b_square_rollout_20260521_2221_full_e49/random_e49_n10/eval_log.json`.
+- Ran full 10-seed rollout for Stage2b epoch 24:
+  - `pretrained_e24_n10`: `0/10`, mean score `0.0`, path `/mnt/nfs/tingwen/intern_ldp_explorer/tasks/direction_c_behavior_translator/evals/stage2b_square_rollout_20260521_2225_full_e24/pretrained_e24_n10/eval_log.json`.
+  - `random_e24_n10`: `2/10`, mean score `0.2`, path `/mnt/nfs/tingwen/intern_ldp_explorer/tasks/direction_c_behavior_translator/evals/stage2b_square_rollout_20260521_2225_full_e24/random_e24_n10/eval_log.json`.
+- Interpretation recorded: both evaluated downstream checkpoints are unfavorable to the initial Direction C go/no-go condition `pretrained context > random context`; the random-context control outperformed pretrained context at epoch 24 and epoch 49.
+- Checked Stage2b training checkpoint status after rollout: old-node add-all jobs still had only epoch 24 and epoch 49 checkpoints saved; no epoch 74 checkpoint had landed yet. Pretrained add-all was inside epoch `74`, random add-all inside epoch `72`.
+- Filled the new 4xH200 node with Stage2b ablation training under `/mnt/nfs/tingwen/intern_ldp_explorer/tasks/direction_c_behavior_translator/outputs/stage2b_square_ablation_20260521_2230`:
+  - GPU0 pid `2080558`: `stage2b_base_no_context_action8`, base `DiffusionTransformerHybridImagePolicy` with the same Square action8 / history16 setup.
+  - GPU1 pid `2080560`: `stage2b_translator_context_add_last_action8`, pretrained context with `context_injection=add_last`.
+  - GPU2 pid `2080562`: `stage2b_random_context_add_last_action8`, random context with `context_injection=add_last`.
+  - GPU3 pid `2080564`: `stage2b_translator_context_nonzero_projector_action8`, pretrained add-all context with `context_projector_zero_init=false`.
+- Verified all four ablation jobs loaded cached replay data, entered epoch 0, and wrote training logs.
