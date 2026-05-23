@@ -612,3 +612,28 @@
   - GPU2 pid `2080562`: `stage2b_random_context_add_last_action8`, random context with `context_injection=add_last`.
   - GPU3 pid `2080564`: `stage2b_translator_context_nonzero_projector_action8`, pretrained add-all context with `context_projector_zero_init=false`.
 - Verified all four ablation jobs loaded cached replay data, entered epoch 0, and wrote training logs.
+
+## Session 45
+
+- User asked for current progress.
+- Rechecked old node `10.100.2.35:25076` at `2026-05-23T00:51Z`: formal Stage1 `past` and `past_future` were still alive on GPU0/GPU2; Stage2b add-all downstream jobs were still alive on GPU1/GPU3.
+- Old-node Stage2b add-all training status:
+  - `stage2b_translator_context_past_best_action8` reached about epoch `284`, latest train loss around `0.00410`, with checkpoints `e49/e74/e99/e174/e199`; best listed val loss was `0.032388 @ e99`.
+  - `stage2b_random_context_action8` reached about epoch `281`, latest train loss around `0.00142`, with checkpoints `e24/e49/e74/e99/e149`; best listed val loss remained `0.051085 @ e49`.
+- Rechecked new node `10.100.4.35:19382`: GPU1/GPU2/GPU3 continued Stage2b ablations for `add_last` pretrained, `add_last` random, and `nonzero_projector` pretrained. GPU0 was used for rollout evaluation and then a clean base rerun.
+- New-node ablation checkpoint status before rollout:
+  - `stage2b_translator_context_add_last_action8`: checkpoints through `e124`, best listed val loss `0.064175 @ e49`.
+  - `stage2b_random_context_add_last_action8`: checkpoints through `e124`, best listed val loss `0.065021 @ e49`.
+  - `stage2b_translator_context_nonzero_projector_action8`: checkpoints through `e199`, best listed val loss `0.032406 @ e99`.
+  - Original `stage2b_base_no_context_action8` had no checkpoint directory and stopped after epoch-0 training rows around global step `2476`; train logs did not show a clear Python traceback, only a W&B conda metadata warning.
+- Ran additional reward-only Square action8 rollouts with py39 / `robomimic==0.2.0`, `n_test=10`, `n_envs=10`, `max_steps=500`:
+  - Add-all original pretrained e99: `4/10`, root `/mnt/nfs/tingwen/intern_ldp_explorer/tasks/direction_c_behavior_translator/evals/stage2b_square_rollout_20260523_0055_followup/original_pretrained_e99`.
+  - Add-all original random e99: `3/10`, root `/mnt/nfs/tingwen/intern_ldp_explorer/tasks/direction_c_behavior_translator/evals/stage2b_square_rollout_20260523_0055_followup/original_random_e99`.
+  - Nonzero-projector pretrained e99: `4/10`, root `/mnt/nfs/tingwen/intern_ldp_explorer/tasks/direction_c_behavior_translator/evals/stage2b_square_rollout_20260523_0055_followup/nonzero_projector_pretrained_e99`.
+  - Add-last pretrained e49: `4/10`, root `/mnt/nfs/tingwen/intern_ldp_explorer/tasks/direction_c_behavior_translator/evals/stage2b_square_rollout_20260523_0102_addlast/addlast_pretrained_e49`.
+  - Add-last random e49: `0/10`, root `/mnt/nfs/tingwen/intern_ldp_explorer/tasks/direction_c_behavior_translator/evals/stage2b_square_rollout_20260523_0102_addlast/addlast_random_e49`.
+- Started a clean base no-context rerun on new-node GPU0:
+  - Path: `/mnt/nfs/tingwen/intern_ldp_explorer/tasks/direction_c_behavior_translator/outputs/stage2b_square_ablation_20260523_0110_base_rerun/stage2b_base_no_context_action8_rerun`.
+  - PID: `4086173`.
+  - Command uses the same Square action8 config with `policy._target_=diffusion_policy.policy.diffusion_transformer_hybrid_image_policy.DiffusionTransformerHybridImagePolicy`, py39 / `robomimic==0.2.0`, and offline W&B.
+- Interpretation: add-all e99 is less negative than e24/e49 but not decisive (`4/10` pretrained vs `3/10` random); add-last e49 is currently the strongest positive translator-context signal (`4/10` vs `0/10`). The missing base no-context result is now being repaired by the clean rerun.
