@@ -1,6 +1,6 @@
 # History Log
 
-<!-- METADATA:SESSION=44 -->
+<!-- METADATA:SESSION=45 -->
 
 ## Session 0
 
@@ -641,3 +641,8 @@
   - New node `10.100.4.35:19382`: pids `2080560`, `2080562`, `2080564`, and `4086173` showed `STAT=Dl`, GPU utilization sampled at `0%`, and `/proc/<pid>/wchan` reported `wait_on_page_bit_common`.
   - This points to filesystem page I/O wait or mount backpressure rather than normal GPU compute. Avoid interpreting elapsed time as training progress until the processes leave `D` state and new metric rows/checkpoints advance.
 - Interpretation: add-all e99 is less negative than e24/e49 but not decisive (`4/10` pretrained vs `3/10` random); add-last e49 is currently the strongest positive translator-context signal (`4/10` vs `0/10`). The missing base no-context result is now being repaired by the clean rerun.
+- User asked to continue after the D-state finding.
+- Rechecked both GPU nodes at `2026-05-23T01:27Z` using only `nvidia-smi` and `/proc` reads. The same monitored training parents were still alive, but still showed `STAT=Dl`, `wchan=wait_on_page_bit_common`, and GPU utilization `0%` on both nodes.
+- Attempted bounded local reads of the shared output/eval directories with `timeout 10-15s` to inspect metric rows, checkpoint mtimes, and rollout JSON files. Reads under `/mnt/nfs/tingwen/intern_ldp_explorer/tasks/direction_c_behavior_translator/...` timed out, confirming the issue is visible from the local workspace as well as from the GPU nodes.
+- Cleaned two stale local SSH benchmark sessions that had been left from older speed tests against `10.100.4.35:19382`. Remote `ps` did not show active matching benchmark workloads after cleanup.
+- Current action is to pause new workload launches while the mounted filesystem is in page I/O wait, and to resume metric/checkpoint checks once lightweight reads of the NFS task directory complete within a normal timeout.

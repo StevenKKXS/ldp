@@ -1,6 +1,6 @@
 # Task Knowledge
 
-<!-- METADATA:SESSION=44 -->
+<!-- METADATA:SESSION=45 -->
 
 ## Working Rules
 
@@ -135,3 +135,4 @@
 - Direction C Stage2b evidence status after Session 45: add-last is the first favorable downstream signal for translator context, but add-all remains mixed. Do not claim a robust gain until base no-context, more checkpoints, and repeated seeds are compared in the same rollout table.
 - Direction C Stage2b base no-context note: the original run under `/mnt/nfs/tingwen/intern_ldp_explorer/tasks/direction_c_behavior_translator/outputs/stage2b_square_ablation_20260521_2230/stage2b_base_no_context_action8` exited before its first checkpoint after epoch-0 training rows. A clean rerun is active at `/mnt/nfs/tingwen/intern_ldp_explorer/tasks/direction_c_behavior_translator/outputs/stage2b_square_ablation_20260523_0110_base_rerun/stage2b_base_no_context_action8_rerun`, pid `4086173` on `10.100.4.35:19382` GPU0.
 - Direction C filesystem health note from Session 45: if training parents are alive but show `STAT=Dl`, `wchan=wait_on_page_bit_common`, and GPU util `0%`, they are likely waiting on mounted filesystem page I/O. Check fresh metric rows and checkpoint mtimes before assuming training is advancing.
+- Direction C NFS health note from Session 45 continuation: if bounded local reads of `/mnt/nfs/tingwen/intern_ldp_explorer/tasks/direction_c_behavior_translator/...` also time out, avoid launching additional training/eval jobs from that tree. First verify NFS responsiveness with small `timeout`-guarded reads, then check process `STAT`, latest metric rows, and checkpoint mtimes.
