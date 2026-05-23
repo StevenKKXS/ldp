@@ -636,4 +636,8 @@
   - Path: `/mnt/nfs/tingwen/intern_ldp_explorer/tasks/direction_c_behavior_translator/outputs/stage2b_square_ablation_20260523_0110_base_rerun/stage2b_base_no_context_action8_rerun`.
   - PID: `4086173`.
   - Command uses the same Square action8 config with `policy._target_=diffusion_policy.policy.diffusion_transformer_hybrid_image_policy.DiffusionTransformerHybridImagePolicy`, py39 / `robomimic==0.2.0`, and offline W&B.
+- Final health check after the rollout and base rerun launch found all monitored training parents still alive but not making visible GPU progress at the sampling point:
+  - Old node `10.100.2.35:25076`: pids `26885`, `1086376`, `4026333`, and `4026336` showed `STAT=Dl`, GPU utilization sampled at `0%`, and `/proc/<pid>/wchan` reported `wait_on_page_bit_common`.
+  - New node `10.100.4.35:19382`: pids `2080560`, `2080562`, `2080564`, and `4086173` showed `STAT=Dl`, GPU utilization sampled at `0%`, and `/proc/<pid>/wchan` reported `wait_on_page_bit_common`.
+  - This points to filesystem page I/O wait or mount backpressure rather than normal GPU compute. Avoid interpreting elapsed time as training progress until the processes leave `D` state and new metric rows/checkpoints advance.
 - Interpretation: add-all e99 is less negative than e24/e49 but not decisive (`4/10` pretrained vs `3/10` random); add-last e49 is currently the strongest positive translator-context signal (`4/10` vs `0/10`). The missing base no-context result is now being repaired by the clean rerun.
