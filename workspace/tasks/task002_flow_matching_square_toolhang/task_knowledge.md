@@ -1,6 +1,6 @@
 # Task Knowledge
 
-<!-- METADATA:SESSION=45 -->
+<!-- METADATA:SESSION=46 -->
 
 ## Working Rules
 
@@ -136,3 +136,5 @@
 - Direction C Stage2b base no-context note: the original run under `/mnt/nfs/tingwen/intern_ldp_explorer/tasks/direction_c_behavior_translator/outputs/stage2b_square_ablation_20260521_2230/stage2b_base_no_context_action8` exited before its first checkpoint after epoch-0 training rows. A clean rerun is active at `/mnt/nfs/tingwen/intern_ldp_explorer/tasks/direction_c_behavior_translator/outputs/stage2b_square_ablation_20260523_0110_base_rerun/stage2b_base_no_context_action8_rerun`, pid `4086173` on `10.100.4.35:19382` GPU0.
 - Direction C filesystem health note from Session 45: if training parents are alive but show `STAT=Dl`, `wchan=wait_on_page_bit_common`, and GPU util `0%`, they are likely waiting on mounted filesystem page I/O. Check fresh metric rows and checkpoint mtimes before assuming training is advancing.
 - Direction C NFS health note from Session 45 continuation: if bounded local reads of `/mnt/nfs/tingwen/intern_ldp_explorer/tasks/direction_c_behavior_translator/...` also time out, avoid launching additional training/eval jobs from that tree. First verify NFS responsiveness with small `timeout`-guarded reads, then check process `STAT`, latest metric rows, and checkpoint mtimes.
+- Direction C recovery state from Session 46: committed code is recoverable from GitHub branch `intern_ldp_explorer/task002_flow_matching_square_toolhang`; local/upstream/cloud matched `7aaf9a3e787dc16f86e36825df3b4caf74dde449` before the Session 46 status commit. A Ceph small-files backup was created at `/mnt/cephfs/home/tinwen.du/ldp_small_files_archive/bundles/task002_flow_matching_square_toolhang_direction_c/task002_flow_matching_square_toolhang_direction_c__intern_ldp_explorer__smallfiles__20260523T041116Z__git-7aaf9a3.tar.gz` with manifest and sha256 under `/mnt/cephfs/home/tinwen.du/ldp_small_files_archive/manifests/task002_flow_matching_square_toolhang_direction_c/`.
+- Direction C storage caveat from Session 46: the Ceph backup covers code, configs, docs, and workspace small files only. Large NFS/3FS training checkpoints, rollout outputs, cached datasets, and videos are not confirmed recoverable while NFS/3FS remain offline.

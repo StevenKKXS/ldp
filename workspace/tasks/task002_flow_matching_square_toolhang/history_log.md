@@ -1,6 +1,6 @@
 # History Log
 
-<!-- METADATA:SESSION=45 -->
+<!-- METADATA:SESSION=46 -->
 
 ## Session 0
 
@@ -646,3 +646,29 @@
 - Attempted bounded local reads of the shared output/eval directories with `timeout 10-15s` to inspect metric rows, checkpoint mtimes, and rollout JSON files. Reads under `/mnt/nfs/tingwen/intern_ldp_explorer/tasks/direction_c_behavior_translator/...` timed out, confirming the issue is visible from the local workspace as well as from the GPU nodes.
 - Cleaned two stale local SSH benchmark sessions that had been left from older speed tests against `10.100.4.35:19382`. Remote `ps` did not show active matching benchmark workloads after cleanup.
 - Current action is to pause new workload launches while the mounted filesystem is in page I/O wait, and to resume metric/checkpoint checks once lightweight reads of the NFS task directory complete within a normal timeout.
+
+## Session 46
+
+- User indicated that storage except Ceph should be considered offline and asked whether code recovery is needed, and to check the cloud version plus Ceph backup state.
+- Avoided `/mnt/nfs`, `/mnt/3fs`, `/mnt/3fs2`, and old GPU nodes. Checked only local workspace, GitHub remote, and `/mnt/cephfs`.
+- Cloud/git state before this status update:
+  - Local branch: `intern_ldp_explorer/task002_flow_matching_square_toolhang`.
+  - Local HEAD: `7aaf9a3e787dc16f86e36825df3b4caf74dde449`.
+  - Upstream `origin/intern_ldp_explorer/task002_flow_matching_square_toolhang`: `7aaf9a3e787dc16f86e36825df3b4caf74dde449`.
+  - Direct `git ls-remote` for the same branch also returned `7aaf9a3e787dc16f86e36825df3b4caf74dde449`.
+  - `origin/main`: `71849920cd72a2074f3cd81049ea1896d5a94513`.
+  - Conclusion: no code restoration is needed for committed code; the PR branch is already recoverable from GitHub.
+- Ceph state:
+  - `/mnt/cephfs/home/tinwen.du` is mounted and writable; `df` reported about `16P` available.
+  - Existing Ceph archives under `/mnt/cephfs/home/tinwen.du/ldp_small_files_archive` covered earlier baseline task bundles from `2026-05-12`.
+  - Existing GMP archives under `/mnt/cephfs/home/tinwen.du/gated-memory-policy/intern_baseline_explorer/task_archives` covered `task001_gmp_robomimic_ptp_release_repro` and `task002_ptp_rollout_history_inputs`.
+  - No pre-existing Direction C archive was found in the bounded Ceph search.
+- Created a current Direction C small-files archive:
+  - Bundle: `/mnt/cephfs/home/tinwen.du/ldp_small_files_archive/bundles/task002_flow_matching_square_toolhang_direction_c/task002_flow_matching_square_toolhang_direction_c__intern_ldp_explorer__smallfiles__20260523T041116Z__git-7aaf9a3.tar.gz`.
+  - Manifest: `/mnt/cephfs/home/tinwen.du/ldp_small_files_archive/manifests/task002_flow_matching_square_toolhang_direction_c/task002_flow_matching_square_toolhang_direction_c__intern_ldp_explorer__smallfiles__20260523T041116Z__git-7aaf9a3.manifest.tsv`.
+  - SHA256: `/mnt/cephfs/home/tinwen.du/ldp_small_files_archive/manifests/task002_flow_matching_square_toolhang_direction_c/task002_flow_matching_square_toolhang_direction_c__intern_ldp_explorer__smallfiles__20260523T041116Z__git-7aaf9a3.sha256`.
+  - Latest symlinks were set under `/mnt/cephfs/home/tinwen.du/ldp_small_files_archive/latest/`.
+  - Archive size: about `13M`; manifest file count: `491`.
+  - Verified `sha256sum -c` passed.
+  - Verified the archive contains Direction C files including `diffusion_policy/model/behavior_translator.py`, `diffusion_policy/workspace/train_behavior_translator_workspace.py`, `diffusion_policy/policy/translator_conditioned_transformer_hybrid_image_policy.py`, `experiment_configs/square/transformer_square_translator_context_action8.yaml`, behavior translator configs, `docs/direction_c_behavior_translator`, and task workspace docs.
+- Current state conclusion: code and small docs/configs are recoverable from GitHub plus Ceph. Large NFS/3FS-only experiment outputs, checkpoints, and rollout artifact files are not confirmed recoverable while those mounts remain offline; only the previously recorded numeric summaries in git-tracked docs are available without storage recovery.
