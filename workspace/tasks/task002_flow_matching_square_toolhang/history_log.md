@@ -1,6 +1,6 @@
 # History Log
 
-<!-- METADATA:SESSION=46 -->
+<!-- METADATA:SESSION=47 -->
 
 ## Session 0
 
@@ -672,3 +672,19 @@
   - Verified `sha256sum -c` passed.
   - Verified the archive contains Direction C files including `diffusion_policy/model/behavior_translator.py`, `diffusion_policy/workspace/train_behavior_translator_workspace.py`, `diffusion_policy/policy/translator_conditioned_transformer_hybrid_image_policy.py`, `experiment_configs/square/transformer_square_translator_context_action8.yaml`, behavior translator configs, `docs/direction_c_behavior_translator`, and task workspace docs.
 - Current state conclusion: code and small docs/configs are recoverable from GitHub plus Ceph. Large NFS/3FS-only experiment outputs, checkpoints, and rollout artifact files are not confirmed recoverable while those mounts remain offline; only the previously recorded numeric summaries in git-tracked docs are available without storage recovery.
+
+## Session 47
+
+- User asked which GPU resources are currently accessible.
+- Ran a lightweight local and SSH GPU reachability check with `nvidia-smi` only, avoiding NFS/3FS file reads.
+- Local host `lg-cmc-b7r201-c01u05-cpu-000024` has no `nvidia-smi`.
+- Reachable GPU nodes:
+  - `10.100.2.35:25076`, host `lg-cmc-b7r201-e02u16-h200-000098`, 4x NVIDIA H200. GPUs reported memory used `5512/143771`, `5218/143771`, `5394/143771`, and `5218/143771` MiB with `0%` utilization.
+  - `10.100.4.35:19382`, host `lg-cmc-b7r201-g07u26-h200-000162`, 4x NVIDIA H200. GPUs reported memory used `5202/143771`, `5218/143771`, `5218/143771`, and `5218/143771` MiB with `0%` utilization.
+- On both reachable nodes, old Direction C Python processes are still present. Several parent processes still show `Dl`, matching the earlier mounted-filesystem wait diagnosis. Treat these nodes as SSH-accessible but not cleanly reusable until the stale jobs are intentionally killed or the underlying mount recovers.
+- Unreachable historical endpoints:
+  - `10.100.2.35:33805`: SSH connection refused.
+  - `10.100.10.31:24050`: SSH connection refused.
+  - `10.100.12.73:25637`: SSH connection refused.
+  - `10.100.12.73:15135`: SSH connection refused.
+  - `10.100.2.35:24644`: SSH connection refused.
