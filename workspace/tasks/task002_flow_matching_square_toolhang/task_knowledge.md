@@ -1,6 +1,6 @@
 # Task Knowledge
 
-<!-- METADATA:SESSION=47 -->
+<!-- METADATA:SESSION=48 -->
 
 ## Working Rules
 
@@ -139,3 +139,4 @@
 - Direction C recovery state from Session 46: committed code is recoverable from GitHub branch `intern_ldp_explorer/task002_flow_matching_square_toolhang`; local/upstream/cloud matched `7aaf9a3e787dc16f86e36825df3b4caf74dde449` before the Session 46 status commit. A Ceph small-files backup was created at `/mnt/cephfs/home/tinwen.du/ldp_small_files_archive/bundles/task002_flow_matching_square_toolhang_direction_c/task002_flow_matching_square_toolhang_direction_c__intern_ldp_explorer__smallfiles__20260523T041116Z__git-7aaf9a3.tar.gz` with manifest and sha256 under `/mnt/cephfs/home/tinwen.du/ldp_small_files_archive/manifests/task002_flow_matching_square_toolhang_direction_c/`.
 - Direction C storage caveat from Session 46: the Ceph backup covers code, configs, docs, and workspace small files only. Large NFS/3FS training checkpoints, rollout outputs, cached datasets, and videos are not confirmed recoverable while NFS/3FS remain offline.
 - Direction C GPU reachability from Session 47: currently reachable GPU endpoints are `10.100.2.35:25076` and `10.100.4.35:19382`, each with 4x NVIDIA H200. Both are SSH-accessible and can run `nvidia-smi`, but stale Direction C Python processes remain and GPU utilization sampled at `0%`; treat them as not cleanly reusable until stale jobs are handled. Historical endpoints `10.100.2.35:33805`, `10.100.10.31:24050`, `10.100.12.73:25637`, `10.100.12.73:15135`, and `10.100.2.35:24644` refused SSH.
+- Direction C GPU usage from Session 48: as of `2026-05-24T10:52-10:53Z`, reachable H200 nodes `10.100.2.35:25076` and `10.100.4.35:19382` each show 4 GPUs with `0%` compute utilization. Each GPU has one stale Python compute process holding about `5.2-5.5GB` VRAM; all eight parent PIDs are `STAT=Dl` and `wchan=wait_on_page_bit_common`. Treat this as no useful GPU progress and not clean availability.

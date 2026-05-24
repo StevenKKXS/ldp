@@ -1,6 +1,6 @@
 # History Log
 
-<!-- METADATA:SESSION=47 -->
+<!-- METADATA:SESSION=48 -->
 
 ## Session 0
 
@@ -688,3 +688,24 @@
   - `10.100.12.73:25637`: SSH connection refused.
   - `10.100.12.73:15135`: SSH connection refused.
   - `10.100.2.35:24644`: SSH connection refused.
+
+## Session 48
+
+- User asked for current GPU utilization.
+- Checked only local GPU visibility plus reachable H200 nodes with `ssh`, `nvidia-smi`, `nvidia-smi pmon`, compute-app queries, `ps`, and `/proc/<pid>/wchan`. Avoided NFS/3FS file reads.
+- Local CPU host `lg-cmc-b7r201-c01u05-cpu-000024` still has no `nvidia-smi`.
+- `10.100.2.35:25076` / `lg-cmc-b7r201-e02u16-h200-000098`:
+  - 4x NVIDIA H200, all sampled at GPU util `0%` and memory util `0%`.
+  - GPU0: `5512/143771 MiB`, pmon PID `1086376`, command `python`, SM `0%`, MEM `0%`.
+  - GPU1: `5218/143771 MiB`, pmon PID `4026333`, command `python`, SM `0%`, MEM `0%`.
+  - GPU2: `5394/143771 MiB`, pmon PID `26885`, command `python`, SM `0%`, MEM `0%`.
+  - GPU3: `5218/143771 MiB`, pmon PID `4026336`, command `python`, SM `0%`, MEM `0%`.
+  - Exact parent states: all four PIDs `1086376`, `4026333`, `26885`, and `4026336` were `STAT=Dl`; all reported `wchan=wait_on_page_bit_common`.
+- `10.100.4.35:19382` / `lg-cmc-b7r201-g07u26-h200-000162`:
+  - 4x NVIDIA H200, all sampled at GPU util `0%` and memory util `0%`.
+  - GPU0: `5202/143771 MiB`, pmon PID `4086173`, command `python`, SM `0%`, MEM `0%`.
+  - GPU1: `5218/143771 MiB`, pmon PID `2080560`, command `python`, SM `0%`, MEM `0%`.
+  - GPU2: `5218/143771 MiB`, pmon PID `2080562`, command `python`, SM `0%`, MEM `0%`.
+  - GPU3: `5218/143771 MiB`, pmon PID `2080564`, command `python`, SM `0%`, MEM `0%`.
+  - Exact parent states: all four PIDs `4086173`, `2080560`, `2080562`, and `2080564` were `STAT=Dl`; all reported `wchan=wait_on_page_bit_common`.
+- Interpretation: there is no active GPU compute load. All visible GPU memory is held by stale Direction C Python jobs blocked in filesystem page I/O wait. The GPUs are SSH-visible but not cleanly reusable for new experiments until those processes are killed or the mount issue clears and they exit.
