@@ -1,6 +1,6 @@
 # Task Knowledge
 
-<!-- METADATA:SESSION=50 -->
+<!-- METADATA:SESSION=51 -->
 
 ## Working Rules
 
@@ -145,3 +145,4 @@
 - Direction C Session 49 corrected experiment matrix: rerun base no-context, pretrained `past` + `add_last`, random + `add_last`, and pretrained `past` + `add_all`, all with `policy.causal_cond_attn=false`, py39, and `robomimic==0.2.0`.
 - Direction C Session 50 cleanup result: `SIGTERM` and `SIGKILL` did not remove stale parent PIDs `1086376`, `4026333`, `26885`, `4026336`, `4086173`, `2080560`, `2080562`, and `2080564`; all stayed in `D/Dl` with `wchan=wait_on_page_bit_common`. Treat existing H200 nodes as requiring platform-level restart/release or storage recovery.
 - Direction C Session 50 corrected configs: M1 base no-context is `transformer_square_action8_causalcond_off_base.yaml`; M2 pretrained `past` + `add_last` is `transformer_square_translator_context_action8_causalcond_off_add_last.yaml`; M3 random + `add_last` is `transformer_square_random_context_action8_causalcond_off_add_last.yaml`; M4 pretrained `past` + `add_all` is `transformer_square_translator_context_action8_causalcond_off_add_all.yaml`.
+- Direction C Session 51 summary report: `docs/direction_c_behavior_translator/translator_progress_brief_2026-05-24.md` is the current concise shareable Chinese summary of Behavior Translator motivation, implementation, Stage 1/2a/2b evidence, mask caveat, and corrected rerun plan.

@@ -1,6 +1,6 @@
 # History Log
 
-<!-- METADATA:SESSION=50 -->
+<!-- METADATA:SESSION=51 -->
 
 ## Session 0
 
@@ -765,3 +765,10 @@
   - Confirmed expected policy target / context source / injection combination for each entry point.
 - Re-ran `py_compile` for the changed transformer and policy files; it passed.
 - Updated `docs/direction_c_behavior_translator/session49_mask_analysis_report.md` with the config entry points and cleanup result.
+
+## Session 51
+
+- User asked for a brief introduction/report that summarizes all Behavior Translator attempts and progress.
+- Added `docs/direction_c_behavior_translator/translator_progress_brief_2026-05-24.md` as a Chinese summary suitable for sharing.
+- The report covers the Direction C hypothesis, Stage 1 `past`/`future`/`past_future` objectives, Stage 2a frozen-head probe results, Stage 2b downstream integration status, the action8 condition-mask bug, corrected `causal_cond_attn=false` rerun matrix, systems bottlenecks, and current recommended priorities.
+- Main summary: pretrained `past` translator context has positive offline representation evidence versus frozen random context; rollout improvement is not yet proven because the old Stage 2b action8 runs were affected by condition masking and need the corrected matrix.
