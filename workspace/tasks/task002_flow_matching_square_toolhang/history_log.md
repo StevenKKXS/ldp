@@ -1,6 +1,6 @@
 # History Log
 
-<!-- METADATA:SESSION=48 -->
+<!-- METADATA:SESSION=49 -->
 
 ## Session 0
 
@@ -709,3 +709,37 @@
   - GPU3: `5218/143771 MiB`, pmon PID `2080564`, command `python`, SM `0%`, MEM `0%`.
   - Exact parent states: all four PIDs `4086173`, `2080560`, `2080562`, and `2080564` were `STAT=Dl`; all reported `wchan=wait_on_page_bit_common`.
 - Interpretation: there is no active GPU compute load. All visible GPU memory is held by stale Direction C Python jobs blocked in filesystem page I/O wait. The GPUs are SSH-visible but not cleanly reusable for new experiments until those processes are killed or the mount issue clears and they exit.
+
+## Session 49
+
+- User asked to continue Direction C experiments: analyze previous results, improve the design, run an experiment, and report the reasoning, design, and results.
+- Re-analyzed prior Direction C evidence:
+  - Stage2a was positive offline: pretrained frozen `past` context beat frozen random context in future-action head probes.
+  - Stage2b add-all rollout was mixed or negative: e24 pretrained/random `0/10` vs `2/10`, e49 `2/10` vs `5/10`, e99 `4/10` vs `3/10`.
+  - Stage2b add-last e49 looked positive (`4/10` vs `0/10`), but this was suspect because it conflicted with the add-all trend and used only 10 rollout seeds.
+- Found a concrete implementation issue in the action8 transformer condition mask:
+  - Current action8 config uses `horizon=8`, `n_obs_steps=16`, `causal_attn=true`, and `n_cond_layers=0`.
+  - `TransformerForDiffusion` builds a memory mask with `mask = t >= (s - 1)`.
+  - For action tokens `t=0..7`, this allows attention only to obs condition tokens `0..7`; obs tokens `8..15` are masked out.
+  - Therefore the newest/current obs token is invisible to the action decoder, and `context_injection=add_last` modifies a token the action decoder cannot see.
+- Implemented a backward-compatible fix:
+  - Added `causal_cond_attn: bool = True` to `diffusion_policy/model/diffusion/transformer_for_diffusion.py`.
+  - Threaded the same option through `diffusion_policy/policy/diffusion_transformer_hybrid_image_policy.py`.
+  - Added `policy.causal_cond_attn: true` to `experiment_configs/square/transformer_square_translator_context_action8.yaml` so existing behavior is explicit.
+  - Corrected experiments should use `policy.causal_cond_attn=false` to keep action self-causal attention while allowing all known observation condition tokens to be visible.
+- Ran synthetic perturbation visibility experiment on CPU, without NFS/3FS:
+  - Model: synthetic `TransformerForDiffusion`, `horizon=8`, `n_obs_steps=16`, `cond_dim=64`, `n_layer=2`, `n_head=4`, `n_emb=64`, `n_cond_layers=0`, dropout disabled, 12 seeds.
+  - Old behavior (`causal_cond_attn=true`): nonzero output sensitivity only for obs tokens `0..7`; obs tokens `8..15` had exactly zero sensitivity. `add_last` RMS was `0.00000000`; `add_visible_last` RMS `0.00000352`; `add_all` RMS `0.00007238`.
+  - Corrected behavior (`causal_cond_attn=false`): all obs tokens `0..15` had nonzero sensitivity. `add_last` RMS `0.00000546`; `add_visible_last` RMS `0.00000548`; `add_all` RMS `0.00008744`.
+- Ran synthetic gradient visibility experiment with the same model setup:
+  - Old behavior: only obs tokens `0..7` had nonzero gradient; obs tokens `8..15` had exactly zero gradient.
+  - Corrected behavior: all obs tokens `0..15` had nonzero gradient.
+- Verification:
+  - `py_compile` passed for `transformer_for_diffusion.py`, `diffusion_transformer_hybrid_image_policy.py`, and `translator_conditioned_transformer_hybrid_image_policy.py`.
+  - Smoke instantiation with `causal_cond_attn=false` confirmed `memory_mask is None`.
+- Wrote analysis report: `docs/direction_c_behavior_translator/session49_mask_analysis_report.md`.
+- Formal Robomimic rollout/training was not launched because the currently reachable H200 nodes still have stale `Dl` processes blocked on NFS/page I/O wait, and the large NFS/3FS experiment artifacts remain unreliable. The next real training matrix should be run on clean storage/GPU resources with:
+  - M1: base action8, `causal_cond_attn=false`.
+  - M2: pretrained `past` translator, `add_last`, `causal_cond_attn=false`.
+  - M3: random translator, `add_last`, `causal_cond_attn=false`.
+  - M4: pretrained `past` translator, `add_all`, `causal_cond_attn=false`.

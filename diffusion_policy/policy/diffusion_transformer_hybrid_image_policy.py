@@ -93,6 +93,7 @@ class DiffusionTransformerHybridImagePolicy(BaseImagePolicy):
             p_drop_emb=0.0,
             p_drop_attn=0.3,
             causal_attn=True,
+            causal_cond_attn=True,
             time_as_cond=True,
             obs_as_cond=True,
             pred_action_steps_only=False,
@@ -214,6 +215,7 @@ class DiffusionTransformerHybridImagePolicy(BaseImagePolicy):
             p_drop_emb=p_drop_emb,
             p_drop_attn=p_drop_attn,
             causal_attn=causal_attn,
+            causal_cond_attn=causal_cond_attn,
             time_as_cond=time_as_cond,
             obs_as_cond=obs_as_cond,
             n_cond_layers=n_cond_layers

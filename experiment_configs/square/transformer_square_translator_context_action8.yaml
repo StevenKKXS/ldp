@@ -102,6 +102,7 @@ policy:
   p_drop_emb: 0.0
   p_drop_attn: 0.3
   causal_attn: true
+  causal_cond_attn: true
   time_as_cond: true
   obs_as_cond: true
   pred_action_steps_only: true

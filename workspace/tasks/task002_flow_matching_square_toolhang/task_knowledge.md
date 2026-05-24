@@ -1,6 +1,6 @@
 # Task Knowledge
 
-<!-- METADATA:SESSION=48 -->
+<!-- METADATA:SESSION=49 -->
 
 ## Working Rules
 
@@ -140,3 +140,6 @@
 - Direction C storage caveat from Session 46: the Ceph backup covers code, configs, docs, and workspace small files only. Large NFS/3FS training checkpoints, rollout outputs, cached datasets, and videos are not confirmed recoverable while NFS/3FS remain offline.
 - Direction C GPU reachability from Session 47: currently reachable GPU endpoints are `10.100.2.35:25076` and `10.100.4.35:19382`, each with 4x NVIDIA H200. Both are SSH-accessible and can run `nvidia-smi`, but stale Direction C Python processes remain and GPU utilization sampled at `0%`; treat them as not cleanly reusable until stale jobs are handled. Historical endpoints `10.100.2.35:33805`, `10.100.10.31:24050`, `10.100.12.73:25637`, `10.100.12.73:15135`, and `10.100.2.35:24644` refused SSH.
 - Direction C GPU usage from Session 48: as of `2026-05-24T10:52-10:53Z`, reachable H200 nodes `10.100.2.35:25076` and `10.100.4.35:19382` each show 4 GPUs with `0%` compute utilization. Each GPU has one stale Python compute process holding about `5.2-5.5GB` VRAM; all eight parent PIDs are `STAT=Dl` and `wchan=wait_on_page_bit_common`. Treat this as no useful GPU progress and not clean availability.
+- Direction C Session 49 masking finding: the old action8 transformer setup (`horizon=8`, `n_obs_steps=16`, `causal_attn=true`, `n_cond_layers=0`) masks obs condition tokens `8..15` from every action decoder token. This makes the newest/current obs token and `context_injection=add_last` invisible. `add_last` rollout evidence from the old runs should not be treated as proof that the translator context helped.
+- Direction C Session 49 code change: `TransformerForDiffusion` and `DiffusionTransformerHybridImagePolicy` now support `causal_cond_attn` with default `true`; corrected long-history action8 experiments should run with `policy.causal_cond_attn=false` so all known obs history tokens are visible to action generation.
+- Direction C Session 49 corrected experiment matrix: rerun base no-context, pretrained `past` + `add_last`, random + `add_last`, and pretrained `past` + `add_all`, all with `policy.causal_cond_attn=false`, py39, and `robomimic==0.2.0`.

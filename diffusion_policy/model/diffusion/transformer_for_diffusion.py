@@ -20,6 +20,7 @@ class TransformerForDiffusion(ModuleAttrMixin):
             p_drop_emb: float = 0.1,
             p_drop_attn: float = 0.1,
             causal_attn: bool=False,
+            causal_cond_attn: bool=True,
             time_as_cond: bool=True,
             obs_as_cond: bool=False,
             n_cond_layers: int = 0
@@ -120,7 +121,7 @@ class TransformerForDiffusion(ModuleAttrMixin):
             mask = mask.float().masked_fill(mask == 0, float('-inf')).masked_fill(mask == 1, float(0.0))
             self.register_buffer("mask", mask)
             
-            if time_as_cond and obs_as_cond:
+            if causal_cond_attn and time_as_cond and obs_as_cond:
                 S = T_cond
                 t, s = torch.meshgrid(
                     torch.arange(T),
@@ -146,6 +147,7 @@ class TransformerForDiffusion(ModuleAttrMixin):
         self.horizon = horizon
         self.time_as_cond = time_as_cond
         self.obs_as_cond = obs_as_cond
+        self.causal_cond_attn = causal_cond_attn
         self.encoder_only = encoder_only
 
         # init
@@ -415,4 +417,3 @@ def test():
     timestep = torch.tensor(0)
     sample = torch.zeros((4,8,16))
     out = transformer(sample, timestep)
-
