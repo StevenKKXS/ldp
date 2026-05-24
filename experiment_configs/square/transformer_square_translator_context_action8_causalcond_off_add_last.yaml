@@ -1,0 +1,23 @@
+defaults:
+  - transformer_square_translator_context_action8
+  - _self_
+
+exp_name: stage2b_translator_context_add_last_action8_causalcond_off
+
+policy:
+  causal_cond_attn: false
+  translator_context_source: checkpoint
+  context_injection: add_last
+  context_projector_zero_init: true
+
+logging:
+  name: stage2b_translator_context_add_last_action8_causalcond_off
+  group: direction_c_translator_context_causalcond_off
+  tags:
+    - train_diffusion_transformer_hybrid
+    - square_image
+    - translator_context
+    - action8
+    - causalcond_off
+    - add_last
+    - pretrained

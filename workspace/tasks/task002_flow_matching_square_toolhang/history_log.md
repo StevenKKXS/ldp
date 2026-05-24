@@ -1,6 +1,6 @@
 # History Log
 
-<!-- METADATA:SESSION=49 -->
+<!-- METADATA:SESSION=50 -->
 
 ## Session 0
 
@@ -743,3 +743,25 @@
   - M2: pretrained `past` translator, `add_last`, `causal_cond_attn=false`.
   - M3: random translator, `add_last`, `causal_cond_attn=false`.
   - M4: pretrained `past` translator, `add_all`, `causal_cond_attn=false`.
+
+## Session 50
+
+- User asked to continue.
+- Rechecked reachable H200 nodes without NFS/3FS file reads. Both nodes still had stale Direction C parent processes holding GPU memory with zero useful GPU utilization:
+  - `10.100.2.35:25076`: PIDs `1086376`, `4026333`, `26885`, `4026336`.
+  - `10.100.4.35:19382`: PIDs `4086173`, `2080560`, `2080562`, `2080564`.
+- Tried to clean the stale jobs:
+  - Sent `SIGTERM`, waited, then sent `SIGKILL` to all eight parent PIDs.
+  - The same PIDs remained visible in `nvidia-smi --query-compute-apps`.
+  - Follow-up `ps` showed the PIDs still in `D` or `Dl`, and `/proc/<pid>/wchan` still reported `wait_on_page_bit_common`.
+  - Conclusion: these processes are in uninterruptible kernel I/O wait. The existing nodes need platform-level restart/release or storage recovery before they are clean training resources.
+- Prepared corrected Square action8 config entry points for the next clean run:
+  - `experiment_configs/square/transformer_square_action8_causalcond_off_base.yaml`: base no-context M1.
+  - `experiment_configs/square/transformer_square_translator_context_action8_causalcond_off_add_last.yaml`: pretrained `past` + `add_last` M2.
+  - `experiment_configs/square/transformer_square_random_context_action8_causalcond_off_add_last.yaml`: random + `add_last` M3.
+  - `experiment_configs/square/transformer_square_translator_context_action8_causalcond_off_add_all.yaml`: pretrained `past` + `add_all` M4.
+- Ran lightweight config validation with PyYAML:
+  - Confirmed all four configs set `policy.causal_cond_attn=false`.
+  - Confirmed expected policy target / context source / injection combination for each entry point.
+- Re-ran `py_compile` for the changed transformer and policy files; it passed.
+- Updated `docs/direction_c_behavior_translator/session49_mask_analysis_report.md` with the config entry points and cleanup result.

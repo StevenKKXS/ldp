@@ -1,0 +1,19 @@
+defaults:
+  - transformer_square_translator_context_action8
+  - _self_
+
+exp_name: stage2b_base_no_context_action8_causalcond_off
+
+policy:
+  _target_: diffusion_policy.policy.diffusion_transformer_hybrid_image_policy.DiffusionTransformerHybridImagePolicy
+  causal_cond_attn: false
+
+logging:
+  name: stage2b_base_no_context_action8_causalcond_off
+  group: direction_c_translator_context_causalcond_off
+  tags:
+    - train_diffusion_transformer_hybrid
+    - square_image
+    - action8
+    - causalcond_off
+    - base

@@ -112,8 +112,25 @@ Once a clean GPU/storage resource is available, run the corrected Square action8
 | M3 | translator-conditioned | random | `add_last` | `false` | same-architecture random control |
 | M4 | translator-conditioned | pretrained `past` | `add_all` | `false` | test whether global injection remains harmful |
 
+Prepared config entry points:
+
+| ID | config |
+| --- | --- |
+| M1 | `experiment_configs/square/transformer_square_action8_causalcond_off_base.yaml` |
+| M2 | `experiment_configs/square/transformer_square_translator_context_action8_causalcond_off_add_last.yaml` |
+| M3 | `experiment_configs/square/transformer_square_random_context_action8_causalcond_off_add_last.yaml` |
+| M4 | `experiment_configs/square/transformer_square_translator_context_action8_causalcond_off_add_all.yaml` |
+
 Use the same py39 / `robomimic==0.2.0` environment. Evaluate at least e24/e49/e99 or equivalent fixed step budgets, and use more than 10 rollout seeds before treating small differences as signal.
 
 ## Current Result Status
 
 This session produced an implementation-level experiment, not a new Robomimic rollout. A meaningful rollout is blocked until the stale NFS/page-I/O-wait jobs are killed or clean storage/GPU resources are provided. The code path for the corrected experiment is implemented and py_compile passed.
+
+Session 50 cleanup attempt:
+
+- Tried `SIGTERM` then `SIGKILL` on stale parent PIDs `1086376`, `4026333`, `26885`, `4026336`, `4086173`, `2080560`, `2080562`, and `2080564`.
+- The same PIDs remained in `D/Dl` with `wchan=wait_on_page_bit_common`.
+- GPU memory remained occupied by those Python compute apps.
+
+Conclusion: these jobs are in uninterruptible kernel I/O wait. The existing nodes require platform-level restart/release or storage recovery before they are clean training resources.
