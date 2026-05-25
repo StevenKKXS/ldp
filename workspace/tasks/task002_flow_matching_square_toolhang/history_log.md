@@ -1,6 +1,6 @@
 # History Log
 
-<!-- METADATA:SESSION=52 -->
+<!-- METADATA:SESSION=53 -->
 
 ## Session 0
 
@@ -792,3 +792,15 @@
   - `10.100.12.73:15135`
   - `10.100.0.29:36645`
 - Current resource conclusion: there is one SSH-reachable 4xH200 node, but no clean usable GPU for new training because all four cards are held by old processes blocked in filesystem page I/O wait.
+
+## Session 53
+
+- User asked what the stale GPU processes are and whether they are historical processes launched by this agent.
+- Checked task history and remote `/proc` state for PIDs `1086376`, `4026333`, `26885`, and `4026336` on `10.100.2.35:25076`.
+- Confirmed all four are historical `intern_ldp_explorer` Direction C runs:
+  - PID `1086376`: Stage 1 Square translator `past`, launched under `/mnt/nfs/tingwen/intern_ldp_explorer/tasks/direction_c_behavior_translator/outputs/stage1_square_20260519_143020/past`, command `behavior_translator_square_past`, `CUDA_VISIBLE_DEVICES=0`, start time `2026-05-20 02:13:55 UTC`.
+  - PID `26885`: Stage 1 Square translator `past_future`, launched under `/mnt/nfs/tingwen/intern_ldp_explorer/tasks/direction_c_behavior_translator/outputs/stage1_square_20260519_143020/past_future`, command `behavior_translator_square_past_future`, `CUDA_VISIBLE_DEVICES=2`, start time `2026-05-19 14:30:20 UTC`.
+  - PID `4026333`: Stage 2b Square action8 pretrained-context run, launched under `/mnt/nfs/tingwen/intern_ldp_explorer/tasks/direction_c_behavior_translator/outputs/stage2b_square_translator_context_20260521_1252/stage2b_translator_context_past_best_action8`, command `transformer_square_translator_context_action8`, `CUDA_VISIBLE_DEVICES=1`, start time `2026-05-21 12:52:17 UTC`.
+  - PID `4026336`: Stage 2b Square action8 random-context run, launched under `/mnt/nfs/tingwen/intern_ldp_explorer/tasks/direction_c_behavior_translator/outputs/stage2b_square_translator_context_20260521_1252/stage2b_random_context_action8`, command `transformer_square_translator_context_action8 policy.translator_context_source=random`, `CUDA_VISIBLE_DEVICES=3`, start time `2026-05-21 12:52:17 UTC`.
+- Remote `/proc` confirmed cwd/PYTHONPATH for all four point to `/mnt/nfs/tingwen/intern_ldp_explorer/repos/ldp_behavior_translator`, and executable is `/mnt/nfs/tingwen/ldp/envs/ptp_ldp_py39_rm020/bin/python3.9`.
+- All four parent processes now have `PPID=1`, so they are orphaned from their original launch shells. Their `STAT` remains `D` or `Dl`, and `wchan=wait_on_page_bit_common`, matching a filesystem page I/O wait hang rather than active training progress.
