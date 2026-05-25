@@ -1,6 +1,6 @@
 # History Log
 
-<!-- METADATA:SESSION=51 -->
+<!-- METADATA:SESSION=52 -->
 
 ## Session 0
 
@@ -772,3 +772,23 @@
 - Added `docs/direction_c_behavior_translator/translator_progress_brief_2026-05-24.md` as a Chinese summary suitable for sharing.
 - The report covers the Direction C hypothesis, Stage 1 `past`/`future`/`past_future` objectives, Stage 2a frozen-head probe results, Stage 2b downstream integration status, the action8 condition-mask bug, corrected `causal_cond_attn=false` rerun matrix, systems bottlenecks, and current recommended priorities.
 - Main summary: pretrained `past` translator context has positive offline representation evidence versus frozen random context; rollout improvement is not yet proven because the old Stage 2b action8 runs were affected by condition masking and need the corrected matrix.
+
+## Session 52
+
+- User asked to check existing GPU resources.
+- Local host `lg-cmc-b7r201-c01u05-cpu-000024` has no `nvidia-smi`.
+- Reachable GPU node:
+  - `10.100.2.35:25076`, host `lg-cmc-b7r201-e02u16-h200-000098`, 4x NVIDIA H200.
+  - GPUs sampled at `0%` compute utilization and `0%` memory utilization.
+  - GPU memory usage: GPU0 `5512/143771 MiB`, GPU1 `5218/143771 MiB`, GPU2 `5394/143771 MiB`, GPU3 `5218/143771 MiB`.
+  - Compute-app PIDs remain `1086376`, `4026333`, `26885`, and `4026336`.
+  - These parent processes are still in `D` or `Dl`, with `/proc/<pid>/wchan` reporting `wait_on_page_bit_common`; `nvidia-smi pmon` shows `0%` SM and `0%` MEM for all four.
+- Unreachable historical endpoints refused SSH:
+  - `10.100.4.35:19382`
+  - `10.100.2.35:33805`
+  - `10.100.2.35:24644`
+  - `10.100.10.31:24050`
+  - `10.100.12.73:25637`
+  - `10.100.12.73:15135`
+  - `10.100.0.29:36645`
+- Current resource conclusion: there is one SSH-reachable 4xH200 node, but no clean usable GPU for new training because all four cards are held by old processes blocked in filesystem page I/O wait.
