@@ -1,6 +1,6 @@
 # Task Knowledge
 
-<!-- METADATA:SESSION=53 -->
+<!-- METADATA:SESSION=54 -->
 
 ## Working Rules
 
@@ -148,3 +148,4 @@
 - Direction C Session 51 summary report: `docs/direction_c_behavior_translator/translator_progress_brief_2026-05-24.md` is the current concise shareable Chinese summary of Behavior Translator motivation, implementation, Stage 1/2a/2b evidence, mask caveat, and corrected rerun plan.
 - Direction C Session 52 GPU availability: as of `2026-05-25T07:18Z`, only `10.100.2.35:25076` is SSH-reachable. It has 4x H200 at `0%` utilization, but all four GPUs are held by old Python PIDs `1086376`, `4026333`, `26885`, and `4026336` in `D/Dl` with `wchan=wait_on_page_bit_common`. Treat this as not cleanly usable for new training until the node is restarted/released or the blocked processes clear.
 - Direction C Session 53 process attribution: stale PIDs `1086376`, `26885`, `4026333`, and `4026336` are confirmed historical `intern_ldp_explorer` jobs from Stage 1 translator and Stage 2b Square action8 runs, using `/mnt/nfs/tingwen/intern_ldp_explorer/repos/ldp_behavior_translator` and `/mnt/nfs/tingwen/ldp/envs/ptp_ldp_py39_rm020/bin/python3.9`. They are orphaned (`PPID=1`) and blocked in `wait_on_page_bit_common`, not active useful training.
+- Direction C Session 54 result-utility clarification: Stage 1 and Stage 2a results are already captured and useful for the offline representation claim; old Stage 2b rollout results are captured but only diagnostic because the old action8 condition mask hid obs tokens `8..15`. Do not treat old Stage 2b success rates as final downstream evidence; rerun corrected Stage 2b with `policy.causal_cond_attn=false`.

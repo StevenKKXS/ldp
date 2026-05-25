@@ -1,6 +1,6 @@
 # History Log
 
-<!-- METADATA:SESSION=53 -->
+<!-- METADATA:SESSION=54 -->
 
 ## Session 0
 
@@ -804,3 +804,16 @@
   - PID `4026336`: Stage 2b Square action8 random-context run, launched under `/mnt/nfs/tingwen/intern_ldp_explorer/tasks/direction_c_behavior_translator/outputs/stage2b_square_translator_context_20260521_1252/stage2b_random_context_action8`, command `transformer_square_translator_context_action8 policy.translator_context_source=random`, `CUDA_VISIBLE_DEVICES=3`, start time `2026-05-21 12:52:17 UTC`.
 - Remote `/proc` confirmed cwd/PYTHONPATH for all four point to `/mnt/nfs/tingwen/intern_ldp_explorer/repos/ldp_behavior_translator`, and executable is `/mnt/nfs/tingwen/ldp/envs/ptp_ldp_py39_rm020/bin/python3.9`.
 - All four parent processes now have `PPID=1`, so they are orphaned from their original launch shells. Their `STAT` remains `D` or `Dl`, and `wchan=wait_on_page_bit_common`, matching a filesystem page I/O wait hang rather than active training progress.
+
+## Session 54
+
+- User asked whether the stale experiments are useful and whether the reported results were obtained.
+- Rechecked git-tracked Direction C reports and history logs for Stage 1, Stage 2a, and Stage 2b numeric summaries.
+- Result status:
+  - Stage 1 results are useful and were already captured. Formal `past` reached at least epoch `141` with best val loss `0.000455 @ e113`; tuned `past` reached epoch `200` with best val loss `0.000434 @ e118`. Formal `past_future` reached at least epoch `142` but was much weaker, with best val loss `0.010111 @ e4`; tuned `past_future` with `w_future=0.5` reached epoch `200`, best val loss `0.006501 @ e4`, latest future L1 `0.044724`.
+  - Stage 2a results are useful and were already captured. Frozen pretrained `past` context beat same-architecture frozen random context: `stage2a_past_e50` best val loss `0.007839`, future L1 `0.04917`; `stage2a_random_frozen` best val loss `0.011571`, future L1 `0.06736`. Additional probes kept the same direction: frozen `past` around `0.00796-0.00803`, `past_future` weaker around `0.0106-0.0136`.
+  - Old Stage 2b rollout results were obtained but should be treated as diagnostic only. Captured numbers include add-all e24 pretrained/random `0/10` vs `2/10`, add-all e49 `2/10` vs `5/10`, add-all e99 `4/10` vs `3/10`, nonzero-projector pretrained e99 `4/10`, and add-last e49 pretrained/random `4/10` vs `0/10`.
+- Interpretation:
+  - Stage 1 and Stage 2a provide the strongest usable evidence so far: `past` translator context learns offline behavior information.
+  - Old Stage 2b rollout is not final downstream evidence because the later mask analysis showed the action8 setup masked obs tokens `8..15`, including the latest obs and `add_last` context token.
+  - The stale live processes no longer add value while blocked in `wait_on_page_bit_common`; they are resource leaks, not ongoing productive jobs.
