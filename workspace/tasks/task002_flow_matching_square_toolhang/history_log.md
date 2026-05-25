@@ -1,6 +1,6 @@
 # History Log
 
-<!-- METADATA:SESSION=54 -->
+<!-- METADATA:SESSION=55 -->
 
 ## Session 0
 
@@ -817,3 +817,24 @@
   - Stage 1 and Stage 2a provide the strongest usable evidence so far: `past` translator context learns offline behavior information.
   - Old Stage 2b rollout is not final downstream evidence because the later mask analysis showed the action8 setup masked obs tokens `8..15`, including the latest obs and `add_last` context token.
   - The stale live processes no longer add value while blocked in `wait_on_page_bit_common`; they are resource leaks, not ongoing productive jobs.
+
+## Session 55
+
+- User asked to stop current GPU contents and continue with the planned corrected Stage 2b direction.
+- On `10.100.2.35:25076`, sent `SIGTERM`, waited, then sent `SIGKILL` to stale parent PIDs `1086376`, `4026333`, `26885`, and `4026336`, plus their listed dataloader children.
+- Stop result:
+  - The four parent PIDs remained visible in `nvidia-smi --query-compute-apps`.
+  - GPU memory remained around GPU0 `5512/143771 MiB`, GPU1 `5218/143771 MiB`, GPU2 `5394/143771 MiB`, GPU3 `5218/143771 MiB`.
+  - Parent states remained `D` or `Dl`, and `wchan` remained `wait_on_page_bit_common`.
+  - Conclusion: ordinary process signals cannot stop these parents while they are in uninterruptible filesystem page I/O wait.
+- Checked launch feasibility on the same node:
+  - `/mnt/nfs/tingwen/intern_ldp_explorer/repos/ldp_behavior_translator` stat timed out.
+  - `/mnt/nfs/tingwen/ldp/envs/ptp_ldp_py39_rm020/bin/python` stat timed out.
+  - `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/datasets/robomimic/datasets/square/mh/image_abs.hdf5` stat succeeded.
+  - Local `/usr/bin/python3` has CUDA torch `2.7.0a0+ecf3bae40a.nv25.02` but lacks `robomimic`, and `/root/ptp_ldp_py39/bin/python` is absent.
+- Did not launch corrected Stage 2b on this node because the required py39 / robomimic 0.2.0 NFS environment and repo are not reachable.
+- Added `launch_direction_c_stage2b_causalcond_off.sh`, a clean-node launcher for the four planned corrected jobs:
+  - M1 base no-context
+  - M2 pretrained `past` + `add_last`
+  - M3 random + `add_last`
+  - M4 pretrained `past` + `add_all`
