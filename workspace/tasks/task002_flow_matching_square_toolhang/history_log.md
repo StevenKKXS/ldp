@@ -1,6 +1,6 @@
 # History Log
 
-<!-- METADATA:SESSION=55 -->
+<!-- METADATA:SESSION=56 -->
 
 ## Session 0
 
@@ -838,3 +838,39 @@
   - M2 pretrained `past` + `add_last`
   - M3 random + `add_last`
   - M4 pretrained `past` + `add_all`
+
+## Session 56
+
+- User provided a fresh 4xH200 node `10.100.2.19:28106`, then clarified that NFS and 3FS should be treated as offline and the work should be placed directly on Ceph.
+- Verified the node:
+  - Host `lg-cmc-b7r201-d05u06-h200-000085`.
+  - Four NVIDIA H200 GPUs were initially idle.
+  - Ceph path `/mnt/cephfs/home/tinwen.du` is mounted and writable.
+  - `/dev/shm` is only `16G`, which constrains aggressive DataLoader worker settings.
+- Prepared Ceph-only Direction C workspace:
+  - Root: `/mnt/cephfs/home/tinwen.du/intern_ldp_explorer/direction_c_behavior_translator`.
+  - Repo: `repos/ldp`, synced from the local branch.
+  - Dataset: `datasets/robomimic/datasets/square/mh/image_abs.hdf5`.
+  - Environment: `envs/ptp_ldp_py39_ceph`, Python `3.9.25`, `robomimic==0.2.0`, CUDA torch `2.5.1+cu124`.
+- Added compatibility and launcher fixes:
+  - Added a local `pytorch3d` transforms stub for the rotation transformer imports.
+  - Filtered inherited `translator_*` and context-injection config keys out of plain `DiffusionTransformerHybridImagePolicy.scheduler.step(**kwargs)`.
+  - Updated `launch_direction_c_stage2b_causalcond_off.sh` to default to Ceph paths, accept `DATASET_PATH` and `TRANSLATOR_CKPT`, skip pretrained configs when the checkpoint is missing, and compact GPU assignment after skips.
+- Verification:
+  - Remote `py_compile` passed for the touched policy files and `pytorch3d/transforms.py`.
+  - Hydra config dry-run passed for the corrected Stage 2b launcher.
+  - One-step smoke for M1 base with `causal_cond_attn=false` completed train and validation successfully, with `val_loss=1.05666`.
+- Launch result:
+  - The old pretrained translator checkpoint path was on NFS and is not available on Ceph, so M2/M4 pretrained Stage2b jobs are not launched yet.
+  - First launch with higher workers failed from `/dev/shm` pressure; cleaned residual `/dev/shm/torch_*` files and relaunched with safe workers.
+  - Active safe-worker Stage2b root: `/mnt/cephfs/home/tinwen.du/intern_ldp_explorer/direction_c_behavior_translator/outputs/stage2b_square_causalcond_off_20260526_032417_safe_workers`.
+  - Active safe-worker Stage1 root: `/mnt/cephfs/home/tinwen.du/intern_ldp_explorer/direction_c_behavior_translator/outputs/stage1_square_past_ceph_20260526_032417_safe_workers`.
+  - Active jobs:
+    - GPU0 PID `91453`: M1 base no-context, corrected `causal_cond_attn=false`.
+    - GPU1 PID `91456`: M3 random translator context, `add_last`, corrected `causal_cond_attn=false`.
+    - GPU2 PID `91460`: Stage1 `past`, `batch_size=128`, `obs_encoder_lr=1e-4`, `translator_lr=1e-4`.
+    - GPU3 PID `91463`: Stage1 `past`, `batch_size=128`, `obs_encoder_lr=5e-5`, `translator_lr=1e-4`.
+- Current status at the end of this session:
+  - All four safe-worker jobs entered training.
+  - `/dev/shm` usage stayed low after reducing workers to `4` train and `2` validation per process.
+  - No new bus-error or scheduler-kwarg error appeared after the safe-worker relaunch.

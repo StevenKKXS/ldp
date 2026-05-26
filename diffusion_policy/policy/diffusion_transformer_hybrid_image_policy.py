@@ -239,7 +239,17 @@ class DiffusionTransformerHybridImagePolicy(BaseImagePolicy):
         self.n_obs_steps = n_obs_steps
         self.obs_as_cond = obs_as_cond
         self.pred_action_steps_only = pred_action_steps_only
-        self.kwargs = kwargs
+        # Hydra configs for translator-conditioned variants inherit from the
+        # base transformer config. When the plain base policy is selected, keep
+        # translator-only options from leaking into scheduler.step(**kwargs).
+        self.kwargs = {
+            key: value for key, value in kwargs.items()
+            if not key.startswith("translator_")
+            and key not in {
+                "context_injection",
+                "context_projector_zero_init",
+            }
+        }
 
         if obs_encoder_dir:
             print(f"loading encoder from {obs_encoder_dir}")
