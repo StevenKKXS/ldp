@@ -931,4 +931,5 @@
   - GPU0 PID `1368459`: M2 pretrained `past` context, `add_last`, run root `/mnt/cephfs/home/tinwen.du/intern_ldp_explorer/direction_c_behavior_translator/outputs/stage2b_square_causalcond_off_pretrained_cephpast_20260526_144615/m2_pretrained_past_add_last_action8_causalcond_off`.
   - GPU1 PID `1368462`: M4 pretrained `past` context, `add_all`, run root `/mnt/cephfs/home/tinwen.du/intern_ldp_explorer/direction_c_behavior_translator/outputs/stage2b_square_causalcond_off_pretrained_cephpast_20260526_144615/m4_pretrained_past_add_all_action8_causalcond_off`.
 - Both M2/M4 jobs loaded the dataset cache/checkpoint and entered training epoch 0 without immediate errors; `/dev/shm` usage remained low.
+- Follow-up live poll at `2026-05-26 14:51 UTC`: M2 was alive at epoch 0 around step `545`, M4 was alive at epoch 0 around step `542`, and neither had produced a validation row or checkpoint yet.
 - No new corrected rollout success rate is available yet. The next decision point is the M1/M2/M3/M4 rollout table once M2/M4 reach comparable checkpoints.
