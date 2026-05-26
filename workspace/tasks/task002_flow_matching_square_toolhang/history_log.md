@@ -1,6 +1,6 @@
 # History Log
 
-<!-- METADATA:SESSION=62 -->
+<!-- METADATA:SESSION=63 -->
 
 ## Session 0
 
@@ -1015,3 +1015,28 @@
   - Move or disable CPU ColorJitter for the speed test while keeping the image encoder trainable.
   - Use one Stage2b job per GPU when the priority is wall-clock time for a single run.
   - Add explicit `data_time` and `compute_time` logging to Stage2b, matching the translator workspace profiling hook, to quantify this more cleanly.
+
+## Session 63
+
+- User asked for a logical report of the translator direction, starting from experiment planning, covering exploration, results, judgment revisions, updated next-step plans, and suggestions for figures/tables suitable for a Feishu document.
+- Reviewed existing Direction C docs and task records:
+  - `docs/direction_c_behavior_translator/translator_progress_brief_2026-05-24.md`
+  - `docs/direction_c_behavior_translator/session49_mask_analysis_report.md`
+  - `docs/direction_c_behavior_translator/status.md`
+  - `workspace/tasks/task002_flow_matching_square_toolhang/task_knowledge.md`
+  - `workspace/tasks/task002_flow_matching_square_toolhang/history_log.md`
+- Created `docs/direction_c_behavior_translator/translator_exploration_report_2026-05-26.md`.
+- The report includes:
+  - one-line current conclusion;
+  - original hypothesis and three-stage plan;
+  - data/window construction and sample counts;
+  - implemented code modules;
+  - Stage 1 objective comparisons and why the mainline shifted from `past_future` to `past`;
+  - Stage 2a frozen-head results supporting pretrained `past` context;
+  - old Stage 2b rollout results and why they were downgraded to diagnostic evidence;
+  - condition-mask diagnosis and corrected `causal_cond_attn=false` matrix;
+  - current Ceph corrected run status;
+  - rollout/runtime blockers and throughput bottleneck;
+  - updated next actions;
+  - suggested workflow, data-window, curve, bar-chart, heatmap, rollout-table, and bottleneck figures/tables for Feishu.
+- Checked for a Feishu/Lark CLI or credential variables in the current environment and did not find a usable sending interface. The document is therefore saved as a Feishu-importable Markdown draft in the repo.
