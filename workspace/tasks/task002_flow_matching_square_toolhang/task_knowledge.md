@@ -1,6 +1,6 @@
 # Task Knowledge
 
-<!-- METADATA:SESSION=59 -->
+<!-- METADATA:SESSION=60 -->
 
 ## Working Rules
 
@@ -163,3 +163,5 @@
 - Direction C Session 59 corrected Stage2b offline status: M1 base no-context with `policy.causal_cond_attn=false` is currently best offline `val_loss=0.057315 @ e22`; M3 frozen random context `add_last` is currently best offline `val_loss=0.058737 @ e22`. This slightly favors base over random context and is not a rollout success-rate result.
 - Direction C Session 59 Stage1 Ceph `past` status: `batch_size=128,obs_lr=1e-4,translator_lr=1e-4` is better than `obs_lr=5e-5,translator_lr=1e-4` (`0.000689 @ e17` vs `0.000828 @ e14`), but still weaker than the historical NFS tuned `past` best `0.000434`.
 - Direction C Session 59 pretrained downstream launch: M2 pretrained `past` `add_last` PID `1368459` and M4 pretrained `past` `add_all` PID `1368462` are running on `10.100.2.19:28106` from Ceph root `/mnt/cephfs/home/tinwen.du/intern_ldp_explorer/direction_c_behavior_translator/outputs/stage2b_square_causalcond_off_pretrained_cephpast_20260526_144615`, using checkpoint `stage1_past_bs128_obs1e4_tr1e4/checkpoints/best.ckpt`; live poll at `2026-05-26 14:51 UTC` showed epoch 0 around steps `545/542` and no validation/checkpoint yet.
+- Direction C Session 60 baseline interpretation: corrected M1 base is the same-architecture no-translator/no-pretraining image baseline, using `DiffusionTransformerHybridImagePolicy`, the robomimic image obs encoder, `obs_encoder_dir=null`, and `obs_encoder_freeze=false`. A separate canonical DP/PTP baseline comparison still requires a matched rollout table.
+- Direction C Session 60 rollout blocker: Stage2b training has offline validation every epoch but no automatic rollout (`training.rollout_every=999999`, `task.env_runner.n_test=0`), checkpoints save every 25 epochs, and the Ceph py39 runtime currently lacks rollout dependencies (`robosuite` missing; `mujoco_py` OSMesa build fails because `GL/osmesa.h` is missing).

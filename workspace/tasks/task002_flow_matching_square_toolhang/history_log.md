@@ -1,6 +1,6 @@
 # History Log
 
-<!-- METADATA:SESSION=59 -->
+<!-- METADATA:SESSION=60 -->
 
 ## Session 0
 
@@ -933,3 +933,27 @@
 - Both M2/M4 jobs loaded the dataset cache/checkpoint and entered training epoch 0 without immediate errors; `/dev/shm` usage remained low.
 - Follow-up live poll at `2026-05-26 14:51 UTC`: M2 was alive at epoch 0 around step `545`, M4 was alive at epoch 0 around step `542`, and neither had produced a validation row or checkpoint yet.
 - No new corrected rollout success rate is available yet. The next decision point is the M1/M2/M3/M4 rollout table once M2/M4 reach comparable checkpoints.
+
+## Session 60
+
+- User asked two follow-up questions:
+  - Whether the current base being better than context can beat an ordinary no-pretraining ResNet baseline.
+  - Why validation/rollout has taken so long and why rollout results are not available yet.
+- Clarified baseline definition:
+  - Current M1 base is the same-architecture no-translator/no-pretraining image baseline for the corrected Direction C matrix.
+  - It uses `DiffusionTransformerHybridImagePolicy`, robomimic image obs encoder, `obs_encoder_dir=null`, `obs_encoder_freeze=false`, and no translator context.
+  - Therefore, inside the current corrected Stage2b setup, M1 is the ordinary no-pretraining ResNet-style image baseline. It is not yet a corrected rollout comparison against a separate canonical DP/PTP baseline with different horizon/head settings.
+- Checked live progress on `10.100.2.19:28106` at `2026-05-26 14:56 UTC`:
+  - M1 base PID `91453` was alive at epoch `25`, global step around `64424`; last validation row was epoch `24`, `val_loss=0.058112`, best `0.057315 @ e22`.
+  - M3 random PID `91456` was alive at epoch `25`, global step around `64381`; last validation row was epoch `24`, `val_loss=0.058755`, best `0.058737 @ e22`.
+  - M2 pretrained add-last PID `1368459` and M4 pretrained add-all PID `1368462` were alive at epoch `0`, global step around `1057`, without validation rows or checkpoints yet.
+  - Stage1 `past` runs were alive at epoch `22`; the `5e-5` obs LR run improved to best `0.000724 @ e22`, while the `1e-4` obs LR run still had earlier best `0.000689 @ e17`.
+- Explained rollout delay:
+  - The Stage2b training config does not automatically run rollout because `training.rollout_every=999999` and `task.env_runner.n_test=0`.
+  - Training validation is offline dataset loss and runs every epoch; success rate requires a separate reward-only rollout command after a checkpoint exists.
+  - Checkpoints are gated by `checkpoint_every=25`, so M1/M3 first rollout-capable checkpoints only landed around epoch 24, and M2/M4 need to reach the same checkpoint cadence unless relaunched or modified.
+  - Manual rollout on the Ceph-only node also requires runtime repair: the py39 env has `robomimic==0.2.0`, but `robosuite` is missing, and `mujoco_py` OSMesa compilation failed because `GL/osmesa.h` is missing.
+- Speed diagnosis:
+  - Each Stage2b step encodes raw images over 16 observation steps and 2 cameras, so each batch processes a large image history before the transformer diffusion head.
+  - Safe-worker mode uses only `num_workers=4` and `val_num_workers=2` because `/dev/shm=16G` caused bus errors at higher worker counts.
+  - M1/M2 share GPU0 and M3/M4 share GPU1; this keeps GPUs occupied but slows any individual run.
