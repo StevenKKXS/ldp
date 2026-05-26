@@ -1,6 +1,6 @@
 # History Log
 
-<!-- METADATA:SESSION=66 -->
+<!-- METADATA:SESSION=67 -->
 
 ## Session 0
 
@@ -1080,3 +1080,20 @@
   - Token scopes include `auth:user.id:read`, `docx:document`, `drive:file`, `offline_access`, `sheets:spreadsheet`, and `wiki:wiki`.
   - Intern Agent Helper has `/root/.vscode-server-insiders/extensions/llm-intern-agents.intern-agent-helper-1.5.3/hooks/feishu_module`, which supports Feishu group messages through `im/v1/messages`.
 - Conclusion: a Feishu doc Codex skill is not installed or loaded in this session, but credentials/scopes appear to exist for manual Feishu OpenAPI work. Image generation support exists via the system `imagegen` skill; no additional image skill was found.
+
+## Session 67
+
+- User asked again whether the Feishu doc skill and the message/image skill exist after adding them.
+- Read the currently exposed `feishu-docs` skill source:
+  - `/work-agents/ldp/workspace/.skill_sources/intern_agent_skills/intern_feishu_docs_skill/SKILL.md`
+  - Confirmed it supports docx, sheets, and wiki operations through local CLI scripts such as `create_doc.py`, `get_doc.py`, `append_block.py`, `replace_block.py`, `create_sheet.py`, `read_range.py`, `write_range.py`, and `create_wiki_doc.py`.
+- Checked `/root/.codex/skills`; it still only contains system skills (`imagegen`, `openai-docs`, `plugin-creator`, `skill-creator`, `skill-installer`). Therefore `feishu-docs` is available to this session from the workspace skill source, not installed as a root Codex skill.
+- Read the sibling message/image skill source:
+  - `/work-agents/ldp/workspace/.skill_sources/intern_agent_skills/intern_feishu_messaging_skill/SKILL.md`
+  - Confirmed scripts exist for `send_image.py`, `send_file.py`, and `list_chat_members.py`.
+  - This sibling skill source exists locally, but it is not listed in the current session's available skill declarations.
+- Checked Feishu auth and routing state:
+  - `/root/.feishu_skill_token.json` exists with scopes for `docx:document`, `drive:file`, `sheets:spreadsheet`, `wiki:wiki`, and `offline_access`.
+  - Access token is expired, but refresh token is valid until `2026-06-01T02:25:56Z`.
+  - `/work-agents/.feishu_registry/intern_ldp_explorer.json` exists, so message/image routing for `intern_ldp_explorer` is configured.
+- Conclusion: Feishu document operations are now available through the exposed `feishu-docs` skill. Message/image sending is available as local source scripts, but not exposed as a declared current-session skill.
