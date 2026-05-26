@@ -1,6 +1,6 @@
 # History Log
 
-<!-- METADATA:SESSION=67 -->
+<!-- METADATA:SESSION=68 -->
 
 ## Session 0
 
@@ -1097,3 +1097,28 @@
   - Access token is expired, but refresh token is valid until `2026-06-01T02:25:56Z`.
   - `/work-agents/.feishu_registry/intern_ldp_explorer.json` exists, so message/image routing for `intern_ldp_explorer` is configured.
 - Conclusion: Feishu document operations are now available through the exposed `feishu-docs` skill. Message/image sending is available as local source scripts, but not exposed as a declared current-session skill.
+
+## Session 68
+
+- User asked to turn the previously discussed translator exploration report into a visual Feishu document for review.
+- Used the exposed `feishu-docs` skill and local Feishu OpenAPI scripts.
+- Generated local visual/report assets under:
+  - `docs/direction_c_behavior_translator/feishu_translator_report_2026-05-26/`
+- Created seven PNG figures:
+  - `fig1_workflow.png`: overall Direction C workflow from translator pretraining to corrected downstream rerun.
+  - `fig2_window.png`: H=16, P=16, K=8 data-window slicing.
+  - `fig3_stage1_objectives.png`: Stage 1 objective best validation loss comparison.
+  - `fig4_stage2a_probe.png`: frozen-head probe comparison showing pretrained `past` context beating random.
+  - `fig5_old_stage2b_rollout.png`: old mixed Stage 2b rollout evidence.
+  - `fig6_mask_diagnosis.png`: why old action8 causal condition mask hid newest obs / `add_last` context.
+  - `fig7_ceph_stage1_curves.png`: current Ceph Stage 1 `past` regeneration curves through available metrics.
+- Created Feishu document:
+  - `https://feishu.cn/docx/GDsFdAw5yo5jVUxwW1ycgGNInme`
+  - Title: `Behavior Translator 方向探索汇报 - 2026-05-26`
+- Wrote 61 content blocks into the doc and uploaded/bound 7 image blocks through docx image upload.
+- Verified with `get_doc.py`:
+  - document text is readable;
+  - block tree has 62 blocks including the page block;
+  - all 7 image blocks have non-empty image tokens and width/height metadata.
+- Saved local source Markdown:
+  - `docs/direction_c_behavior_translator/feishu_translator_report_2026-05-26/source_report.md`

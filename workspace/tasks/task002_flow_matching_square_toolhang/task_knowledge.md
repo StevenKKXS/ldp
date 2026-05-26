@@ -1,6 +1,6 @@
 # Task Knowledge
 
-<!-- METADATA:SESSION=67 -->
+<!-- METADATA:SESSION=68 -->
 
 ## Working Rules
 
@@ -172,3 +172,4 @@
 - Direction C Session 65 skill availability: current accessible skills are `imagegen`, `openai-docs`, `plugin-creator`, `skill-creator`, and `skill-installer`; no Feishu/Lark publishing skill is listed.
 - Direction C Session 66 Feishu capability update: no Feishu/Lark Codex skill is installed under `/root/.codex/skills`, but `/root/.feishu_skill_token.json` exists with `docx:document`, `drive:file`, `sheets:spreadsheet`, and `wiki:wiki` scopes. Intern Agent Helper has a Feishu group-message module, not a docx creation skill. Manual Feishu OpenAPI document creation may be possible with the token, but it is not exposed as a current skill.
 - Direction C Session 67 Feishu skill status: `feishu-docs` is now exposed in the current session from `/work-agents/ldp/workspace/.skill_sources/intern_agent_skills/intern_feishu_docs_skill/SKILL.md`, with scripts for docx/sheet/wiki read and write. The sibling source `/work-agents/ldp/workspace/.skill_sources/intern_agent_skills/intern_feishu_messaging_skill/SKILL.md` exists and includes `send_image.py`, `send_file.py`, and `list_chat_members.py`, but it is not listed as a declared available skill in this session. For messaging scripts, use `--intern-name intern_ldp_explorer --project ldp`. Current OAuth access token is expired but refresh token is valid until `2026-06-01T02:25:56Z`; registry route `/work-agents/.feishu_registry/intern_ldp_explorer.json` exists.
+- Direction C Session 68 Feishu report: visual Feishu docx review draft is `https://feishu.cn/docx/GDsFdAw5yo5jVUxwW1ycgGNInme`; local assets/source are under `docs/direction_c_behavior_translator/feishu_translator_report_2026-05-26/`. The doc contains seven figures covering workflow, data slicing, Stage 1 objectives, Stage 2a probe, old Stage 2b rollout, mask diagnosis, and current Ceph Stage 1 curves. Verification via `get_doc.py --format blocks` showed 62 blocks and 7 image blocks with valid tokens.
