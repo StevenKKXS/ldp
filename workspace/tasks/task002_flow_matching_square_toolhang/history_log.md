@@ -1,6 +1,6 @@
 # History Log
 
-<!-- METADATA:SESSION=57 -->
+<!-- METADATA:SESSION=58 -->
 
 ## Session 0
 
@@ -890,3 +890,27 @@
   - Stage1 `past` retrains were around epoch 1 step `345/620`, so first Stage1 eval and an initial `best.ckpt` should arrive roughly 15-25 minutes after the check.
   - Stage2b training checkpoints are gated by `checkpoint_every=25`; at current speed, first M1/M3 checkpoints suitable for rollout evaluation are roughly 10-11 hours away, then rollout needs an additional short evaluation run.
   - M2/M4 pretrained-context runs remain gated on a Ceph-local translator checkpoint. A very early checkpoint can be launched soon after the first Stage1 eval, but a more meaningful comparison should wait for multiple Stage1 epochs.
+
+## Session 58
+
+- User asked which CephFS files are involved for this task and whether inode counts can be computed.
+- Counted the active CephFS task root `/mnt/cephfs/home/tinwen.du/intern_ldp_explorer/direction_c_behavior_translator`.
+- Snapshot counts:
+  - Total root: `45,204` entries/inodes, `41,252` files, `3,929` directories, `23` symlinks, about `15G`.
+  - `envs`: `44,359` entries, `40,598` files, `3,757` directories, `4` symlinks, about `6.1G`.
+  - `datasets`: `8` entries, `3` files, `5` directories, about `7.0G`.
+  - `outputs`: `147` entries, `85` files, `50` directories, `12` symlinks, about `1.3G`.
+  - `repos`: `629` entries, `534` files, `94` directories, `1` symlink, about `20M`.
+  - `smoke`: `59` entries, `32` files, `21` directories, `6` symlinks, about `123K`.
+  - `logs`: `1` directory, empty.
+- Dataset files under the active root:
+  - `image_abs.hdf5`, `6,959,859,145` bytes.
+  - `image_abs.hdf5.zarr.zip`, `511,698,669` bytes.
+  - `image_abs.hdf5.zarr.zip.lock`, `0` bytes.
+- Active output roots:
+  - `stage1_square_past_ceph_20260526_032417_safe_workers`: `28` entries, `1.3G`, including four Stage1 checkpoint files.
+  - `stage2b_square_causalcond_off_20260526_032417_safe_workers`: `46` entries, about `6.0M`.
+- Also found earlier Ceph small-files archive entries under `/mnt/cephfs/home/tinwen.du/ldp_small_files_archive`:
+  - Bundle directory has `2` entries and about `13M`.
+  - Manifest directory has `3` entries and about `51K`.
+  - Two `latest/` symlinks point to that archive/manifest.
