@@ -1,6 +1,6 @@
 # Task Knowledge
 
-<!-- METADATA:SESSION=61 -->
+<!-- METADATA:SESSION=62 -->
 
 ## Working Rules
 
@@ -166,3 +166,4 @@
 - Direction C Session 60 baseline interpretation: corrected M1 base is the same-architecture no-translator/no-pretraining image baseline, using `DiffusionTransformerHybridImagePolicy`, the robomimic image obs encoder, `obs_encoder_dir=null`, and `obs_encoder_freeze=false`. A separate canonical DP/PTP baseline comparison still requires a matched rollout table.
 - Direction C Session 60 rollout blocker: Stage2b training has offline validation every epoch but no automatic rollout (`training.rollout_every=999999`, `task.env_runner.n_test=0`), checkpoints save every 25 epochs, and the Ceph py39 runtime currently lacks rollout dependencies (`robosuite` missing; `mujoco_py` OSMesa build fails because `GL/osmesa.h` is missing).
 - Direction C Session 61 sample-count rule: active Square/mh has `300` demos and `80,731` frames; `val_ratio=0.02,seed=42` selects validation demos `[26,129,130,194,229,257]`, leaving `79,289` train frames/windows and `1,442` val frames/windows. Current `sequence_length=24,pad_before=16,pad_after=7` makes each episode of length `L` contribute exactly `L` sampler windows. Stage2b batch `32` gives `2,478` train batches/epoch; Stage1 batch `128` gives `620` train batches/epoch.
+- Direction C Session 62 bottleneck finding: current training on `10.100.2.19:28106` is not file-read bound and not GPU-saturated. `vmstat` showed `0%` iowait and near-zero block input; `nvidia-smi dmon` showed bursty GPU util with many `0%` samples and spikes below sustained saturation. The likely limiter is CPU-side raw-image batch construction / ColorJitter / numpy-torch copying / DataLoader IPC under safe worker counts (`num_workers=4,val_workers=2`) forced by `/dev/shm=16G`.

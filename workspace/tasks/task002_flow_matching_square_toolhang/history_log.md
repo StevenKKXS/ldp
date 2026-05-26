@@ -1,6 +1,6 @@
 # History Log
 
-<!-- METADATA:SESSION=61 -->
+<!-- METADATA:SESSION=62 -->
 
 ## Session 0
 
@@ -981,3 +981,37 @@
   - Boundary windows are padded by repeating the first or last valid frame/action inside that episode.
   - Stage2b `RobomimicReplayImageDataset.__getitem__` returns the first `16` obs steps and a `24`-step action sequence, later sliced by the policy to the 8 predicted action steps.
   - Stage1 `BehaviorTranslationDataset` uses the same base sampler length, then slices obs history and `act_past` / `act_future` around anchor `16`.
+
+## Session 62
+
+- User asked whether the current training speed is limited by file reading or by GPU saturation.
+- Ran lightweight live profiling on `10.100.2.19:28106`.
+- `vmstat 1 8` showed:
+  - CPU user time around `13%`, system time around `0-1%`, idle around `86-87%`.
+  - iowait `0%`.
+  - block input mostly `0`.
+  - This does not look like HDF5/Ceph file reads are the active bottleneck during training.
+- `nvidia-smi dmon -s pucm -c 12` showed bursty GPU utilization:
+  - many `0%` SM samples;
+  - intermittent spikes such as GPU0 `79%`, GPU1 `78%`, GPU2 `76%`, GPU3 `29-40%`.
+  - H200 memory usage was far below capacity: around `10.4GB` for Stage2b processes and `17.6GB` for Stage1 processes on `143GB` GPUs.
+  - This does not look like the GPUs are saturated.
+- Checked active process and worker state:
+  - Six parent training processes are alive.
+  - Each training parent has four DataLoader worker children in `R` state, plus wandb service.
+  - M1/M2 share GPU0, and M3/M4 share GPU1.
+- Checked train logs:
+  - M1 epoch 26 was around `1.69 it/s`.
+  - M2 epoch 0 was around `1.65-1.66 it/s`.
+  - M3 epoch 26 was around `1.63-1.70 it/s`.
+  - M4 epoch 0 was around `1.66 it/s`.
+- Bottleneck interpretation:
+  - The dataset is loaded from zarr cache into memory at startup, so per-step disk reads are not the likely critical path.
+  - The likely current limiter is CPU-side batch construction and DataLoader IPC: raw image history over `16` obs steps and two cameras, CPU `ColorJitter`, `torch.from_numpy -> transform -> float32/255 -> numpy -> torch.from_numpy` conversions, and host-to-device scheduling.
+  - We intentionally use safe worker counts (`num_workers=4`, `val_workers=2`, `persistent_workers=false`) because `/dev/shm=16G` caused DataLoader bus errors at higher worker counts.
+  - Running two Stage2b jobs per GPU keeps resources occupied but slows individual jobs.
+- Practical speed directions:
+  - On a node with larger shared memory or `--ipc=host`, try `num_workers=8-16`, `persistent_workers=true`, controlled `prefetch_factor`, and batch size `64/128`.
+  - Move or disable CPU ColorJitter for the speed test while keeping the image encoder trainable.
+  - Use one Stage2b job per GPU when the priority is wall-clock time for a single run.
+  - Add explicit `data_time` and `compute_time` logging to Stage2b, matching the translator workspace profiling hook, to quantify this more cleanly.
