@@ -1,6 +1,6 @@
 # History Log
 
-<!-- METADATA:SESSION=58 -->
+<!-- METADATA:SESSION=59 -->
 
 ## Session 0
 
@@ -914,3 +914,21 @@
   - Bundle directory has `2` entries and about `13M`.
   - Manifest directory has `3` entries and about `51K`.
   - Two `latest/` symlinks point to that archive/manifest.
+
+## Session 59
+
+- User asked whether the experiment progress and conclusions have updated.
+- Checked Ceph-only Direction C experiment progress on `10.100.2.19:28106`.
+- Corrected Stage2b M1/M3 with `policy.causal_cond_attn=false` have crossed epoch 24 and written first checkpoints:
+  - M1 base no-context: best offline `val_loss=0.057315 @ e22`; epoch-24 checkpoint `val_loss=0.058112`.
+  - M3 frozen random context, `add_last`: best offline `val_loss=0.058737 @ e22`; epoch-24 checkpoint `val_loss=0.058755`.
+- Current corrected Stage2b offline result slightly favors the no-context base over frozen random context; this is an offline-loss comparison, not a rollout success-rate result.
+- Checked Ceph Stage1 `past` retrains:
+  - `batch_size=128,obs_lr=1e-4,translator_lr=1e-4`: best `val/loss_total=0.000689 @ e17`; latest checked epoch 21 `val/loss_total=0.000873`.
+  - `batch_size=128,obs_lr=5e-5,translator_lr=1e-4`: best `val/loss_total=0.000828 @ e14`; latest checked epoch 21 `val/loss_total=0.000833`.
+- Stage1 conclusion: the Ceph retrain is stable and `obs_lr=1e-4` is better than `obs_lr=5e-5`, but the best Ceph value is still weaker than the historical NFS tuned `past` best `0.000434`.
+- Launched corrected pretrained-context Stage2b jobs using the better Ceph Stage1 checkpoint `/mnt/cephfs/home/tinwen.du/intern_ldp_explorer/direction_c_behavior_translator/outputs/stage1_square_past_ceph_20260526_032417_safe_workers/stage1_past_bs128_obs1e4_tr1e4/checkpoints/best.ckpt`:
+  - GPU0 PID `1368459`: M2 pretrained `past` context, `add_last`, run root `/mnt/cephfs/home/tinwen.du/intern_ldp_explorer/direction_c_behavior_translator/outputs/stage2b_square_causalcond_off_pretrained_cephpast_20260526_144615/m2_pretrained_past_add_last_action8_causalcond_off`.
+  - GPU1 PID `1368462`: M4 pretrained `past` context, `add_all`, run root `/mnt/cephfs/home/tinwen.du/intern_ldp_explorer/direction_c_behavior_translator/outputs/stage2b_square_causalcond_off_pretrained_cephpast_20260526_144615/m4_pretrained_past_add_all_action8_causalcond_off`.
+- Both M2/M4 jobs loaded the dataset cache/checkpoint and entered training epoch 0 without immediate errors; `/dev/shm` usage remained low.
+- No new corrected rollout success rate is available yet. The next decision point is the M1/M2/M3/M4 rollout table once M2/M4 reach comparable checkpoints.

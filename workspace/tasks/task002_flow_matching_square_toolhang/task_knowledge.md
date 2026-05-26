@@ -1,6 +1,6 @@
 # Task Knowledge
 
-<!-- METADATA:SESSION=58 -->
+<!-- METADATA:SESSION=59 -->
 
 ## Working Rules
 
@@ -160,3 +160,6 @@
 - Direction C Session 56 systems note: `/dev/shm` is `16G`. Four concurrent jobs with `num_workers=16/48` failed from DataLoader shared-memory pressure. The stable relaunch uses Stage2b `dataloader.num_workers=4,val_dataloader.num_workers=2` and Stage1 `batch_size=128,num_workers=4,val_num_workers=2,persistent_workers=false`.
 - Direction C Session 57 ETA note from `2026-05-26 03:41 UTC`: Stage2b M1/M3 first offline eval loss is expected roughly 10-15 minutes after that check; Stage1 `past` first eval and initial `best.ckpt` roughly 15-25 minutes after that check; first Stage2b checkpoint for rollout is at epoch 25, roughly 10-11 hours at current safe-worker speed.
 - Direction C Session 58 CephFS inode snapshot: active root `/mnt/cephfs/home/tinwen.du/intern_ldp_explorer/direction_c_behavior_translator` has `45,204` total entries/inodes (`41,252` files, `3,929` directories, `23` symlinks), about `15G`. Most inode pressure is the py39 env: `envs` has `44,359` entries; active `outputs` has only `147` entries but already contains four Stage1 checkpoint files totaling about `1.3G`.
+- Direction C Session 59 corrected Stage2b offline status: M1 base no-context with `policy.causal_cond_attn=false` is currently best offline `val_loss=0.057315 @ e22`; M3 frozen random context `add_last` is currently best offline `val_loss=0.058737 @ e22`. This slightly favors base over random context and is not a rollout success-rate result.
+- Direction C Session 59 Stage1 Ceph `past` status: `batch_size=128,obs_lr=1e-4,translator_lr=1e-4` is better than `obs_lr=5e-5,translator_lr=1e-4` (`0.000689 @ e17` vs `0.000828 @ e14`), but still weaker than the historical NFS tuned `past` best `0.000434`.
+- Direction C Session 59 pretrained downstream launch: M2 pretrained `past` `add_last` PID `1368459` and M4 pretrained `past` `add_all` PID `1368462` are running on `10.100.2.19:28106` from Ceph root `/mnt/cephfs/home/tinwen.du/intern_ldp_explorer/direction_c_behavior_translator/outputs/stage2b_square_causalcond_off_pretrained_cephpast_20260526_144615`, using checkpoint `stage1_past_bs128_obs1e4_tr1e4/checkpoints/best.ckpt`.
