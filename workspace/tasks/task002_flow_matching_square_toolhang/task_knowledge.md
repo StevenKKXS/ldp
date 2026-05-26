@@ -1,6 +1,6 @@
 # Task Knowledge
 
-<!-- METADATA:SESSION=56 -->
+<!-- METADATA:SESSION=57 -->
 
 ## Working Rules
 
@@ -158,3 +158,4 @@
 - Direction C Session 56 checkpoint caveat: the pretrained Stage1 translator ckpt formerly referenced under NFS is not available on Ceph. Corrected Stage2b M2/M4 cannot launch until a Ceph checkpoint exists. Current workaround is to run M1 base, M3 random-context, and retrain Stage1 `past` on GPU2/GPU3 to regenerate a checkpoint.
 - Direction C Session 56 active safe-worker jobs: Stage2b root `/mnt/cephfs/home/tinwen.du/intern_ldp_explorer/direction_c_behavior_translator/outputs/stage2b_square_causalcond_off_20260526_032417_safe_workers` with M1 PID `91453` on GPU0 and M3 PID `91456` on GPU1; Stage1 root `/mnt/cephfs/home/tinwen.du/intern_ldp_explorer/direction_c_behavior_translator/outputs/stage1_square_past_ceph_20260526_032417_safe_workers` with `past` PID `91460` on GPU2 (`obs_lr=1e-4,tr_lr=1e-4`) and PID `91463` on GPU3 (`obs_lr=5e-5,tr_lr=1e-4`).
 - Direction C Session 56 systems note: `/dev/shm` is `16G`. Four concurrent jobs with `num_workers=16/48` failed from DataLoader shared-memory pressure. The stable relaunch uses Stage2b `dataloader.num_workers=4,val_dataloader.num_workers=2` and Stage1 `batch_size=128,num_workers=4,val_num_workers=2,persistent_workers=false`.
+- Direction C Session 57 ETA note from `2026-05-26 03:41 UTC`: Stage2b M1/M3 first offline eval loss is expected roughly 10-15 minutes after that check; Stage1 `past` first eval and initial `best.ckpt` roughly 15-25 minutes after that check; first Stage2b checkpoint for rollout is at epoch 25, roughly 10-11 hours at current safe-worker speed.

@@ -1,6 +1,6 @@
 # History Log
 
-<!-- METADATA:SESSION=56 -->
+<!-- METADATA:SESSION=57 -->
 
 ## Session 0
 
@@ -874,3 +874,19 @@
   - All four safe-worker jobs entered training.
   - `/dev/shm` usage stayed low after reducing workers to `4` train and `2` validation per process.
   - No new bus-error or scheduler-kwarg error appeared after the safe-worker relaunch.
+
+## Session 57
+
+- User asked how long it should take to get results from the current Ceph-only runs.
+- Checked new node `10.100.2.19:28106` at `2026-05-26 03:41 UTC`.
+- Current process/resource status:
+  - GPU0 PID `91453`, Stage2b M1 base: alive, `Sl`, about `5.2GB` VRAM.
+  - GPU1 PID `91456`, Stage2b M3 random context: alive, `Sl`, about `5.2GB` VRAM.
+  - GPU2 PID `91460`, Stage1 `past` `obs_lr=1e-4`: alive, `Sl`, about `17.6GB` VRAM.
+  - GPU3 PID `91463`, Stage1 `past` `obs_lr=5e-5`: alive, `Sl`, about `17.6GB` VRAM.
+  - `/dev/shm` usage remained low after the safe-worker relaunch.
+- Progress/ETA:
+  - Stage2b M1/M3 were still in epoch 0 around global step `1779/2478`, so the first offline validation loss should arrive roughly 10-15 minutes after the check.
+  - Stage1 `past` retrains were around epoch 1 step `345/620`, so first Stage1 eval and an initial `best.ckpt` should arrive roughly 15-25 minutes after the check.
+  - Stage2b training checkpoints are gated by `checkpoint_every=25`; at current speed, first M1/M3 checkpoints suitable for rollout evaluation are roughly 10-11 hours away, then rollout needs an additional short evaluation run.
+  - M2/M4 pretrained-context runs remain gated on a Ceph-local translator checkpoint. A very early checkpoint can be launched soon after the first Stage1 eval, but a more meaningful comparison should wait for multiple Stage1 epochs.
