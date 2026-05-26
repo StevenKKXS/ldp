@@ -1,6 +1,6 @@
 # History Log
 
-<!-- METADATA:SESSION=60 -->
+<!-- METADATA:SESSION=61 -->
 
 ## Session 0
 
@@ -957,3 +957,27 @@
   - Each Stage2b step encodes raw images over 16 observation steps and 2 cameras, so each batch processes a large image history before the transformer diffusion head.
   - Safe-worker mode uses only `num_workers=4` and `val_num_workers=2` because `/dev/shm=16G` caused bus errors at higher worker counts.
   - M1/M2 share GPU0 and M3/M4 share GPU1; this keeps GPUs occupied but slows any individual run.
+
+## Session 61
+
+- User asked how many samples each epoch sees and how the samples are extracted.
+- Recomputed the active Square/mh split directly from Ceph HDF5 `/mnt/cephfs/home/tinwen.du/intern_ldp_explorer/direction_c_behavior_translator/datasets/robomimic/datasets/square/mh/image_abs.hdf5`.
+- Dataset counts:
+  - `300` demos, `80,731` frames total.
+  - `val_ratio=0.02,seed=42` selects `6` validation demos: `[26, 129, 130, 194, 229, 257]`.
+  - Train split has `294` demos and `79,289` frames.
+  - Validation split has `6` demos and `1,442` frames.
+- Current sampler geometry:
+  - `sequence_length=(horizon - n_obs_steps) + n_obs_steps * subsample_frames = (24 - 16) + 16 * 1 = 24`.
+  - `pad_before=16`, `pad_after=7`.
+  - For an episode of length `L`, `SequenceSampler.create_indices` creates starts from `-pad_before` through `L - sequence_length + pad_after`, inclusive, so the number of windows is `L - 24 + 16 + 7 + 1 = L`.
+  - Therefore the current split has `79,289` train windows and `1,442` validation windows.
+- Per-epoch batch counts:
+  - Stage2b M1/M2/M3/M4 use batch size `32`, so each epoch has `2,478` train batches and `46` validation batches, with partial final batches included.
+  - Stage1 translator runs use batch size `128`, so each epoch has `620` train batches and `12` validation batches, with partial final batches included.
+- Sampling semantics:
+  - The train `DataLoader` shuffles sampler indices each epoch, so each train window is visited once per epoch in a randomized order.
+  - The sampler splits at the episode level, so train and validation windows do not cross demo boundaries or share validation demos.
+  - Boundary windows are padded by repeating the first or last valid frame/action inside that episode.
+  - Stage2b `RobomimicReplayImageDataset.__getitem__` returns the first `16` obs steps and a `24`-step action sequence, later sliced by the policy to the 8 predicted action steps.
+  - Stage1 `BehaviorTranslationDataset` uses the same base sampler length, then slices obs history and `act_past` / `act_future` around anchor `16`.
