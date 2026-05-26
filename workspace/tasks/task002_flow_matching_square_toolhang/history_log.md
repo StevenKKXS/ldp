@@ -1,6 +1,6 @@
 # History Log
 
-<!-- METADATA:SESSION=64 -->
+<!-- METADATA:SESSION=65 -->
 
 ## Session 0
 
@@ -1049,3 +1049,14 @@
   - `docs/direction_c_behavior_translator/translator_exploration_report_2026-05-26.md`
   - `560` lines.
 - Final response points the user to the clickable local document path and notes that it is ready to open locally or import into Feishu.
+
+## Session 65
+
+- User asked which skills are available to this agent.
+- Reported the current listed skills:
+  - `imagegen`
+  - `openai-docs`
+  - `plugin-creator`
+  - `skill-creator`
+  - `skill-installer`
+- Clarified that no Feishu/Lark document publishing skill is currently listed, matching the earlier check that no Feishu/Lark CLI or credential variables were available in the environment.

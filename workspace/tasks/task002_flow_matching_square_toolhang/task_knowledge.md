@@ -1,6 +1,6 @@
 # Task Knowledge
 
-<!-- METADATA:SESSION=64 -->
+<!-- METADATA:SESSION=65 -->
 
 ## Working Rules
 
@@ -169,3 +169,4 @@
 - Direction C Session 62 bottleneck finding: current training on `10.100.2.19:28106` is not file-read bound and not GPU-saturated. `vmstat` showed `0%` iowait and near-zero block input; `nvidia-smi dmon` showed bursty GPU util with many `0%` samples and spikes below sustained saturation. The likely limiter is CPU-side raw-image batch construction / ColorJitter / numpy-torch copying / DataLoader IPC under safe worker counts (`num_workers=4,val_workers=2`) forced by `/dev/shm=16G`.
 - Direction C Session 63 report: the Feishu-ready translator exploration report is `docs/direction_c_behavior_translator/translator_exploration_report_2026-05-26.md`. It supersedes the shorter `translator_progress_brief_2026-05-24.md` for user-facing summary because it includes planning history, result-driven revisions, corrected Stage2b status, runtime blockers, and suggested figures/tables.
 - Direction C Session 64 delivery note: no Feishu/Lark CLI or credentials are available in the current environment; share the clickable local Markdown path for review/import: `docs/direction_c_behavior_translator/translator_exploration_report_2026-05-26.md`.
+- Direction C Session 65 skill availability: current accessible skills are `imagegen`, `openai-docs`, `plugin-creator`, `skill-creator`, and `skill-installer`; no Feishu/Lark publishing skill is listed.
