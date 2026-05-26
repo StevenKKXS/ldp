@@ -1,6 +1,6 @@
 # History Log
 
-<!-- METADATA:SESSION=65 -->
+<!-- METADATA:SESSION=66 -->
 
 ## Session 0
 
@@ -1060,3 +1060,23 @@
   - `skill-creator`
   - `skill-installer`
 - Clarified that no Feishu/Lark document publishing skill is currently listed, matching the earlier check that no Feishu/Lark CLI or credential variables were available in the environment.
+
+## Session 66
+
+- User said they should have added Feishu doc and image skills and asked to check whether they exist.
+- Checked Codex skill locations:
+  - `/root/.codex/skills`
+  - `${CODEX_HOME:-$HOME/.codex}/skills`
+  - workspace-local paths under `/work-agents/intern_ldp_explorer`
+- Only current Codex-visible skill files are:
+  - `/root/.codex/skills/.system/imagegen/SKILL.md`
+  - `/root/.codex/skills/.system/openai-docs/SKILL.md`
+  - `/root/.codex/skills/.system/plugin-creator/SKILL.md`
+  - `/root/.codex/skills/.system/skill-creator/SKILL.md`
+  - `/root/.codex/skills/.system/skill-installer/SKILL.md`
+- Ran deferred tool search for Feishu/Lark/doc/image tools; no matching deferred tools were found.
+- Found Feishu-related artifacts outside the Codex skill system:
+  - `/root/.feishu_skill_token.json` exists.
+  - Token scopes include `auth:user.id:read`, `docx:document`, `drive:file`, `offline_access`, `sheets:spreadsheet`, and `wiki:wiki`.
+  - Intern Agent Helper has `/root/.vscode-server-insiders/extensions/llm-intern-agents.intern-agent-helper-1.5.3/hooks/feishu_module`, which supports Feishu group messages through `im/v1/messages`.
+- Conclusion: a Feishu doc Codex skill is not installed or loaded in this session, but credentials/scopes appear to exist for manual Feishu OpenAPI work. Image generation support exists via the system `imagegen` skill; no additional image skill was found.

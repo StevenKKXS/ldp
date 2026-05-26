@@ -1,6 +1,6 @@
 # Task Knowledge
 
-<!-- METADATA:SESSION=65 -->
+<!-- METADATA:SESSION=66 -->
 
 ## Working Rules
 
@@ -170,3 +170,4 @@
 - Direction C Session 63 report: the Feishu-ready translator exploration report is `docs/direction_c_behavior_translator/translator_exploration_report_2026-05-26.md`. It supersedes the shorter `translator_progress_brief_2026-05-24.md` for user-facing summary because it includes planning history, result-driven revisions, corrected Stage2b status, runtime blockers, and suggested figures/tables.
 - Direction C Session 64 delivery note: no Feishu/Lark CLI or credentials are available in the current environment; share the clickable local Markdown path for review/import: `docs/direction_c_behavior_translator/translator_exploration_report_2026-05-26.md`.
 - Direction C Session 65 skill availability: current accessible skills are `imagegen`, `openai-docs`, `plugin-creator`, `skill-creator`, and `skill-installer`; no Feishu/Lark publishing skill is listed.
+- Direction C Session 66 Feishu capability update: no Feishu/Lark Codex skill is installed under `/root/.codex/skills`, but `/root/.feishu_skill_token.json` exists with `docx:document`, `drive:file`, `sheets:spreadsheet`, and `wiki:wiki` scopes. Intern Agent Helper has a Feishu group-message module, not a docx creation skill. Manual Feishu OpenAPI document creation may be possible with the token, but it is not exposed as a current skill.
