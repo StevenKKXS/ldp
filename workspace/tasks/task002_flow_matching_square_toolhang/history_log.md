@@ -1,6 +1,6 @@
 # History Log
 
-<!-- METADATA:SESSION=68 -->
+<!-- METADATA:SESSION=69 -->
 
 ## Session 0
 
@@ -1122,3 +1122,26 @@
   - all 7 image blocks have non-empty image tokens and width/height metadata.
 - Saved local source Markdown:
   - `docs/direction_c_behavior_translator/feishu_translator_report_2026-05-26/source_report.md`
+
+## Session 69
+
+- User asked three Direction C analysis questions: whether translator may only be learning proprio-to-action, how to obtain an end-to-end SR result quickly, and how to visualize the four Stage2b settings.
+- Rechecked code paths:
+  - `BehaviorTranslationDataset` returns raw image keys plus lowdim proprio unless embedding-cache mode is enabled.
+  - `TrainBehaviorTranslatorWorkspace._encode_obs` normalizes obs, runs the trainable robomimic `obs_encoder`, and feeds encoded observation tokens to `BehaviorTranslator`.
+  - Current Stage1 configs use `obs_encoder_dir=null`, `obs_encoder_freeze=false`, and include two RGB keys plus lowdim proprio, so the translator can see image information in the implemented pipeline.
+- Analysis conclusion: current code includes image input, but current aggregate losses do not prove the learned context uses image. Because `past` reconstruction is strongly predictable from proprio history, the model may mostly rely on proprio; this should be tested with lowdim-only, image-only/proprio-masked, image-shuffled, and proprio-shuffled ablations.
+- Rechecked Ceph node `10.100.2.19:28106`:
+  - py39 env reports `robomimic==0.2.0`.
+  - `robosuite` import fails with `ModuleNotFoundError`.
+  - `mujoco_py` import fails because OSMesa build cannot find `GL/osmesa.h`.
+  - Therefore training can continue, but end-to-end Robomimic rollout SR cannot run in the current Ceph env until rollout dependencies are fixed.
+- Rechecked corrected Stage2b status:
+  - M1 base no-context and M3 random add-last have epoch-49 checkpoints on Ceph.
+  - M2 pretrained `past` add-last and M4 pretrained `past` add-all are running around epoch 23 and approaching the first checkpoint boundary.
+  - Existing corrected results are offline validation loss only; SR requires a separate rollout pass with `gather_rollouts.py` or equivalent.
+- Prepared the answer-level Stage2b visualization:
+  - M1 base no context.
+  - M3 frozen random translator context injected into the last condition token.
+  - M2 frozen pretrained `past` translator context injected into the last condition token.
+  - M4 frozen pretrained `past` translator context broadcast to all condition tokens.
