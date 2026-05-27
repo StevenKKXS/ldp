@@ -1,6 +1,6 @@
 # Task Knowledge
 
-<!-- METADATA:SESSION=69 -->
+<!-- METADATA:SESSION=70 -->
 
 ## Working Rules
 
@@ -176,3 +176,5 @@
 - Direction C Session 69 modality caveat: the implemented BehaviorTranslator is not proprio-only. Stage1 data returns raw RGB plus lowdim proprio, and the workspace feeds both through a trainable robomimic obs encoder before the translator. However, current aggregate Stage1/Stage2a losses do not prove the learned context uses images; `past` action reconstruction may be dominated by proprio because recent EEF/gripper state is highly predictive of recent actions. Verify with eval-time masking/shuffling of image versus proprio, and with retrained lowdim-only / image-only ablations if the fast diagnostic shows a strong imbalance.
 - Direction C Session 69 SR caveat: corrected Stage2b training does not automatically run rollout (`rollout_every=999999`, `task.env_runner.n_test=0`). On Ceph py39, `robomimic==0.2.0` imports, but rollout is blocked because `robosuite` is missing and `mujoco_py` fails OSMesa compilation due missing `GL/osmesa.h`. First SR table should use available M1/M3 epoch-49 checkpoints and the first M2/M4 checkpoints once rollout dependencies are fixed.
 - Direction C Session 69 Stage2b matrix: all corrected Square action8 runs share `n_obs_steps=16`, `n_action_steps=8`, `policy.causal_cond_attn=false`, and `context_projector_zero_init=true`. M1 is base/no translator; M3 is frozen random translator with `add_last`; M2 is frozen pretrained `past` translator with `add_last`; M4 is frozen pretrained `past` translator with `add_all`. `add_last` is the lower-risk belief-state injection, while `add_all` is the stronger broadcast injection that may over-bias all observation condition tokens.
+- Direction C Session 70 input contract: for rollout-valid image configs, allowed inputs are `agentview_image` `[3,84,84]`, `robot0_eye_in_hand_image` `[3,84,84]`, `robot0_eef_pos` `[3]`, `robot0_eef_quat` `[4]`, and `robot0_gripper_qpos` `[2]`. Treat `past_act`, object state, simulator state, reward, or privileged labels as out-of-contract unless an experiment explicitly marks them as privileged ablations.
+- Direction C Session 70 revised downstream plan: baseline B0 is default DP with `cond[0..1]` / `n_obs_steps=2`; baseline B1 is the proven PTP path with `cond[0..15]` / `n_obs_steps=16` and past+future action objective. Translator experiments should cover both the current projection path (`project(context)->add_last/add_all`) and an encoder-replacement path that transfers the translator-trained obs encoder into the downstream policy, with random encoder controls.

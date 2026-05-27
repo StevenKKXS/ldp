@@ -1,6 +1,6 @@
 # History Log
 
-<!-- METADATA:SESSION=69 -->
+<!-- METADATA:SESSION=70 -->
 
 ## Session 0
 
@@ -1145,3 +1145,17 @@
   - M3 frozen random translator context injected into the last condition token.
   - M2 frozen pretrained `past` translator context injected into the last condition token.
   - M4 frozen pretrained `past` translator context broadcast to all condition tokens.
+
+## Session 70
+
+- User clarified two points:
+  - The intended input contract is rollout-observable `image1`, `image2`, and proprio only, so train/eval information should match.
+  - The downstream Stage2b plan should use two explicit baselines: default DP with `cond[0..1]`, and proven PTP with `cond[0..15]` predicting past+future action, then test both current projection injection and direct encoder replacement.
+- Rechecked current Square configs and dataset parsing:
+  - Current Direction C translator configs use `agentview_image`, `robot0_eye_in_hand_image`, `robot0_eef_pos`, `robot0_eef_quat`, and `robot0_gripper_qpos`.
+  - The current translator configs use `image_abs.hdf5`; they do not include `past_act`.
+  - `RobomimicReplayImageDataset` classifies `type: rgb` keys as RGB and all other non-embedding obs keys as lowdim.
+- Added Session 70 sections to `docs/direction_c_behavior_translator/experiments.md`:
+  - Input contract table for image/proprio keys.
+  - Modality verification checks: image-masked eval, proprio-masked eval, lowdim-only retrain, and image-only retrain.
+  - Revised Stage2b matrix with `base_dp_obs2`, `base_ptp_obs16_past_future`, projection-path runs, and encoder-replacement runs.

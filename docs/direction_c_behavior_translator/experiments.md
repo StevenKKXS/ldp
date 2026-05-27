@@ -47,6 +47,69 @@ Stage 1 Square comparison jobs are running on `10.100.2.35:25076` in py39 / `rob
 | `experiment_configs/square/behavior_translator_square_future.yaml` | `future` | `a[t:t+7]` |
 | `experiment_configs/square/behavior_translator_square_past_future.yaml` | `past_future` | both |
 
+## Session 70 Input Contract
+
+Current Square image configs use only rollout-observable signals as policy or translator inputs:
+
+| Input group | Config key | Shape | Meaning |
+|---|---|---:|---|
+| Image 1 | `agentview_image` | `[3,84,84]` | third-person/front RGB camera |
+| Image 2 | `robot0_eye_in_hand_image` | `[3,84,84]` | wrist / eye-in-hand RGB camera |
+| Proprio | `robot0_eef_pos` | `[3]` | end-effector Cartesian position |
+| Proprio | `robot0_eef_quat` | `[4]` | end-effector orientation quaternion |
+| Proprio | `robot0_gripper_qpos` | `[2]` | gripper joint positions |
+
+Do not mix in `past_act`, object state, simulator state, reward, or privileged task variables for the Direction C translator unless an ablation explicitly marks them as privileged. The current Stage1 translator configs use `image_abs.hdf5`, not `image_abs_past.hdf5`, and their `shape_meta` does not include `past_act`.
+
+Fast modality checks before more downstream runs:
+
+| Check | Train-time change | Eval-time change | Purpose |
+|---|---|---|---|
+| Full input | none | none | reference |
+| Image masked | none | zero or shuffle both RGB streams | test whether trained model depends on images |
+| Proprio masked | none | zero or shuffle all lowdim keys | test whether trained model depends on proprio |
+| Lowdim-only retrain | remove RGB keys | none | test whether proprio alone matches full input |
+| Image-only retrain | remove lowdim keys | none | test whether images alone learn useful behavior context |
+
+## Session 70 Revised Stage2b Downstream Plan
+
+The downstream matrix is split into two baselines and two translator-integration mechanisms. All rollout-facing policies must use only the observable input contract above.
+
+### Baselines
+
+| ID | Name | Policy family | Condition | Prediction target | Purpose |
+|---|---|---|---|---|---|
+| B0 | `base_dp_obs2` | default DP | `cond[0..1]`, `n_obs_steps=2` | future action chunk | Standard short-context DP baseline |
+| B1 | `base_ptp_obs16_past_future` | proven PTP path | `cond[0..15]`, `n_obs_steps=16` | past + future action objective, rollout uses future action chunk | Strong long-context PTP baseline |
+
+### Translator Projection Path
+
+This keeps the base policy image/proprio encoder and adds frozen translator context through a learned projection. This is the current implemented path.
+
+| ID | Base | Translator | Injection | Control meaning |
+|---|---|---|---|---|
+| P0 | B1 | frozen random translator | `project(context) -> add_last` | architecture / extra-parameter control |
+| P1 | B1 | frozen pretrained translator | `project(context) -> add_last` | low-risk behavior-context injection |
+| P2 | B1 | frozen pretrained translator | `project(context) -> add_all` | stronger broadcast injection |
+
+### Translator Encoder Replacement Path
+
+This path directly replaces or initializes the downstream observation encoder from the translator-side encoder, then trains the PTP/DP head on top. It tests whether the useful part is the learned visual/proprio encoder rather than the pooled behavior context.
+
+| ID | Base | Encoder source | Frozen | Purpose |
+|---|---|---|---:|---|
+| R0 | B1 | random same-architecture encoder | yes | replacement control |
+| R1 | B1 | translator pretrained obs encoder | yes | frozen encoder transfer |
+| R2 | B1 | translator pretrained obs encoder | no | finetuned encoder transfer |
+| R3 | B0 | translator pretrained obs encoder | no | test whether translator encoder helps default DP |
+
+Execution order when more GPUs are available:
+
+1. Run B0 and B1 first to anchor the SR scale.
+2. Run P0/P1/P2 with identical seeds and rollout protocol.
+3. Run R0/R1/R2 to separate context projection from encoder transfer.
+4. Run R3 only after B0 is measured, because it is the DP-side transfer question rather than the main PTP-context question.
+
 ## Smoke Result
 
 `behavior_translator_square_past_future` CPU smoke:
