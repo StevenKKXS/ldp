@@ -1217,3 +1217,45 @@
   - block tree has 148 blocks;
   - 6 image blocks are present;
   - all image blocks have non-empty `image.token`, width, height, and scale.
+
+## Session 73
+
+- User provided a fresh GPU resource `10.100.0.62:24345` and asked to configure the environment, smoke-test rollout, and launch the needed experiments.
+- Verified the node:
+  - host `lg-cmc-b7r201-c06u06-h200-000061`;
+  - `8x NVIDIA H200`;
+  - `/mnt/cephfs` mounted;
+  - NFS/3FS not used for this setup;
+  - all GPUs initially idle.
+- Repaired the shared Ceph py39 environment:
+  - installed node-level `python3.9`, `python3.9-venv`, `python3.9-dev`, and OSMesa/Mesa dev libraries through the internal apt mirror;
+  - verified the Ceph venv path `/mnt/cephfs/home/tinwen.du/intern_ldp_explorer/direction_c_behavior_translator/envs/ptp_ldp_py39_ceph`;
+  - downloaded `robosuite==1.2.0`, `av==14.2.0`, and `egl-probe==1.0.2` into Ceph package caches from the CPU/common side and installed them into the venv without pulling from the GPU node at runtime.
+- Verified key runtime versions on the new node:
+  - `torch 2.5.1+cu124`;
+  - `robomimic 0.2.0`;
+  - `robosuite 1.2.0`;
+  - `mujoco_py 2.0.2.13`;
+  - `hydra 1.2.0`;
+  - `diffusers 0.11.1`.
+- Ran Square rollout smoke:
+  - first `gather_rollouts.py` path reached env execution but failed at PyAV h264 video encoding, so score-only eval should use reward-only rollout for now;
+  - `eval_flow_matching_rollout.py` reward-only smoke completed with M1 base e49 checkpoint, `n_test=1`, `n_envs=1`, `score=0.0`;
+  - smoke output path: `/mnt/cephfs/home/tinwen.du/intern_ldp_explorer/direction_c_behavior_translator/outputs/rollout_smoke_newnode_20260527/m1_base_e49_n1_reward_only`.
+- Verified four corrected Stage2b Hydra configs parse on the new node with `--cfg job`:
+  - `transformer_square_action8_causalcond_off_base`;
+  - `transformer_square_random_context_action8_causalcond_off_add_last`;
+  - `transformer_square_translator_context_action8_causalcond_off_add_last`;
+  - `transformer_square_translator_context_action8_causalcond_off_add_all`.
+- Launched eight 50-episode Square rollout eval jobs on GPUs 0-7:
+  - `m1_base_e49` EMA;
+  - `m3_random_e49` EMA;
+  - `m2_pretrained_add_last_e24` EMA;
+  - `m4_pretrained_add_all_e24` EMA;
+  - `m1_base_e24` EMA;
+  - `m3_random_e24` EMA;
+  - `m1_base_e49_model` raw model;
+  - `m4_pretrained_add_all_e24_model` raw model.
+- Rollout eval output root:
+  - `/mnt/cephfs/home/tinwen.du/intern_ldp_explorer/direction_c_behavior_translator/outputs/stage2b_rollout_eval_newnode_20260527`
+- At launch check, the node had 88 rollout-related Python processes, about `1.1-1.2GB` GPU memory per used GPU, and load around `67/192`, consistent with CPU/simulator-heavy reward-only Robomimic rollout.

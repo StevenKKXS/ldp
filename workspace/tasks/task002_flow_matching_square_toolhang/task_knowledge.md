@@ -1,6 +1,6 @@
 # Task Knowledge
 
-<!-- METADATA:SESSION=72 -->
+<!-- METADATA:SESSION=73 -->
 
 ## Working Rules
 
@@ -184,3 +184,11 @@
 - Direction C Session 72 full Feishu report: final complete up-to-now story doc is `https://feishu.cn/docx/WJSDdG6LBoxrjTx3zY6cmGVknDc`; local source and assets are under `docs/direction_c_behavior_translator/feishu_translator_full_report_2026-05-27/`. This supersedes the Session 71 update-style doc for user review.
 - Direction C Session 72 Feishu image insertion rule: create an empty image block first, upload media with `parent_type=docx_image` and `parent_node=<image_block_id>`, then PATCH the block with `replace_image.token=<file_token>`. The direct append-with-`file_token` shortcut can create blocks that API accepts but Feishu UI may not render.
 - Direction C Session 72 latest corrected Stage2b offline status: M1 base best `0.040411 @ e52`, M3 random add-last best `0.044589 @ e52`, M2 pretrained add-last best `0.048950 @ e26`, M4 pretrained add-all best `0.046840 @ e22`. SR remains unavailable until rollout runtime is repaired.
+- Direction C Session 73 fresh node: `10.100.0.62:24345`, host `lg-cmc-b7r201-c06u06-h200-000061`, has `8x NVIDIA H200` and Ceph mounted. Use Ceph-only root `/mnt/cephfs/home/tinwen.du/intern_ldp_explorer/direction_c_behavior_translator` on this node.
+- Direction C Session 73 py39 runtime repair: the shared Ceph venv path is `/mnt/cephfs/home/tinwen.du/intern_ldp_explorer/direction_c_behavior_translator/envs/ptp_ldp_py39_ceph`. New GPU nodes may need node-level `/usr/bin/python3.9`; install `python3.9`, `python3.9-venv`, `python3.9-dev`, `libosmesa6-dev`, and `patchelf` through the internal apt mirror before using the venv.
+- Direction C Session 73 verified runtime versions on the new node: `torch 2.5.1+cu124`, `robomimic 0.2.0`, `robosuite 1.2.0`, `mujoco_py 2.0.2.13`, `hydra 1.2.0`, and `diffusers 0.11.1`.
+- Direction C Session 73 offline package caches: `robosuite==1.2.0` is cached under `packages/robosuite_1.2.0`, `av==14.2.0` under `packages/av_py39`, and `egl-probe==1.0.2` under `packages/egl_probe` inside the Ceph Direction C root. GPU-node installs should use these caches instead of external pip.
+- Direction C Session 73 rollout environment exports: use `MUJOCO_GL=osmesa`, `PYOPENGL_PLATFORM=osmesa`, `MUJOCO_PY_FORCE_CPU=1`, `LD_LIBRARY_PATH=/usr/lib/x86_64-linux-gnu:$LD_LIBRARY_PATH`, and `PYTHONPATH=<ceph_repo>:$PYTHONPATH` for reward-only rollout on the new node.
+- Direction C Session 73 rollout evaluator: `gather_rollouts.py` video path currently fails on PyAV h264 `profile=high` encoding with `av==14.2.0`; use `eval_flow_matching_rollout.py` for score-only SR eval because it sets `n_test_vis=0` and writes `eval_log.json`.
+- Direction C Session 73 smoke result: M1 base e49 reward-only Square rollout smoke completed for `n_test=1,n_envs=1` with score `0.0`; this verifies checkpoint loading and Robomimic env execution, not final SR.
+- Direction C Session 73 active rollout eval root: `/mnt/cephfs/home/tinwen.du/intern_ldp_explorer/direction_c_behavior_translator/outputs/stage2b_rollout_eval_newnode_20260527`. It contains eight 50-episode jobs: M1 e49 EMA, M3 e49 EMA, M2 e24 EMA, M4 e24 EMA, M1 e24 EMA, M3 e24 EMA, M1 e49 raw model, and M4 e24 raw model.
