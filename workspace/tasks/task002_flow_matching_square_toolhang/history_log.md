@@ -1259,3 +1259,21 @@
 - Rollout eval output root:
   - `/mnt/cephfs/home/tinwen.du/intern_ldp_explorer/direction_c_behavior_translator/outputs/stage2b_rollout_eval_newnode_20260527`
 - At launch check, the node had 88 rollout-related Python processes, about `1.1-1.2GB` GPU memory per used GPU, and load around `67/192`, consistent with CPU/simulator-heavy reward-only Robomimic rollout.
+- Follow-up result check after the eight rollout jobs completed:
+  - all rollout processes exited cleanly and all eight runs wrote `eval_log.json`;
+  - GPUs returned to idle;
+  - result root remains `/mnt/cephfs/home/tinwen.du/intern_ldp_explorer/direction_c_behavior_translator/outputs/stage2b_rollout_eval_newnode_20260527`.
+- Corrected Stage2b Square rollout SR results, 50 episodes each:
+  - `m1_base_e24`, EMA: `22/50`, mean score `0.44`;
+  - `m3_random_e24`, EMA: `21/50`, mean score `0.42`;
+  - `m2_pretrained_add_last_e24`, EMA: `15/50`, mean score `0.30`;
+  - `m4_pretrained_add_all_e24`, EMA: `18/50`, mean score `0.36`;
+  - `m1_base_e49`, EMA: `16/50`, mean score `0.32`;
+  - `m3_random_e49`, EMA: `26/50`, mean score `0.52`;
+  - `m1_base_e49_model`, raw model: `2/50`, mean score `0.04`;
+  - `m4_pretrained_add_all_e24_model`, raw model: `4/50`, mean score `0.08`.
+- Interpretation relative to the latest Feishu report:
+  - rollout runtime is repaired and first SR evidence is available;
+  - matched e24 comparison does not support the current projection-based pretrained translator context, because M2/M4 are below M1/M3;
+  - raw model is much worse than EMA for these checkpoints;
+  - offline validation loss is not sufficient as the selection metric, because M4 e24 had better offline loss than M1/M3 e24 but lower rollout SR.
