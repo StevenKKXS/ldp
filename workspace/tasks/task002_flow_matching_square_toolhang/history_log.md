@@ -1302,3 +1302,14 @@
   - For PTP-like Square comparisons, e100 is already a meaningful checkpoint because the old PTP rollout record selected e99.
   - For DP/FM-style Square comparisons, e400-e500 is a reasonable sufficiency cap unless e50/e100/e200 SR curves are still clearly improving.
   - Current Stage2b e24/e49 results remain early evidence; the next fair checkpoints are e100 first, then e200, then e400-e500 only if the SR trend has not plateaued.
+- User asked how long it will take to train the current corrected Stage2b Square runs to ep100.
+- Parsed live Ceph logs at `2026-05-27 09:16 UTC`:
+  - M1 base log was actively updating around epoch `67` at about `81%`;
+  - M3 random add-last was around epoch `68` at about `13%`;
+  - M2 pretrained add-last was around epoch `40` at about `95%`;
+  - M4 pretrained add-all was around epoch `41` at about `8%`.
+- Used the observed checkpoint cadence from e24 to e49 (`~10h50m` for 25 epochs) and live tqdm speed (`~1.6 it/s` over `2478` batches/epoch) to estimate about `26` minutes per epoch including validation/checkpoint overhead.
+- ETA to the 100-epoch checkpoint (`epoch=0099`, zero-indexed checkpoint name):
+  - M1/M3 should land around `2026-05-27 23:05-23:15 UTC`, about `14` hours from the check.
+  - M2/M4 should land around `2026-05-28 10:50 UTC`, about `25.5-26` hours from the check.
+  - From scratch, current Stage2b e100 is about `43-44` hours per run before separate rollout evaluation.
