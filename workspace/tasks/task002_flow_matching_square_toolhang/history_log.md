@@ -1277,3 +1277,12 @@
   - matched e24 comparison does not support the current projection-based pretrained translator context, because M2/M4 are below M1/M3;
   - raw model is much worse than EMA for these checkpoints;
   - offline validation loss is not sufficient as the selection metric, because M4 e24 had better offline loss than M1/M3 e24 but lower rollout SR.
+- User asked how much training budget the current Square results have compared with the LDP Square setting that obtained results.
+- Checked reference and current configs:
+  - original LDP Square configs `experiment_configs/square/transformer_square.yaml` and `transformer_square_past.yaml` use `num_epochs=3500`, `batch_size=64`, and `gradient_accumulate_every=1`;
+  - current corrected Stage2b configs use `num_epochs=400`, `batch_size=32`, and `gradient_accumulate_every=1`;
+  - current Square split has `79,289` training windows, so batch size 32 gives `2478` optimizer steps per epoch and batch size 64 gives about `1239` optimizer steps per epoch.
+- Computed budget comparison:
+  - current e24 checkpoints are `24/3500 = 0.69%` by epoch/data-pass count, or `59,472 / 4,336,500 = 1.37%` by optimizer steps versus full 3500-epoch LDP Square;
+  - current e49 checkpoints are `49/3500 = 1.40%` by epoch/data-pass count, or `121,422 / 4,336,500 = 2.80%` by optimizer steps versus full 3500-epoch LDP Square;
+  - compared to the earlier Square FM result checkpoint around e786, current e24/e49 are about `3.1%/6.2%` by epoch, or `6.1%/12.5%` by optimizer steps.
