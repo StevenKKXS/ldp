@@ -1287,3 +1287,18 @@
   - current e49 checkpoints are `49/3500 = 1.40%` by epoch/data-pass count, or `121,422 / 4,336,500 = 2.80%` by optimizer steps versus full 3500-epoch LDP Square;
   - compared to the earlier Square FM result checkpoint around e786, current e24/e49 are about `3.1%/6.2%` by epoch, or `6.1%/12.5%` by optimizer steps.
 - Hook-compliance pass: rewrote the current status summary to explicitly mention the same budget comparison and retained this Session 73 calculation in the history log.
+- User asked to check prior LDP rollout records, especially Square, to determine when results became close enough to useful and whether Square actually used the 3500-epoch ceiling.
+- Rechecked repo configs and Ceph small-file archive `/mnt/cephfs/home/tinwen.du/ldp_small_files_archive/latest/task002_remaining_baselines_push_t_aloha_longsquare_transport_latest_small_files.tar.gz`:
+  - `experiment_configs/square/transformer_square*.yaml` use `num_epochs=3500`, `batch_size=64`, `rollout_every=100`, and `checkpoint_every=100`; this is the config ceiling.
+  - Archived old Square PTP rollout record `session63_eval_square_ptp_1778032161.log` selected `fig9_diffusion_subset_square_ptp_s42_1777979501/checkpoints/epoch=0099-test_mean_score=0.475.ckpt` and wrote `EVAL_LOG_JSON` with `test/mean_score=0.36` over `100` test seeds.
+  - Archived old Square DP rollout record `session63_eval_square_dp_1778032161.log` selected `fig9_diffusion_subset_square_dp_s42_1777979501/checkpoints/epoch=0499-test_mean_score=0.025.ckpt` and wrote `EVAL_LOG_JSON` with `test/mean_score=0.0` over `100` test seeds.
+  - The same old Square PTP/DP results were repeated in the `session65_video_eval_square_*` logs.
+  - Later cached Square logs reached e1387-e1394 and some session120 Square 2000-epoch launch logs reached e199/e399/e599, but the archived small files contain no parseable `EVAL_LOG_JSON` or stronger Square SR record from those later epochs.
+- Reconciled with earlier FM records in this task:
+  - Formal FM Square jobs were around e457/e459 after about 12.4 hours and showed py39 / `robomimic==0.2.0` rollout signal at that stage: Square h10 `7/10`, Square action8 `4/10`.
+  - The same FM run later reached e788/e786; the recorded rollout result was reconfirmed as the same Square h10 `7/10` and Square action8 `4/10`, so there is no recorded evidence that extending beyond roughly 500 epochs improved Square in that run.
+- Budget conclusion for current Direction C Square:
+  - `3500` should be treated as a maximum config value, not the practical reproduced Square budget.
+  - For PTP-like Square comparisons, e100 is already a meaningful checkpoint because the old PTP rollout record selected e99.
+  - For DP/FM-style Square comparisons, e400-e500 is a reasonable sufficiency cap unless e50/e100/e200 SR curves are still clearly improving.
+  - Current Stage2b e24/e49 results remain early evidence; the next fair checkpoints are e100 first, then e200, then e400-e500 only if the SR trend has not plateaued.
