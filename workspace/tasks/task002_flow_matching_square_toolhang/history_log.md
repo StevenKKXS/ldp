@@ -1286,3 +1286,4 @@
   - current e24 checkpoints are `24/3500 = 0.69%` by epoch/data-pass count, or `59,472 / 4,336,500 = 1.37%` by optimizer steps versus full 3500-epoch LDP Square;
   - current e49 checkpoints are `49/3500 = 1.40%` by epoch/data-pass count, or `121,422 / 4,336,500 = 2.80%` by optimizer steps versus full 3500-epoch LDP Square;
   - compared to the earlier Square FM result checkpoint around e786, current e24/e49 are about `3.1%/6.2%` by epoch, or `6.1%/12.5%` by optimizer steps.
+- Hook-compliance pass: rewrote the current status summary to explicitly mention the same budget comparison and retained this Session 73 calculation in the history log.
