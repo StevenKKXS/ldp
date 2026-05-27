@@ -1,6 +1,6 @@
 # History Log
 
-<!-- METADATA:SESSION=71 -->
+<!-- METADATA:SESSION=72 -->
 
 ## Session 0
 
@@ -1190,3 +1190,30 @@
   - text content is readable;
   - block tree has 69 blocks;
   - 6 image blocks are present.
+
+## Session 72
+
+- User clarified that the desired report should be a complete up-to-now story, not a delta from the prior Feishu document, and noted two formatting problems: Markdown-style tables do not render as proper Feishu tables, and images in the prior doc did not load.
+- Diagnosed Feishu image insertion:
+  - Prior implementation directly appended an image block with `file_token`, which the API accepted but can fail to render in the Feishu UI.
+  - Implemented `docs/direction_c_behavior_translator/feishu_docx_writer.py` using the documented image flow: create empty Image Block, upload media with `parent_node` set to that Image Block ID, then PATCH `replace_image`.
+- Created and verified image test doc:
+  - `https://feishu.cn/docx/IlSNdNGxioVVdzxtc5SczTAen3c`
+  - `get_doc.py --format blocks` returned one image block with non-empty `image.token`, width, height, and scale.
+- Rechecked current experiment status:
+  - M1 base latest epoch around 54, best offline `0.040411 @ e52`.
+  - M3 random add-last latest epoch around 54, best offline `0.044589 @ e52`.
+  - M2 pretrained add-last latest epoch around 27, best offline `0.048950 @ e26`.
+  - M4 pretrained add-all latest epoch around 27, best offline `0.046840 @ e22`.
+  - Ceph Stage1 past obs lr `1e-4` best `0.0005926 @ e31`; obs lr `5e-5` best `0.0005978 @ e31`.
+- Generated a new complete local report without Markdown tables:
+  - directory `docs/direction_c_behavior_translator/feishu_translator_full_report_2026-05-27/`
+  - six figures: complete story, input contract, workflow structure, Stage1/2a evidence, corrected Stage2b status, next plan.
+- Published final Feishu document:
+  - `https://feishu.cn/docx/WJSDdG6LBoxrjTx3zY6cmGVknDc`
+  - Title: `Behavior Translator 方向完整探索汇报 - 2026-05-27`
+- Verified final doc with `get_doc.py`:
+  - text content is readable;
+  - block tree has 148 blocks;
+  - 6 image blocks are present;
+  - all image blocks have non-empty `image.token`, width, height, and scale.

@@ -1,6 +1,6 @@
 # Task Knowledge
 
-<!-- METADATA:SESSION=71 -->
+<!-- METADATA:SESSION=72 -->
 
 ## Working Rules
 
@@ -181,3 +181,6 @@
 - Direction C Session 71 updated Feishu report: new visual doc is `https://feishu.cn/docx/OGUcdSos4o21a5x3prZcfe65nVh`; local source and figures are in `docs/direction_c_behavior_translator/feishu_translator_report_2026-05-27/`. The doc merges the prior story with the Session 70 input contract and revised downstream matrix.
 - Direction C Session 71 corrected Stage2b offline status: M1 base e24 `0.058112`, best `0.040411 @ e52`; M3 random add-last e24 `0.058755`, best `0.044589 @ e52`; M2 pretrained add-last e24/best `0.050084`; M4 pretrained add-all e24 `0.048616`, best `0.046840 @ e22`. Matched e24 offline loss favors pretrained contexts, but longer M1/M3 runs have lower offline loss, so SR and matched training-budget comparisons are required.
 - Direction C Session 71 current Ceph Stage1 `past` regeneration: obs lr `1e-4` best `0.0005926 @ e31`; obs lr `5e-5` best `0.0005978 @ e31`. These are usable for Ceph continuity but still weaker than the historical NFS tuned `past` best `0.000434 @ e118`.
+- Direction C Session 72 full Feishu report: final complete up-to-now story doc is `https://feishu.cn/docx/WJSDdG6LBoxrjTx3zY6cmGVknDc`; local source and assets are under `docs/direction_c_behavior_translator/feishu_translator_full_report_2026-05-27/`. This supersedes the Session 71 update-style doc for user review.
+- Direction C Session 72 Feishu image insertion rule: create an empty image block first, upload media with `parent_type=docx_image` and `parent_node=<image_block_id>`, then PATCH the block with `replace_image.token=<file_token>`. The direct append-with-`file_token` shortcut can create blocks that API accepts but Feishu UI may not render.
+- Direction C Session 72 latest corrected Stage2b offline status: M1 base best `0.040411 @ e52`, M3 random add-last best `0.044589 @ e52`, M2 pretrained add-last best `0.048950 @ e26`, M4 pretrained add-all best `0.046840 @ e22`. SR remains unavailable until rollout runtime is repaired.
