@@ -1,6 +1,6 @@
 # History Log
 
-<!-- METADATA:SESSION=70 -->
+<!-- METADATA:SESSION=71 -->
 
 ## Session 0
 
@@ -1159,3 +1159,34 @@
   - Input contract table for image/proprio keys.
   - Modality verification checks: image-masked eval, proprio-masked eval, lowdim-only retrain, and image-only retrain.
   - Revised Stage2b matrix with `base_dp_obs2`, `base_ptp_obs16_past_future`, projection-path runs, and encoder-replacement runs.
+
+## Session 71
+
+- User asked to merge the revised plan with the earlier Feishu report into a new visual story document, grounded in accurate current experiment status.
+- Rechecked current Ceph node `10.100.2.19:28106`:
+  - Corrected Stage2b M1/M3/M2/M4 training processes are still running.
+  - M1 base and M3 random have e24 and e49 checkpoints, with latest logs around epoch 53.
+  - M2 pretrained `past` add-last and M4 pretrained `past` add-all now have e24 checkpoints and logs around epoch 26.
+- Parsed current corrected Stage2b offline validation:
+  - M1 base: e24 `0.058112`, best `0.040411 @ e52`.
+  - M3 random add-last: e24 `0.058755`, best `0.044589 @ e52`.
+  - M2 pretrained add-last: e24/best `0.050084`.
+  - M4 pretrained add-all: e24 `0.048616`, best `0.046840 @ e22`.
+- Parsed current Ceph Stage1 `past` regeneration:
+  - obs lr `1e-4`: best `0.0005926 @ e31`, latest e44 `0.0007053`.
+  - obs lr `5e-5`: best `0.0005978 @ e31`, latest e44 `0.0008672`.
+- Generated local visual report assets under `docs/direction_c_behavior_translator/feishu_translator_report_2026-05-27/`:
+  - `fig1_storyline.png`
+  - `fig2_input_contract.png`
+  - `fig3_stage1_objectives_updated.png`
+  - `fig4_stage2a_probe_updated.png`
+  - `fig5_stage2b_corrected_status.png`
+  - `fig6_next_experiment_matrix.png`
+  - `source_report.md`
+- Created Feishu document:
+  - `https://feishu.cn/docx/OGUcdSos4o21a5x3prZcfe65nVh`
+  - Title: `Behavior Translator 方向探索更新 - 2026-05-27`
+- Verified with Feishu `get_doc.py`:
+  - text content is readable;
+  - block tree has 69 blocks;
+  - 6 image blocks are present.

@@ -1,6 +1,6 @@
 # Task Knowledge
 
-<!-- METADATA:SESSION=70 -->
+<!-- METADATA:SESSION=71 -->
 
 ## Working Rules
 
@@ -178,3 +178,6 @@
 - Direction C Session 69 Stage2b matrix: all corrected Square action8 runs share `n_obs_steps=16`, `n_action_steps=8`, `policy.causal_cond_attn=false`, and `context_projector_zero_init=true`. M1 is base/no translator; M3 is frozen random translator with `add_last`; M2 is frozen pretrained `past` translator with `add_last`; M4 is frozen pretrained `past` translator with `add_all`. `add_last` is the lower-risk belief-state injection, while `add_all` is the stronger broadcast injection that may over-bias all observation condition tokens.
 - Direction C Session 70 input contract: for rollout-valid image configs, allowed inputs are `agentview_image` `[3,84,84]`, `robot0_eye_in_hand_image` `[3,84,84]`, `robot0_eef_pos` `[3]`, `robot0_eef_quat` `[4]`, and `robot0_gripper_qpos` `[2]`. Treat `past_act`, object state, simulator state, reward, or privileged labels as out-of-contract unless an experiment explicitly marks them as privileged ablations.
 - Direction C Session 70 revised downstream plan: baseline B0 is default DP with `cond[0..1]` / `n_obs_steps=2`; baseline B1 is the proven PTP path with `cond[0..15]` / `n_obs_steps=16` and past+future action objective. Translator experiments should cover both the current projection path (`project(context)->add_last/add_all`) and an encoder-replacement path that transfers the translator-trained obs encoder into the downstream policy, with random encoder controls.
+- Direction C Session 71 updated Feishu report: new visual doc is `https://feishu.cn/docx/OGUcdSos4o21a5x3prZcfe65nVh`; local source and figures are in `docs/direction_c_behavior_translator/feishu_translator_report_2026-05-27/`. The doc merges the prior story with the Session 70 input contract and revised downstream matrix.
+- Direction C Session 71 corrected Stage2b offline status: M1 base e24 `0.058112`, best `0.040411 @ e52`; M3 random add-last e24 `0.058755`, best `0.044589 @ e52`; M2 pretrained add-last e24/best `0.050084`; M4 pretrained add-all e24 `0.048616`, best `0.046840 @ e22`. Matched e24 offline loss favors pretrained contexts, but longer M1/M3 runs have lower offline loss, so SR and matched training-budget comparisons are required.
+- Direction C Session 71 current Ceph Stage1 `past` regeneration: obs lr `1e-4` best `0.0005926 @ e31`; obs lr `5e-5` best `0.0005978 @ e31`. These are usable for Ceph continuity but still weaker than the historical NFS tuned `past` best `0.000434 @ e118`.
