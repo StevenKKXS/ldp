@@ -1313,3 +1313,24 @@
   - M1/M3 should land around `2026-05-27 23:05-23:15 UTC`, about `14` hours from the check.
   - M2/M4 should land around `2026-05-28 10:50 UTC`, about `25.5-26` hours from the check.
   - From scratch, current Stage2b e100 is about `43-44` hours per run before separate rollout evaluation.
+- User asked for current progress on `2026-05-29`.
+- Checked GPU reachability:
+  - `10.100.2.19:28106` is reachable and running the active jobs.
+  - `10.100.0.62:24345`, `10.100.2.35:25076`, and `10.100.4.35:19382` refused SSH.
+- Current active process state on `10.100.2.19:28106`:
+  - Six training parents are alive: Stage2b M1/M2 on physical GPU0, Stage2b M3/M4 on physical GPU1, Stage1 `past` obs-lr variants on GPUs2/3.
+  - `nvidia-smi` snapshot showed about `10.4GB` on GPU0, `10.4GB` on GPU1, and `17.6GB` on GPUs2/3; instantaneous GPU util was low, but dataloader children were active.
+- Corrected Stage2b Square checkpoint/progress state:
+  - M1 base: latest train around epoch `164`, e99 checkpoint exists, latest saved periodic checkpoint e149; best val loss `0.037692 @ e57`, e99 val loss `0.049891`, latest val `0.055543 @ e163`.
+  - M3 random add-last: latest train around epoch `165`, e99 checkpoint exists, latest periodic checkpoint e124 and latest.ckpt; best val loss `0.044589 @ e52`, e99 val loss `0.060510`, latest val `0.088819 @ e164`.
+  - M2 pretrained add-last: latest train around epoch `137`, e99 checkpoint exists, latest periodic checkpoint e124; best val loss `0.033300 @ e64`, e99 val loss `0.044782`, latest val `0.047412 @ e136`.
+  - M4 pretrained add-all: latest train around epoch `138`, e99 checkpoint exists, latest periodic checkpoint e124; best val loss `0.030108 @ e62`, e99 val loss `0.039144`, latest val `0.040281 @ e137`.
+- Corrected Stage2b rollout state:
+  - No new e99/e124/e149 `eval_log.json` files are present under the Ceph rollout output roots.
+  - The only corrected rollout table remains the previous e24/e49 run: M1 e24 `22/50`, M3 e24 `21/50`, M2 e24 `15/50`, M4 e24 `18/50`, M1 e49 `16/50`, M3 e49 `26/50`, raw model checks much worse.
+- Stage1 Ceph `past` progress:
+  - obs lr `1e-4`: latest val around e136, best val/loss_total `0.000485 @ e110`, latest `0.000570 @ e136`, checkpoints e50/e100/best/latest exist.
+  - obs lr `5e-5`: latest val around e136, best val/loss_total `0.000524 @ e129`, latest `0.000551 @ e136`, checkpoints e50/e100/best/latest exist.
+- Interpretation:
+  - Offline loss now favors pretrained-context variants over base/random at their best epochs, but all four Stage2b runs show best offline validation before e100 and degradation after e99.
+  - The downstream decision still requires e99 or best-val EMA rollout; offline validation alone is not reliable because prior e24 rollout contradicted the offline-loss ranking.
