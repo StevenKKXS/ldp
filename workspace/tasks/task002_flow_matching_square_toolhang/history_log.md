@@ -1,6 +1,6 @@
 # History Log
 
-<!-- METADATA:SESSION=73 -->
+<!-- METADATA:SESSION=74 -->
 
 ## Session 0
 
@@ -1353,3 +1353,33 @@
   - Confirmed `history_log.md` has file metadata `METADATA:SESSION=73`.
   - Confirmed the active record is under explicit `## Session 73`.
   - Retained the 3FS1 migration target and current no-GPU-access progress record in Session 73.
+
+## Session 74
+
+- User asked for the current working-code path, branch, and a compact workflow/data-flow explanation to inspect whether training is correct.
+- Verified code locations:
+  - Authoritative git worktree: `/work-agents/intern_ldp_explorer/ldp`.
+  - Branch: `intern_ldp_explorer/task002_flow_matching_square_toolhang`.
+  - Remote: `git@github.com:StevenKKXS/ldp.git`.
+  - Current commit: `7cc3e24bf8d7f9d98c295217910efe5b54aee5a7`.
+  - Ceph execution copy: `/mnt/cephfs/home/tinwen.du/intern_ldp_explorer/direction_c_behavior_translator/repos/ldp`; this is a synced code copy without `.git`.
+  - Confirmed key Direction C files in the Ceph execution copy match the authoritative git worktree by `diff -q`.
+- Verified actual run paths and configs:
+  - Dataset: `/mnt/cephfs/home/tinwen.du/intern_ldp_explorer/direction_c_behavior_translator/datasets/robomimic/datasets/square/mh/image_abs.hdf5`.
+  - Stage1 active run root: `/mnt/cephfs/home/tinwen.du/intern_ldp_explorer/direction_c_behavior_translator/outputs/stage1_square_past_ceph_20260526_032417_safe_workers`.
+  - Stage2b base/random root: `/mnt/cephfs/home/tinwen.du/intern_ldp_explorer/direction_c_behavior_translator/outputs/stage2b_square_causalcond_off_20260526_032417_safe_workers`.
+  - Stage2b pretrained root: `/mnt/cephfs/home/tinwen.du/intern_ldp_explorer/direction_c_behavior_translator/outputs/stage2b_square_causalcond_off_pretrained_cephpast_20260526_144615`.
+  - Stage2b actual `.hydra/config.yaml` files override dataset path to Ceph and use `batch_size=32`, `num_workers=4`, `val_num_workers=2`, `num_epochs=400`, `checkpoint_every=25`, `rollout_every=999999`.
+- Workflow recorded for inspection:
+  - Stage1 uses `RobomimicReplayImageDataset` inside `BehaviorTranslationDataset`.
+  - Stage1 window config is `H=16`, `P=16`, `K=8`; with `anchor=16`, obs indices are `1..16`, `act_past` indices `0..15`, and `act_future` indices `16..23`.
+  - Stage1 feeds raw RGB plus proprio into a trainable robomimic obs encoder, then into `BehaviorTranslator`.
+  - Stage1 current Ceph run uses `target_mode=past`, so loss is SmoothL1 only on normalized `pred_past` vs normalized `act_past`.
+  - Stage2b uses `RobomimicReplayImageDataset` directly with `global_horizon=24`, `n_obs_steps=16`, `policy_horizon=8`, `pred_action_steps_only=true`, and `causal_cond_attn=false`.
+  - Stage2b base M1 uses `DiffusionTransformerHybridImagePolicy`; M3 uses frozen random translator context with `add_last`; M2 uses frozen pretrained context with `add_last`; M4 uses frozen pretrained context with `add_all`.
+  - Stage2b pretrained M2/M4 load translator checkpoint from `/mnt/cephfs/home/tinwen.du/intern_ldp_explorer/direction_c_behavior_translator/outputs/stage1_square_past_ceph_20260526_032417_safe_workers/stage1_past_bs128_obs1e4_tr1e4/checkpoints/best.ckpt`.
+- Important training concern recorded:
+  - `BehaviorTranslator.get_context()` uses `context_projector(mean_future_pool, mean_all_pool, z_last)`.
+  - Stage1 `TrainBehaviorTranslatorWorkspace` computes context but does not include context in any loss.
+  - In the active `target_mode=past` setup, only `loss_past` drives optimization; `loss_future` is logged but not optimized.
+  - Therefore the context projection used by Stage2b is likely underconstrained by Stage1 supervision; this is a plausible reason pretrained context can look good in offline loss yet fail rollout.

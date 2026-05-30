@@ -1,6 +1,6 @@
 # Task Knowledge
 
-<!-- METADATA:SESSION=73 -->
+<!-- METADATA:SESSION=74 -->
 
 ## Working Rules
 
@@ -207,3 +207,6 @@
 - Direction C Session 73 current progress on `2026-05-30`: all known GPU endpoints refused SSH, including `10.100.2.19:28106`; Ceph Stage2b logs reached M1 e213, M3 e217, M2 e188, and M4 e189 by `2026-05-30 02:55 UTC`. No new rollout exists beyond the prior e24/e49 table. Stage1 Ceph `past` logs reached e178 for both LR variants.
 - Direction C Session 73 final storage rule: after finishing this Direction C work, migrate/copy Ceph code and small-file artifacts from `/mnt/cephfs/home/tinwen.du/intern_ldp_explorer/direction_c_behavior_translator` to `/mnt/3fs1/data/tingwen.du/intern_ldp_explorer/direction_c_behavior_translator`. The 3FS1 target root exists. Dense many-file trees should be placed under this target, preferably as task-scoped archives when appropriate.
 - Direction C Session 73 hook format rule: keep `history_log.md` metadata at `METADATA:SESSION=73` and keep current notes under explicit `## Session 73`.
+- Direction C Session 74 code path: authoritative branch is `/work-agents/intern_ldp_explorer/ldp` on `intern_ldp_explorer/task002_flow_matching_square_toolhang` at commit `7cc3e24bf8d7f9d98c295217910efe5b54aee5a7`; Ceph execution copy is `/mnt/cephfs/home/tinwen.du/intern_ldp_explorer/direction_c_behavior_translator/repos/ldp` and has no `.git`.
+- Direction C Session 74 active data-flow caveat: Stage1 `target_mode=past` optimizes only normalized past-action SmoothL1. `BehaviorTranslator.context_projector` is used by downstream `get_context()` but has no direct Stage1 loss, so the pooled context is underconstrained unless downstream projector training compensates. This is a key item to inspect before trusting the current translator-context design.
+- Direction C Session 74 Stage2b data-flow: base/random/pretrained runs use raw Square image dataset at `/mnt/cephfs/home/tinwen.du/intern_ldp_explorer/direction_c_behavior_translator/datasets/robomimic/datasets/square/mh/image_abs.hdf5`, `global_horizon=24`, `n_obs_steps=16`, `n_action_steps=8`, `pred_action_steps_only=true`, and `causal_cond_attn=false`; M2/M4 load the Stage1 `past` checkpoint from the Ceph Stage1 obs-lr `1e-4` run.
