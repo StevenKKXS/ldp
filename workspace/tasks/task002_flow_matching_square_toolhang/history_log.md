@@ -1,6 +1,6 @@
 # History Log
 
-<!-- METADATA:SESSION=72 -->
+<!-- METADATA:SESSION=73 -->
 
 ## Session 0
 
@@ -1334,3 +1334,18 @@
 - Interpretation:
   - Offline loss now favors pretrained-context variants over base/random at their best epochs, but all four Stage2b runs show best offline validation before e100 and degradation after e99.
   - The downstream decision still requires e99 or best-val EMA rollout; offline validation alone is not reliable because prior e24 rollout contradicted the offline-loss ranking.
+- User asked for current progress on `2026-05-30`.
+- Checked known GPU endpoints: `10.100.2.19:28106`, `10.100.0.62:24345`, `10.100.2.35:25076`, and `10.100.4.35:19382` all refused SSH, so there is currently no accessible GPU node for rollout.
+- Parsed Ceph Stage2b logs:
+  - M1 base log mtime `2026-05-30 02:55 UTC`, last train epoch `213`, best val loss `0.037692 @ e57`, latest val `0.070021 @ e212`.
+  - M3 random add-last log mtime `2026-05-30 02:55 UTC`, last train epoch `217`, best val loss `0.044589 @ e52`, latest val `0.101548 @ e216`.
+  - M2 pretrained add-last log mtime `2026-05-30 02:55 UTC`, last train epoch `188`, best val loss `0.033300 @ e64`, latest val `0.065726 @ e187`.
+  - M4 pretrained add-all log mtime `2026-05-30 02:55 UTC`, last train epoch `189`, best val loss `0.030108 @ e62`, latest val `0.052371 @ e188`.
+- Checkpoint state remains sufficient for eval: all four Stage2b runs have e99 checkpoints; latest.ckpt files were last touched around `2026-05-29 19:13-20:44 UTC`; no new periodic checkpoint beyond e149/e124 was found.
+- Rollout state remains unchanged: no e99/e124/e149 `eval_log.json` exists; only the previous e24/e49 rollout table under `stage2b_rollout_eval_newnode_20260527` is available.
+- Parsed Ceph Stage1 `past` translator logs:
+  - obs lr `1e-4`: last train epoch `178`, best `val/loss_total=0.000485 @ e110`, latest `0.000719 @ e178`, checkpoints include e50/e100/e150/best/latest.
+  - obs lr `5e-5`: last train epoch `178`, best `0.000524 @ e129`, latest `0.000607 @ e178`, checkpoints include e50/e100/e150/best/latest.
+- User requested final migration of Ceph code/files to 3FS1 after the work is complete.
+- Verified `/mnt/3fs1/data/tingwen.du` exists on `hf3fs.stage` with large free space and created the target root `/mnt/3fs1/data/tingwen.du/intern_ldp_explorer/direction_c_behavior_translator`.
+- Migration rule recorded: after finishing Direction C work, move/copy Ceph code and small-file artifacts from `/mnt/cephfs/home/tinwen.du/intern_ldp_explorer/direction_c_behavior_translator` into the 3FS1 target; put many-file trees under that target, preferably as task-scoped archives for dense small-file sets.
