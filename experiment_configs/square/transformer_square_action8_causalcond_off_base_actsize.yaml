@@ -1,0 +1,33 @@
+defaults:
+  - transformer_square_action8_causalcond_off_base
+  - _self_
+
+exp_name: stage2b_base_no_context_action8_actsize_causalcond_off
+
+task:
+  dataset_path: /mnt/cephfs/home/tinwen.du/intern_ldp_explorer/direction_c_behavior_translator/datasets/robomimic/datasets/square/mh/image_abs.hdf5
+
+policy:
+  n_emb: 512
+  n_head: 8
+  n_layer: 7
+  n_cond_layers: 4
+
+optimizer:
+  learning_rate: 5.0e-5
+
+logging:
+  name: stage2b_base_no_context_action8_actsize_causalcond_off
+  group: direction_c_translator_context_actsize
+  tags:
+    - train_diffusion_transformer_hybrid
+    - square_image
+    - action8
+    - causalcond_off
+    - base
+    - actsize
+
+hydra:
+  run:
+    dir: /mnt/cephfs/home/tinwen.du/intern_ldp_explorer/direction_c_behavior_translator/outputs/stage2b_square_actsize/${now:%Y%m%d_%H%M%S}_${exp_name}
+

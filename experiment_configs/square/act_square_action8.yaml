@@ -1,0 +1,43 @@
+defaults:
+  - transformer_square_action8_causalcond_off_base
+  - _self_
+
+exp_name: act_square_action8
+
+task:
+  dataset_path: /mnt/cephfs/home/tinwen.du/intern_ldp_explorer/direction_c_behavior_translator/datasets/robomimic/datasets/square/mh/image_abs.hdf5
+
+policy:
+  _target_: diffusion_policy.policy.action_chunking_transformer_hybrid_image_policy.ActionChunkingTransformerHybridImagePolicy
+  hidden_dim: 512
+  n_encoder_layers: 4
+  n_decoder_layers: 7
+  n_head: 8
+  dim_feedforward: 3200
+  dropout: 0.1
+  causal_obs_encoder: false
+  loss_type: l1
+  loss_reduction: sum_action_dim
+  loss_scale: 1.0
+
+optimizer:
+  learning_rate: 5.0e-5
+
+training:
+  num_epochs: 400
+  checkpoint_every: 25
+  rollout_every: 999999
+
+logging:
+  name: act_square_action8
+  group: direction_c_act_baseline
+  tags:
+    - act_style
+    - square_image
+    - action8
+    - deterministic_v0
+
+hydra:
+  run:
+    dir: /mnt/cephfs/home/tinwen.du/intern_ldp_explorer/direction_c_behavior_translator/outputs/act_square_action8/${now:%Y%m%d_%H%M%S}_${exp_name}
+

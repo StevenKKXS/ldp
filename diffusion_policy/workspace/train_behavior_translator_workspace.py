@@ -97,8 +97,18 @@ class TrainBehaviorTranslatorWorkspace(BaseWorkspace):
         pred_past = pred[:, :p]
         pred_future = pred[:, p:]
 
-        loss_past = F.smooth_l1_loss(pred_past, act_past) if p > 0 else pred.sum() * 0
-        loss_future = F.smooth_l1_loss(pred_future, act_future)
+        loss_reduction = str(self.cfg.training.get("action_loss_reduction", "mean"))
+
+        def action_loss(pred_action, target_action):
+            loss = F.smooth_l1_loss(pred_action, target_action, reduction="none")
+            if loss_reduction == "mean":
+                return loss.mean()
+            if loss_reduction == "sum_action_dim":
+                return loss.sum(dim=-1).mean()
+            raise ValueError(f"Unsupported action_loss_reduction: {loss_reduction}")
+
+        loss_past = action_loss(pred_past, act_past) if p > 0 else pred.sum() * 0
+        loss_future = action_loss(pred_future, act_future)
         target_mode = self.cfg.training.target_mode
         if target_mode == "past":
             loss_total = loss_past
@@ -112,6 +122,9 @@ class TrainBehaviorTranslatorWorkspace(BaseWorkspace):
         else:
             raise ValueError(f"Unsupported target_mode: {target_mode}")
 
+        loss_scale = float(self.cfg.training.get("loss_scale", 1.0))
+        loss_for_backward = loss_total * loss_scale
+
         with torch.no_grad():
             future_l1_by_h = torch.mean(torch.abs(pred_future - act_future), dim=(0, 2))
             gripper_acc = torch.mean(
@@ -121,6 +134,7 @@ class TrainBehaviorTranslatorWorkspace(BaseWorkspace):
                 "loss_total": loss_total.detach(),
                 "loss_past": loss_past.detach(),
                 "loss_future": loss_future.detach(),
+                "loss_scaled": loss_for_backward.detach(),
                 "past_l1": torch.mean(torch.abs(pred_past - act_past)).detach() if p > 0 else loss_total.detach() * 0,
                 "future_l1": torch.mean(torch.abs(pred_future - act_future)).detach(),
                 "future_mse": F.mse_loss(pred_future, act_future).detach(),
@@ -129,7 +143,7 @@ class TrainBehaviorTranslatorWorkspace(BaseWorkspace):
             for i, value in enumerate(future_l1_by_h):
                 metrics[f"per_horizon_future_l1_{i:02d}"] = value.detach()
 
-        return loss_total, metrics
+        return loss_for_backward, metrics
 
     def _mean_metrics(self, metrics_list):
         result = dict()

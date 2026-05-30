@@ -33,6 +33,7 @@ class TranslatorConditionedTransformerHybridImagePolicy(DiffusionTransformerHybr
             translator_freeze: bool = True,
             context_injection: str = "add_all",
             context_projector_zero_init: bool = True,
+            translator_context_norm: bool = False,
             **kwargs):
         super().__init__(*args, **kwargs)
 
@@ -40,6 +41,7 @@ class TranslatorConditionedTransformerHybridImagePolicy(DiffusionTransformerHybr
         self.translator_freeze = bool(translator_freeze)
         self.translator_context_source = str(translator_context_source)
         self.context_injection = str(context_injection)
+        self.translator_context_norm_enabled = bool(translator_context_norm)
 
         self.translator_obs_encoder = copy.deepcopy(self.obs_encoder)
         self.translator_model = BehaviorTranslator(
@@ -56,6 +58,11 @@ class TranslatorConditionedTransformerHybridImagePolicy(DiffusionTransformerHybr
             dropout=float(translator_dropout),
             context_dim=int(translator_context_dim),
             causal_obs_encoder=bool(translator_causal_obs_encoder),
+        )
+        self.translator_context_norm = (
+            nn.LayerNorm(int(translator_context_dim))
+            if self.translator_context_norm_enabled
+            else nn.Identity()
         )
         self.translator_context_projector = nn.Linear(
             int(translator_context_dim), int(self.obs_feature_dim))
@@ -112,7 +119,8 @@ class TranslatorConditionedTransformerHybridImagePolicy(DiffusionTransformerHybr
             "weight_decay": obs_encoder_weight_decay
         })
         optim_groups.append({
-            "params": self.translator_context_projector.parameters(),
+            "params": list(self.translator_context_norm.parameters())
+            + list(self.translator_context_projector.parameters()),
             "weight_decay": transformer_weight_decay
         })
         if not self.translator_freeze:
@@ -156,8 +164,9 @@ class TranslatorConditionedTransformerHybridImagePolicy(DiffusionTransformerHybr
         grad_enabled = not self.translator_freeze
         with torch.set_grad_enabled(grad_enabled):
             context = self._compute_translator_context(nobs)
-        context_token = self.translator_context_projector(
-            context.detach() if self.translator_freeze else context)
+        context = context.detach() if self.translator_freeze else context
+        context = self.translator_context_norm(context)
+        context_token = self.translator_context_projector(context)
 
         if self.context_injection == "add_all":
             return cond + context_token.unsqueeze(1)

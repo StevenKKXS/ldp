@@ -1,0 +1,42 @@
+defaults:
+  - behavior_translator_square_past
+  - _self_
+
+name: behavior_translator_square_past_actsize_norm
+
+model:
+  d_model: 512
+  n_encoder_layers: 4
+  n_decoder_layers: 7
+  n_heads: 8
+  ff_dim: 3200
+  dropout: 0.1
+  context_dim: 512
+
+task:
+  dataset_path: /mnt/cephfs/home/tinwen.du/intern_ldp_explorer/direction_c_behavior_translator/datasets/robomimic/datasets/square/mh/image_abs.hdf5
+  dataset:
+    base_dataset:
+      dataset_path: /mnt/cephfs/home/tinwen.du/intern_ldp_explorer/direction_c_behavior_translator/datasets/robomimic/datasets/square/mh/image_abs.hdf5
+
+dataloader:
+  batch_size: 64
+  num_workers: 16
+
+val_dataloader:
+  batch_size: 64
+  num_workers: 16
+
+optimizer:
+  obs_encoder_lr: 5.0e-5
+  translator_lr: 5.0e-5
+
+training:
+  action_loss_reduction: sum_action_dim
+  loss_scale: 10.0
+  checkpoint_every: 50
+
+hydra:
+  run:
+    dir: /mnt/cephfs/home/tinwen.du/intern_ldp_explorer/direction_c_behavior_translator/outputs/${name}_${now:%Y%m%d_%H%M%S}
+

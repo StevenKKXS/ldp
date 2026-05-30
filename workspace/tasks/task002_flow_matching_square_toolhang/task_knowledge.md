@@ -1,6 +1,6 @@
 # Task Knowledge
 
-<!-- METADATA:SESSION=74 -->
+<!-- METADATA:SESSION=75 -->
 
 ## Working Rules
 
@@ -210,3 +210,11 @@
 - Direction C Session 74 code path: authoritative branch is `/work-agents/intern_ldp_explorer/ldp` on `intern_ldp_explorer/task002_flow_matching_square_toolhang` at commit `7cc3e24bf8d7f9d98c295217910efe5b54aee5a7`; Ceph execution copy is `/mnt/cephfs/home/tinwen.du/intern_ldp_explorer/direction_c_behavior_translator/repos/ldp` and has no `.git`.
 - Direction C Session 74 active data-flow caveat: Stage1 `target_mode=past` optimizes only normalized past-action SmoothL1. `BehaviorTranslator.context_projector` is used by downstream `get_context()` but has no direct Stage1 loss, so the pooled context is underconstrained unless downstream projector training compensates. This is a key item to inspect before trusting the current translator-context design.
 - Direction C Session 74 Stage2b data-flow: base/random/pretrained runs use raw Square image dataset at `/mnt/cephfs/home/tinwen.du/intern_ldp_explorer/direction_c_behavior_translator/datasets/robomimic/datasets/square/mh/image_abs.hdf5`, `global_horizon=24`, `n_obs_steps=16`, `n_action_steps=8`, `pred_action_steps_only=true`, and `causal_cond_attn=false`; M2/M4 load the Stage1 `past` checkpoint from the Ceph Stage1 obs-lr `1e-4` run.
+- Direction C Session 75 node setup: `10.100.0.20:26715` is an 8xH200 node. New Ubuntu 24.04 nodes may need internal-apt install of `python3.9`, `python3.9-venv`, `python3.9-dev`, `libpython3.9`, `libosmesa6-dev`, `libgl1-mesa-dev`, `libglfw3`, `libglew-dev`, and `patchelf` before the shared Ceph py39 venv works.
+- Direction C Session 75 verified env: `/mnt/cephfs/home/tinwen.du/intern_ldp_explorer/direction_c_behavior_translator/envs/ptp_ldp_py39_ceph` runs Python `3.9.25`, `torch 2.5.1+cu124`, `robomimic 0.2.0`, `robosuite 1.2.0`, `hydra 1.2.0`, and `diffusers 0.11.1` on `10.100.0.20:26715`.
+- Direction C Session 75 norm controls: Stage1 translator configs can now use `training.action_loss_reduction=sum_action_dim` to avoid averaging away action-dim supervision and `training.loss_scale` to increase effective gradient scale while keeping raw `loss_total` logged.
+- Direction C Session 75 downstream norm control: `TranslatorConditionedTransformerHybridImagePolicy` supports `policy.translator_context_norm=true`; frozen translator contexts are detached before the trainable norm/projector.
+- Direction C Session 75 ACT caveat: `ActionChunkingTransformerHybridImagePolicy` is deterministic ACT-style v0 with ACT-scale Transformer dimensions, not full CVAE ACT. It is intended as a fast action-chunk baseline and capacity reference.
+- Direction C Session 75 new Square configs: `behavior_translator_square_past_actsize_norm.yaml`, `act_square_action8.yaml`, `transformer_square_action8_causalcond_off_base_actsize.yaml`, and `transformer_square_translator_context_action8_causalcond_off_add_last_actsize_norm.yaml`.
+- Direction C Session 75 active run root: `/mnt/cephfs/home/tinwen.du/intern_ldp_explorer/direction_c_behavior_translator/outputs/session75_norm_act_20260530_061542`. Manifest entries are GPU0/PID `2592812` Stage1 past ACT-size norm, GPU1/PID `2592813` ACT-style action8, GPU2/PID `2592814` ACT-size base DP/PTP, and GPU3/PID `2592815` ACT-size normalized translator-context.
+- Direction C Session 75 data caveat: on current Ceph storage, only Square `image_abs.hdf5` is present. ToolHang experiments require copying/restoring the ToolHang dataset to Ceph or 3FS1.

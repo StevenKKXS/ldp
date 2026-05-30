@@ -1,6 +1,6 @@
 # History Log
 
-<!-- METADATA:SESSION=74 -->
+<!-- METADATA:SESSION=75 -->
 
 ## Session 0
 
@@ -1383,3 +1383,46 @@
   - Stage1 `TrainBehaviorTranslatorWorkspace` computes context but does not include context in any loss.
   - In the active `target_mode=past` setup, only `loss_past` drives optimization; `loss_future` is logged but not optimized.
   - Therefore the context projection used by Stage2b is likely underconstrained by Stage1 supervision; this is a plausible reason pretrained context can look good in offline loss yet fail rollout.
+
+## Session 75
+
+- User requested a stronger normalized translator objective, ACT-based training attempts, and transformer parameter scaling to ACT-like size on new GPU resource `10.100.0.20:26715`.
+- New node setup:
+  - Fixed stale SSH host key and confirmed host `lg-cmc-b7r201-a08u06-h200-000019`.
+  - Confirmed `8x NVIDIA H200`, Ceph mounted at `/mnt/cephfs`, and 3FS1 mounted at `/mnt/3fs1`.
+  - The shared Ceph venv existed but its `python` symlink pointed to missing node-level `/usr/bin/python3.9`.
+  - Installed node-level `python3.9`, `python3.9-venv`, `python3.9-dev`, `libpython3.9`, `libosmesa6-dev`, `libgl1-mesa-dev`, `libglfw3`, `libglew-dev`, and `patchelf` through the internal apt mirror.
+  - Verified runtime under `/mnt/cephfs/home/tinwen.du/intern_ldp_explorer/direction_c_behavior_translator/envs/ptp_ldp_py39_ceph`: Python `3.9.25`, `torch 2.5.1+cu124`, `robomimic 0.2.0`, `robosuite 1.2.0`, `hydra 1.2.0`, `diffusers 0.11.1`, CUDA available with `8` devices.
+- Code review found no existing ACT policy implementation in the repo; only BET and diffusion/transformer policies were present.
+- Implemented norm / scale support for Stage1 translator:
+  - `diffusion_policy/workspace/train_behavior_translator_workspace.py` now supports `training.action_loss_reduction=mean|sum_action_dim`.
+  - It also supports `training.loss_scale`, while logging raw `loss_total` and additional `loss_scaled`.
+- Implemented downstream context normalization:
+  - `diffusion_policy/policy/translator_conditioned_transformer_hybrid_image_policy.py` now supports `policy.translator_context_norm=true`.
+  - The frozen translator context is detached before the trainable LayerNorm/projector, so the norm/projector still receive gradients while the translator remains frozen.
+- Added deterministic ACT-style action chunking v0:
+  - New file `diffusion_policy/policy/action_chunking_transformer_hybrid_image_policy.py`.
+  - Uses the existing robomimic image obs encoder, 4-layer observation Transformer encoder, 7-layer action-query decoder, hidden dim `512`, `8` heads, FFN dim `3200`, and direct normalized action chunk loss.
+  - This v0 intentionally excludes the ACT CVAE latent path; it is a smokeable ACT-scale action chunking baseline rather than a full official ACT clone.
+- Added experiment configs:
+  - `experiment_configs/square/behavior_translator_square_past_actsize_norm.yaml`.
+  - `experiment_configs/square/act_square_action8.yaml`.
+  - `experiment_configs/square/transformer_square_action8_causalcond_off_base_actsize.yaml`.
+  - `experiment_configs/square/transformer_square_translator_context_action8_causalcond_off_add_last_actsize_norm.yaml`.
+- Added plan document:
+  - `workspace/tasks/task002_flow_matching_square_toolhang/session75_norm_act_plan.md`.
+- Validation:
+  - Local `py_compile` passed for modified/new Python files.
+  - Synced changed files into Ceph execution copy `/mnt/cephfs/home/tinwen.du/intern_ldp_explorer/direction_c_behavior_translator/repos/ldp`.
+  - Hydra `--cfg job` parsed all four new configs on the new node.
+  - One-step train/val smoke passed for Stage1 norm, ACT-style action8, ACT-size DP/PTP base, and ACT-size normalized translator-context.
+  - Smoke metrics included ACT-style first-step `val_loss=4.68449`, ACT-size base first-step `val_loss=1.24067`, and ACT-size translator-context first-step `val_loss=1.24235`; these are sanity metrics only.
+- Started four Square long-running jobs under `/mnt/cephfs/home/tinwen.du/intern_ldp_explorer/direction_c_behavior_translator/outputs/session75_norm_act_20260530_061542`:
+  - GPU0 PID `2592812`: `stage1_past_actsize_norm`, config `behavior_translator_square_past_actsize_norm`.
+  - GPU1 PID `2592813`: `act_square_action8`, config `act_square_action8`.
+  - GPU2 PID `2592814`: `base_actsize_action8`, config `transformer_square_action8_causalcond_off_base_actsize`.
+  - GPU3 PID `2592815`: `context_actsize_norm_action8`, config `transformer_square_translator_context_action8_causalcond_off_add_last_actsize_norm`.
+- Live check after launch showed all four processes alive. GPU memory was about `10.4GB` on GPU0 and `5.6-5.9GB` on GPUs1-3. Training had entered epoch 0/1 with normal tqdm progress.
+- Storage/data caveat:
+  - Ceph currently contains Square dataset only at `/mnt/cephfs/home/tinwen.du/intern_ldp_explorer/direction_c_behavior_translator/datasets/robomimic/datasets/square/mh/image_abs.hdf5`.
+  - ToolHang cannot be run from this node until its dataset is restored to Ceph or 3FS1.
