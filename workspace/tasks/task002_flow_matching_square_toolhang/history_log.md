@@ -1426,3 +1426,4 @@
 - Storage/data caveat:
   - Ceph currently contains Square dataset only at `/mnt/cephfs/home/tinwen.du/intern_ldp_explorer/direction_c_behavior_translator/datasets/robomimic/datasets/square/mh/image_abs.hdf5`.
   - ToolHang cannot be run from this node until its dataset is restored to Ceph or 3FS1.
+- Created a 3FS1 code snapshot for small-file continuity at `/mnt/3fs1/data/tingwen.du/intern_ldp_explorer/direction_c_behavior_translator/code_snapshots/ldp_direction_c_session75_63d544a.tar.gz`.
