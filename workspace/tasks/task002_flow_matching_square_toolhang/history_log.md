@@ -1,6 +1,6 @@
 # History Log
 
-<!-- METADATA:SESSION=19 -->
+<!-- METADATA:SESSION=20 -->
 
 ## Session 0
 
@@ -378,3 +378,43 @@
   - Use `16` as a conservative high setting if GPU utilization still starves.
   - Do not use `64+` for this PTP-style pipeline unless a different profiling run proves it helps.
   - `224` is the observed process-open ceiling; it is not a useful throughput setting.
+
+## Session 20
+
+- Recorded code path, branch, and workflow for user inspection.
+- Current review source:
+  - Local repo: `/work-agents/intern_method_developer/ldp`
+  - Branch: `intern_method_developer/task002_flow_matching_square_toolhang`
+  - Remote: `git@github.com:StevenKKXS/ldp.git`
+  - Latest commit before this documentation update: `7911914 Record dataloader worker benchmark`
+  - PR: `https://github.com/StevenKKXS/ldp/pull/1`
+- Historical GPU-side code paths used by earlier runs:
+  - Encoder probes: `/mnt/nfs/tingwen/intern_method_developer/repos/ldp_encoder_probe`
+  - Flow-matching probes: `/mnt/nfs/tingwen/intern_method_developer/repos/ldp_flow_matching`
+  - New node `10.100.2.50:26953` did not have a verified synced copy of this active branch; only a separate ceph repo was found under `/mnt/cephfs/home/tinwen.du/intern_ldp_explorer/direction_c_behavior_translator/repos/ldp`, and that directory was not a git checkout on the node.
+- Encoder pretraining workflow:
+  - Entry: `train.py`
+  - Workspace: `diffusion_policy/workspace/train_encoder_pretrain_workspace.py`
+  - Configs: `experiment_configs/encoder_pretrain/{predictive_square,contrastive_square,predictive_tool_hang,contrastive_tool_hang}.yaml`
+  - Launcher: `scripts/launch_encoder_pretrain_probe.sh`
+  - Dataset: `RobomimicReplayImageDataset` reads `image_abs.hdf5`, builds an in-memory replay buffer, samples sequences, returns `batch["obs"]` and `batch["action"]`.
+  - Model: instantiate PTP `DiffusionTransformerHybridImagePolicy`, keep only `policy.obs_encoder`, wrap it with `EncoderPretrainModel`.
+  - Direction B predictive loss: normalize obs/action, encode obs, pool features, MLP predicts selected normalized action sequence, optimize Smooth L1.
+  - Direction A contrastive loss: normalize obs/action, encode obs, project embedding, compute pairwise normalized future-action distance, match embedding similarity distribution using soft contrastive CE.
+  - Checkpoint: `save_encoder_checkpoint()` writes only obs encoder weights under `state_dicts.model` with `obs_encoder.*` keys plus pretrain metadata.
+- Downstream exact-PTP workflow:
+  - Entry: `train.py`
+  - Workspace: `diffusion_policy/workspace/train_diffusion_transformer_hybrid_workspace.py`
+  - Policy: `diffusion_policy/policy/diffusion_transformer_hybrid_image_policy.py`
+  - Configs: `experiment_configs/square/transformer_square.yaml` and `experiment_configs/tool/transformer_tool_hang.yaml`
+  - Launchers: `scripts/launch_encoder_downstream_probe.sh`, `scripts/launch_encoder_downstream_extra_probe.sh`, `scripts/launch_encoder_downstream_seed43_probe.sh`
+  - Encoder loading: `obs_encoder_dir=<checkpoint>` causes `DiffusionTransformerHybridImagePolicy` to load `obs_encoder.*` weights; `obs_encoder_freeze=true/false` controls frozen versus finetuned ablation.
+  - Training signal: downstream PTP still uses DDPM policy loss with `past_action_pred=true`; rollout was disabled in the loss ablations with `training.rollout_every=999999`.
+- Flow-matching workflow on this branch:
+  - Policy: `diffusion_policy/policy/flow_matching_transformer_hybrid_image_policy.py`
+  - Configs: `experiment_configs/square/flow_transformer_square_{h10,action8}.yaml` and `experiment_configs/tool/flow_transformer_tool_hang_{h10,action8}.yaml`
+  - Data flow: same robomimic image dataset and obs encoder condition path as transformer DP; normalized action trajectory is noised by `x_t=t*noise+(1-t)*action`; transformer predicts velocity `noise-action`; inference integrates from noise to action with Euler steps.
+- Important training-review point:
+  - Encoder pretraining configs currently use `global_obs=16,horizon=32,n_action_steps=8`.
+  - Downstream exact PTP configs use Square `global_obs=2,horizon=32,n_action_steps=1` and ToolHang `global_obs=2,horizon=16,n_action_steps=8`.
+  - This means downstream policy structure was kept exact, but the pretraining input horizon is not identical to downstream PTP observation length. This is the first thing to inspect if strict PTP-structure matching is required.

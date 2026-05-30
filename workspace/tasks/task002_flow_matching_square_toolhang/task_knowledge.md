@@ -1,6 +1,6 @@
 # Task Knowledge
 
-<!-- METADATA:SESSION=19 -->
+<!-- METADATA:SESSION=20 -->
 
 ## Working Rules
 
@@ -113,3 +113,8 @@
 - Session 19 worker benchmark conclusion: PyTorch DataLoader can open 224 synthetic workers on this node; 256 fails with `OSError(24, Too many open files)`, so file descriptors rather than shared memory are the observed hard limit.
 - For raw-image PTP-style dataloading with ColorJitter and batch size 64, practical `num_workers` should start at 8 or 12; 16 is a reasonable high setting, 32 works but is slower in the synthetic benchmark, and 64+ is counterproductive.
 - Existing ceph py39 env at `/mnt/cephfs/home/tinwen.du/intern_ldp_explorer/direction_c_behavior_translator/envs/ptp_ldp_py39_ceph` is incomplete on `10.100.2.50` because `bin/python` points to missing `/usr/bin/python3.9`; system Python lacks `h5py`, so real HDF5 dataset benchmarking needs a repaired Python env.
+- Session 20 active review source: `/work-agents/intern_method_developer/ldp` on branch `intern_method_developer/task002_flow_matching_square_toolhang`, PR `https://github.com/StevenKKXS/ldp/pull/1`.
+- Encoder pretraining code path: `train.py` -> `diffusion_policy/workspace/train_encoder_pretrain_workspace.py` -> `EncoderPretrainModel` using the PTP `policy.obs_encoder`; configs live in `experiment_configs/encoder_pretrain/`.
+- Downstream encoder ablation code path: `train.py` -> `diffusion_policy/workspace/train_diffusion_transformer_hybrid_workspace.py` -> `diffusion_policy/policy/diffusion_transformer_hybrid_image_policy.py`; launch scripts are `scripts/launch_encoder_downstream_probe.sh`, `scripts/launch_encoder_downstream_extra_probe.sh`, and `scripts/launch_encoder_downstream_seed43_probe.sh`.
+- Main training-review concern: encoder pretraining currently uses `global_obs=16,horizon=32,n_action_steps=8`, while downstream PTP keeps Square `global_obs=2,horizon=32,n_action_steps=1` and ToolHang `global_obs=2,horizon=16,n_action_steps=8`; downstream is exact PTP, but pretrain is not observation-length matched.
+- Flow-matching code path remains on the same branch via `diffusion_policy/policy/flow_matching_transformer_hybrid_image_policy.py` and `experiment_configs/*/flow_transformer_*`, but current encoder-method results were produced by the encoder pretrain/downstream PTP workflow.
