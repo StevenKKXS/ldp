@@ -1349,3 +1349,7 @@
 - User requested final migration of Ceph code/files to 3FS1 after the work is complete.
 - Verified `/mnt/3fs1/data/tingwen.du` exists on `hf3fs.stage` with large free space and created the target root `/mnt/3fs1/data/tingwen.du/intern_ldp_explorer/direction_c_behavior_translator`.
 - Migration rule recorded: after finishing Direction C work, move/copy Ceph code and small-file artifacts from `/mnt/cephfs/home/tinwen.du/intern_ldp_explorer/direction_c_behavior_translator` into the 3FS1 target; put many-file trees under that target, preferably as task-scoped archives for dense small-file sets.
+- Hook correction pass:
+  - Confirmed `history_log.md` has file metadata `METADATA:SESSION=73`.
+  - Confirmed the active record is under explicit `## Session 73`.
+  - Retained the 3FS1 migration target and current no-GPU-access progress record in Session 73.
