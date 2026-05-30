@@ -1,6 +1,6 @@
 # Task Knowledge
 
-<!-- METADATA:SESSION=18 -->
+<!-- METADATA:SESSION=19 -->
 
 ## Working Rules
 
@@ -109,3 +109,7 @@
 - The py39/RoboMimic `0.2.0` host `10.100.0.29:36645` is documented as a closer release-like stack, but it is not a current verified active GPU allocation in Session 17.
 - Session 18 reachability check: `10.100.2.4:35140` returned `Connection refused` for SSH and a raw TCP probe, so it must not be treated as currently reachable.
 - Before launching additional rollout or release-like evaluation, confirm a reachable GPU allocation and then re-check `nvidia-smi`.
+- Session 19 new GPU endpoint: `root@10.100.2.50 -p 26953`, hostname `lg-cmc-b7r201-e07u16-h200-000113`, 1x NVIDIA H200, `/dev/shm=256G`, `nproc=192`, `ulimit -n=1024`.
+- Session 19 worker benchmark conclusion: PyTorch DataLoader can open 224 synthetic workers on this node; 256 fails with `OSError(24, Too many open files)`, so file descriptors rather than shared memory are the observed hard limit.
+- For raw-image PTP-style dataloading with ColorJitter and batch size 64, practical `num_workers` should start at 8 or 12; 16 is a reasonable high setting, 32 works but is slower in the synthetic benchmark, and 64+ is counterproductive.
+- Existing ceph py39 env at `/mnt/cephfs/home/tinwen.du/intern_ldp_explorer/direction_c_behavior_translator/envs/ptp_ldp_py39_ceph` is incomplete on `10.100.2.50` because `bin/python` points to missing `/usr/bin/python3.9`; system Python lacks `h5py`, so real HDF5 dataset benchmarking needs a repaired Python env.

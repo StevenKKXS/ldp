@@ -1,6 +1,6 @@
 # History Log
 
-<!-- METADATA:SESSION=18 -->
+<!-- METADATA:SESSION=19 -->
 
 ## Session 0
 
@@ -340,3 +340,41 @@
   - The previously active encoder-method GPU endpoint `10.100.2.4:35140` is not reachable now.
   - No current GPU process state can be confirmed from that endpoint.
   - Historical node `10.100.2.35:33805` was not touched, following the user's prior instruction.
+
+## Session 19
+
+- Tested the new user-provided GPU endpoint:
+  - SSH: `root@10.100.2.50 -p 26953`
+  - Hostname: `lg-cmc-b7r201-e07u16-h200-000113`
+  - GPU: 1x NVIDIA H200, idle before and after benchmark.
+  - `/dev/shm`: 256G, with only 12K used before benchmark.
+  - CPU count: 192.
+  - System memory: about 2.0TiB.
+  - `ulimit -n`: 1024.
+- Environment note:
+  - Existing ceph repo path found at `/mnt/cephfs/home/tinwen.du/intern_ldp_explorer/direction_c_behavior_translator/repos/ldp`.
+  - Existing ceph py39 env path found at `/mnt/cephfs/home/tinwen.du/intern_ldp_explorer/direction_c_behavior_translator/envs/ptp_ldp_py39_ceph`.
+  - That env is incomplete on this node because `bin/python` points to missing `/usr/bin/python3.9`.
+  - System Python has PyTorch `2.7.0a0+ecf3bae40a.nv25.02` and torchvision `0.22.0a0`, but does not have `h5py`.
+  - Therefore the worker test used system PyTorch synthetic robomimic-like batches instead of the real HDF5 dataset.
+- Synthetic shared-memory/collate hard-limit test:
+  - Batch shape approximated raw-image PTP batches: batch size 64, two RGB camera views, two observation frames, low-dim state, and action horizon 32.
+  - `num_workers=224` opened and iterated successfully, with PyTorch warning that the suggested max worker count is 192.
+  - `num_workers=256` failed with `OSError(24, Too many open files)`.
+  - Interpretation: `/dev/shm=256G` is not the active limit; the current file descriptor limit is.
+- ColorJitter-like benchmark:
+  - Tested raw-image-like samples with torchvision `ColorJitter`, batch size 64, `pin_memory=True`, `persistent_workers=False`, `prefetch_factor=2`.
+  - 8 workers: about `12.447` total batches/s for 8 batches; after first batch about `24.705` batches/s.
+  - 12 workers: about `12.411` total batches/s; after first batch about `36.662` batches/s.
+  - 16 workers: about `11.297` total batches/s; after first batch about `28.878` batches/s.
+  - 24 workers: about `7.332` total batches/s.
+  - 32 workers: about `8.037` total batches/s.
+  - 48 workers: about `3.688` total batches/s.
+  - 64 workers: about `2.667` total batches/s.
+  - 96 workers: about `1.506` total batches/s.
+  - 128, 160, 192, and 224 workers also opened with the transform benchmark but were slow due to startup and process overhead.
+- Practical conclusion:
+  - Start real raw-image training with `num_workers=8` or `12`.
+  - Use `16` as a conservative high setting if GPU utilization still starves.
+  - Do not use `64+` for this PTP-style pipeline unless a different profiling run proves it helps.
+  - `224` is the observed process-open ceiling; it is not a useful throughput setting.
