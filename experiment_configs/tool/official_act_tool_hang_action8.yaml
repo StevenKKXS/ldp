@@ -1,0 +1,89 @@
+defaults:
+  - transformer_tool_hang
+  - _self_
+
+exp_name: official_act_tool_hang_action8
+
+global_horizon: 10
+global_obs: 2
+global_action: 8
+
+task:
+  dataset_path: /mnt/cephfs/home/tinwen.du/intern_ldp_explorer/direction_c_behavior_translator/datasets/robomimic/datasets/tool_hang/ph/image_abs.hdf5
+  dataset:
+    dataset_path: ${task.dataset_path}
+    horizon: ${global_horizon}
+    n_obs_steps: ${global_obs}
+    pad_before: 1
+    pad_after: 7
+  env_runner:
+    dataset_path: ${task.dataset_path}
+    n_obs_steps: ${global_obs}
+    n_action_steps: ${global_action}
+    n_train: 0
+    n_train_vis: 0
+    n_test: 20
+    n_test_vis: 0
+    n_envs: 10
+
+policy:
+  _target_: diffusion_policy.policy.official_act_hybrid_image_policy.OfficialActHybridImagePolicy
+  shape_meta: ${shape_meta}
+  horizon: ${global_horizon}
+  n_action_steps: ${global_action}
+  n_obs_steps: ${global_obs}
+  use_embed_if_present: false
+  crop_shape: [216, 216]
+  obs_encoder_group_norm: true
+  eval_fixed_crop: true
+  hidden_dim: 512
+  enc_layers: 4
+  dec_layers: 7
+  nheads: 8
+  dim_feedforward: 3200
+  dropout: 0.1
+  latent_dim: 32
+  kl_weight: 10.0
+  loss_reduction: official_mean
+  obs_encoder_freeze: false
+
+optimizer:
+  learning_rate: 1.0e-5
+  transformer_weight_decay: 1.0e-4
+  obs_encoder_weight_decay: 1.0e-6
+
+dataloader:
+  batch_size: 16
+  num_workers: 16
+
+val_dataloader:
+  batch_size: 16
+  num_workers: 16
+
+checkpoint:
+  topk:
+    format_str: epoch={epoch:04d}-val_loss={val_loss:.6f}.ckpt
+    k: 5
+    mode: min
+    monitor_key: val_loss
+
+training:
+  num_epochs: 100
+  rollout_every: 25
+  checkpoint_every: 25
+  sample_every: 10
+  val_every: 1
+
+logging:
+  name: official_act_tool_hang_action8
+  group: direction_c_official_act
+  tags:
+    - official_act
+    - cvae
+    - tool_hang_image
+    - action8
+  mode: offline
+
+hydra:
+  run:
+    dir: /mnt/cephfs/home/tinwen.du/intern_ldp_explorer/direction_c_behavior_translator/outputs/official_act_tool_hang_action8/${now:%Y%m%d_%H%M%S}_${exp_name}

@@ -1561,3 +1561,61 @@
   - Shape-pruned ablations are not checkpoint-compatible with full-modality checkpoints and should be interpreted as retrain capacity ablations, not eval-time reliance tests.
   - Because `RobomimicReplayImageDataset` cache path is only `dataset_path + ".zarr.zip"`, shape-pruned runs should avoid creating a modality-pruned cache under the shared dataset path; prefer `use_cache=false` or confirm a full cache already exists.
 - Prepared the user-facing recommendation: run checkpoint-compatible mask/shuffle eval first after adding a small normalizer-aware perturb/eval-only hook, then run lowdim-only and image-only retrains with pruned `shape_meta`.
+
+## Session 77 - implementation and experiment launch
+
+- User provided a new 8xH200 GPU node `10.100.2.39:23494` and asked to:
+  - set up the environment;
+  - verify the modality/proprio shortcut issue;
+  - download/audit official ACT and test it on Robomimic Square/ToolHang;
+  - add a raw/denormalized-action-loss Square translator run;
+  - run downstream add_last/add_all checks against random context.
+- Verified the new node:
+  - host `lg-cmc-b7r201-e03u26-h200-000102`;
+  - 8x NVIDIA H200;
+  - Ceph mounted;
+  - shared env `/mnt/cephfs/home/tinwen.du/intern_ldp_explorer/direction_c_behavior_translator/envs/ptp_ldp_py39_ceph` works after installing node-level Python 3.9 packages;
+  - runtime versions: Python `3.9.25`, torch `2.5.1+cu124`, CUDA visible, `robomimic==0.2.0`, `robosuite==1.2.0`, Hydra `1.2.0`, diffusers `0.11.1`.
+- Confirmed current Ceph dataset availability:
+  - Square data exists at `/mnt/cephfs/home/tinwen.du/intern_ldp_explorer/direction_c_behavior_translator/datasets/robomimic/datasets/square/mh/image_abs.hdf5`;
+  - ToolHang `image_abs.hdf5` was not found under the current Ceph Direction C dataset tree, so ToolHang official-ACT execution is blocked until the dataset is restored or a path is provided.
+- Downloaded/audited official ACT code:
+  - repo path `/mnt/cephfs/home/tinwen.du/intern_ldp_explorer/direction_c_behavior_translator/external/act_official`;
+  - official commit `742c753c0d4a5d87076c8f69e5628c79a8cc5488`;
+  - core official settings from the repo/README: `hidden_dim=512`, `enc_layers=4`, `dec_layers=7`, `nheads=8`, `dim_feedforward=3200`, `kl_weight=10`, `latent_dim=32`, `backbone=resnet18`, `lr=1e-5`, `lr_backbone=1e-5`, example `chunk_size=100`.
+- Added code/configs:
+  - `diffusion_policy/policy/official_act_hybrid_image_policy.py`: Robomimic-compatible ACT CVAE policy with dynamic action/proprio dimensions, posterior action encoder, latent bottleneck, KL+L1 loss, and full-horizon `action_pred` for the existing Robomimic runner.
+  - `experiment_configs/square/official_act_square_action8.yaml`: Square action8 official-ACT-compatible config using chunk size 8 for first runner-compatible tests.
+  - `experiment_configs/tool/official_act_tool_hang_action8.yaml`: ToolHang counterpart config, currently blocked by missing ToolHang data.
+  - `eval_behavior_translator_ablation.py`: checkpoint-compatible image/proprio zero/shuffle eval script.
+  - `diffusion_policy/workspace/train_behavior_translator_workspace.py`: added `training.action_loss_space=normalized|raw`.
+  - `experiment_configs/square/behavior_translator_square_past_actsize_rawloss.yaml`: Square ACT-size translator with raw-action loss.
+- Verification:
+  - `py_compile` passed locally and in the Ceph execution copy for new/modified Python files.
+  - Hydra `--cfg job` parsed for `official_act_square_action8` and `behavior_translator_square_past_actsize_rawloss`.
+  - Official-ACT 1-step Square smoke completed train/val without shape errors.
+- Leakage/proprio shortcut quick sanity check:
+  - Ran micro eval with one 4-sample val batch because full image decoding was too slow for an immediate answer.
+  - d256 old translator: baseline past loss `0.00127`; image zero `0.00063`; image shuffle `0.00129`; proprio zero `0.2550`; proprio shuffle `0.00125`.
+  - ACT-size norm translator: baseline past loss `0.00221`; image zero `0.00627`; image shuffle `0.00240`; proprio zero `2.4460`; proprio shuffle `0.00247`.
+  - Interpretation: this strongly supports the user's concern that the current `past` translator objective is dominated by lowdim/proprio; image perturbation is weak, while proprio zero destroys the prediction. Because this is a one-batch sanity check, use it as directional evidence and follow with lowdim-only/image-only retrain if needed.
+- Raw-action-loss translator:
+  - First launched inherited 1000-epoch run, then stopped and relaunched as 50 epochs with `checkpoint_every=5` for faster diagnosis.
+  - Active run: `/mnt/cephfs/home/tinwen.du/intern_ldp_explorer/direction_c_behavior_translator/outputs/behavior_translator_square_past_actsize_rawloss_20260601_1058_50ep`.
+  - By epoch 5, raw-loss translator reached val past loss `0.0083928`, val past L1 `0.0136117`, and wrote `epoch_0005.ckpt`, `best.ckpt`, and `latest.ckpt`.
+- Official ACT Square:
+  - First 25-epoch attempt trained to rollout but crashed in `RobomimicImageRunner` because official-ACT `action_pred` returned only a future chunk while the runner expects a full-horizon action tensor for its action trace / sample-selection path.
+  - Fixed `OfficialActHybridImagePolicy.predict_action()` to return full-horizon `action_pred` with the future chunk placed at `n_obs_steps-1:n_obs_steps-1+n_action_steps`, while `action` remains the executable 8-step chunk.
+  - Fixed 5-epoch Square rollout completed with 20 test seeds and `test/mean_score=0.0` (`0/20`).
+  - A fixed 25-epoch Square run is active at `/mnt/cephfs/home/tinwen.du/intern_ldp_explorer/direction_c_behavior_translator/outputs/official_act_square_action8/20260601_1208_official_act_square_action8_fixed_rollout25`.
+- Stage2b ACT-size current-checkpoint matrix launched:
+  - pretrained ACT-size norm translator add_last: `/mnt/cephfs/home/tinwen.du/intern_ldp_explorer/direction_c_behavior_translator/outputs/stage2b_square_actsize_norm_current/20260601_1046_add_last`;
+  - pretrained ACT-size norm translator add_all: `/mnt/cephfs/home/tinwen.du/intern_ldp_explorer/direction_c_behavior_translator/outputs/stage2b_square_actsize_norm_current/20260601_1050_add_all`;
+  - random ACT-size translator add_last: `/mnt/cephfs/home/tinwen.du/intern_ldp_explorer/direction_c_behavior_translator/outputs/stage2b_square_actsize_norm_current/20260601_1050_random_add_last`;
+  - ACT-size base: `/mnt/cephfs/home/tinwen.du/intern_ldp_explorer/direction_c_behavior_translator/outputs/stage2b_square_actsize_norm_current/20260601_1046_base_actsize`.
+  - These runs use `n_test=20,n_envs=10,rollout_every=25,checkpoint_every=25`. At the last check they were around epoch 4, so no Stage2b rollout SR yet.
+- Latest check on `10.100.2.39:23494`:
+  - GPU0/GPU1 are idle, GPU2 runs fixed official ACT, GPU3 runs raw-loss translator, and GPU4-GPU7 run the four Stage2b jobs.
+  - Raw-loss translator has reached epoch 8; best val/loss_total is `0.0067753` with val/past_l1 `0.012166`.
+  - Stage2b base/add_last/add_all/random are around epoch 7-8; no epoch-25 rollout results yet.
+  - Fixed official-ACT 25-epoch run is still training around epoch 1; no new rollout result beyond the fixed 5-epoch `0/20`.

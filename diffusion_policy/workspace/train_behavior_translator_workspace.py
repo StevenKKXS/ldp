@@ -85,10 +85,17 @@ class TrainBehaviorTranslatorWorkspace(BaseWorkspace):
 
     def _compute_batch(self, batch, normalizer, device):
         obs_tokens = self._encode_obs(batch["obs"], normalizer, device)
-        act_past = batch["act_past"].to(device, non_blocking=True)
-        act_future = batch["act_future"].to(device, non_blocking=True)
-        act_past = normalizer["action"].normalize(act_past)
-        act_future = normalizer["action"].normalize(act_future)
+        act_past_raw = batch["act_past"].to(device, non_blocking=True)
+        act_future_raw = batch["act_future"].to(device, non_blocking=True)
+        action_loss_space = str(self.cfg.training.get("action_loss_space", "normalized"))
+        if action_loss_space == "normalized":
+            act_past = normalizer["action"].normalize(act_past_raw)
+            act_future = normalizer["action"].normalize(act_future_raw)
+        elif action_loss_space == "raw":
+            act_past = act_past_raw
+            act_future = act_future_raw
+        else:
+            raise ValueError(f"Unsupported action_loss_space: {action_loss_space}")
 
         result = self.model(obs_tokens, return_context=True)
         pred = result["pred_actions"]

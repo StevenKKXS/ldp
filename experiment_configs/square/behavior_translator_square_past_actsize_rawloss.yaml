@@ -1,0 +1,15 @@
+defaults:
+  - behavior_translator_square_past_actsize_norm
+  - _self_
+
+name: behavior_translator_square_past_actsize_rawloss
+
+training:
+  action_loss_space: raw
+  action_loss_reduction: sum_action_dim
+  loss_scale: 1.0
+  monitor_key: val/loss_total
+
+hydra:
+  run:
+    dir: /mnt/cephfs/home/tinwen.du/intern_ldp_explorer/direction_c_behavior_translator/outputs/${name}_${now:%Y%m%d_%H%M%S}
