@@ -1545,3 +1545,19 @@
   - lowest-risk route is a new official-compatible Robomimic image policy class under the existing Hydra workspace/dataset/runner, reusing Robomimic normalizers and `image_abs` action conversion, rather than trying to run official `imitate_episodes.py` directly on Robomimic files;
   - required code work is action/qpos dimension generalization from 14 to Robomimic action_dim/qpos_dim, camera key mapping, CVAE `is_pad` target construction from `valid_mask` or no-pad false masks, and optional temporal ensembling support in rollout;
   - first smoke should use `chunk_size=8` to match current action8, then optionally run `chunk_size=100` only if rollout runner and dataset windows are extended.
+- User requested a read-only audit of current Direction C code and a concrete quick plan for leakage/proprio shortcut diagnostics covering image mask/shuffle, proprio mask/shuffle, lowdim-only, and image-only.
+- Reviewed:
+  - `diffusion_policy/dataset/behavior_translation_dataset.py`;
+  - `diffusion_policy/workspace/train_behavior_translator_workspace.py`;
+  - `diffusion_policy/model/common/normalizer.py`;
+  - `diffusion_policy/common/normalize_util.py`;
+  - `diffusion_policy/dataset/robomimic_replay_image_dataset.py`;
+  - Square Stage1/Stage2 configs including `behavior_translator_square_past.yaml`, `behavior_translator_square_past_actsize_norm.yaml`, and `transformer_square_translator_context_action8.yaml`.
+- Findings for the diagnostic design:
+  - `BehaviorTranslationDataset` currently supports only `shuffle_obs_history` and `single_frame_obs`; `shuffle_obs_history` shuffles temporal indices for all obs keys together and is not a modality-specific image/proprio shuffle.
+  - `TrainBehaviorTranslatorWorkspace._encode_obs` is the best minimal hook for mask/shuffle because it has normalized observations and the normalizer object; masking there can use per-key normalized mean instead of raw zeros.
+  - Existing `LinearNormalizer` skips `embedding`; current raw Square translator configs use image/proprio keys and not embedding or `past_act`.
+  - Lowdim-only/image-only retrain ablations can be done without model source edits by pruning the shared top-level `shape_meta.obs`; `obs_encoder_policy.shape_meta` and `base_dataset.shape_meta` both reference it, and `obs_dim` is computed dynamically before instantiating `BehaviorTranslator`.
+  - Shape-pruned ablations are not checkpoint-compatible with full-modality checkpoints and should be interpreted as retrain capacity ablations, not eval-time reliance tests.
+  - Because `RobomimicReplayImageDataset` cache path is only `dataset_path + ".zarr.zip"`, shape-pruned runs should avoid creating a modality-pruned cache under the shared dataset path; prefer `use_cache=false` or confirm a full cache already exists.
+- Prepared the user-facing recommendation: run checkpoint-compatible mask/shuffle eval first after adding a small normalizer-aware perturb/eval-only hook, then run lowdim-only and image-only retrains with pruned `shape_meta`.
