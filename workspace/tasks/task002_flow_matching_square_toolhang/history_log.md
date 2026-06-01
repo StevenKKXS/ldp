@@ -1,6 +1,6 @@
 # History Log
 
-<!-- METADATA:SESSION=76 -->
+<!-- METADATA:SESSION=77 -->
 
 ## Session 0
 
@@ -1522,3 +1522,26 @@
   - in parallel or next, complete missing best-val/e99/e124 SR for current context path;
   - then decide whether official ACT / ACT-capacity alignment is worth implementing;
   - if diagnostics show translator is proprio-only or pooled context remains negative, down-rank current v0 and move to encoder replacement or the next idea.
+
+## Session 77 - official ACT audit
+
+- User asked for a read-only official ACT code/parameter study and a minimal adaptation judgment for current LDP Robomimic Square/ToolHang `image_abs.hdf5`.
+- Did not modify implementation files.
+- Cloned official `tonyzhaozh/act` to `/tmp/act_official` for inspection at commit `742c753c0d4a5d87076c8f69e5628c79a8cc5488`.
+- Confirmed official source layout:
+  - `README.md` identifies `imitate_episodes.py` as train/eval entry, `policy.py` as ACT policy adaptor, and `detr/` as model definitions.
+  - `policy.py::ACTPolicy` builds the DETR/VAE model, applies ImageNet image normalization, slices actions/is_pad to `num_queries`, optimizes `L1 + kl_weight * KL`, and returns `a_hat` at inference.
+  - `detr/models/detr_vae.py::DETRVAE` hardcodes ALOHA `state_dim=14`, projects qpos/actions with 14-dim linear layers, uses CVAE `latent_dim=32`, and injects latent/proprio tokens before the visual memory.
+  - `detr/models/transformer.py` uses DETR-style encoder/decoder with `return_intermediate_dec=True`.
+- Confirmed official example/core parameters:
+  - README example uses `--kl_weight 10 --chunk_size 100 --hidden_dim 512 --batch_size 8 --dim_feedforward 3200 --num_epochs 2000 --lr 1e-5`.
+  - `imitate_episodes.py` sets ACT `enc_layers=4`, `dec_layers=7`, `nheads=8`, `lr_backbone=1e-5`, `backbone=resnet18`.
+  - Official parser defaults are overridden by the example/config path; parser defaults include `dec_layers=6`, `hidden_dim=256`, `dim_feedforward=2048`, and `num_queries=400`, so cite example/runtime config rather than raw parser defaults for paper-like ACT.
+- Compared with current local ACT-style baseline:
+  - local `ActionChunkingTransformerHybridImagePolicy` matches ACT-scale geometry (`512/4/7/8/3200`) but is deterministic;
+  - it has no CVAE posterior, KL term, `latent_dim=32`, `is_pad` masking, ImageNet-normalized DETR backbone path, or official temporal aggregation;
+  - it uses robomimic BC-RNN obs encoder output tokens and Square long history (`n_obs_steps=16`, `n_action_steps=8`), not official single-current-observation qpos/image inputs.
+- Minimal adaptation conclusion:
+  - lowest-risk route is a new official-compatible Robomimic image policy class under the existing Hydra workspace/dataset/runner, reusing Robomimic normalizers and `image_abs` action conversion, rather than trying to run official `imitate_episodes.py` directly on Robomimic files;
+  - required code work is action/qpos dimension generalization from 14 to Robomimic action_dim/qpos_dim, camera key mapping, CVAE `is_pad` target construction from `valid_mask` or no-pad false masks, and optional temporal ensembling support in rollout;
+  - first smoke should use `chunk_size=8` to match current action8, then optionally run `chunk_size=100` only if rollout runner and dataset windows are extended.
