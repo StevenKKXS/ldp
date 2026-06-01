@@ -1506,3 +1506,19 @@
   - close/down-rank the current pooled context injection v0 if best-val/e99/e124 rollouts do not reverse the result;
   - before abandoning Direction C entirely, run a time-boxed diagnostic pass on modality shortcut, context underconstraint, encoder replacement, and token-level injection;
   - if those still fail, move to the next idea.
+- User summarized the current Direction C task phases and asked whether the understanding is correct:
+  - Phase 1: loosely run translator pretraining plus downstream rollout testing;
+  - Phase 2: because results were poor, reference working Transformer-style methods such as ACT, first checking ACT performance on Robomimic and then borrowing ACT-scale parameter settings if ACT works;
+  - Phase 3: improve translator by strengthening weak supervision, including normalization / denormalization or loss-scaling because normalized MSE/SmoothL1 can become very small;
+  - Phase 4: check whether proprio leaks action-like information and whether images matter little for prediction.
+- Response position recorded:
+  - the user's four-stage understanding is broadly correct;
+  - correction for Phase 1: the actual pipeline is Stage1 translator pretrain, Stage2a offline frozen-head probe, then Stage2b downstream rollout; rollout is not part of Stage1 itself;
+  - correction for Phase 2: current experiment is ACT-style/ACT-size, not official ACT; official ACT Robomimic performance remains unknown in this project unless implemented or run from a trusted source;
+  - correction for Phase 3: denormalized/raw-action loss is a valid diagnostic for supervision scale, but should be used carefully because position, rotation, and gripper dimensions have different units and can imbalance the objective; current implemented controls are `sum_action_dim`, `loss_scale`, and context LayerNorm, not a full raw-action denorm objective;
+  - correction for Phase 4: proprio shortcut is likely and should be the first cheap diagnostic before deeper architecture changes. The fast checks are image-masked/shuffled eval, proprio-masked/shuffled eval, lowdim-only retrain, and image-only retrain.
+- Recommended next ordering:
+  - first run modality/proprio shortcut diagnostics;
+  - in parallel or next, complete missing best-val/e99/e124 SR for current context path;
+  - then decide whether official ACT / ACT-capacity alignment is worth implementing;
+  - if diagnostics show translator is proprio-only or pooled context remains negative, down-rank current v0 and move to encoder replacement or the next idea.
