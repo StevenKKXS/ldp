@@ -1463,3 +1463,15 @@
   - projection-context wording should emphasize that `get_context()` uses an underconstrained `context_projector`, so the failed result is about the current pooled projection injection path, not all translator-pretrained hidden-state transfer;
   - EMA strength should be phrased as observed on two raw-model controls, not a universal conclusion;
   - Stage1 normalized loss should be reported as raw loss under changed reduction/scale and not compared directly with old Stage1 mean-loss values.
+- Incorporated review feedback into a new incremental report generator and regenerated the local report:
+  - generator: `docs/direction_c_behavior_translator/make_feishu_incremental_report_2026_06_01.py`;
+  - local report directory: `docs/direction_c_behavior_translator/feishu_translator_incremental_report_2026-06-01/`;
+  - figures: timeline, rollout SR, corrected Stage2b offline curves, Session 75 ACT/norm curves, next plan.
+- Published the final Feishu document:
+  - `https://feishu.cn/docx/WuM0dvY3No8X8jxLiM9cjmTUn4c`;
+  - title: `Direction C Behavior Translator 增量进展汇报 - 2026-06-01`.
+- Verified the published Feishu document via `get_doc.py`:
+  - raw text is readable and includes the tightened SR/offline caveats;
+  - block tree has `117` blocks;
+  - `5` image blocks are present;
+  - all image blocks have non-empty tokens and dimensions.
