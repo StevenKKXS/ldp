@@ -1475,3 +1475,34 @@
   - block tree has `117` blocks;
   - `5` image blocks are present;
   - all image blocks have non-empty tokens and dimensions.
+
+## Session 77
+
+- User asked four clarification questions before deciding whether to close the current translator exploration:
+  - whether current ACT experiment is direct official ACT or an ACT-style modification;
+  - ACT/translator parameter sizes;
+  - whether translator add-last/add-all underperform random context;
+  - whether the current result is enough to end the first exploration and move to diagnosis or another idea.
+- Rechecked current implementation:
+  - `diffusion_policy/policy/action_chunking_transformer_hybrid_image_policy.py` is an ACT-style deterministic action chunking baseline, not official ACT;
+  - it intentionally omits the official ACT CVAE/action-history latent path;
+  - config `experiment_configs/square/act_square_action8.yaml` uses `hidden_dim=512`, `n_encoder_layers=4`, `n_decoder_layers=7`, `n_head=8`, `dim_feedforward=3200`, direct normalized action chunk loss, and no rollout during training.
+- Measured exact parameter counts on reachable node `10.100.0.20:26715` using the py39 / `robomimic==0.2.0` Ceph environment:
+  - Square robomimic obs encoder output dim is `137`, action dim is `10`;
+  - robomimic image obs encoder is `22.394M` parameters;
+  - base d256 diffusion policy is `31.395M` total, with `9.001M` in the diffusion transformer;
+  - default BehaviorTranslator core is `5.776M`;
+  - default frozen translator branch used in Stage2b is about `28.170M` including copied obs encoder plus translator core;
+  - d256 translator-conditioned policy is `59.635M` total with `31.465M` trainable because the translator branch is frozen;
+  - ACT-style core is `55.116M`; full ACT-style policy with robomimic obs encoder is `77.510M`;
+  - ACT-size diffusion policy is `64.527M` total with `42.133M` in the diffusion transformer;
+  - ACT-size BehaviorTranslator core is `56.177M`, about `78.571M` with copied obs encoder.
+- Clarified result boundary for the user:
+  - current corrected rollout evidence is from the Stage2b Square action8 diffusion/long-history setup, not a completed direct official ACT, DP, and PTP matrix;
+  - available corrected e24 EMA rollout: M1 base `22/50`, M3 random `21/50`, M2 pretrained add_last `15/50`, M4 pretrained add_all `18/50`;
+  - available e49 EMA rollout: M1 base `16/50`, M3 random `26/50`; pretrained e49/e99/best-val rollouts are still missing;
+  - the current evidence is negative for the v0 pooled projection context path, but not a full rejection of translator encoder transfer or token-level hidden-state injection.
+- Recommended decision boundary:
+  - close/down-rank the current pooled context injection v0 if best-val/e99/e124 rollouts do not reverse the result;
+  - before abandoning Direction C entirely, run a time-boxed diagnostic pass on modality shortcut, context underconstraint, encoder replacement, and token-level injection;
+  - if those still fail, move to the next idea.

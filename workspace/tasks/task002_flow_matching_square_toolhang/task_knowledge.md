@@ -1,6 +1,6 @@
 # Task Knowledge
 
-<!-- METADATA:SESSION=76 -->
+<!-- METADATA:SESSION=77 -->
 
 ## Working Rules
 
@@ -221,4 +221,7 @@
 - Direction C Session 76 report-review caveat: in user-facing reports, keep rollout SR and offline validation loss strictly separated. The corrected Stage2b SR table under `stage2b_rollout_eval_newnode_20260527` is true 50-episode reward-only rollout, while corrected e99/best-val and Session 75 ACT-size values are offline validation only until new `eval_log.json` files are produced.
 - Direction C Session 76 projection-context wording caveat: Stage1 optimizes the sketch action head, not the `BehaviorTranslator.context_projector` used by `get_context()`. Reports should describe the current failed path as "pooled projection context as implemented" rather than evidence against all translator-pretrained hidden states.
 - Direction C Session 76 incremental Feishu report: final published doc is `https://feishu.cn/docx/WuM0dvY3No8X8jxLiM9cjmTUn4c`; local source/assets are in `docs/direction_c_behavior_translator/feishu_translator_incremental_report_2026-06-01/`; generator is `docs/direction_c_behavior_translator/make_feishu_incremental_report_2026_06_01.py`. Verification showed 117 blocks and 5 valid image blocks.
+- Direction C Session 77 ACT clarification: current `ActionChunkingTransformerHybridImagePolicy` is not official ACT. It is a deterministic ACT-style action chunking baseline with ACT-like geometry (`d_model=512`, 4 encoder layers, 7 decoder layers, 8 heads, FFN 3200) and no CVAE/action-history latent path.
+- Direction C Session 77 parameter counts measured on `10.100.0.20:26715`: robomimic obs encoder output dim is `137`, action dim is `10`, obs encoder is `22.394M`; default BehaviorTranslator core is `5.776M`; default frozen translator branch in Stage2b is about `28.170M` including its copied obs encoder; translator-conditioned d256 policy is `59.635M` total with `31.465M` trainable; ACT-style core is `55.116M`, full ACT-style policy is `77.510M`; ACT-size diffusion policy is `64.527M` total with `42.133M` transformer core.
+- Direction C Session 77 result boundary: corrected available rollout only shows e24 pretrained context add_last/add_all below base/random and M3 random e49 strong. It is not a completed PTP-vs-DP matrix and not a proof about official ACT or encoder replacement. Treat current v0 pooled context injection as negative unless best-val/e99/e124 rollouts reverse it.
 - Direction C Session 75 3FS1 small-file snapshot: `/mnt/3fs1/data/tingwen.du/intern_ldp_explorer/direction_c_behavior_translator/code_snapshots/ldp_direction_c_session75_63d544a.tar.gz`.

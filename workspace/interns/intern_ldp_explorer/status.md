@@ -8,5 +8,5 @@
 | Status | Working |
 | Current Task | task002_flow_matching_square_toolhang |
 | PR | https://github.com/StevenKKXS/ldp/pull/1 |
-| Session | 76 |
-| Recent Progress | Built and published the 2026-06-01 incremental Direction C Behavior Translator Feishu report at `https://feishu.cn/docx/WuM0dvY3No8X8jxLiM9cjmTUn4c`. The report covers last week's plan, this week's corrected Stage2b rollout SR, offline/SR mismatch, Session 75 ACT-size/norm controls, caveats around underconstrained pooled context projection, and the next SR-first plan. Verified the published doc via Feishu API: raw text is readable and all 5 image blocks have tokens and dimensions. |
+| Session | 77 |
+| Recent Progress | Answered user clarification questions about Direction C: current ACT experiment is an ACT-style deterministic chunking baseline rather than official ACT; measured exact parameter counts on `10.100.0.20:26715`; clarified that the corrected e24 rollout shows the current pooled projection context path underperforms base/random, while best-val/e99/e124 SR remains missing; recommended treating v0 pooled context injection as negative unless missing rollouts reverse it, then time-boxing diagnostics before moving to another idea. |
