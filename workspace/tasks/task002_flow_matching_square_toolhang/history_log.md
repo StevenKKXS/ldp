@@ -1,6 +1,6 @@
 # History Log
 
-<!-- METADATA:SESSION=21 -->
+<!-- METADATA:SESSION=22 -->
 
 ## Session 0
 
@@ -432,4 +432,19 @@
   - Native Codex skills are scoped by the `CODEX_HOME` used when the Codex process starts; with default home, installing into `/root/.codex/skills` affects all sessions sharing that home after restart.
   - Agent-local scope can be achieved by using `/work-agents/<agent>/.agents/skills` for harness/helper skills, or by launching that specific agent with a private `CODEX_HOME` and installing Codex skills there.
   - Workspace-only scope requires a workspace-local skill directory and explicit loader/start-hook support. Creating repo-local skill files alone is not sufficient if the session loader never imports that path.
+- No Superpowers skills were installed or symlinked in this session.
+
+## Session 22
+
+- Answered follow-up question about the difference between installing Superpowers skills for one intern versus one workspace, using this intern agent as the concrete example.
+- Intern-level example paths:
+  - Harness/helper skill path: `/work-agents/intern_method_developer/.agents/skills/<skill-name>`
+  - Private Codex-native path: `/work-agents/intern_method_developer/.codex_home/skills/<skill-name>` if this intern is launched with `CODEX_HOME=/work-agents/intern_method_developer/.codex_home`
+  - Scope meaning: follows the intern agent identity; the skill can apply when this intern works in `ldp` or another repo under the same intern root, assuming the loader scans that intern-level path.
+- Workspace-level example paths for the current repo:
+  - Harness/helper skill path: `/work-agents/intern_method_developer/ldp/.agents/skills/<skill-name>`
+  - Private Codex-native path: `/work-agents/intern_method_developer/ldp/.codex_home/skills/<skill-name>` if this workspace is launched with that `CODEX_HOME`
+  - Scope meaning: follows this project/workspace root; it should not affect this intern when working in another workspace, and can be shared by any agent session that is configured to scan this workspace-local path.
+- Example Superpowers source path for symlinks:
+  - `/root/.codex/.tmp/plugins/plugins/superpowers/skills/<skill-name>`
 - No Superpowers skills were installed or symlinked in this session.

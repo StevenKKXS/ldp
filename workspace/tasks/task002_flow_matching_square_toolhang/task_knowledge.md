@@ -1,6 +1,6 @@
 # Task Knowledge
 
-<!-- METADATA:SESSION=21 -->
+<!-- METADATA:SESSION=22 -->
 
 ## Working Rules
 
@@ -119,3 +119,4 @@
 - Main training-review concern: encoder pretraining currently uses `global_obs=16,horizon=32,n_action_steps=8`, while downstream PTP keeps Square `global_obs=2,horizon=32,n_action_steps=1` and ToolHang `global_obs=2,horizon=16,n_action_steps=8`; downstream is exact PTP, but pretrain is not observation-length matched.
 - Flow-matching code path remains on the same branch via `diffusion_policy/policy/flow_matching_transformer_hybrid_image_policy.py` and `experiment_configs/*/flow_transformer_*`, but current encoder-method results were produced by the encoder pretrain/downstream PTP workflow.
 - Session 21 Superpowers scope note: installing into default `/root/.codex/skills` is broad for all sessions sharing that home; for one intern agent use `/work-agents/<agent>/.agents/skills` symlinks or a private `CODEX_HOME`; for one workspace add a workspace-local skill directory and ensure the session loader imports it.
+- Session 22 path distinction using this agent: intern-level helper skills go under `/work-agents/intern_method_developer/.agents/skills`; current workspace-level helper skills would go under `/work-agents/intern_method_developer/ldp/.agents/skills`. Private Codex-native equivalents are `/work-agents/intern_method_developer/.codex_home/skills` and `/work-agents/intern_method_developer/ldp/.codex_home/skills`.
