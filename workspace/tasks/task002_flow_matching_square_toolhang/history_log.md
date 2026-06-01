@@ -1619,3 +1619,7 @@
   - Raw-loss translator has reached epoch 8; best val/loss_total is `0.0067753` with val/past_l1 `0.012166`.
   - Stage2b base/add_last/add_all/random are around epoch 7-8; no epoch-25 rollout results yet.
   - Fixed official-ACT 25-epoch run is still training around epoch 1; no new rollout result beyond the fixed 5-epoch `0/20`.
+- Added two extra leakage/proprio ablation runs on the previously idle cards:
+  - lowdim-only Square ACT-size translator, using Hydra deletion overrides for the two RGB keys, running at `/mnt/cephfs/home/tinwen.du/intern_ldp_explorer/direction_c_behavior_translator/outputs/stage1_square_modality_ablation_20260601/lowdim_only_workers0`; first attempt with 8 DataLoader workers hit a worker abort during validation, so it was relaunched with `num_workers=0`;
+  - image-only Square ACT-size translator, using Hydra deletion overrides for the three proprio/lowdim keys, running at `/mnt/cephfs/home/tinwen.du/intern_ldp_explorer/direction_c_behavior_translator/outputs/stage1_square_modality_ablation_20260601/image_only`;
+  - both are 20-epoch diagnostic runs with `checkpoint_every=5`, intended to test whether lowdim alone approaches full-modality past loss and whether image alone is substantially worse.
