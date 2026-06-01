@@ -1,6 +1,6 @@
 # Task Knowledge
 
-<!-- METADATA:SESSION=75 -->
+<!-- METADATA:SESSION=76 -->
 
 ## Working Rules
 
@@ -218,4 +218,6 @@
 - Direction C Session 75 new Square configs: `behavior_translator_square_past_actsize_norm.yaml`, `act_square_action8.yaml`, `transformer_square_action8_causalcond_off_base_actsize.yaml`, and `transformer_square_translator_context_action8_causalcond_off_add_last_actsize_norm.yaml`.
 - Direction C Session 75 active run root: `/mnt/cephfs/home/tinwen.du/intern_ldp_explorer/direction_c_behavior_translator/outputs/session75_norm_act_20260530_061542`. Manifest entries are GPU0/PID `2592812` Stage1 past ACT-size norm, GPU1/PID `2592813` ACT-style action8, GPU2/PID `2592814` ACT-size base DP/PTP, and GPU3/PID `2592815` ACT-size normalized translator-context.
 - Direction C Session 75 data caveat: on current Ceph storage, only Square `image_abs.hdf5` is present. ToolHang experiments require copying/restoring the ToolHang dataset to Ceph or 3FS1.
+- Direction C Session 76 report-review caveat: in user-facing reports, keep rollout SR and offline validation loss strictly separated. The corrected Stage2b SR table under `stage2b_rollout_eval_newnode_20260527` is true 50-episode reward-only rollout, while corrected e99/best-val and Session 75 ACT-size values are offline validation only until new `eval_log.json` files are produced.
+- Direction C Session 76 projection-context wording caveat: Stage1 optimizes the sketch action head, not the `BehaviorTranslator.context_projector` used by `get_context()`. Reports should describe the current failed path as "pooled projection context as implemented" rather than evidence against all translator-pretrained hidden states.
 - Direction C Session 75 3FS1 small-file snapshot: `/mnt/3fs1/data/tingwen.du/intern_ldp_explorer/direction_c_behavior_translator/code_snapshots/ldp_direction_c_session75_63d544a.tar.gz`.

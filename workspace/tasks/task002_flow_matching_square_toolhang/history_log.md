@@ -1,6 +1,6 @@
 # History Log
 
-<!-- METADATA:SESSION=75 -->
+<!-- METADATA:SESSION=76 -->
 
 ## Session 0
 
@@ -1427,3 +1427,39 @@
   - Ceph currently contains Square dataset only at `/mnt/cephfs/home/tinwen.du/intern_ldp_explorer/direction_c_behavior_translator/datasets/robomimic/datasets/square/mh/image_abs.hdf5`.
   - ToolHang cannot be run from this node until its dataset is restored to Ceph or 3FS1.
 - Created a 3FS1 code snapshot for small-file continuity at `/mnt/3fs1/data/tingwen.du/intern_ldp_explorer/direction_c_behavior_translator/code_snapshots/ldp_direction_c_session75_63d544a.tar.gz`.
+
+## Session 76
+
+- User requested a read-only review of `docs/direction_c_behavior_translator/feishu_translator_incremental_report_2026-06-01/source_report.md`, with focus on numeric consistency, offline validation versus rollout SR separation, and conclusion boundaries around projection context, ACT-size, and Stage1 normalized loss.
+- Did not modify the report draft.
+- Checked the draft against current task history, Ceph logs, rollout `eval_log.json`, and the live `10.100.0.20:26715` node.
+- Verified the corrected Stage2b rollout table in the draft matches actual 50-episode reward-only eval logs:
+  - M1 base e24 EMA `22/50 = 44%`;
+  - M3 random e24 EMA `21/50 = 42%`;
+  - M2 pretrained add-last e24 EMA `15/50 = 30%`;
+  - M4 pretrained add-all e24 EMA `18/50 = 36%`;
+  - M1 base e49 EMA `16/50 = 32%`;
+  - M3 random e49 EMA `26/50 = 52%`;
+  - M1 e49 raw `2/50 = 4%`;
+  - M4 e24 raw `4/50 = 8%`.
+- Verified corrected Stage2b offline values match current Ceph logs:
+  - M1 best `0.037692 @ e57`, latest `0.070021 @ e212`;
+  - M3 best `0.044589 @ e52`, latest `0.101548 @ e216`;
+  - M2 best `0.033300 @ e64`, latest `0.065726 @ e187`;
+  - M4 best `0.030108 @ e62`, latest `0.052371 @ e188`.
+- Verified Session 75 current Ceph offline logs have advanced beyond the draft's timestamped latest values:
+  - ACT-size base latest `0.044514 @ e304`;
+  - ACT-size context norm latest `0.059502 @ e311`;
+  - ACT-style direct chunk latest `0.442059 @ e294`;
+  - Stage1 normalized past latest `0.005220 @ e259`.
+- Confirmed live node `10.100.0.20:26715` remains reachable with four Session 75 parent processes alive:
+  - GPU0/PID `2592812` Stage1 normalized past translator;
+  - GPU1/PID `2592813` ACT-style action8;
+  - GPU2/PID `2592814` ACT-size base DP/PTP;
+  - GPU3/PID `2592815` ACT-size normalized translator context.
+- Review findings prepared for the user:
+  - no offline validation loss was mislabeled as rollout SR in the corrected Stage2b rollout section;
+  - summary wording overstates ACT-size results because ACT-style direct chunking is much worse offline and has no rollout SR;
+  - projection-context wording should emphasize that `get_context()` uses an underconstrained `context_projector`, so the failed result is about the current pooled projection injection path, not all translator-pretrained hidden-state transfer;
+  - EMA strength should be phrased as observed on two raw-model controls, not a universal conclusion;
+  - Stage1 normalized loss should be reported as raw loss under changed reduction/scale and not compared directly with old Stage1 mean-loss values.
