@@ -1,6 +1,6 @@
 # History Log
 
-<!-- METADATA:SESSION=20 -->
+<!-- METADATA:SESSION=21 -->
 
 ## Session 0
 
@@ -418,3 +418,18 @@
   - Encoder pretraining configs currently use `global_obs=16,horizon=32,n_action_steps=8`.
   - Downstream exact PTP configs use Square `global_obs=2,horizon=32,n_action_steps=1` and ToolHang `global_obs=2,horizon=16,n_action_steps=8`.
   - This means downstream policy structure was kept exact, but the pretraining input horizon is not identical to downstream PTP observation length. This is the first thing to inspect if strict PTP-structure matching is required.
+
+## Session 21
+
+- Answered the user's question about Superpowers skill scoping.
+- Observed local skill-related paths:
+  - Codex native installed skills are under `/root/.codex/skills`; current available system skills are in `/root/.codex/skills/.system`.
+  - The Superpowers plugin payload exists under `/root/.codex/.tmp/plugins/plugins/superpowers`, with skill directories under `/root/.codex/.tmp/plugins/plugins/superpowers/skills`.
+  - This intern agent has an agent-local helper skill directory at `/work-agents/intern_method_developer/.agents/skills`, currently containing Feishu skill symlinks.
+  - Other intern agents have separate `.agents/skills` directories under `/work-agents/<agent>/.agents/skills`.
+  - `/work-agents/intern_method_developer/.codex/config.toml` is a symlink to shared `/work-agents/.github/codex_settings.toml`.
+- Scope explanation recorded:
+  - Native Codex skills are scoped by the `CODEX_HOME` used when the Codex process starts; with default home, installing into `/root/.codex/skills` affects all sessions sharing that home after restart.
+  - Agent-local scope can be achieved by using `/work-agents/<agent>/.agents/skills` for harness/helper skills, or by launching that specific agent with a private `CODEX_HOME` and installing Codex skills there.
+  - Workspace-only scope requires a workspace-local skill directory and explicit loader/start-hook support. Creating repo-local skill files alone is not sufficient if the session loader never imports that path.
+- No Superpowers skills were installed or symlinked in this session.
