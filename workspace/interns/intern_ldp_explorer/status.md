@@ -8,5 +8,5 @@
 | Status | Working |
 | Current Task | task002_flow_matching_square_toolhang |
 | PR | https://github.com/StevenKKXS/ldp/pull/1 |
-| Session | 83 |
-| Recent Progress | Recalled the historical Square PTP record. The clearest archived PTP result is `fig9_diffusion_subset_square_ptp_s42_1777979501/checkpoints/epoch=0099-test_mean_score=0.475.ckpt`, evaluated as `test/mean_score=0.36` over 100 seeds. This is treated as the valid py39 / `robomimic==0.2.0` PTP reproduction reference; later archived Square logs do not contain a stronger parseable PTP rollout JSON. |
+| Session | 85 |
+| Recent Progress | Verified the GPU-node venv on `10.100.2.39:23494`. The active experiment venv is `/mnt/cephfs/home/tinwen.du/intern_ldp_explorer/direction_c_behavior_translator/envs/ptp_ldp_py39_ceph`; on the GPU node `bin/python -> python3.9 -> /usr/bin/python3.9`, `python --version` is `Python 3.9.25`, `robomimic==0.2.0`, `torch==2.5.1+cu124`, and CUDA is available. |

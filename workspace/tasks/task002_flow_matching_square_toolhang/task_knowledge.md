@@ -1,6 +1,6 @@
 # Task Knowledge
 
-<!-- METADATA:SESSION=83 -->
+<!-- METADATA:SESSION=85 -->
 
 ## Working Rules
 
@@ -245,3 +245,5 @@
 - Direction C Session 81 parameter comparison: shared robomimic obs encoder is `22.394M`; default d256 translator is `5.776M` core / `28.170M` full with obs encoder; ACT-size translator is `56.177M` core / `78.571M` full; deterministic ACT-style baseline is `55.116M` core / `77.510M` full; official-ACT-compatible CVAE adapter is `72.513M` core / `94.907M` full. Use core counts to compare transformer/action modules and full counts to compare deployed policies.
 - Direction C Session 82 success-rate shortlist: positive verified Square rollout results are FM h10 `7/10`, FM action8 `4/10`, corrected Stage2b base/no-context e24 `22/50`, corrected Stage2b random-context control e24 `21/50` and e49 `26/50`, plus archived old Square PTP e99 `0.36` over 100 seeds. Translator-pretrained context variants are lower (`15/50`, `18/50`), official ACT is weak (`1/20`), archived old DP is `0/100`, and ToolHang has no positive verified SR in the current records.
 - Direction C Session 83 PTP callback: the historical Square PTP reference is `fig9_diffusion_subset_square_ptp_s42_1777979501/checkpoints/epoch=0099-test_mean_score=0.475.ckpt`, evaluated by `session63_eval_square_ptp_1778032161.log` to `test/mean_score=0.36` over 100 seeds. Treat it as the py39 / `robomimic==0.2.0` PTP reproduction reference; later archived Square logs do not contain a stronger parseable PTP rollout JSON.
+- Direction C Session 84 runtime check: the current local Codex shell has no active venv and uses system Python `3.12.3`. The Ceph experiment venv `/mnt/cephfs/home/tinwen.du/intern_ldp_explorer/direction_c_behavior_translator/envs/ptp_ldp_py39_ceph` is configured as Python `3.9.25`, with `bin/python3.9 -> /usr/bin/python3.9`; it requires node-level Python 3.9 on the execution node and cannot run on a shell where `/usr/bin/python3.9` is missing.
+- Direction C Session 85 GPU-node venv check: on `10.100.2.39:23494`, `/mnt/cephfs/home/tinwen.du/intern_ldp_explorer/direction_c_behavior_translator/envs/ptp_ldp_py39_ceph/bin/python` executes as Python `3.9.25`, with `robomimic==0.2.0`, `torch==2.5.1+cu124`, and CUDA available. This confirms the GPU-node experiment venv is Python 3.9.

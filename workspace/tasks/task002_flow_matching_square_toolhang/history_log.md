@@ -1,6 +1,6 @@
 # History Log
 
-<!-- METADATA:SESSION=83 -->
+<!-- METADATA:SESSION=85 -->
 
 ## Session 0
 
@@ -1733,3 +1733,35 @@
   - the Direction C records treat the old Square PTP e99 result as the valid py39 / `robomimic==0.2.0` PTP reference point;
   - no stronger parseable archived PTP rollout JSON was found in later Square cached logs.
 - Practical conclusion: yes, the historical PTP reference we should compare against is the py39 / `robomimic==0.2.0` Square PTP e99 rollout, with measured rollout SR `0.36` over 100 seeds.
+
+## Session 84
+
+- User asked what Python version is in the current venv execution environment.
+- Checked the active local Codex shell:
+  - `VIRTUAL_ENV` is empty;
+  - `which python` is `/usr/bin/python`;
+  - `python --version` and `python3 --version` are both `Python 3.12.3`.
+- Checked the Direction C Ceph experiment venv path `/mnt/cephfs/home/tinwen.du/intern_ldp_explorer/direction_c_behavior_translator/envs/ptp_ldp_py39_ceph`:
+  - `pyvenv.cfg` says `version = 3.9.25`;
+  - `bin/python` and `bin/python3` point to `python3.9`, and `bin/python3.9` points to `/usr/bin/python3.9`;
+  - on the current local shell `/usr/bin/python3.9` is absent, so this Ceph venv cannot execute locally even though it executed on repaired GPU nodes.
+- Answer boundary:
+  - current local shell runtime is Python `3.12.3` with no venv activated;
+  - the intended Direction C/PTP experiment venv is Python `3.9.25`, assuming the execution node has `/usr/bin/python3.9` installed.
+
+## Session 85
+
+- User clarified the question is about the venv on the GPU node and whether it is Python 3.9.
+- Checked the latest recorded GPU node `10.100.2.39:23494`.
+- Verified GPU node host `lg-cmc-b7r201-e03u26-h200-000102`.
+- Verified experiment venv:
+  - path: `/mnt/cephfs/home/tinwen.du/intern_ldp_explorer/direction_c_behavior_translator/envs/ptp_ldp_py39_ceph`;
+  - `bin/python -> python3.9`;
+  - `bin/python3.9 -> /usr/bin/python3.9`;
+  - `/usr/bin/python3.9` exists on the GPU node;
+  - `python --version`: `Python 3.9.25`;
+  - `sys.executable`: the Ceph venv `bin/python`;
+  - `robomimic==0.2.0`;
+  - `torch==2.5.1+cu124`;
+  - `torch.cuda.is_available()` is `True`.
+- Conclusion: yes, on the GPU node the intended experiment venv is a Python 3.9 venv, specifically Python `3.9.25`.
