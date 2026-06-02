@@ -1,6 +1,6 @@
 # History Log
 
-<!-- METADATA:SESSION=82 -->
+<!-- METADATA:SESSION=83 -->
 
 ## Session 0
 
@@ -1718,3 +1718,18 @@
   - currently "比较不错" should mean Square-only and mostly PTP / FM / diffusion-transformer-style baselines;
   - translator-conditioned variants have not beaten the base/random controls;
   - ToolHang still lacks a positive SR result in the current verified records.
+
+## Session 83
+
+- User asked to recall whether the historical highest PTP result came from py39 training and testing.
+- Rechecked the task history and knowledge entries around Session 73 and Session 82.
+- The clearest archived old Square PTP record is still:
+  - log: `session63_eval_square_ptp_1778032161.log`;
+  - selected checkpoint: `fig9_diffusion_subset_square_ptp_s42_1777979501/checkpoints/epoch=0099-test_mean_score=0.475.ckpt`;
+  - rollout result: `test/mean_score=0.36` over `100` test seeds.
+- The old Square DP reference in the same archive selected e499 and evaluated to `0.0` over 100 seeds.
+- Environment callback:
+  - the project-level rule and shared knowledge record require PTP reproduction, PTP-data comparisons, and PTP-claim rollouts to use Python 3.9 with `robomimic==0.2.0`;
+  - the Direction C records treat the old Square PTP e99 result as the valid py39 / `robomimic==0.2.0` PTP reference point;
+  - no stronger parseable archived PTP rollout JSON was found in later Square cached logs.
+- Practical conclusion: yes, the historical PTP reference we should compare against is the py39 / `robomimic==0.2.0` Square PTP e99 rollout, with measured rollout SR `0.36` over 100 seeds.

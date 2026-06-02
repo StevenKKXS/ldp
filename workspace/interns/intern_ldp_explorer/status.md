@@ -8,5 +8,5 @@
 | Status | Working |
 | Current Task | task002_flow_matching_square_toolhang |
 | PR | https://github.com/StevenKKXS/ldp/pull/1 |
-| Session | 82 |
-| Recent Progress | Summarized rollout-success models. The best recorded successful results are Square-only: Flow Matching h10 `7/10`, corrected Stage2b Square action8 base/random-context controls `22/50=44%`, `21/50=42%`, and `26/50=52%`, and archived old Square PTP `0.36` over 100 seeds. Translator-pretrained context variants are lower (`15/50`, `18/50`) and official ACT is weak (`1/20`); ToolHang, DP archive, GMP-release PTP, and current ACT/translator paths do not yet show good SR. |
+| Session | 83 |
+| Recent Progress | Recalled the historical Square PTP record. The clearest archived PTP result is `fig9_diffusion_subset_square_ptp_s42_1777979501/checkpoints/epoch=0099-test_mean_score=0.475.ckpt`, evaluated as `test/mean_score=0.36` over 100 seeds. This is treated as the valid py39 / `robomimic==0.2.0` PTP reproduction reference; later archived Square logs do not contain a stronger parseable PTP rollout JSON. |
