@@ -1,6 +1,6 @@
 # History Log
 
-<!-- METADATA:SESSION=77 -->
+<!-- METADATA:SESSION=78 -->
 
 ## Session 0
 
@@ -1623,3 +1623,21 @@
   - lowdim-only Square ACT-size translator, using Hydra deletion overrides for the two RGB keys, running at `/mnt/cephfs/home/tinwen.du/intern_ldp_explorer/direction_c_behavior_translator/outputs/stage1_square_modality_ablation_20260601/lowdim_only_workers0`; first attempt with 8 DataLoader workers hit a worker abort during validation, so it was relaunched with `num_workers=0`;
   - image-only Square ACT-size translator, using Hydra deletion overrides for the three proprio/lowdim keys, running at `/mnt/cephfs/home/tinwen.du/intern_ldp_explorer/direction_c_behavior_translator/outputs/stage1_square_modality_ablation_20260601/image_only`;
   - both are 20-epoch diagnostic runs with `checkpoint_every=5`, intended to test whether lowdim alone approaches full-modality past loss and whether image alone is substantially worse.
+
+## Session 78
+
+- User asked for the ACT result.
+- Checked the official-ACT-compatible Square action8 25-epoch run on `10.100.2.39:23494`.
+- Run path: `/mnt/cephfs/home/tinwen.du/intern_ldp_explorer/direction_c_behavior_translator/outputs/official_act_square_action8/20260601_1208_official_act_square_action8_fixed_rollout25`.
+- The run completed normally and saved:
+  - `/mnt/cephfs/home/tinwen.du/intern_ldp_explorer/direction_c_behavior_translator/outputs/official_act_square_action8/20260601_1208_official_act_square_action8_fixed_rollout25/checkpoints/epoch=0024-val_loss=0.046737.ckpt`;
+  - `latest.ckpt`.
+- Final rollout result over 20 Square test seeds:
+  - `test/mean_score=0.05`;
+  - `1/20` successes, with only seed `100009` reaching reward `1.0`;
+  - all other seeds `100000-100008` and `100010-100019` scored `0.0`.
+- Interpretation:
+  - the fixed 25-epoch run improves over the earlier 5-epoch smoke result (`0/20`);
+  - the result remains much weaker than the corrected Square DP/PTP-style baselines seen in earlier Direction C runs;
+  - current local official-ACT-compatible adapter should be treated as a smoke-tested weak baseline, not evidence that ACT is competitive on this Robomimic setup yet.
+- GPU node had no active utilization after the check; all 8 H200 GPUs reported near-zero memory and `0%` util.
