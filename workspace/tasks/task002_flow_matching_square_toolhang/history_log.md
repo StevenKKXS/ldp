@@ -1,6 +1,6 @@
 # History Log
 
-<!-- METADATA:SESSION=87 -->
+<!-- METADATA:SESSION=88 -->
 
 ## Session 0
 
@@ -1808,3 +1808,30 @@
   - official ACT CVAE posterior/memory/decoder path and inference latent-zero path;
   - deterministic ACT-style baseline distinction;
   - PTP / diffusion-transformer training target, denoising rollout, and full PTP-style past-token mode versus current action8 base.
+
+## Session 88
+
+- User requested a plan-mode-style consolidation of Direction C translator scale-up results and the modality shortcut evidence, focusing on:
+  - translator structure and scale-up results;
+  - ACT-style / official-ACT attempts and whether they improved performance;
+  - why current evidence indicates proprio/lowdim shortcut use and weak image use;
+  - whether any current code needed to be stopped before focusing on the report.
+- Checked the current GPU node `10.100.2.39:23494`:
+  - host `lg-cmc-b7r201-e03u26-h200-000102`;
+  - all 8 H200 GPUs were idle with about `1 MB` memory used and `0%` utilization;
+  - no train, rollout, eval, or generic python experiment processes were found.
+- Re-read existing Direction C records and parsed the relevant result groups:
+  - d256 Stage1 past runs: obs lr `1e-4` best val/loss_total `0.000485 @ e110`, val/past_l1 `0.01172`; obs lr `5e-5` best val/loss_total `0.000524 @ e129`, val/past_l1 `0.01261`.
+  - ACT-size Stage1 normalized past run: best val/loss_total `0.002727 @ e430`, val/past_l1 `0.00917`, val/future_l1 `0.08539`.
+  - ACT-size raw-action-loss run: best val/loss_total `0.004895 @ e37`, val/past_l1 `0.00857`, val/future_l1 `0.05367`.
+  - corrected Stage2b rollout table: base e24 `22/50`, random e24 `21/50`, random e49 `26/50`, pretrained add_last e24 `15/50`, pretrained add_all e24 `18/50`.
+  - official-ACT-compatible Square action8 25-epoch result: val_loss `0.046737`, rollout `1/20`.
+  - lowdim-only vs image-only Stage1 ablations: lowdim-only 20ep val/past_l1 `0.01264`, image-only 18ep val/past_l1 `0.02054`, with full ACT-size e20 reference around `0.01211`.
+  - modality perturbation diagnostics: zeroing proprio causes catastrophic loss increases, while image zero/shuffle is much smaller and image shuffle is often near baseline.
+- Added report:
+  - `docs/direction_c_behavior_translator/scaleup_shortcut_report_2026_06_02.md`.
+- Report conclusion:
+  - current translator v0 learns an action-reconstruction mapping, but the evidence supports that it is mostly lowdim/proprio-driven;
+  - scaling to ACT-size helps past-action fitting but does not make the context useful downstream;
+  - current ACT-style and official-ACT-compatible tests do not rescue the hypothesis;
+  - the current pooled/projection context path should be treated as a negative result unless a new image-grounded objective removes the shortcut.

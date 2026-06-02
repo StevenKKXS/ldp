@@ -8,5 +8,5 @@
 | Status | Working |
 | Current Task | task002_flow_matching_square_toolhang |
 | PR | https://github.com/StevenKKXS/ldp/pull/1 |
-| Session | 87 |
-| Recent Progress | Wrote a local dataflow report for how Translator, official ACT, deterministic ACT-style, and PTP / diffusion-transformer policies compute action tensors. Report path: `docs/direction_c_behavior_translator/action_generation_dataflow_report_2026_06_02.md`. It includes ASCII module diagrams, Square action8 tensor shapes, slicing rules, losses, and GPU-node py39-measured parameter counts. |
+| Session | 88 |
+| Recent Progress | Wrote `docs/direction_c_behavior_translator/scaleup_shortcut_report_2026_06_02.md`, summarizing Direction C translator scale-up, ACT attempts, downstream context results, and the modality shortcut evidence showing the current past-action translator is mostly lowdim/proprio-driven. Checked `10.100.2.39:23494`; all 8 H200 GPUs were idle with no train/rollout/eval processes. |

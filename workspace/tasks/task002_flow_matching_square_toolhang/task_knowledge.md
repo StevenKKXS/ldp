@@ -1,6 +1,6 @@
 # Task Knowledge
 
-<!-- METADATA:SESSION=87 -->
+<!-- METADATA:SESSION=88 -->
 
 ## Working Rules
 
@@ -249,3 +249,4 @@
 - Direction C Session 85 GPU-node venv check: on `10.100.2.39:23494`, `/mnt/cephfs/home/tinwen.du/intern_ldp_explorer/direction_c_behavior_translator/envs/ptp_ldp_py39_ceph/bin/python` executes as Python `3.9.25`, with `robomimic==0.2.0`, `torch==2.5.1+cu124`, and CUDA available. This confirms the GPU-node experiment venv is Python 3.9.
 - Direction C Session 86 main-env rule: the main Direction C / PTP-data runtime is `/mnt/cephfs/home/tinwen.du/intern_ldp_explorer/direction_c_behavior_translator/envs/ptp_ldp_py39_ceph`. Before training, rollout, eval, parameter counting, or smoke tests, run `"$VENV/bin/python" diffusion_policy/scripts/check_main_runtime_env.py --require-cuda` from the repo checkout. If it fails, stop or explicitly label the run as a version-ablation.
 - Direction C Session 87 action-generation report: `docs/direction_c_behavior_translator/action_generation_dataflow_report_2026_06_02.md` documents Translator, official ACT, deterministic ACT-style, and PTP / diffusion-transformer dataflow with ASCII module diagrams, Square action8 tensor shapes, target slicing, losses, and GPU-node py39 parameter counts.
+- Direction C Session 88 scale-up/shortcut report: `docs/direction_c_behavior_translator/scaleup_shortcut_report_2026_06_02.md` consolidates the current negative translator result. Key points: ACT-size translator improves past L1 but not downstream context; corrected Stage2b rollout has base e24 `22/50`, random e49 `26/50`, pretrained add_last e24 `15/50`, and pretrained add_all e24 `18/50`; official-ACT-compatible Square action8 is weak at `1/20`; lowdim-only Stage1 is close to full input while image-only is much worse, and modality perturbations show proprio zeroing is catastrophic while image perturbations are much smaller. Treat the v0 pooled/projection translator context as shortcut-prone and mostly lowdim/proprio-driven.
