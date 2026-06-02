@@ -1,6 +1,6 @@
 # History Log
 
-<!-- METADATA:SESSION=86 -->
+<!-- METADATA:SESSION=87 -->
 
 ## Session 0
 
@@ -1781,3 +1781,30 @@
   - `VENV=/mnt/cephfs/home/tinwen.du/intern_ldp_explorer/direction_c_behavior_translator/envs/ptp_ldp_py39_ceph`
   - `"$VENV/bin/python" diffusion_policy/scripts/check_main_runtime_env.py --require-cuda`
 - Rule: do not treat any training, rollout, eval, parameter-counting, or smoke-test result as trusted Direction C / PTP-data evidence unless this preflight passes, or the run is explicitly labeled as a version-ablation.
+
+## Session 87
+
+- User requested a report explaining how Translator generates actions step by step, with an overview module diagram, and the same style for ACT and PTP, including tensor dimensions, module dimensions, and parameter sizes.
+- Re-read the relevant code paths:
+  - `diffusion_policy/model/behavior_translator.py`;
+  - `diffusion_policy/dataset/behavior_translation_dataset.py`;
+  - `diffusion_policy/workspace/train_behavior_translator_workspace.py`;
+  - `diffusion_policy/policy/official_act_hybrid_image_policy.py`;
+  - `diffusion_policy/policy/action_chunking_transformer_hybrid_image_policy.py`;
+  - `diffusion_policy/policy/diffusion_transformer_hybrid_image_policy.py`;
+  - `diffusion_policy/model/diffusion/transformer_for_diffusion.py`.
+- Ran GPU-node py39 parameter inspection on `10.100.2.39:23494` with `/mnt/cephfs/home/tinwen.du/intern_ldp_explorer/direction_c_behavior_translator/envs/ptp_ldp_py39_ceph`, confirming:
+  - shared Square robomimic obs encoder output dim `137`, params `22.394M`;
+  - default d256 translator core `5.776M`, full Stage1 `28.170M`;
+  - ACT-size translator core `56.177M`, full Stage1 `78.571M`;
+  - official ACT CVAE core `72.513M`, full policy `94.907M`;
+  - deterministic ACT-style core `55.116M`, full policy `77.510M`;
+  - d256 Stage2b action8 diffusion transformer core `9.001M`, full policy `31.395M`;
+  - ACT-size diffusion transformer core `42.133M`, full policy `64.527M`.
+- Added report:
+  - `docs/direction_c_behavior_translator/action_generation_dataflow_report_2026_06_02.md`.
+- Report covers:
+  - Translator dataset windowing, direct sketch-action head, Stage1 losses, and context computation;
+  - official ACT CVAE posterior/memory/decoder path and inference latent-zero path;
+  - deterministic ACT-style baseline distinction;
+  - PTP / diffusion-transformer training target, denoising rollout, and full PTP-style past-token mode versus current action8 base.
