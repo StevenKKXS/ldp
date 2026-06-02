@@ -1,6 +1,6 @@
 # Task Knowledge
 
-<!-- METADATA:SESSION=78 -->
+<!-- METADATA:SESSION=79 -->
 
 ## Working Rules
 
@@ -240,3 +240,4 @@
 - Direction C Session 77 Stage2b current matrix: active ACT-size runs are base `/outputs/stage2b_square_actsize_norm_current/20260601_1046_base_actsize`, pretrained add_last `/20260601_1046_add_last`, pretrained add_all `/20260601_1050_add_all`, and random add_last `/20260601_1050_random_add_last`. They use `n_test=20`, `n_envs=10`, `rollout_every=25`, and `checkpoint_every=25`; latest check shows epochs 7-8 and no SR yet.
 - Direction C Session 77 modality retrain ablations: lowdim-only and image-only Square ACT-size translator diagnostics can be launched without new source files by Hydra deletion overrides on `shape_meta.obs`. Lowdim-only deletes `agentview_image` and `robot0_eye_in_hand_image`; image-only deletes `robot0_eef_pos`, `robot0_eef_quat`, and `robot0_gripper_qpos`. Use `task.dataset.base_dataset.use_cache=false` to avoid shape-pruned cache collisions. Current paths are `/mnt/cephfs/home/tinwen.du/intern_ldp_explorer/direction_c_behavior_translator/outputs/stage1_square_modality_ablation_20260601/lowdim_only_workers0` and `/mnt/cephfs/home/tinwen.du/intern_ldp_explorer/direction_c_behavior_translator/outputs/stage1_square_modality_ablation_20260601/image_only`.
 - Direction C Session 78 official-ACT result: fixed Square action8 25-epoch run at `/mnt/cephfs/home/tinwen.du/intern_ldp_explorer/direction_c_behavior_translator/outputs/official_act_square_action8/20260601_1208_official_act_square_action8_fixed_rollout25` completed with `val_loss=0.046737` and `test/mean_score=0.05` over 20 rollout seeds (`1/20`, only seed `100009` succeeded). This is a weak smoke-tested ACT baseline and should not be used as a competitive ACT claim.
+- Direction C Session 79 official-ACT speed: Square action8 official-ACT-compatible run has `2469` batches/epoch at batch size `32`; training speed is roughly `15-18 it/s`, about `2.5-2.8 min/epoch` for training and about `5s` validation. The 25-epoch train+val+final-rollout job took about `73 min`; extrapolate to about `4.8-5h` for 100 epochs and about `4 days` for 2000 epochs on the same setup.

@@ -1,6 +1,6 @@
 # History Log
 
-<!-- METADATA:SESSION=78 -->
+<!-- METADATA:SESSION=79 -->
 
 ## Session 0
 
@@ -1641,3 +1641,24 @@
   - the result remains much weaker than the corrected Square DP/PTP-style baselines seen in earlier Direction C runs;
   - current local official-ACT-compatible adapter should be treated as a smoke-tested weak baseline, not evidence that ACT is competitive on this Robomimic setup yet.
 - GPU node had no active utilization after the check; all 8 H200 GPUs reported near-zero memory and `0%` util.
+
+## Session 79
+
+- User asked whether ACT training is slow and what the current speed is.
+- Checked the completed official-ACT-compatible Square action8 25-epoch run:
+  - run path: `/mnt/cephfs/home/tinwen.du/intern_ldp_explorer/direction_c_behavior_translator/outputs/official_act_square_action8/20260601_1208_official_act_square_action8_fixed_rollout25`;
+  - `logs.json.txt` contains `61725` train rows over epochs `0..24`;
+  - each epoch has `2469` batches, matching about `79k` Square train windows at batch size `32`.
+- Training speed from tqdm/logs:
+  - epoch 0 stabilized around `15-18 it/s` after startup and finished training in about `2.5 min`;
+  - epoch 24 finished `2469` batches in about `2:45`, roughly `15 it/s`, with instantaneous tqdm values commonly `14-16 it/s`;
+  - validation is about `45` batches and takes about `5s` per epoch.
+- Final rollout overhead:
+  - `n_test=20,n_envs=10,max_steps=500` runs in two eval waves;
+  - final rollout took roughly `3 min` total at about `5.5-6 env-steps/s` per 10-env wave.
+- Overall speed:
+  - the 25-epoch train+val+final-rollout run started around `2026-06-01 12:08 UTC` and wrote the final checkpoint/log around `13:21 UTC`, about `73 min` total;
+  - practical rate is about `2.9 min/epoch` including startup, validation, checkpoint, and final rollout, or about `2.5-2.8 min/epoch` for training+validation without final rollout.
+- Interpretation:
+  - the ACT adapter training loop itself is not especially slow compared with image-heavy translator runs;
+  - the long wall time comes from epoch count: a 100-epoch run would be about `4.8-5h`, and a 2000-epoch ACT-style run would naively be about `4 days` on this setup.

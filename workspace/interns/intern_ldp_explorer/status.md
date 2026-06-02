@@ -8,5 +8,5 @@
 | Status | Working |
 | Current Task | task002_flow_matching_square_toolhang |
 | PR | https://github.com/StevenKKXS/ldp/pull/1 |
-| Session | 78 |
-| Recent Progress | Checked official-ACT Square action8 25-epoch run on `10.100.2.39:23494`. The run finished normally, saved `epoch=0024-val_loss=0.046737.ckpt`, and rollout over 20 test seeds produced `test/mean_score=0.05` (`1/20`, only seed `100009` succeeded). This improves over the 5-epoch `0/20` smoke but remains far below the Square DP/PTP baselines; treat current official-ACT-compatible adaptation as a weak baseline, not a solved ACT result. |
+| Session | 79 |
+| Recent Progress | Checked official-ACT Square action8 training speed from the completed 25-epoch run. It used `2469` batches per epoch and trained at roughly `15-18 it/s`; later epochs took about `2.5-2.8 min/epoch` for training, validation added about `5s/epoch`, and the final 20-seed rollout took about `3 min`. The full 25-epoch train+val+final-rollout job took about `73 min`; extrapolating naively, 100 epochs is about `4.8-5h`, while 2000 epochs would be about `4 days`. |
