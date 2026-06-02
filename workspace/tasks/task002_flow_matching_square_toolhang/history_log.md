@@ -1,6 +1,6 @@
 # History Log
 
-<!-- METADATA:SESSION=81 -->
+<!-- METADATA:SESSION=82 -->
 
 ## Session 0
 
@@ -1696,3 +1696,25 @@
   - the original default translator is much smaller than ACT: about one tenth of ACT-style core size and about one third of full ACT-style policy size;
   - the ACT-size translator intentionally matches deterministic ACT-style capacity almost exactly (`56.177M` vs `55.116M` core);
   - the official-ACT-compatible CVAE adapter is larger than both because it includes posterior action encoder, latent projection, memory encoder, action-query decoder, KL path, and pad head.
+
+## Session 82
+
+- User asked which models have been run through with relatively good success rate, besides PTP.
+- Rechecked task history and Ceph rollout logs.
+- Good or at least meaningful positive Square rollout results:
+  - Flow Matching Square h10, py39 / `robomimic==0.2.0`: `7/10 = 70%`;
+  - Flow Matching Square action8, py39 / `robomimic==0.2.0`: `4/10 = 40%`;
+  - corrected Stage2b Square action8 M1 base/no-context EMA e24: `22/50 = 44%`;
+  - corrected Stage2b Square action8 M3 random-context control EMA e24: `21/50 = 42%`;
+  - corrected Stage2b Square action8 M3 random-context control EMA e49: `26/50 = 52%`;
+  - archived old Square PTP e99 record: `test/mean_score=0.36` over 100 seeds.
+- Weak or negative results:
+  - corrected Stage2b pretrained translator contexts are lower than base/random controls: M2 add-last e24 `15/50 = 30%`, M4 add-all e24 `18/50 = 36%`;
+  - official-ACT-compatible CVAE Square action8 e24: `1/20 = 5%`;
+  - archived old Square DP e499: `0/100`;
+  - Flow Matching ToolHang h10/action8: both `0/10`;
+  - GMP-release PTP rollout tests did not reproduce claim-level success in prior checks.
+- Interpretation:
+  - currently "比较不错" should mean Square-only and mostly PTP / FM / diffusion-transformer-style baselines;
+  - translator-conditioned variants have not beaten the base/random controls;
+  - ToolHang still lacks a positive SR result in the current verified records.

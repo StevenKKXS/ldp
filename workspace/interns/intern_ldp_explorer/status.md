@@ -8,5 +8,5 @@
 | Status | Working |
 | Current Task | task002_flow_matching_square_toolhang |
 | PR | https://github.com/StevenKKXS/ldp/pull/1 |
-| Session | 81 |
-| Recent Progress | Recomputed parameter counts on the Ceph py39 / `robomimic==0.2.0` runtime. Default d256 translator is `5.776M` core / `28.170M` with robomimic obs encoder. ACT-size translator is `56.177M` core / `78.571M` with obs encoder, almost the same size as the deterministic ACT-style baseline (`55.116M` core / `77.510M` full). The official-ACT-compatible CVAE adapter is larger: `72.513M` core / `94.907M` full. |
+| Session | 82 |
+| Recent Progress | Summarized rollout-success models. The best recorded successful results are Square-only: Flow Matching h10 `7/10`, corrected Stage2b Square action8 base/random-context controls `22/50=44%`, `21/50=42%`, and `26/50=52%`, and archived old Square PTP `0.36` over 100 seeds. Translator-pretrained context variants are lower (`15/50`, `18/50`) and official ACT is weak (`1/20`); ToolHang, DP archive, GMP-release PTP, and current ACT/translator paths do not yet show good SR. |
