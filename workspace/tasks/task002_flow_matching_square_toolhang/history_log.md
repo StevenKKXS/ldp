@@ -1,6 +1,6 @@
 # History Log
 
-<!-- METADATA:SESSION=79 -->
+<!-- METADATA:SESSION=80 -->
 
 ## Session 0
 
@@ -1662,3 +1662,16 @@
 - Interpretation:
   - the ACT adapter training loop itself is not especially slow compared with image-heavy translator runs;
   - the long wall time comes from epoch count: a 100-epoch run would be about `4.8-5h`, and a 2000-epoch ACT-style run would naively be about `4 days` on this setup.
+
+## Session 80
+
+- User asked what pip mirror is configured on the GPU node.
+- Performed read-only checks on `10.100.2.39:23494` with `python3 -m pip config list`, `python3 -m pip config debug`, pip-related environment variables, and common pip config files.
+- Confirmed active global/user pip configs point to internal PyPI mirror:
+  - `index-url = http://10.100.197.13/simple/`;
+  - `trusted-host = 10.100.197.13`;
+  - `extra-index-url =` is intentionally empty in `/etc/pip.conf`, `/etc/xdg/pip/pip.conf`, `/root/.pip/pip.conf`, and `/root/.config/pip/pip.conf`.
+- Noted one caveat:
+  - `/usr/pip.conf` still has site-level external entries for `https://pypi.org/simple` and `https://pypi.ngc.nvidia.com`;
+  - explicit GPU-node installs should therefore use `pip install <package> --index-url http://10.100.197.13/simple/ --trusted-host 10.100.197.13`.
+- No files or environment settings were modified on the GPU node.

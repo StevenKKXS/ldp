@@ -8,5 +8,5 @@
 | Status | Working |
 | Current Task | task002_flow_matching_square_toolhang |
 | PR | https://github.com/StevenKKXS/ldp/pull/1 |
-| Session | 79 |
-| Recent Progress | Checked official-ACT Square action8 training speed from the completed 25-epoch run. It used `2469` batches per epoch and trained at roughly `15-18 it/s`; later epochs took about `2.5-2.8 min/epoch` for training, validation added about `5s/epoch`, and the final 20-seed rollout took about `3 min`. The full 25-epoch train+val+final-rollout job took about `73 min`; extrapolating naively, 100 epochs is about `4.8-5h`, while 2000 epochs would be about `4 days`. |
+| Session | 80 |
+| Recent Progress | Checked GPU-node pip mirror configuration on `10.100.2.39:23494` without modifying the environment. Active global/user pip configs point to the internal mirror `http://10.100.197.13/simple/` with trusted host `10.100.197.13`; `/usr/pip.conf` still contains external PyPI/NGC entries, so explicit installs should use `--index-url http://10.100.197.13/simple/ --trusted-host 10.100.197.13` to avoid ambiguity. |
