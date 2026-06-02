@@ -8,6 +8,26 @@ For PTP reproduction, PTP encoder pretraining, downstream PTP/DP comparison on t
 
 Do not use `gmp-py310` / `robomimic 0.4.0` for trusted PTP-data training or rollout unless the run is explicitly labeled as a version-ablation. Results produced under `robomimic 0.4.0` are version-confounded for this project.
 
+## Current Main Environment
+
+For Direction C and current PTP-data experiments, treat this GPU-node venv as the main runtime:
+
+- Env path: `/mnt/cephfs/home/tinwen.du/intern_ldp_explorer/direction_c_behavior_translator/envs/ptp_ldp_py39_ceph`
+- Verified GPU node: `10.100.2.39:23494`
+- Python: `3.9.25`
+- RoboMimic: `0.2.0`
+- Torch: `2.5.1+cu124`
+- CUDA: available on the verified GPU node
+
+Before launching training, rollout, eval, parameter counting, or smoke tests, run this preflight from the repo checkout:
+
+```bash
+VENV=/mnt/cephfs/home/tinwen.du/intern_ldp_explorer/direction_c_behavior_translator/envs/ptp_ldp_py39_ceph
+"$VENV/bin/python" diffusion_policy/scripts/check_main_runtime_env.py --require-cuda
+```
+
+If the preflight fails, stop before launch and repair the node-level Python / venv / package stack, or explicitly label the run as a version-ablation.
+
 Session 13 check on `2026-05-19T11:52:47Z`:
 
 - Current FM GPU node `10.100.2.35:33805` does not have `/root/ptp_ldp_py39/bin/python`.

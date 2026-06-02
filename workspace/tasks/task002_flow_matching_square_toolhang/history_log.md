@@ -1,6 +1,6 @@
 # History Log
 
-<!-- METADATA:SESSION=85 -->
+<!-- METADATA:SESSION=86 -->
 
 ## Session 0
 
@@ -1765,3 +1765,19 @@
   - `torch==2.5.1+cu124`;
   - `torch.cuda.is_available()` is `True`.
 - Conclusion: yes, on the GPU node the intended experiment venv is a Python 3.9 venv, specifically Python `3.9.25`.
+
+## Session 86
+
+- User requested marking the Python 3.9 GPU-node venv as the main environment and recording that code launch must check it first.
+- Added repo-local preflight script:
+  - `diffusion_policy/scripts/check_main_runtime_env.py`.
+- The script checks:
+  - Python major/minor is `3.9`;
+  - `robomimic.__version__ == "0.2.0"`;
+  - `torch` imports and reports version;
+  - optional `--require-cuda` fails if CUDA is unavailable.
+- Recorded the main environment in `workspace/interns/intern_ldp_explorer/knowledge.md` and `workspace/shared/ldp_ptp_py39_h200_environment.md`.
+- Main runtime command before launch:
+  - `VENV=/mnt/cephfs/home/tinwen.du/intern_ldp_explorer/direction_c_behavior_translator/envs/ptp_ldp_py39_ceph`
+  - `"$VENV/bin/python" diffusion_policy/scripts/check_main_runtime_env.py --require-cuda`
+- Rule: do not treat any training, rollout, eval, parameter-counting, or smoke-test result as trusted Direction C / PTP-data evidence unless this preflight passes, or the run is explicitly labeled as a version-ablation.

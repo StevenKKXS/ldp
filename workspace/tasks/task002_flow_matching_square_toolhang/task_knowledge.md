@@ -1,6 +1,6 @@
 # Task Knowledge
 
-<!-- METADATA:SESSION=85 -->
+<!-- METADATA:SESSION=86 -->
 
 ## Working Rules
 
@@ -247,3 +247,4 @@
 - Direction C Session 83 PTP callback: the historical Square PTP reference is `fig9_diffusion_subset_square_ptp_s42_1777979501/checkpoints/epoch=0099-test_mean_score=0.475.ckpt`, evaluated by `session63_eval_square_ptp_1778032161.log` to `test/mean_score=0.36` over 100 seeds. Treat it as the py39 / `robomimic==0.2.0` PTP reproduction reference; later archived Square logs do not contain a stronger parseable PTP rollout JSON.
 - Direction C Session 84 runtime check: the current local Codex shell has no active venv and uses system Python `3.12.3`. The Ceph experiment venv `/mnt/cephfs/home/tinwen.du/intern_ldp_explorer/direction_c_behavior_translator/envs/ptp_ldp_py39_ceph` is configured as Python `3.9.25`, with `bin/python3.9 -> /usr/bin/python3.9`; it requires node-level Python 3.9 on the execution node and cannot run on a shell where `/usr/bin/python3.9` is missing.
 - Direction C Session 85 GPU-node venv check: on `10.100.2.39:23494`, `/mnt/cephfs/home/tinwen.du/intern_ldp_explorer/direction_c_behavior_translator/envs/ptp_ldp_py39_ceph/bin/python` executes as Python `3.9.25`, with `robomimic==0.2.0`, `torch==2.5.1+cu124`, and CUDA available. This confirms the GPU-node experiment venv is Python 3.9.
+- Direction C Session 86 main-env rule: the main Direction C / PTP-data runtime is `/mnt/cephfs/home/tinwen.du/intern_ldp_explorer/direction_c_behavior_translator/envs/ptp_ldp_py39_ceph`. Before training, rollout, eval, parameter counting, or smoke tests, run `"$VENV/bin/python" diffusion_policy/scripts/check_main_runtime_env.py --require-cuda` from the repo checkout. If it fails, stop or explicitly label the run as a version-ablation.
