@@ -1,6 +1,6 @@
 # Task Knowledge
 
-<!-- METADATA:SESSION=80 -->
+<!-- METADATA:SESSION=81 -->
 
 ## Working Rules
 
@@ -242,3 +242,4 @@
 - Direction C Session 78 official-ACT result: fixed Square action8 25-epoch run at `/mnt/cephfs/home/tinwen.du/intern_ldp_explorer/direction_c_behavior_translator/outputs/official_act_square_action8/20260601_1208_official_act_square_action8_fixed_rollout25` completed with `val_loss=0.046737` and `test/mean_score=0.05` over 20 rollout seeds (`1/20`, only seed `100009` succeeded). This is a weak smoke-tested ACT baseline and should not be used as a competitive ACT claim.
 - Direction C Session 79 official-ACT speed: Square action8 official-ACT-compatible run has `2469` batches/epoch at batch size `32`; training speed is roughly `15-18 it/s`, about `2.5-2.8 min/epoch` for training and about `5s` validation. The 25-epoch train+val+final-rollout job took about `73 min`; extrapolate to about `4.8-5h` for 100 epochs and about `4 days` for 2000 epochs on the same setup.
 - Direction C Session 80 GPU-node pip mirror: active global/user configs on `10.100.2.39:23494` use `http://10.100.197.13/simple/` with `trusted-host=10.100.197.13`. Because `/usr/pip.conf` still lists external PyPI/NGC as site config, prefer explicit installs: `pip install <package> --index-url http://10.100.197.13/simple/ --trusted-host 10.100.197.13`.
+- Direction C Session 81 parameter comparison: shared robomimic obs encoder is `22.394M`; default d256 translator is `5.776M` core / `28.170M` full with obs encoder; ACT-size translator is `56.177M` core / `78.571M` full; deterministic ACT-style baseline is `55.116M` core / `77.510M` full; official-ACT-compatible CVAE adapter is `72.513M` core / `94.907M` full. Use core counts to compare transformer/action modules and full counts to compare deployed policies.

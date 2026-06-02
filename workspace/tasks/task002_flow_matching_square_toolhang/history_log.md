@@ -1,6 +1,6 @@
 # History Log
 
-<!-- METADATA:SESSION=80 -->
+<!-- METADATA:SESSION=81 -->
 
 ## Session 0
 
@@ -1675,3 +1675,24 @@
   - `/usr/pip.conf` still has site-level external entries for `https://pypi.org/simple` and `https://pypi.ngc.nvidia.com`;
   - explicit GPU-node installs should therefore use `pip install <package> --index-url http://10.100.197.13/simple/ --trusted-host 10.100.197.13`.
 - No files or environment settings were modified on the GPU node.
+
+## Session 81
+
+- User asked how translator parameter count compares with ACT.
+- Recomputed counts on `10.100.2.39:23494` using the Ceph py39 / `robomimic==0.2.0` runtime and current code.
+- Shared obs encoder:
+  - robomimic image+lowdim obs encoder is `22.394M` parameters.
+- Translator counts:
+  - default d256 BehaviorTranslator core: `5.776M`;
+  - default d256 translator + obs encoder: `28.170M`;
+  - ACT-size BehaviorTranslator core: `56.177M`;
+  - ACT-size translator + obs encoder: `78.571M`.
+- ACT counts:
+  - deterministic ACT-style action chunking baseline core: `55.116M`;
+  - deterministic ACT-style full policy with obs encoder: `77.510M`;
+  - official-ACT-compatible CVAE adapter core: `72.513M`;
+  - official-ACT-compatible CVAE full policy with obs encoder: `94.907M`.
+- Interpretation:
+  - the original default translator is much smaller than ACT: about one tenth of ACT-style core size and about one third of full ACT-style policy size;
+  - the ACT-size translator intentionally matches deterministic ACT-style capacity almost exactly (`56.177M` vs `55.116M` core);
+  - the official-ACT-compatible CVAE adapter is larger than both because it includes posterior action encoder, latent projection, memory encoder, action-query decoder, KL path, and pad head.

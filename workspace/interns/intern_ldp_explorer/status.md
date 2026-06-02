@@ -8,5 +8,5 @@
 | Status | Working |
 | Current Task | task002_flow_matching_square_toolhang |
 | PR | https://github.com/StevenKKXS/ldp/pull/1 |
-| Session | 80 |
-| Recent Progress | Checked GPU-node pip mirror configuration on `10.100.2.39:23494` without modifying the environment. Active global/user pip configs point to the internal mirror `http://10.100.197.13/simple/` with trusted host `10.100.197.13`; `/usr/pip.conf` still contains external PyPI/NGC entries, so explicit installs should use `--index-url http://10.100.197.13/simple/ --trusted-host 10.100.197.13` to avoid ambiguity. |
+| Session | 81 |
+| Recent Progress | Recomputed parameter counts on the Ceph py39 / `robomimic==0.2.0` runtime. Default d256 translator is `5.776M` core / `28.170M` with robomimic obs encoder. ACT-size translator is `56.177M` core / `78.571M` with obs encoder, almost the same size as the deterministic ACT-style baseline (`55.116M` core / `77.510M` full). The official-ACT-compatible CVAE adapter is larger: `72.513M` core / `94.907M` full. |
