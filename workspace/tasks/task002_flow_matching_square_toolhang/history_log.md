@@ -1,6 +1,6 @@
 # History Log
 
-<!-- METADATA:SESSION=92 -->
+<!-- METADATA:SESSION=93 -->
 
 ## Session 0
 
@@ -1907,3 +1907,17 @@
   - Stage1 translator itself still has no direct rollout because it is not a policy;
   - ACT-size downstream still has no confirmed rollout SR;
   - the confirmed translator-context rollout table is non-ACT-size corrected Stage2b, and it does not pass the pretrained > random/base go/no-go criterion.
+
+## Session 93
+
+- User asked whether ACT-size rollout SR has a result.
+- Rechecked ACT-size output roots:
+  - `/mnt/cephfs/home/tinwen.du/intern_ldp_explorer/direction_c_behavior_translator/outputs/stage2b_square_actsize`;
+  - `/mnt/cephfs/home/tinwen.du/intern_ldp_explorer/direction_c_behavior_translator/outputs/stage2b_square_actsize_norm_current`.
+- Findings:
+  - no `eval_log.json`, `*eval*.json`, or `rollout*.json` files were found under those ACT-size roots;
+  - ACT-size `logs.json.txt` files contain `val_loss` rows only and no `test/mean_score` or rollout SR metric.
+- Restated answer boundary:
+  - ACT-size Stage1 translator has no rollout SR because it is not an environment policy;
+  - ACT-size downstream diffusion/context experiments currently have offline validation only;
+  - confirmed translator-conditioned rollout SR table exists only for the non-ACT-size corrected Stage2b run recorded in Session 92.
