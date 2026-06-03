@@ -1,6 +1,6 @@
 # History Log
 
-<!-- METADATA:SESSION=89 -->
+<!-- METADATA:SESSION=90 -->
 
 ## Session 0
 
@@ -1853,3 +1853,18 @@
   - `act_square_action8.yaml` is deterministic ACT-style, not official ACT;
   - `official_act_square_action8.yaml` is the CVAE-style official-ACT-compatible adapter with `latent_dim=32` and `kl_weight=10`;
   - ACT-size downstream diffusion scales the policy transformer to `n_emb=512`, `n_head=8`, `n_layer=7`, `n_cond_layers=4`, and the translator-context variant injects frozen translator context by additive `add_last` / `add_all` projection rather than by appending a new token.
+
+## Session 90
+
+- User clarified the intended presentation scope:
+  - only discuss the original BehaviorTranslator scaled to ACT-size;
+  - do not include the raw-loss, deterministic ACT-style, official ACT, or downstream ACT-size variants as main presentation content;
+  - then explain the proprio shortcut phenomenon, including experimental design, results, and why proprio logically predicts past actions.
+- Added focused presentation brief:
+  - `docs/direction_c_behavior_translator/actsize_translator_proprio_shortcut_brief_2026_06_03.md`.
+- Brief content:
+  - compares original d256 translator versus ACT-size translator (`d_model=512`, decoder layers `7`, heads `8`, FFN `3200`, core params `56.177M`);
+  - reports the Stage1 result that ACT-size improves past L1 (`0.00917`) over d256 (`0.01172`) but does not improve future L1;
+  - explains proprio as `robot0_eef_pos`, `robot0_eef_quat`, and `robot0_gripper_qpos`;
+  - explains the shortcut mechanism: past actions are reflected in later EEF/gripper states inside the observation history, so the model can reconstruct past actions from robot-state trajectories without learning object/image state;
+  - records perturbation evidence and lowdim-only versus image-only retrain evidence.

@@ -8,5 +8,5 @@
 | Status | Working |
 | Current Task | task002_flow_matching_square_toolhang |
 | PR | https://github.com/StevenKKXS/ldp/pull/1 |
-| Session | 89 |
-| Recent Progress | Reviewed the ACT-scale experiment configurations and code paths, then summarized the four scale-up settings: ACT-size Stage1 translator, raw-action-loss translator, deterministic ACT-style action chunking baseline, official-ACT-compatible CVAE adapter, and ACT-size downstream diffusion/translator-context variants. |
+| Session | 90 |
+| Recent Progress | Narrowed the presentation scope to the original BehaviorTranslator scaled to ACT-size only, and wrote `docs/direction_c_behavior_translator/actsize_translator_proprio_shortcut_brief_2026_06_03.md` explaining the ACT-size setup, proprio shortcut logic, perturbation diagnostics, and lowdim-only/image-only retrain evidence. |
