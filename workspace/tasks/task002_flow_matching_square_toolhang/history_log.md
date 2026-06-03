@@ -1,6 +1,6 @@
 # History Log
 
-<!-- METADATA:SESSION=88 -->
+<!-- METADATA:SESSION=89 -->
 
 ## Session 0
 
@@ -1835,3 +1835,21 @@
   - scaling to ACT-size helps past-action fitting but does not make the context useful downstream;
   - current ACT-style and official-ACT-compatible tests do not rescue the hypothesis;
   - the current pooled/projection context path should be treated as a negative result unless a new image-grounded objective removes the shortcut.
+
+## Session 89
+
+- User asked for a detailed explanation of the ACT-scale translator settings.
+- Re-read the relevant configs and code paths:
+  - `experiment_configs/square/behavior_translator_square_past_actsize_norm.yaml`;
+  - `experiment_configs/square/behavior_translator_square_past_actsize_rawloss.yaml`;
+  - `experiment_configs/square/act_square_action8.yaml`;
+  - `experiment_configs/square/official_act_square_action8.yaml`;
+  - `experiment_configs/square/transformer_square_action8_causalcond_off_base_actsize.yaml`;
+  - `experiment_configs/square/transformer_square_translator_context_action8_causalcond_off_add_last_actsize_norm.yaml`;
+  - `diffusion_policy/policy/translator_conditioned_transformer_hybrid_image_policy.py`.
+- Clarified the taxonomy:
+  - ACT-size Stage1 translator scales `d_model=512`, `n_encoder_layers=4`, `n_decoder_layers=7`, `n_heads=8`, `ff_dim=3200`, while keeping Robomimic raw images + lowdim and the trainable obs encoder;
+  - raw-action-loss translator uses the same ACT-size geometry but trains the action loss in raw action space;
+  - `act_square_action8.yaml` is deterministic ACT-style, not official ACT;
+  - `official_act_square_action8.yaml` is the CVAE-style official-ACT-compatible adapter with `latent_dim=32` and `kl_weight=10`;
+  - ACT-size downstream diffusion scales the policy transformer to `n_emb=512`, `n_head=8`, `n_layer=7`, `n_cond_layers=4`, and the translator-context variant injects frozen translator context by additive `add_last` / `add_all` projection rather than by appending a new token.

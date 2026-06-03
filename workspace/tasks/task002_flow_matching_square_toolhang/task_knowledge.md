@@ -1,6 +1,6 @@
 # Task Knowledge
 
-<!-- METADATA:SESSION=88 -->
+<!-- METADATA:SESSION=89 -->
 
 ## Working Rules
 
@@ -250,3 +250,4 @@
 - Direction C Session 86 main-env rule: the main Direction C / PTP-data runtime is `/mnt/cephfs/home/tinwen.du/intern_ldp_explorer/direction_c_behavior_translator/envs/ptp_ldp_py39_ceph`. Before training, rollout, eval, parameter counting, or smoke tests, run `"$VENV/bin/python" diffusion_policy/scripts/check_main_runtime_env.py --require-cuda` from the repo checkout. If it fails, stop or explicitly label the run as a version-ablation.
 - Direction C Session 87 action-generation report: `docs/direction_c_behavior_translator/action_generation_dataflow_report_2026_06_02.md` documents Translator, official ACT, deterministic ACT-style, and PTP / diffusion-transformer dataflow with ASCII module diagrams, Square action8 tensor shapes, target slicing, losses, and GPU-node py39 parameter counts.
 - Direction C Session 88 scale-up/shortcut report: `docs/direction_c_behavior_translator/scaleup_shortcut_report_2026_06_02.md` consolidates the current negative translator result. Key points: ACT-size translator improves past L1 but not downstream context; corrected Stage2b rollout has base e24 `22/50`, random e49 `26/50`, pretrained add_last e24 `15/50`, and pretrained add_all e24 `18/50`; official-ACT-compatible Square action8 is weak at `1/20`; lowdim-only Stage1 is close to full input while image-only is much worse, and modality perturbations show proprio zeroing is catastrophic while image perturbations are much smaller. Treat the v0 pooled/projection translator context as shortcut-prone and mostly lowdim/proprio-driven.
+- Direction C Session 89 ACT-scale taxonomy: "scale up to ACT" refers to several separate settings, not one run. Stage1 ACT-size translator uses `d_model=512`, encoder layers `4`, decoder layers `7`, heads `8`, FFN `3200`, context dim `512`; `behavior_translator_square_past_actsize_rawloss.yaml` keeps that geometry but trains raw action loss. `act_square_action8.yaml` is deterministic ACT-style and has no CVAE latent. `official_act_square_action8.yaml` is the CVAE-style official-ACT-compatible adapter with `global_obs=2`, `global_action=8`, `latent_dim=32`, `kl_weight=10`. ACT-size downstream diffusion uses `n_emb=512`, `n_head=8`, `n_layer=7`, `n_cond_layers=4`; translator context is additively injected through `add_last` or `add_all`, not appended as a new token.
