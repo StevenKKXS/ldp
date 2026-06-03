@@ -144,7 +144,128 @@ Stage 1 offline validation 结果：
 
 这引出了 shortcut 诊断。
 
-## 5. 什么是 Proprio Shortcut
+## 5. ACT-size Rollout 结果边界
+
+这里需要明确区分两件事：
+
+```text
+ACT-size translator Stage 1
+    是 offline representation / action reconstruction 模型，
+    本身不是 Robomimic rollout policy，
+    因此没有环境 success rate。
+
+ACT-size downstream policy
+    是把下游 diffusion/transformer policy 也放大到 ACT-size，
+    再接 translator context。
+```
+
+我检查了 Ceph 上 ACT-size 相关输出：
+
+```text
+/mnt/cephfs/home/tinwen.du/intern_ldp_explorer/direction_c_behavior_translator/outputs/stage2b_square_actsize
+/mnt/cephfs/home/tinwen.du/intern_ldp_explorer/direction_c_behavior_translator/outputs/stage2b_square_actsize_norm_current
+```
+
+结论是：
+
+```text
+没有找到 ACT-size 对应的 eval_log.json；
+训练日志 logs.json.txt 中也没有 test/mean_score；
+所以目前没有可确认的 ACT-size rollout SR。
+```
+
+可确认的 ACT-size downstream offline validation 只有：
+
+| ACT-size downstream setting | Training budget | Best val loss | Best epoch | Rollout SR |
+|---|---:|---:|---:|---|
+| base, no translator context | 400 epochs | 0.02965 | 43 | 无可确认结果 |
+| pretrained translator add_last | 400 epochs | 0.03138 | 41 | 无可确认结果 |
+| current base rerun | 24 epochs | 0.03913 | 22 | 无可确认结果 |
+| current pretrained add_last rerun | 24 epochs | 0.03943 | 22 | 无可确认结果 |
+| current pretrained add_all rerun | 24 epochs | 0.03852 | 22 | 无可确认结果 |
+| current random add_last rerun | 24 epochs | 0.03949 | 22 | 无可确认结果 |
+
+汇报时建议这样说：
+
+```text
+ACT-size scale-up 的结果目前只能报 offline loss；
+没有 ACT-size rollout SR 可以作为结论。
+
+因此不能说 ACT-size translator 在 rollout 上成功或失败；
+只能说 offline past-action fitting 变好，
+但没有可确认的 downstream SR 证明它帮助控制。
+```
+
+## 6. Translator-conditioned Rollout 结果
+
+这里也要先明确边界：
+
+```text
+Stage 1 translator 本身不是可 rollout 的 policy；
+能做环境 rollout 的是 downstream DP/PTP-style policy，
+其中额外注入 frozen translator context。
+```
+
+因此这里汇报的是：
+
+```text
+corrected Stage2b Square action8 rollout
+  base / random context / pretrained translator context
+  py39 + robomimic 0.2.0
+  reward-only Robomimic rollout
+  n_test = 50
+  n_envs = 10
+  max_steps = 500
+  policy_source = ema_model unless noted
+```
+
+可确认结果如下：
+
+| Method | Checkpoint | Policy source | Success Rate |
+|---|---:|---|---:|
+| base, no translator context | e24 | EMA | 22/50 = 44% |
+| base, no translator context | e49 | EMA | 16/50 = 32% |
+| random frozen translator context, add_last | e24 | EMA | 21/50 = 42% |
+| random frozen translator context, add_last | e49 | EMA | 26/50 = 52% |
+| pretrained translator context, add_last | e24 | EMA | 15/50 = 30% |
+| pretrained translator context, add_all | e24 | EMA | 18/50 = 36% |
+| base, no translator context | e49 | raw model | 2/50 = 4% |
+| pretrained translator context, add_all | e24 | raw model | 4/50 = 8% |
+
+这组 rollout 的核心读法：
+
+```text
+pretrained translator context 没有超过 base；
+pretrained translator context 也没有超过 random context；
+random context 甚至在 e49 达到 52%。
+```
+
+所以它没有通过我们最初设定的 go/no-go：
+
+```text
+pretrained translator context
+    应该 > random context
+    并且最好 >= base
+```
+
+实际结果更支持：
+
+```text
+当前 pooled/projection translator context 没有提供可靠的可迁移 behavior signal。
+```
+
+这也和 proprio shortcut 诊断一致：Stage 1 能降低 past-action loss，但学到的内容可能主要是 lowdim/proprio 反推动作，而不是 downstream 需要的 image-grounded task state。
+
+汇报时建议把这一页放在 ACT-size offline 结果之后：
+
+```text
+ACT-size 证明更大模型能更好拟合 past action；
+但历史 translator-context rollout 已经显示：
+pretrained context 没有超过 random/base。
+这促使我们进一步检查 representation 是否走了 proprio shortcut。
+```
+
+## 7. 什么是 Proprio Shortcut
 
 这里的 proprio / lowdim 指：
 
@@ -190,7 +311,7 @@ eef position / orientation / gripper state 的时间变化
 
 这就是 proprio shortcut。
 
-## 6. Shortcut 实验 1：checkpoint perturbation
+## 8. Shortcut 实验 1：checkpoint perturbation
 
 实验设计：
 
@@ -239,7 +360,7 @@ ACT-size translator micro check：
 
 这个实验说明 translator 的预测强依赖 proprio。但 shuffle 结果要谨慎，因为 micro batch 内 shuffle 不一定构造了足够强的跨 episode 扰动。
 
-## 7. Shortcut 实验 2：lowdim-only vs image-only retrain
+## 9. Shortcut 实验 2：lowdim-only vs image-only retrain
 
 为了避免只看 checkpoint perturbation 的不稳定性，我们又做了从头训练的输入消融。
 
@@ -272,7 +393,7 @@ image-only 明显差于 full input
 
 说明当前 past-action objective 下，模型几乎可以靠 lowdim/proprio 拟合到接近 full input 的水平。
 
-## 8. 应该如何汇报这个现象
+## 10. 应该如何汇报这个现象
 
 建议这样讲：
 
@@ -295,7 +416,7 @@ image-only 明显差于 full input
 而是 Stage 1 目标存在 proprio shortcut。
 ```
 
-## 9. 结论与下一步
+## 11. 结论与下一步
 
 当前结论：
 

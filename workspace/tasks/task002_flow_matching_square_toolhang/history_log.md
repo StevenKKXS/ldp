@@ -1,6 +1,6 @@
 # History Log
 
-<!-- METADATA:SESSION=90 -->
+<!-- METADATA:SESSION=92 -->
 
 ## Session 0
 
@@ -1868,3 +1868,42 @@
   - explains proprio as `robot0_eef_pos`, `robot0_eef_quat`, and `robot0_gripper_qpos`;
   - explains the shortcut mechanism: past actions are reflected in later EEF/gripper states inside the observation history, so the model can reconstruct past actions from robot-state trajectories without learning object/image state;
   - records perturbation evidence and lowdim-only versus image-only retrain evidence.
+
+## Session 91
+
+- User asked to add ACT-size rollout results to the focused presentation brief.
+- Checked ACT-size output roots on Ceph:
+  - `/mnt/cephfs/home/tinwen.du/intern_ldp_explorer/direction_c_behavior_translator/outputs/stage2b_square_actsize`;
+  - `/mnt/cephfs/home/tinwen.du/intern_ldp_explorer/direction_c_behavior_translator/outputs/stage2b_square_actsize_norm_current`.
+- Search result:
+  - no ACT-size `eval_log.json` or rollout JSON was found;
+  - ACT-size `logs.json.txt` files contain offline train/validation rows but no `test/mean_score` or rollout SR metric.
+- Parsed available ACT-size downstream offline validation:
+  - base/no-context 400ep best val_loss `0.02965 @ e43`, no confirmed rollout SR;
+  - pretrained add_last 400ep best val_loss `0.03138 @ e41`, no confirmed rollout SR;
+  - current base rerun best `0.03913 @ e22`, add_last best `0.03943 @ e22`, add_all best `0.03852 @ e22`, random add_last best `0.03949 @ e22`, all without confirmed rollout SR.
+- Updated `docs/direction_c_behavior_translator/actsize_translator_proprio_shortcut_brief_2026_06_03.md` with an explicit ACT-size rollout boundary:
+  - Stage1 ACT-size translator is an offline action-reconstruction model and has no environment SR;
+  - ACT-size downstream policy paths currently have offline validation only;
+  - report should not claim ACT-size rollout success or failure until an `eval_log.json` is produced.
+
+## Session 92
+
+- User asked to also include translator rollout results in the focused report.
+- Re-parsed the confirmed corrected Stage2b rollout logs under:
+  - `/mnt/cephfs/home/tinwen.du/intern_ldp_explorer/direction_c_behavior_translator/outputs/stage2b_rollout_eval_newnode_20260527`.
+- Added a `Translator-conditioned Rollout 结果` section to:
+  - `docs/direction_c_behavior_translator/actsize_translator_proprio_shortcut_brief_2026_06_03.md`.
+- Recorded the confirmed non-ACT-size Square action8 reward-only rollout table:
+  - base/no context e24 EMA `22/50=44%`;
+  - base/no context e49 EMA `16/50=32%`;
+  - random frozen context add_last e24 EMA `21/50=42%`;
+  - random frozen context add_last e49 EMA `26/50=52%`;
+  - pretrained translator context add_last e24 EMA `15/50=30%`;
+  - pretrained translator context add_all e24 EMA `18/50=36%`;
+  - base e49 raw model `2/50=4%`;
+  - pretrained add_all e24 raw model `4/50=8%`.
+- Interpretation recorded in the report:
+  - Stage1 translator itself still has no direct rollout because it is not a policy;
+  - ACT-size downstream still has no confirmed rollout SR;
+  - the confirmed translator-context rollout table is non-ACT-size corrected Stage2b, and it does not pass the pretrained > random/base go/no-go criterion.
