@@ -1,6 +1,6 @@
 # History Log
 
-<!-- METADATA:SESSION=96 -->
+<!-- METADATA:SESSION=97 -->
 
 ## Session 0
 
@@ -1988,3 +1988,30 @@
   - GPU-node installs should keep using the internal pip mirror `http://10.100.197.13/simple/`.
 - Added migration report:
   - `docs/direction_c_behavior_translator/gpu_env_migration_summary_2026_06_05.md`.
+
+## Session 97
+
+- User asked to install the pip version of `Wangmerlyn/KeepGPU` in a chosen venv and keep two GPU nodes:
+  - `10.100.2.39:23494`;
+  - `10.100.4.23:21492`.
+- Confirmed both nodes are 8xH200 with `/mnt/cephfs` mounted.
+- Tried the main Direction C py39 environment first, but KeepGPU `0.5.1` uses Python 3.10+ syntax and failed under Python 3.9.
+- Created a dedicated KeepGPU venv on Ceph:
+  - `/mnt/cephfs/home/tinwen.du/intern_ldp_explorer/direction_c_behavior_translator/envs/keepgpu_py312`.
+- Installed KeepGPU `0.5.1` with Python `3.12.3` and pinned torch to `2.5.1+cu124`:
+  - the default latest torch resolution produced `torch 2.12.0+cu130`, which could not initialize CUDA on the current driver;
+  - the final pinned torch `2.5.1+cu124` passed CUDA smoke on both nodes.
+- Started KeepGPU service sessions:
+  - `10.100.2.39:23494`: service PID `501645`, job id `direction_c_keepgpu_10_100_2_39_20260605`;
+  - `10.100.4.23:21492`: service PID `3501701`, job id `direction_c_keepgpu_10_100_4_23_20260605`.
+- Keep parameters on each node:
+  - `--gpu-ids 0,1,2,3,4,5,6,7`;
+  - `--vram 70GiB`;
+  - `--busy-threshold 100`;
+  - `--interval 0`.
+- Verification after startup:
+  - each H200 reports total memory about `143771 MiB`;
+  - each GPU reports used memory about `72302 MiB`;
+  - each GPU reports utilization `100%`.
+- Added runbook:
+  - `docs/direction_c_behavior_translator/keepgpu_reservation_2026_06_05.md`.

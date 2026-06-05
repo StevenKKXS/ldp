@@ -1,6 +1,6 @@
 # Task Knowledge
 
-<!-- METADATA:SESSION=96 -->
+<!-- METADATA:SESSION=97 -->
 
 ## Working Rules
 
@@ -261,3 +261,7 @@
 - Direction C Session 96 shared migration env: both current GPU nodes run `/mnt/cephfs/home/tinwen.du/intern_ldp_explorer/direction_c_behavior_translator/envs/ptp_ldp_py39_ceph` as Python `3.9.25`, torch `2.5.1+cu124`, CUDA `12.4`, `robomimic==0.2.0`, `robosuite==1.2.0`, hydra `1.2.0`, and diffusers `0.11.1`. Run `diffusion_policy/scripts/check_main_runtime_env.py --require-cuda` from the Ceph repo before any migrated experiment.
 - Direction C Session 96 migration code caveat: `/mnt/cephfs/home/tinwen.du/intern_ldp_explorer/direction_c_behavior_translator/repos/ldp` is an execution copy without `.git`; the authoritative branch remains `/work-agents/intern_ldp_explorer/ldp` on `intern_ldp_explorer/task002_flow_matching_square_toolhang`.
 - Direction C Session 96 migration report path: `docs/direction_c_behavior_translator/gpu_env_migration_summary_2026_06_05.md` records node status, venv versions, pip mirror, data/output roots, key configs, rollout exports, and a new-node checklist.
+- Direction C Session 97 KeepGPU runtime: use dedicated venv `/mnt/cephfs/home/tinwen.du/intern_ldp_explorer/direction_c_behavior_translator/envs/keepgpu_py312`, not the main py39 experiment venv. KeepGPU `0.5.1` requires Python 3.10+ syntax, and the final working runtime is Python `3.12.3` with torch `2.5.1+cu124`.
+- Direction C Session 97 KeepGPU torch caveat: the default py312 dependency resolution selected torch `2.12.0+cu130`, which failed CUDA initialization because the current driver reports CUDA `12.8`; pin torch `2.5.1` for this environment.
+- Direction C Session 97 active KeepGPU jobs: `10.100.2.39:23494` job `direction_c_keepgpu_10_100_2_39_20260605` service PID `501645`; `10.100.4.23:21492` job `direction_c_keepgpu_10_100_4_23_20260605` service PID `3501701`. Both run all GPUs `0-7` with `--vram 70GiB --busy-threshold 100 --interval 0`, yielding about `72302 MiB` used and `100%` reported util per H200.
+- Direction C Session 97 KeepGPU runbook path: `docs/direction_c_behavior_translator/keepgpu_reservation_2026_06_05.md` records status and stop commands.
