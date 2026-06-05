@@ -1,6 +1,6 @@
 # Task Knowledge
 
-<!-- METADATA:SESSION=95 -->
+<!-- METADATA:SESSION=96 -->
 
 ## Working Rules
 
@@ -257,3 +257,7 @@
 - Direction C Session 93 ACT-size SR answer: no confirmed ACT-size rollout SR exists. Recheck found no `eval_log.json`, rollout JSON, or `test/mean_score` under `stage2b_square_actsize` or `stage2b_square_actsize_norm_current`; only offline validation metrics are available.
 - Direction C Session 94 GPU usage snapshot: current reachable occupied resource is `10.100.0.20:26715` GPU0 running ACT-size Stage1 translator `behavior_translator_square_past_actsize_norm`, parent PID `2592812`, about `10.4GB/143GB` VRAM with bursty utilization and active dataloader workers; latest log reached about epoch `974/1000`. `10.100.2.39:23494` is reachable and all 8 H200 GPUs are idle; `10.100.2.19:28106`, `10.100.0.62:24345`, `10.100.2.35:25076`, and `10.100.4.35:19382` refused SSH.
 - Direction C Session 95 stop result: ACT-size Stage1 translator parent PID `2592812` on `10.100.0.20:26715` was stopped with `SIGTERM`; child workers exited, `SIGKILL` was not needed, and all 8 H200 GPUs on that node are now idle with about `1 MiB` memory and no compute apps.
+- Direction C Session 96 migration summary: current releasable GPU nodes are `10.100.0.20:26715` and `10.100.2.39:23494`; both are 8xH200, reachable, idle with no compute apps, and have `/mnt/cephfs` plus `/mnt/3fs1` mounted.
+- Direction C Session 96 shared migration env: both current GPU nodes run `/mnt/cephfs/home/tinwen.du/intern_ldp_explorer/direction_c_behavior_translator/envs/ptp_ldp_py39_ceph` as Python `3.9.25`, torch `2.5.1+cu124`, CUDA `12.4`, `robomimic==0.2.0`, `robosuite==1.2.0`, hydra `1.2.0`, and diffusers `0.11.1`. Run `diffusion_policy/scripts/check_main_runtime_env.py --require-cuda` from the Ceph repo before any migrated experiment.
+- Direction C Session 96 migration code caveat: `/mnt/cephfs/home/tinwen.du/intern_ldp_explorer/direction_c_behavior_translator/repos/ldp` is an execution copy without `.git`; the authoritative branch remains `/work-agents/intern_ldp_explorer/ldp` on `intern_ldp_explorer/task002_flow_matching_square_toolhang`.
+- Direction C Session 96 migration report path: `docs/direction_c_behavior_translator/gpu_env_migration_summary_2026_06_05.md` records node status, venv versions, pip mirror, data/output roots, key configs, rollout exports, and a new-node checklist.

@@ -1,6 +1,6 @@
 # History Log
 
-<!-- METADATA:SESSION=95 -->
+<!-- METADATA:SESSION=96 -->
 
 ## Session 0
 
@@ -1972,3 +1972,19 @@
 - Result:
   - the ACT-size translator training process is stopped;
   - `10.100.0.20:26715` GPUs are idle and released for reuse.
+
+## Session 96
+
+- User asked to summarize the venv environments and configs on the two current GPU nodes before migrating to a new GPU and releasing the current nodes.
+- Checked and recorded the two reachable GPU resources:
+  - `10.100.0.20:26715`, host `lg-cmc-b7r201-a08u06-h200-000019`, `8 x NVIDIA H200`, all GPUs idle with about `1 MiB` memory and `0%` util;
+  - `10.100.2.39:23494`, host `lg-cmc-b7r201-e03u26-h200-000102`, `8 x NVIDIA H200`, all GPUs idle with about `1 MiB` memory and `0%` util.
+- Verified both nodes have `/mnt/cephfs` and `/mnt/3fs1` mounted and can run the shared Ceph main environment:
+  - `/mnt/cephfs/home/tinwen.du/intern_ldp_explorer/direction_c_behavior_translator/envs/ptp_ldp_py39_ceph`;
+  - Python `3.9.25`, torch `2.5.1+cu124`, CUDA `12.4`, `robomimic==0.2.0`, `robosuite==1.2.0`, hydra `1.2.0`, diffusers `0.11.1`.
+- Recorded migration caveats:
+  - the Ceph execution copy `/mnt/cephfs/home/tinwen.du/intern_ldp_explorer/direction_c_behavior_translator/repos/ldp` has no `.git`, so `/work-agents/intern_ldp_explorer/ldp` on branch `intern_ldp_explorer/task002_flow_matching_square_toolhang` remains the authoritative code source;
+  - Square dataset exists on Ceph, while ToolHang was not confirmed under the current Ceph Direction C dataset root;
+  - GPU-node installs should keep using the internal pip mirror `http://10.100.197.13/simple/`.
+- Added migration report:
+  - `docs/direction_c_behavior_translator/gpu_env_migration_summary_2026_06_05.md`.
