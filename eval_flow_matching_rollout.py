@@ -87,6 +87,7 @@ def main():
     parser.add_argument("--device", default="cuda:0")
     parser.add_argument("--max-steps", type=int, default=None)
     parser.add_argument("--dataset-path", default=None)
+    parser.add_argument("--test-start-seed", type=int, default=None)
     parser.add_argument("--use-model", action="store_true")
     args = parser.parse_args()
 
@@ -108,6 +109,8 @@ def main():
     if args.dataset_path is not None:
         cfg.task.dataset_path = args.dataset_path
         cfg.task.env_runner.dataset_path = args.dataset_path
+    if args.test_start_seed is not None:
+        cfg.task.env_runner.test_start_seed = args.test_start_seed
 
     workspace_cls = hydra.utils.get_class(cfg._target_)
     workspace = workspace_cls(cfg, output_dir=str(output_dir))
@@ -132,6 +135,7 @@ def main():
         "policy_source": policy_source,
         "n_test": args.n_test,
         "n_envs": args.n_envs,
+        "test_start_seed": int(cfg.task.env_runner.test_start_seed),
         "max_steps": int(cfg.task.env_runner.max_steps),
         "scores": scores,
         "mean_score": float(np.mean(scores)) if scores else None,

@@ -1,6 +1,6 @@
 # History Log
 
-<!-- METADATA:SESSION=99 -->
+<!-- METADATA:SESSION=100 -->
 
 ## Session 0
 
@@ -2058,3 +2058,30 @@
   - sampled videos have 250 frames.
 - Added local report:
   - `docs/direction_c_behavior_translator/square_rollout_videos_2026_06_05.md`.
+
+## Session 100
+
+- User observed the stability rollout was creating too many simulator environments and asked to reduce pressure:
+  - target per-run environment count: `n_envs=8`;
+  - total active simulator environments capped at `32`.
+- Checked `10.100.2.39:23494`:
+  - the previous stability launch was still running the high-pressure plan with 8 concurrent eval processes and `--n-envs 20`, for about 160 active simulator envs;
+  - no `eval_log.json` had completed yet.
+- Stopped the high-pressure batch:
+  - terminated matching `stage2b_square_rollout_stability_20260605` / `eval_flow_matching_rollout.py` processes;
+  - verified all 8 H200 GPUs returned to about `1 MiB` memory and `0%` util.
+- Added `--test-start-seed` support to `eval_flow_matching_rollout.py` so each 100-episode run records and controls its seed range.
+- Added launcher script:
+  - `tools/direction_c_launch_square_rollout_stability_nenv8.sh`;
+  - evaluates Square `base_e49`, `random_add_last_e24`, and `pretrained_add_last_e24`;
+  - uses seed ranges `100000`, `200000`, and `300000`;
+  - runs `100` episodes per seed range;
+  - uses `n_envs=8`;
+  - runs at most 4 eval processes concurrently, so active simulator envs stay at `32`.
+- Synced the evaluator and launcher to the Ceph execution copy on `10.100.2.39:23494`:
+  - `/mnt/cephfs/home/tinwen.du/intern_ldp_explorer/direction_c_behavior_translator/repos/ldp`.
+- Relaunched the reduced-pressure stability eval with `nohup`:
+  - launcher PID `1180684`;
+  - output root `/mnt/cephfs/home/tinwen.du/intern_ldp_explorer/direction_c_behavior_translator/outputs/stage2b_square_rollout_stability_nenv8_max4_20260605`;
+  - first wave started four evals on GPUs 0-3, each with `--n-envs 8`;
+  - GPU4-7 remained unused by this reduced-pressure launcher.
