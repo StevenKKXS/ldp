@@ -8,5 +8,5 @@
 | Status | Working |
 | Current Task | task002_flow_matching_square_toolhang |
 | PR | https://github.com/StevenKKXS/ldp/pull/1 |
-| Session | 100 |
-| Recent Progress | Stopped the overly aggressive Square stability rollout batch on `10.100.2.39:23494` and relaunched the 3-settings x 3-seeds x 100-episode evaluation with `n_envs=8` and at most 4 concurrent eval processes, capping active simulator envs at 32 under Ceph output root `stage2b_square_rollout_stability_nenv8_max4_20260605`. |
+| Session | 101 |
+| Recent Progress | Measured `10.100.2.39:23494` CPU pressure under 32-env Square rollout as low, stopped the max4 launcher, and relaunched the 3-settings x 3-seeds x 100-episode stability eval with 8 concurrent jobs, `n_envs=8` each, for a 64 simulator-env cap under Ceph output root `stage2b_square_rollout_stability_nenv8_max8_20260605`. |

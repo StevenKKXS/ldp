@@ -1,6 +1,6 @@
 # History Log
 
-<!-- METADATA:SESSION=100 -->
+<!-- METADATA:SESSION=101 -->
 
 ## Session 0
 
@@ -2085,3 +2085,31 @@
   - output root `/mnt/cephfs/home/tinwen.du/intern_ldp_explorer/direction_c_behavior_translator/outputs/stage2b_square_rollout_stability_nenv8_max4_20260605`;
   - first wave started four evals on GPUs 0-3, each with `--n-envs 8`;
   - GPU4-7 remained unused by this reduced-pressure launcher.
+
+## Session 101
+
+- User asked to check CPU pressure and, if acceptable, raise the active simulator cap to `64` and use all 8 GPUs for rollout.
+- Measured `10.100.2.39:23494` while the 32-env max4 launcher was active:
+  - `nproc=192`;
+  - loadavg about `30.95 33.03 42.31`;
+  - `vmstat 1 5` showed CPU idle about `83-87%` after initialization;
+  - memory had about `1.9TiB` available;
+  - GPU0-3 were active and GPU4-7 were idle.
+- Decided the node had enough CPU headroom to raise concurrency.
+- Added max8 launcher:
+  - `tools/direction_c_launch_square_rollout_stability_nenv8_max8.sh`;
+  - first wave launches 8 eval jobs on GPU0-7;
+  - each eval uses `--n-envs 8`, so the active simulator-env cap is `64`;
+  - the ninth eval, `pretrained_add_last_e24_seed300000`, runs after the first wave completes.
+- Synced the max8 launcher to the Ceph execution copy on `10.100.2.39:23494`.
+- Stopped the previous max4 launcher and its spawned eval/env-worker processes:
+  - the max4 directory had no completed `eval_log.json` before replacement;
+  - after cleanup all 8 H200 GPUs returned to about `1 MiB` memory and `0%` util.
+- Started max8 rollout:
+  - launcher PID `1217987`;
+  - output root `/mnt/cephfs/home/tinwen.du/intern_ldp_explorer/direction_c_behavior_translator/outputs/stage2b_square_rollout_stability_nenv8_max8_20260605`;
+  - first wave started 8 evals across GPUs 0-7.
+- Rechecked CPU pressure after max8 initialization:
+  - loadavg about `17.81 25.79 37.29`;
+  - `vmstat 1 5` showed CPU idle about `96-99%`;
+  - active process count matched expectation: 8 main evals plus 64 env workers.
