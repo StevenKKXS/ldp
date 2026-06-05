@@ -1,6 +1,6 @@
 # History Log
 
-<!-- METADATA:SESSION=98 -->
+<!-- METADATA:SESSION=99 -->
 
 ## Session 0
 
@@ -2025,3 +2025,36 @@
 - Provided one-shot `nvidia-smi` and interactive `watch -n 1 nvidia-smi` variants for both nodes.
 - Included KeepGPU status command using:
   - `/mnt/cephfs/home/tinwen.du/intern_ldp_explorer/direction_c_behavior_translator/envs/keepgpu_py312/bin/keep-gpu status`.
+
+## Session 99
+
+- User asked to cancel KeepGPU on one py39-capable server and generate Square rollout videos for the previous base/random/add_last settings.
+- Released KeepGPU on `10.100.2.39:23494`:
+  - stopped job `direction_c_keepgpu_10_100_2_39_20260605`;
+  - stopped the local KeepGPU service daemon;
+  - verified all 8 H200 GPUs returned to about `1 MiB` memory and `0%` util.
+- Kept `10.100.4.23:21492` active under KeepGPU:
+  - job `direction_c_keepgpu_10_100_4_23_20260605` still reports about `72302 MiB` and `100%` util per H200.
+- Added `eval_robomimic_rollout_videos.py`:
+  - loads the same workspace checkpoints as `eval_flow_matching_rollout.py`;
+  - uses EMA model by default;
+  - sets `n_test_vis` to the requested video count;
+  - avoids runner `wandb.log` / HSIC path;
+  - patches H264 creation to omit PyAV's `profile` option because PyAV `14.2.0` failed with both `profile=high` and `profile=baseline`, while no profile succeeded.
+- Ran one-video smoke on Base e49 successfully.
+- Generated 10 videos each under:
+  - `/mnt/cephfs/home/tinwen.du/intern_ldp_explorer/direction_c_behavior_translator/outputs/stage2b_square_rollout_videos_20260605/base_e49_10vid/videos`;
+  - `/mnt/cephfs/home/tinwen.du/intern_ldp_explorer/direction_c_behavior_translator/outputs/stage2b_square_rollout_videos_20260605/random_add_last_e24_10vid/videos`;
+  - `/mnt/cephfs/home/tinwen.du/intern_ldp_explorer/direction_c_behavior_translator/outputs/stage2b_square_rollout_videos_20260605/pretrained_add_last_e24_10vid/videos`.
+- Result on seeds `100000-100009`:
+  - Base e49: `0/10`;
+  - Random add_last e24: `2/10`;
+  - Pretrained add_last e24: `1/10`.
+- Caveat:
+  - the old Base e24 `eval_log.json` exists, but the Base e24 checkpoint file is no longer present in the current Ceph checkpoint directory, so the available Base e49 checkpoint was used for video generation.
+- Verification:
+  - each output set contains 10 mp4 files;
+  - PyAV decoded sampled videos successfully;
+  - sampled videos have 250 frames.
+- Added local report:
+  - `docs/direction_c_behavior_translator/square_rollout_videos_2026_06_05.md`.

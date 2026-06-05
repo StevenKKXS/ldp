@@ -1,6 +1,6 @@
 # Task Knowledge
 
-<!-- METADATA:SESSION=98 -->
+<!-- METADATA:SESSION=99 -->
 
 ## Working Rules
 
@@ -266,3 +266,7 @@
 - Direction C Session 97 active KeepGPU jobs: `10.100.2.39:23494` job `direction_c_keepgpu_10_100_2_39_20260605` service PID `501645`; `10.100.4.23:21492` job `direction_c_keepgpu_10_100_4_23_20260605` service PID `3501701`. Both run all GPUs `0-7` with `--vram 70GiB --busy-threshold 100 --interval 0`, yielding about `72302 MiB` used and `100%` reported util per H200.
 - Direction C Session 97 KeepGPU runbook path: `docs/direction_c_behavior_translator/keepgpu_reservation_2026_06_05.md` records status and stop commands.
 - Direction C Session 98 SSH shortcuts: use `ssh -p 23494 root@10.100.2.39` and `ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -p 21492 root@10.100.4.23` to enter the active KeepGPU nodes. One-shot checks are `ssh -p 23494 root@10.100.2.39 'nvidia-smi'` and `ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -p 21492 root@10.100.4.23 'nvidia-smi'`.
+- Direction C Session 99 KeepGPU update: `10.100.2.39:23494` KeepGPU job `direction_c_keepgpu_10_100_2_39_20260605` was stopped and the node is free after video generation; `10.100.4.23:21492` KeepGPU remains active.
+- Direction C Session 99 video evaluator: `eval_robomimic_rollout_videos.py` generates robomimic rollout videos without the runner's `wandb.log` / HSIC path and omits H264 `profile` because PyAV `14.2.0` rejects `profile=high` and `profile=baseline`.
+- Direction C Session 99 Square video outputs: `/mnt/cephfs/home/tinwen.du/intern_ldp_explorer/direction_c_behavior_translator/outputs/stage2b_square_rollout_videos_20260605/{base_e49_10vid,random_add_last_e24_10vid,pretrained_add_last_e24_10vid}/videos` each contain 10 mp4 files for seeds `100000-100009`. Scores are Base e49 `0/10`, random add_last e24 `2/10`, pretrained add_last e24 `1/10`.
+- Direction C Session 99 base-video caveat: Base e24 appears in the old rollout `eval_log.json`, but its checkpoint file is absent from the current Ceph checkpoint directory; Base e49 was used for video generation.
