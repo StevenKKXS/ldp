@@ -1,6 +1,6 @@
 # History Log
 
-<!-- METADATA:SESSION=93 -->
+<!-- METADATA:SESSION=94 -->
 
 ## Session 0
 
@@ -1921,3 +1921,32 @@
   - ACT-size Stage1 translator has no rollout SR because it is not an environment policy;
   - ACT-size downstream diffusion/context experiments currently have offline validation only;
   - confirmed translator-conditioned rollout SR table exists only for the non-ACT-size corrected Stage2b run recorded in Session 92.
+
+## Session 94
+
+- User asked to check current GPU resources, running programs, and GPU utilization.
+- Checked local process list:
+  - no local Direction C train/rollout/eval Python jobs were found in this workspace;
+  - local visible Python-related processes are unrelated VS Code / helper / other-intern processes.
+- Checked recent and historical GPU endpoints:
+  - `10.100.2.39:23494` is reachable, host `lg-cmc-b7r201-e03u26-h200-000102`, 8xH200 all idle: each GPU showed about `1 MiB` memory, `0%` util, no `nvidia-smi pmon` compute process.
+  - `10.100.0.20:26715` is reachable, host `lg-cmc-b7r201-a08u06-h200-000019`, 8xH200; only GPU0 is occupied.
+  - `10.100.2.19:28106`, `10.100.0.62:24345`, `10.100.2.35:25076`, and `10.100.4.35:19382` refused SSH.
+- Active process on `10.100.0.20:26715`:
+  - parent PID `2592812`;
+  - command `/mnt/cephfs/home/tinwen.du/intern_ldp_explorer/direction_c_behavior_translator/envs/ptp_ldp_py39_ceph/bin/python train.py --config-dir=experiment_configs/square --config-name=behavior_translator_square_past_actsize_norm`;
+  - working directory `/mnt/cephfs/home/tinwen.du/intern_ldp_explorer/direction_c_behavior_translator/repos/ldp`;
+  - elapsed `5-21:26:52` at one sample;
+  - 16 dataloader child Python workers were active, each around `97-100%` CPU in the sample.
+- GPU status on `10.100.0.20:26715`:
+  - GPU0 memory about `10402/143771 MiB`;
+  - other GPUs 1-7 about `1/143771 MiB`;
+  - utilization is bursty: one `nvidia-smi` snapshot showed GPU0 `88%`, `pmon` showed PID `2592812` around SM `35%`, and `dmon` over 5 samples saw mostly `0%` with one `93%` spike.
+- Progress status for the active run:
+  - output log `/mnt/cephfs/home/tinwen.du/intern_ldp_explorer/direction_c_behavior_translator/outputs/behavior_translator_square_past_actsize_norm_20260530_061543/logs.json.txt` is still being updated;
+  - recent tail reached around epoch `974/1000`;
+  - checkpoints include `epoch_0950.ckpt` from `2026-06-05 00:34` and `latest.ckpt` from `2026-06-05 03:42`.
+- Conclusion:
+  - current useful GPU occupancy attributable to this task is one active ACT-size Stage1 translator run on `10.100.0.20:26715` GPU0;
+  - `10.100.2.39:23494` is clean idle;
+  - no other checked GPU resources are currently reachable.

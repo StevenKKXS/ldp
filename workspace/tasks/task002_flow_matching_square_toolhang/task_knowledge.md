@@ -1,6 +1,6 @@
 # Task Knowledge
 
-<!-- METADATA:SESSION=93 -->
+<!-- METADATA:SESSION=94 -->
 
 ## Working Rules
 
@@ -255,3 +255,4 @@
 - Direction C Session 91 ACT-size rollout boundary: no confirmed ACT-size rollout SR exists in current Ceph outputs. `stage2b_square_actsize` and `stage2b_square_actsize_norm_current` have offline validation logs and checkpoints, but no `eval_log.json` and no `test/mean_score` in `logs.json.txt`. For reporting, say ACT-size Stage1 translator has no rollout because it is an offline reconstruction model, and ACT-size downstream policy has offline validation only until a separate rollout eval is run.
 - Direction C Session 92 translator rollout table for reporting: confirmed corrected non-ACT-size Stage2b Square action8 reward-only rollout under `stage2b_rollout_eval_newnode_20260527` is base e24 EMA `22/50=44%`, base e49 EMA `16/50=32%`, random context add_last e24 EMA `21/50=42%`, random context add_last e49 EMA `26/50=52%`, pretrained translator add_last e24 EMA `15/50=30%`, pretrained translator add_all e24 EMA `18/50=36%`, base e49 raw model `2/50=4%`, and pretrained add_all e24 raw model `4/50=8%`. Use this as translator-conditioned downstream rollout evidence, not as ACT-size rollout evidence.
 - Direction C Session 93 ACT-size SR answer: no confirmed ACT-size rollout SR exists. Recheck found no `eval_log.json`, rollout JSON, or `test/mean_score` under `stage2b_square_actsize` or `stage2b_square_actsize_norm_current`; only offline validation metrics are available.
+- Direction C Session 94 GPU usage snapshot: current reachable occupied resource is `10.100.0.20:26715` GPU0 running ACT-size Stage1 translator `behavior_translator_square_past_actsize_norm`, parent PID `2592812`, about `10.4GB/143GB` VRAM with bursty utilization and active dataloader workers; latest log reached about epoch `974/1000`. `10.100.2.39:23494` is reachable and all 8 H200 GPUs are idle; `10.100.2.19:28106`, `10.100.0.62:24345`, `10.100.2.35:25076`, and `10.100.4.35:19382` refused SSH.
