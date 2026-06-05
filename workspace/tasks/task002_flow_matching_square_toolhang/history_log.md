@@ -1,6 +1,6 @@
 # History Log
 
-<!-- METADATA:SESSION=97 -->
+<!-- METADATA:SESSION=98 -->
 
 ## Session 0
 
@@ -2015,3 +2015,13 @@
   - each GPU reports utilization `100%`.
 - Added runbook:
   - `docs/direction_c_behavior_translator/keepgpu_reservation_2026_06_05.md`.
+
+## Session 98
+
+- User asked for the exact commands to connect to the two active KeepGPU GPU servers and inspect `nvidia-smi`.
+- Provided direct login commands:
+  - `ssh -p 23494 root@10.100.2.39`;
+  - `ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -p 21492 root@10.100.4.23`.
+- Provided one-shot `nvidia-smi` and interactive `watch -n 1 nvidia-smi` variants for both nodes.
+- Included KeepGPU status command using:
+  - `/mnt/cephfs/home/tinwen.du/intern_ldp_explorer/direction_c_behavior_translator/envs/keepgpu_py312/bin/keep-gpu status`.

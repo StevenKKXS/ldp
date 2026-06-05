@@ -1,6 +1,6 @@
 # Task Knowledge
 
-<!-- METADATA:SESSION=97 -->
+<!-- METADATA:SESSION=98 -->
 
 ## Working Rules
 
@@ -265,3 +265,4 @@
 - Direction C Session 97 KeepGPU torch caveat: the default py312 dependency resolution selected torch `2.12.0+cu130`, which failed CUDA initialization because the current driver reports CUDA `12.8`; pin torch `2.5.1` for this environment.
 - Direction C Session 97 active KeepGPU jobs: `10.100.2.39:23494` job `direction_c_keepgpu_10_100_2_39_20260605` service PID `501645`; `10.100.4.23:21492` job `direction_c_keepgpu_10_100_4_23_20260605` service PID `3501701`. Both run all GPUs `0-7` with `--vram 70GiB --busy-threshold 100 --interval 0`, yielding about `72302 MiB` used and `100%` reported util per H200.
 - Direction C Session 97 KeepGPU runbook path: `docs/direction_c_behavior_translator/keepgpu_reservation_2026_06_05.md` records status and stop commands.
+- Direction C Session 98 SSH shortcuts: use `ssh -p 23494 root@10.100.2.39` and `ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -p 21492 root@10.100.4.23` to enter the active KeepGPU nodes. One-shot checks are `ssh -p 23494 root@10.100.2.39 'nvidia-smi'` and `ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -p 21492 root@10.100.4.23 'nvidia-smi'`.
