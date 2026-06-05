@@ -1,6 +1,6 @@
 # History Log
 
-<!-- METADATA:SESSION=94 -->
+<!-- METADATA:SESSION=95 -->
 
 ## Session 0
 
@@ -1950,3 +1950,25 @@
   - current useful GPU occupancy attributable to this task is one active ACT-size Stage1 translator run on `10.100.0.20:26715` GPU0;
   - `10.100.2.39:23494` is clean idle;
   - no other checked GPU resources are currently reachable.
+
+## Session 95
+
+- User requested killing the active translator run.
+- Target node and process:
+  - `10.100.0.20:26715`;
+  - parent PID `2592812`;
+  - command `train.py --config-dir=experiment_configs/square --config-name=behavior_translator_square_past_actsize_norm`;
+  - active dataloader children included PIDs under parent `2592812`.
+- Stop action:
+  - sent `SIGTERM` to PID `2592812`;
+  - parent and child processes exited within the wait window;
+  - `SIGKILL` was not required.
+- Verification:
+  - `ps -p 2592812` returned no process;
+  - `pgrep -P 2592812` returned no children;
+  - after a short delay, GPU memory on all 8 H200 GPUs was about `1 MiB`;
+  - `nvidia-smi pmon` showed no compute process on any GPU;
+  - no matching `python`, `train.py`, or `behavior_translator_square_past_actsize_norm` process remained.
+- Result:
+  - the ACT-size translator training process is stopped;
+  - `10.100.0.20:26715` GPUs are idle and released for reuse.
