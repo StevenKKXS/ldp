@@ -1,4 +1,5 @@
 import os
+import copy
 import wandb
 import numpy as np
 import torch
@@ -27,10 +28,37 @@ from hsic import batch_hsic
 from mlp_correlation import batch_mlp_corr
 
 def create_env(env_meta, shape_meta, enable_render=True):
+    env_meta = copy.deepcopy(env_meta)
     modality_mapping = collections.defaultdict(list)
     for key, attr in shape_meta['obs'].items():
         modality_mapping[attr.get('type', 'low_dim')].append(key)
     ObsUtils.initialize_obs_modality_mapping_from_dict(modality_mapping)
+
+    controller_config = env_meta.get('env_kwargs', {}).get('controller_configs', None)
+    if isinstance(controller_config, dict) and controller_config.get('type') in {
+        'JOINT_VELOCITY', 'JOINT_TORQUE', 'JOINT_POSITION',
+        'OSC_POSITION', 'OSC_POSE', 'IK_POSE'
+    }:
+        controller_config = copy.deepcopy(controller_config)
+        if 'damping' in controller_config and 'damping_ratio' not in controller_config:
+            controller_config['damping_ratio'] = controller_config.pop('damping')
+        if 'damping_limits' in controller_config and 'damping_ratio_limits' not in controller_config:
+            controller_config['damping_ratio_limits'] = controller_config.pop('damping_limits')
+        if 'control_delta' in controller_config and 'input_type' not in controller_config:
+            controller_config['input_type'] = 'delta' if controller_config.pop('control_delta') else 'absolute'
+        else:
+            controller_config.pop('control_delta', None)
+        try:
+            from robosuite.controllers.composite.composite_controller_factory import (
+                refactor_composite_controller_config,
+            )
+            robots = env_meta['env_kwargs'].get('robots', ['Panda'])
+            robot = robots[0] if isinstance(robots, (list, tuple)) else robots
+            env_meta['env_kwargs']['controller_configs'] = refactor_composite_controller_config(
+                controller_config, robot, ['right', 'left']
+            )
+        except Exception:
+            env_meta['env_kwargs']['controller_configs'] = controller_config
 
     env = EnvUtils.create_env_from_metadata(
         env_meta=env_meta,
@@ -222,7 +250,7 @@ class RobomimicImageRunner(BaseImageRunner):
             env_prefixs.append('test/')
             env_init_fn_dills.append(dill.dumps(init_fn))
 
-        env = AsyncVectorEnv(env_fns, dummy_env_fn=dummy_env_fn)
+        env = AsyncVectorEnv(env_fns, dummy_env_fn=dummy_env_fn, shared_memory=False)
         # env = SyncVectorEnv(env_fns)
 
         self.env_meta = env_meta

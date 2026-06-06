@@ -1,6 +1,6 @@
 # Task Knowledge
 
-<!-- METADATA:SESSION=0 -->
+<!-- METADATA:SESSION=23 -->
 
 ## Working Rules
 
@@ -9,8 +9,115 @@
 - Limit first experiment matrix to `square` and `tool_hang`.
 - Store small files and launch metadata under `/mnt/nfs/tingwen/intern_method_developer/tasks/task002_flow_matching_square_toolhang/`, then archive to CephFS when stable.
 - Do not persist checkpoints, large rollout outputs, datasets, or videos unless explicitly requested.
+- GPU nodes must not perform external network operations; fetch/clone/pip/network prep should happen on CPU/common environment and then be copied to the GPU node.
+- Do not touch the previous GPU node for this task; ownership has moved to another agent.
+- New PTP encoder method-development docs live under `docs/`; start from `docs/main.md` and `docs/status.md` before answering progress questions.
+- For the new encoder task, no experiment is valid until Direction A / Direction B detailed plans are reviewed and experiment logs are recorded.
+- Current local `docs/` path is `/work-agents/intern_method_developer/ldp/docs`, on container `overlay` mounted at `/`; it is not currently placed under `/mnt/nfs/tingwen` or `/mnt/cephfs/home/tinwen.du`.
+- Direction A review file: `docs/direction_a_future_action_contrastive/review_2026-05-18.md`.
+- Direction A latest review update: `docs/direction_a_future_action_contrastive/review_update_ptp_compat_2026-05-18.md`.
+- Direction A "action window" means the action segment used as contrastive similarity supervision, not a change to PTP prediction horizon or rollout logic.
+- Direction A first implementation should preserve the proven PTP policy structure and use future-action contrastive learning as encoder pretraining loaded through existing PTP encoder checkpoint hooks.
+- Policy-side condition concat is deferred; exact-PTP-compatible encoder pretraining is preferred for the first pass.
+- Direction A B2 is mandatory only if a new policy-side architecture is added; if policy structure is unchanged, compare exact PTP baseline against contrastive-pretrained encoder frozen/finetuned and record whether B2 is distinct from B1.
+- Direction B plan file: `docs/direction_b_action_sequence_predictive/plan_detailed_2026-05-18.md`.
+- Direction B review file: `docs/direction_b_action_sequence_predictive/review_2026-05-18.md`.
+- Direction B first implementation should preserve the proven PTP policy structure and use action-sequence prediction only as encoder pretraining; discard the decoder before downstream PTP training.
+- Direction B is likely the simpler smoke path: `dataset batch -> obs_encoder -> small MLP decoder -> Huber(normalized action sequence) -> compatible encoder checkpoint`.
+- If no new retained policy module is added, Direction B B2 may not be distinct from B1; record this rather than inventing a misleading control.
+- New encoder probe code path: `diffusion_policy/workspace/train_encoder_pretrain_workspace.py`.
+- Encoder probe configs: `experiment_configs/encoder_pretrain/{predictive_square,contrastive_square,predictive_tool_hang,contrastive_tool_hang}.yaml`.
+- Session 8 launcher script: `scripts/launch_encoder_pretrain_probe.sh`; poll script: `scripts/poll_encoder_pretrain_probe.sh`.
+- Session 8 encoder probe logs are on NFS at `/mnt/nfs/tingwen/intern_method_developer/tasks/ptp_encoder_probe/logs/20260518_session8`.
+- Session 8 encoder probe outputs and checkpoints are on 3fs2 at `/mnt/3fs2/data/tingwen.du/intern_method_developer/ptp_encoder_probe/runs/20260518_session8`.
 
 ## Findings
 
-- None yet.
-
+- Current DDPM policy diffuses normalized action tensors directly; obs embeddings condition the model but are not the noised variable.
+- The FM implementation keeps the same normalized action-space convention: training uses `x_t = t * noise + (1 - t) * action`, target velocity `noise - action`, and inference integrates from `t=1` to `t=0`.
+- Full-trajectory configs use dataset/policy `horizon=10`, `n_obs_steps=2`, `n_action_steps=8`; predicted actions are sliced from indices 1 through 8.
+- Action-only configs keep dataset `horizon=10` but set policy `horizon=8` and `pred_action_steps_only=true`, training directly on `action[:, 1:9]`.
+- Remote node has usable conda env `/mnt/nfs/tingwen/ldp/envs/gmp_released_ckpt/miniforge3/envs/gmp-py310` with torch, hydra, diffusers, robomimic, wandb, and zarr installed.
+- Remote code handoff path is `/mnt/nfs/tingwen/intern_method_developer/repos/ldp_flow_matching`, branch `intern_method_developer/task002_flow_matching_square_toolhang`, commit `3914a6b`, with `data` symlinked to `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/datasets`.
+- Dataset files observed on the remote node include square `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/datasets/robomimic/datasets/square/mh/image_abs.hdf5` and tool_hang `/mnt/3fs2/data/tingwen.du/intern_ldp_explorer/datasets/robomimic/datasets/tool_hang/ph/image_abs.hdf5`.
+- Four configs parsed on the remote env: `experiment_configs/square/flow_transformer_square_h10.yaml`, `experiment_configs/square/flow_transformer_square_action8.yaml`, `experiment_configs/tool/flow_transformer_tool_hang_h10.yaml`, and `experiment_configs/tool/flow_transformer_tool_hang_action8.yaml`.
+- `gmp-py310` initially lacked `threadpoolctl`; dataset import fails without it. It was installed into the NFS env from CPU/common side, not from the GPU node.
+- `gmp-py310` also lacked `pytorch3d`; a pure-Python transforms stub already existed at `/mnt/nfs/tingwen/ldp/small_files/intern_ldp_explorer/pytorch3d_src` and was symlinked into the NFS env as `site-packages/pytorch3d`.
+- The GMP robomimic 0.4 checkout has `CropRandomizer` in `robomimic.models.obs_core`, not `robomimic.models.base_nets`.
+- The square FM configs must not include `task.dataset.shape_meta.obs.embedding` when using raw `image_abs.hdf5`; the dataset conversion tries to load every key in dataset `shape_meta`.
+- The current `gmp-py310` env is sufficient for training when rollout is disabled. Online rollout still needs env-runner dependencies fixed: at minimum `gym` is missing, and current `cv2` import requires `libGL.so.1`.
+- The transformer workspace now skips env-runner instantiation when the local training run will not hit a rollout epoch or when `n_train+n_test == 0`.
+- Formal runs started with online rollout disabled via `training.rollout_every=999999`; rollout evaluation should be launched as a separate phase after env-runner dependencies are repaired.
+- New GPU node for encoder probes is `10.100.2.4:35140`; existing `gmp-py310` env has RoboMimic `0.4.0`, and the documented py39/RoboMimic `0.2.0` env was not present on that node.
+- Raw-image encoder pretraining configs must not include `task.dataset.shape_meta.obs.embedding`; the dataset converter reads every key listed there even when `use_embed_if_present=false`.
+- Contrastive loss must zero diagonal `log_p` after masked `log_softmax`; otherwise `q * log_p` can compute `0 * -inf` and produce NaN.
+- Encoder pretraining Square smokes passed in Session 8:
+  - Direction B predictive: train loss `0.4260`, val loss `0.4002`.
+  - Direction A contrastive after NaN fix: train loss `1.2313`, val loss `1.2405`.
+- Encoder pretraining ToolHang smokes passed in Session 8:
+  - Direction B predictive: train loss `0.4394`, val loss `0.3929`.
+  - Direction A contrastive: train loss `1.3928`, val loss `1.1212`.
+- Current encoder probe smoke results are implementation feasibility observations only; method validity still requires downstream exact-PTP frozen/finetune scores.
+- Session 9 GPU check: `10.100.2.4:35140` has all 8 H200 idle after Session 8 probes completed.
+- Session 8 encoder pretraining probes completed 10 epochs and wrote `latest.ckpt` in each run directory.
+- Final Direction A long-run losses: `A_square_future_seed42` train/val `3.3737`/`3.3962`; `A_square_future_seed43` `3.3742`/`3.3965`; `A_tool_hang_future_seed42` `2.6360`/`2.6933`; `A_tool_hang_future_seed43` `2.6395`/`2.6921`.
+- Final Direction B long-run losses: `B_square_full_seed42` train/val `0.0167`/`0.0373`; `B_square_future_seed42` `0.0164`/`0.0426`; `B_tool_hang_full_seed42` `0.0243`/`0.0494`; `B_tool_hang_future_seed42` `0.0252`/`0.0420`.
+- Session 10 downstream scripts:
+  - `scripts/launch_encoder_downstream_probe.sh`
+  - `scripts/launch_encoder_downstream_extra_probe.sh`
+  - `scripts/poll_encoder_downstream_probe.sh`
+- Exact-PTP downstream Square raw-image config needs these overrides when cached embeddings are disabled: `task.dataset.use_cache=false`, `~task.dataset.shape_meta.obs.embedding`, `policy.use_embed_if_present=false`, and `task.dataset.use_embed_if_present=false`.
+- Session 10 B-square frozen downstream smoke passed with train loss `1.0785`, val loss `1.2045`, and train action MSE `0.7062`.
+- Session 10 main downstream matrix output/log paths:
+  - outputs: `/mnt/3fs2/data/tingwen.du/intern_method_developer/ptp_encoder_probe/downstream_runs/20260519_session10`
+  - logs: `/mnt/nfs/tingwen/intern_method_developer/tasks/ptp_encoder_probe/downstream_logs/20260519_session10`
+- Session 10 extra downstream matrix output/log paths:
+  - outputs: `/mnt/3fs2/data/tingwen.du/intern_method_developer/ptp_encoder_probe/downstream_runs/20260519_session10_extra`
+  - logs: `/mnt/nfs/tingwen/intern_method_developer/tasks/ptp_encoder_probe/downstream_logs/20260519_session10_extra`
+- Early downstream diffusion loss comparison is not a rollout score. As of the Session 10 poll, Square main matrix at epoch 17-18 shows original val `0.0965`, `B_full_frozen` `0.0933`, `B_full_finetune` `0.0865`, `A_future_finetune` `0.0866`.
+- Early ToolHang main matrix at epoch 6 is close: original val `0.1568`, `B_full_frozen` `0.1585`, `B_full_finetune` `0.1566`, `A_future_finetune` `0.1572`.
+- The 8-H200 node can run 16 downstream jobs concurrently with memory headroom, but raw-image PTP training is CPU/data-pipeline limited; low instantaneous SM utilization does not mean the jobs are absent.
+- Session 11 poll: all 16 downstream PTP jobs remain active on `10.100.2.4:35140`; main Square is near epoch 38-39, main ToolHang near epoch 15-16.
+- Session 11 latest main-matrix val losses show a small `B_full_frozen` train/val diffusion-loss advantage: Square `0.0702` vs original `0.0735`, ToolHang `0.0943` vs original `0.1001`.
+- Session 11 results are still train/val diffusion losses with rollout disabled, so they should be discussed as optimization signals, not success-rate evidence.
+- Session 12 high-level summary: both Direction A and Direction B are under test, but the clearest current emphasis is Direction B full-action predictive encoder pretraining, with Direction A contrastive encoder retained as a parallel comparison.
+- The chosen protocol intentionally keeps the downstream PTP policy structure unchanged and tests encoder checkpoints through existing `obs_encoder_dir` / `obs_encoder_freeze` controls.
+- Current downstream results should be described as encoder-pretraining ablations for exact PTP, not as new policy architectures.
+- Session 13 completed first downstream matrix: Square best val favored frozen pretrained encoders (`A_future_frozen` best `0.0677`, `B_full_frozen` best `0.0691`, original best `0.0711`); ToolHang was effectively tied across methods.
+- Current strongest loss-only candidate is Square `A_future_frozen`, with `B_full_frozen` also positive. This is not a success-rate result.
+- Current py310 rollout compatibility fixes needed for robosuite 1.5 / gym 0.23:
+  - refactor old `OSC_POSE` controller configs into composite controller configs;
+  - map old `damping` / `damping_limits` / `control_delta` fields to current keys;
+  - run `AsyncVectorEnv` with `shared_memory=False`;
+  - accept gym 0.23 reset kwargs and use current `concatenate(space, items, out)` argument order.
+- A 5-step Square rollout smoke using `scripts/run_checkpoint_rollout_eval.py` passed; it validates env-runner execution only.
+- Session 13 seed-43 repeat matrix is running on 8 GPUs to test whether the Square frozen-encoder loss signal survives a different training seed.
+- Session 14 version clarification: current `10.100.2.4:35140` experiments run in `gmp-py310` with RoboMimic `0.4.0`, RoboSuite `1.5.1`, Gym `0.23.1`, Torch `2.8.0+cu128`, and Diffusers `0.33.1`.
+- The closer release-like stack documented in `workspace/shared/ldp_ptp_py39_h200_environment.md` uses Python 3.9, RoboMimic `0.2.0`, and RoboSuite source version `1.2.0`.
+- Results from RoboMimic `0.4.0` should be described as feasibility / ablation evidence, not final release-like evidence.
+- Session 15 high-level method progress: Direction A and Direction B are both implemented, pretrained, and evaluated through first-round exact-PTP downstream loss ablations.
+- Current strongest signal is Square frozen encoder pretraining: first-round best vals were original `0.0711`, `A_future_frozen` `0.0677`, `B_full_frozen` `0.0691`, and `B_future_frozen` `0.0700`.
+- Current seed-43 repeat around epoch 35 still favors frozen pretrained encoders over original on Square by a small margin: original `0.0756`, `A_future_frozen` `0.0731`, `B_full_frozen` `0.0731`, `B_future_frozen` `0.0735`.
+- ToolHang has not shown a clear loss-only benefit; first round and seed-43 repeat are both close across methods.
+- Formal method conclusion requires either completed seed-43 repeat consistency or rollout success-rate comparison.
+- Plan A short name: future-action contrastive encoder pretraining. It organizes history embeddings by future expert action similarity.
+- Plan B short name: action-sequence predictive encoder pretraining. It makes the encoder predict expert action sequences during pretraining, then discards the decoder.
+- Updated Square seed-43 repeat completed: original best val `0.0692`, Plan A `A_future_frozen` `0.0640`, Plan B `B_full_frozen` `0.0659`, Plan B `B_future_frozen` `0.0662`.
+- Current concise takeaway: on Square, frozen pretrained encoders beat original in both seeds, with Plan A frozen strongest; on ToolHang, loss-only results are still close.
+- Current active GPU resource after Session 17 check is `10.100.2.4:35140`, hostname `lg-cmc-b7r201-c08u06-h200-000067`, with 8x NVIDIA H200 GPUs. All 8 are idle with no compute apps reported.
+- Historical node `10.100.2.35:33805` should not be touched for this encoder-method task unless the user explicitly reassigns it.
+- The py39/RoboMimic `0.2.0` host `10.100.0.29:36645` is documented as a closer release-like stack, but it is not a current verified active GPU allocation in Session 17.
+- Session 18 reachability check: `10.100.2.4:35140` returned `Connection refused` for SSH and a raw TCP probe, so it must not be treated as currently reachable.
+- Before launching additional rollout or release-like evaluation, confirm a reachable GPU allocation and then re-check `nvidia-smi`.
+- Session 19 new GPU endpoint: `root@10.100.2.50 -p 26953`, hostname `lg-cmc-b7r201-e07u16-h200-000113`, 1x NVIDIA H200, `/dev/shm=256G`, `nproc=192`, `ulimit -n=1024`.
+- Session 19 worker benchmark conclusion: PyTorch DataLoader can open 224 synthetic workers on this node; 256 fails with `OSError(24, Too many open files)`, so file descriptors rather than shared memory are the observed hard limit.
+- For raw-image PTP-style dataloading with ColorJitter and batch size 64, practical `num_workers` should start at 8 or 12; 16 is a reasonable high setting, 32 works but is slower in the synthetic benchmark, and 64+ is counterproductive.
+- Existing ceph py39 env at `/mnt/cephfs/home/tinwen.du/intern_ldp_explorer/direction_c_behavior_translator/envs/ptp_ldp_py39_ceph` is incomplete on `10.100.2.50` because `bin/python` points to missing `/usr/bin/python3.9`; system Python lacks `h5py`, so real HDF5 dataset benchmarking needs a repaired Python env.
+- Session 20 active review source: `/work-agents/intern_method_developer/ldp` on branch `intern_method_developer/task002_flow_matching_square_toolhang`, PR `https://github.com/StevenKKXS/ldp/pull/1`.
+- Encoder pretraining code path: `train.py` -> `diffusion_policy/workspace/train_encoder_pretrain_workspace.py` -> `EncoderPretrainModel` using the PTP `policy.obs_encoder`; configs live in `experiment_configs/encoder_pretrain/`.
+- Downstream encoder ablation code path: `train.py` -> `diffusion_policy/workspace/train_diffusion_transformer_hybrid_workspace.py` -> `diffusion_policy/policy/diffusion_transformer_hybrid_image_policy.py`; launch scripts are `scripts/launch_encoder_downstream_probe.sh`, `scripts/launch_encoder_downstream_extra_probe.sh`, and `scripts/launch_encoder_downstream_seed43_probe.sh`.
+- Main training-review concern: encoder pretraining currently uses `global_obs=16,horizon=32,n_action_steps=8`, while downstream PTP keeps Square `global_obs=2,horizon=32,n_action_steps=1` and ToolHang `global_obs=2,horizon=16,n_action_steps=8`; downstream is exact PTP, but pretrain is not observation-length matched.
+- Flow-matching code path remains on the same branch via `diffusion_policy/policy/flow_matching_transformer_hybrid_image_policy.py` and `experiment_configs/*/flow_transformer_*`, but current encoder-method results were produced by the encoder pretrain/downstream PTP workflow.
+- Session 21 Superpowers scope note: installing into default `/root/.codex/skills` is broad for all sessions sharing that home; for one intern agent use `/work-agents/<agent>/.agents/skills` symlinks or a private `CODEX_HOME`; for one workspace add a workspace-local skill directory and ensure the session loader imports it.
+- Session 22 path distinction using this agent: intern-level helper skills go under `/work-agents/intern_method_developer/.agents/skills`; current workspace-level helper skills would go under `/work-agents/intern_method_developer/ldp/.agents/skills`. Private Codex-native equivalents are `/work-agents/intern_method_developer/.codex_home/skills` and `/work-agents/intern_method_developer/ldp/.codex_home/skills`.
+- Session 23 GPU resource status: latest endpoint `10.100.2.50:26953` returned `Connection refused`; `10.100.2.4:35140` is not current after prior `Connection refused`; `10.100.2.35:33805` remains historical and should not be touched without explicit reassignment.
