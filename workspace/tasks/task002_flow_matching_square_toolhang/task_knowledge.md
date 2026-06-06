@@ -1,6 +1,6 @@
 # Task Knowledge
 
-<!-- METADATA:SESSION=22 -->
+<!-- METADATA:SESSION=23 -->
 
 ## Working Rules
 
@@ -120,3 +120,4 @@
 - Flow-matching code path remains on the same branch via `diffusion_policy/policy/flow_matching_transformer_hybrid_image_policy.py` and `experiment_configs/*/flow_transformer_*`, but current encoder-method results were produced by the encoder pretrain/downstream PTP workflow.
 - Session 21 Superpowers scope note: installing into default `/root/.codex/skills` is broad for all sessions sharing that home; for one intern agent use `/work-agents/<agent>/.agents/skills` symlinks or a private `CODEX_HOME`; for one workspace add a workspace-local skill directory and ensure the session loader imports it.
 - Session 22 path distinction using this agent: intern-level helper skills go under `/work-agents/intern_method_developer/.agents/skills`; current workspace-level helper skills would go under `/work-agents/intern_method_developer/ldp/.agents/skills`. Private Codex-native equivalents are `/work-agents/intern_method_developer/.codex_home/skills` and `/work-agents/intern_method_developer/ldp/.codex_home/skills`.
+- Session 23 GPU resource status: latest endpoint `10.100.2.50:26953` returned `Connection refused`; `10.100.2.4:35140` is not current after prior `Connection refused`; `10.100.2.35:33805` remains historical and should not be touched without explicit reassignment.

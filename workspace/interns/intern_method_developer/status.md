@@ -8,6 +8,6 @@
 | Status | Working |
 | Current Task | task002_flow_matching_square_toolhang |
 | PR | https://github.com/StevenKKXS/ldp/pull/1 |
-| Session | 22 |
-| Recent Progress | Clarified intern-level versus workspace-level Superpowers skill paths using this agent as the example. Intern-level path is `/work-agents/intern_method_developer/.agents/skills`; workspace-level path would be `/work-agents/intern_method_developer/ldp/.agents/skills`. |
-| Handoff | Intern-level install follows the agent identity and applies to this intern across repos if the harness loader scans `.agents/skills`. Workspace-level install follows the repo/project root and applies only when that workspace loader is configured to scan the repo-local path. For stricter Codex-native isolation, use private `CODEX_HOME` paths: `/work-agents/intern_method_developer/.codex_home/skills` for one intern, or `/work-agents/intern_method_developer/ldp/.codex_home/skills` for this workspace. No installation was performed. |
+| Session | 23 |
+| Recent Progress | Checked known GPU resource status for the user. Latest assigned endpoint `10.100.2.50:26953` now returns `Connection refused`, so there is no currently reachable GPU confirmed in this session. |
+| Handoff | Known GPU history: `10.100.2.50:26953` was a 1x H200 node with `/dev/shm=256G` in Session 19 but is unreachable now; `10.100.2.4:35140` was an 8x H200 node but returned `Connection refused` in Session 18; `10.100.2.35:33805` is a historical 4x H200 flow-matching node that should not be touched unless explicitly reassigned; `10.100.0.29:36645` is only a documented py39/RoboMimic 0.2.0 environment reference, not a current verified allocation. |

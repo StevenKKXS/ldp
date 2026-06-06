@@ -1,6 +1,6 @@
 # History Log
 
-<!-- METADATA:SESSION=22 -->
+<!-- METADATA:SESSION=23 -->
 
 ## Session 0
 
@@ -448,3 +448,17 @@
 - Example Superpowers source path for symlinks:
   - `/root/.codex/.tmp/plugins/plugins/superpowers/skills/<skill-name>`
 - No Superpowers skills were installed or symlinked in this session.
+
+## Session 23
+
+- Answered the user's question about currently known GPU resources.
+- Performed a non-mutating reachability check only on the latest user-provided endpoint:
+  - Endpoint: `root@10.100.2.50 -p 26953`
+  - Result: `Connection refused`
+  - Interpretation: this endpoint is not currently reachable, so no live GPU process state can be confirmed from it.
+- Current known GPU resource inventory:
+  - `10.100.2.50:26953`: latest user-provided node; previously observed as hostname `lg-cmc-b7r201-e07u16-h200-000113`, 1x NVIDIA H200, `/dev/shm=256G`, now unreachable.
+  - `10.100.2.4:35140`: earlier encoder-method node; previously observed as 8x NVIDIA H200, but returned `Connection refused` in Session 18 and is not treated as current.
+  - `10.100.2.35:33805`: historical 4x H200 flow-matching node; user previously instructed not to touch it, so it was not queried in this session.
+  - `10.100.0.29:36645`: documented py39/RoboMimic 0.2.0 environment reference; not a current verified allocation.
+- Current conclusion: there is no currently reachable GPU allocation confirmed by this session.
