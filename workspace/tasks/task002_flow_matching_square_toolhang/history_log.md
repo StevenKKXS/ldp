@@ -1,6 +1,6 @@
 # History Log
 
-<!-- METADATA:SESSION=102 -->
+<!-- METADATA:SESSION=103 -->
 
 ## Session 0
 
@@ -2135,3 +2135,18 @@
   - this is negative evidence for the current pooled/projection translator-context injection path.
 - Added local result note:
   - `docs/direction_c_behavior_translator/square_rollout_stability_eval_2026_06_06.md`.
+
+## Session 103
+
+- User asked to create and push a `to_be_improved.md` document to track issues needing improvement and started the discussion with three candidate problems:
+  - current translator mode does not improve diffusion;
+  - long-context training cost is too high compared with faster DP-style training;
+  - future development codebase is undecided among current PTP/LDP-derived code, Gated Memory Policy, or latent-planner/LDP-style code.
+- Added:
+  - `docs/direction_c_behavior_translator/to_be_improved.md`.
+- The document records:
+  - confirmed rollout evidence that current pooled/projection translator `add_last` is negative;
+  - likely causes such as under-supervised exported context, proprio shortcut, offline-loss/SR mismatch, and weak injection interface;
+  - long-context training-cost sub-problems and speed-improvement ideas;
+  - pros/cons and recommended use cases for current codebase, Gated Memory Policy, and latent-planner/LDP-style directions;
+  - decision criteria for selecting the next implementation path.
