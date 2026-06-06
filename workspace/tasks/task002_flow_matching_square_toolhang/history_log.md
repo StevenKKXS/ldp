@@ -1,6 +1,6 @@
 # History Log
 
-<!-- METADATA:SESSION=101 -->
+<!-- METADATA:SESSION=102 -->
 
 ## Session 0
 
@@ -2113,3 +2113,25 @@
   - loadavg about `17.81 25.79 37.29`;
   - `vmstat 1 5` showed CPU idle about `96-99%`;
   - active process count matched expectation: 8 main evals plus 64 env workers.
+
+## Session 102
+
+- User asked for the Square eval result.
+- Checked `10.100.2.39:23494` and the max8 output root:
+  - `/mnt/cephfs/home/tinwen.du/intern_ldp_explorer/direction_c_behavior_translator/outputs/stage2b_square_rollout_stability_nenv8_max8_20260605`.
+- Verified the stability rollout finished:
+  - all 9 `eval_log.json` files exist;
+  - `summary.json` exists;
+  - no rollout launcher/eval process remains;
+  - all 8 H200 GPUs on `10.100.2.39:23494` are idle.
+- Final 3-seed x 100-episode Square SR results:
+  - `base_e49`: seed ranges `49/100`, `56/100`, `61/100`; pooled `166/300 = 55.33%`;
+  - `random_add_last_e24`: seed ranges `53/100`, `60/100`, `51/100`; pooled `164/300 = 54.67%`;
+  - `pretrained_add_last_e24`: seed ranges `44/100`, `50/100`, `41/100`; pooled `135/300 = 45.00%`.
+- Interpretation:
+  - the 300-episode evaluation resolves the instability seen in 10-video checks;
+  - `base_e49` and random frozen context are effectively similar around 55%;
+  - current pretrained translator `add_last` context is lower than both baseline and random control;
+  - this is negative evidence for the current pooled/projection translator-context injection path.
+- Added local result note:
+  - `docs/direction_c_behavior_translator/square_rollout_stability_eval_2026_06_06.md`.
