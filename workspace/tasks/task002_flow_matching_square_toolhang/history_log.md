@@ -1,6 +1,6 @@
 # History Log
 
-<!-- METADATA:SESSION=104 -->
+<!-- METADATA:SESSION=105 -->
 
 ## Session 0
 
@@ -2166,3 +2166,21 @@
   - random-context / parameter-count controls are mandatory because random context can match or beat pretrained context;
   - current evidence is Square-heavy and ToolHang coverage is insufficient;
   - environment / reproducibility constraints remain important: py39 + `robomimic==0.2.0`, Ceph/3FS storage, and GPU-node network restrictions.
+
+## Session 105
+
+- User asked for a handoff document so another intern can take over the work in a GMP workspace.
+- Added:
+  - `docs/direction_c_behavior_translator/gmp_handoff_2026_06_06.md`.
+- The handoff document covers:
+  - original Direction C motivation and go/no-go criterion;
+  - confirmed negative result for current pooled/projection translator context;
+  - Square 300-episode stability eval results;
+  - key implementation files, configs, env, data paths, and output roots;
+  - translator dataflow and the Stage1/downstream exported-context mismatch;
+  - proprio / lowdim shortcut evidence from perturbation and lowdim-only/image-only retrains;
+  - scale-up / ACT lessons;
+  - offline-loss vs rollout-SR mismatch;
+  - long-context cost split into training and inference/eval;
+  - recommended GMP takeover route with base/random/pretrained controls and memory-interface priorities.
+- No GPU training or rollout was started in this session.

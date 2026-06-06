@@ -1,6 +1,6 @@
 # Task Knowledge
 
-<!-- METADATA:SESSION=104 -->
+<!-- METADATA:SESSION=105 -->
 
 ## Working Rules
 
@@ -275,3 +275,4 @@
 - Direction C Session 102 conclusion: the larger stability eval is negative for the current pretrained translator `add_last` injection path. Random context is about tied with base, while pretrained context underperforms both. Treat this as evidence against the current pooled/projection context implementation, not against every possible encoder-replacement or token-level translator design.
 - Direction C Session 103 improvement tracker: `docs/direction_c_behavior_translator/to_be_improved.md` is the living issue list for Direction C. Current top issues are negative current translator injection, high long-context training cost, and codebase-choice uncertainty. Use it as the starting point before proposing the next implementation route.
 - Direction C Session 104 tracker-edit constraint: user wants to keep the current codebase for now and remove the codebase-choice issue from `to_be_improved.md` after approval. Do not edit the tracker body until the revised issue list is approved. Split cost into training cost and inference/eval cost, and consider adding historical issues including proprio shortcut, Stage1/downstream mismatch, offline-loss/SR mismatch, mandatory random controls, limited task coverage, and environment reproducibility constraints.
+- Direction C Session 105 GMP handoff: `docs/direction_c_behavior_translator/gmp_handoff_2026_06_06.md` is the current handoff document for another intern taking this work into a GMP workspace. It records the original hypothesis, confirmed negative v0 pooled-context result, shortcut evidence, cost split, artifact paths, and the recommended GMP takeover protocol: do not repeat pooled add_last; inspect memory-token/cross-attention/encoder-replacement interfaces; keep base/random/pretrained controls and rollout SR as the main metric.
