@@ -1,6 +1,6 @@
 # History Log
 
-<!-- METADATA:SESSION=105 -->
+<!-- METADATA:SESSION=106 -->
 
 ## Session 0
 
@@ -2184,3 +2184,14 @@
   - long-context cost split into training and inference/eval;
   - recommended GMP takeover route with base/random/pretrained controls and memory-interface priorities.
 - No GPU training or rollout was started in this session.
+
+## Session 106
+
+- User asked where to inspect rollout results.
+- Reconfirmed existing Ceph result directories:
+  - 300-episode Square stability eval root: `/mnt/cephfs/home/tinwen.du/intern_ldp_explorer/direction_c_behavior_translator/outputs/stage2b_square_rollout_stability_nenv8_max8_20260605`;
+  - 300-episode summary file: `/mnt/cephfs/home/tinwen.du/intern_ldp_explorer/direction_c_behavior_translator/outputs/stage2b_square_rollout_stability_nenv8_max8_20260605/summary.json`;
+  - per-run 100-episode eval files are under the setting/seed subdirectories, each as `eval_log.json`;
+  - earlier 50-episode corrected eval root: `/mnt/cephfs/home/tinwen.du/intern_ldp_explorer/direction_c_behavior_translator/outputs/stage2b_rollout_eval_newnode_20260527`;
+  - 10-video rollout root: `/mnt/cephfs/home/tinwen.du/intern_ldp_explorer/direction_c_behavior_translator/outputs/stage2b_square_rollout_videos_20260605`.
+- No new rollout or GPU process was started.

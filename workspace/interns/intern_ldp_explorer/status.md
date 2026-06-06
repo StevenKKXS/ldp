@@ -8,5 +8,5 @@
 | Status | Working |
 | Current Task | task002_flow_matching_square_toolhang |
 | PR | https://github.com/StevenKKXS/ldp/pull/1 |
-| Session | 105 |
-| Recent Progress | Created `docs/direction_c_behavior_translator/gmp_handoff_2026_06_06.md` as a GMP-workspace handoff document covering the original translator hypothesis, confirmed negative results, proprio shortcut evidence, long-context train/eval cost split, implementation paths, artifacts, and recommended GMP takeover steps. |
+| Session | 106 |
+| Recent Progress | Reconfirmed the Ceph rollout result locations for Direction C: 300-episode Square stability eval under `stage2b_square_rollout_stability_nenv8_max8_20260605`, earlier 50-episode corrected eval under `stage2b_rollout_eval_newnode_20260527`, and 10-video rollout outputs under `stage2b_square_rollout_videos_20260605`. |

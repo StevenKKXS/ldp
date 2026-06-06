@@ -1,6 +1,6 @@
 # Task Knowledge
 
-<!-- METADATA:SESSION=105 -->
+<!-- METADATA:SESSION=106 -->
 
 ## Working Rules
 
@@ -276,3 +276,4 @@
 - Direction C Session 103 improvement tracker: `docs/direction_c_behavior_translator/to_be_improved.md` is the living issue list for Direction C. Current top issues are negative current translator injection, high long-context training cost, and codebase-choice uncertainty. Use it as the starting point before proposing the next implementation route.
 - Direction C Session 104 tracker-edit constraint: user wants to keep the current codebase for now and remove the codebase-choice issue from `to_be_improved.md` after approval. Do not edit the tracker body until the revised issue list is approved. Split cost into training cost and inference/eval cost, and consider adding historical issues including proprio shortcut, Stage1/downstream mismatch, offline-loss/SR mismatch, mandatory random controls, limited task coverage, and environment reproducibility constraints.
 - Direction C Session 105 GMP handoff: `docs/direction_c_behavior_translator/gmp_handoff_2026_06_06.md` is the current handoff document for another intern taking this work into a GMP workspace. It records the original hypothesis, confirmed negative v0 pooled-context result, shortcut evidence, cost split, artifact paths, and the recommended GMP takeover protocol: do not repeat pooled add_last; inspect memory-token/cross-attention/encoder-replacement interfaces; keep base/random/pretrained controls and rollout SR as the main metric.
+- Direction C Session 106 rollout result paths: inspect the latest 300-episode Square stability summary at `/mnt/cephfs/home/tinwen.du/intern_ldp_explorer/direction_c_behavior_translator/outputs/stage2b_square_rollout_stability_nenv8_max8_20260605/summary.json`; per-seed `eval_log.json` files live in sibling setting/seed subdirectories. Earlier corrected 50-episode rollout logs are under `/mnt/cephfs/home/tinwen.du/intern_ldp_explorer/direction_c_behavior_translator/outputs/stage2b_rollout_eval_newnode_20260527`; videos are under `/mnt/cephfs/home/tinwen.du/intern_ldp_explorer/direction_c_behavior_translator/outputs/stage2b_square_rollout_videos_20260605`.
