@@ -1,6 +1,6 @@
 # History Log
 
-<!-- METADATA:SESSION=106 -->
+<!-- METADATA:SESSION=107 -->
 
 ## Session 0
 
@@ -2195,3 +2195,16 @@
   - earlier 50-episode corrected eval root: `/mnt/cephfs/home/tinwen.du/intern_ldp_explorer/direction_c_behavior_translator/outputs/stage2b_rollout_eval_newnode_20260527`;
   - 10-video rollout root: `/mnt/cephfs/home/tinwen.du/intern_ldp_explorer/direction_c_behavior_translator/outputs/stage2b_square_rollout_videos_20260605`.
 - No new rollout or GPU process was started.
+
+## Session 107
+
+- User asked for the Stage 1 translator image-encoder structure and end-to-end dataflow.
+- Re-audited the implementation in `train_behavior_translator_workspace.py`, `behavior_translator.py`, and the Square Stage 1 configs.
+- Confirmed Stage 1 uses raw image and lowdim/proprio observations, not precomputed image embeddings, for the main Square translator configs.
+- Confirmed the image/proprio encoder is instantiated through `DiffusionTransformerHybridImagePolicy` as a Robomimic `bc_rnn` image observation encoder; it is used as a trainable feature extractor before the standalone `BehaviorTranslator`.
+- Confirmed the data path:
+  - dataset yields `obs_hist` over 16 frames, `act_past` over 16 actions, and `act_future` over 8 actions;
+  - workspace normalizes observations, flattens `[B,H,...]` to `[B*H,...]`, encodes each frame independently through the Robomimic obs encoder, and reshapes to `[B,H,obs_dim]`;
+  - Square full-input obs tokens are `[B,16,137]`;
+  - `BehaviorTranslator` projects tokens to `d_model`, applies a causal temporal Transformer encoder, decodes learned past/future action queries, and optimizes SmoothL1 action reconstruction according to `target_mode`.
+- No code change, GPU process, training, or rollout was started.
