@@ -1,6 +1,6 @@
 # Task Knowledge
 
-<!-- METADATA:SESSION=103 -->
+<!-- METADATA:SESSION=104 -->
 
 ## Working Rules
 
@@ -274,3 +274,4 @@
 - Direction C Session 102 Square stability SR: output root `/mnt/cephfs/home/tinwen.du/intern_ldp_explorer/direction_c_behavior_translator/outputs/stage2b_square_rollout_stability_nenv8_max8_20260605` completed 3 seed ranges x 100 episodes. Results are `base_e49` `166/300=55.33%`, `random_add_last_e24` `164/300=54.67%`, and `pretrained_add_last_e24` `135/300=45.00%`.
 - Direction C Session 102 conclusion: the larger stability eval is negative for the current pretrained translator `add_last` injection path. Random context is about tied with base, while pretrained context underperforms both. Treat this as evidence against the current pooled/projection context implementation, not against every possible encoder-replacement or token-level translator design.
 - Direction C Session 103 improvement tracker: `docs/direction_c_behavior_translator/to_be_improved.md` is the living issue list for Direction C. Current top issues are negative current translator injection, high long-context training cost, and codebase-choice uncertainty. Use it as the starting point before proposing the next implementation route.
+- Direction C Session 104 tracker-edit constraint: user wants to keep the current codebase for now and remove the codebase-choice issue from `to_be_improved.md` after approval. Do not edit the tracker body until the revised issue list is approved. Split cost into training cost and inference/eval cost, and consider adding historical issues including proprio shortcut, Stage1/downstream mismatch, offline-loss/SR mismatch, mandatory random controls, limited task coverage, and environment reproducibility constraints.

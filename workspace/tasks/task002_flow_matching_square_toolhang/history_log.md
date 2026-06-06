@@ -1,6 +1,6 @@
 # History Log
 
-<!-- METADATA:SESSION=103 -->
+<!-- METADATA:SESSION=104 -->
 
 ## Session 0
 
@@ -2150,3 +2150,19 @@
   - long-context training-cost sub-problems and speed-improvement ideas;
   - pros/cons and recommended use cases for current codebase, Gated Memory Policy, and latent-planner/LDP-style directions;
   - decision criteria for selecting the next implementation path.
+
+## Session 104
+
+- User clarified how to revise `to_be_improved.md`:
+  - do not switch codebase for now;
+  - remove the codebase-choice issue from the tracker after confirmation;
+  - split the long-context-cost issue into training cost and inference/eval cost because optimization methods differ;
+  - review history for other issues before editing the tracker body.
+- Did not edit `to_be_improved.md` in this session, per user instruction to discuss first and update after approval.
+- Proposed additional issues from history for user review:
+  - proprio / lowdim shortcut and weak image grounding;
+  - Stage1 objective and downstream exported-context mismatch;
+  - offline validation loss not matching rollout SR;
+  - random-context / parameter-count controls are mandatory because random context can match or beat pretrained context;
+  - current evidence is Square-heavy and ToolHang coverage is insufficient;
+  - environment / reproducibility constraints remain important: py39 + `robomimic==0.2.0`, Ceph/3FS storage, and GPU-node network restrictions.
